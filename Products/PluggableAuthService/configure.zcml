@@ -1,0 +1,9 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    >
+
+  <include file="exportimport.zcml" />
+
+  <include file="events.zcml" />
+
+</configure>
