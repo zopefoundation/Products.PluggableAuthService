@@ -70,8 +70,8 @@ class BasePlugin(SimpleItem, PropertyManager):
 
     security.declareProtected( ManageUsers, 'testImplements' )
     def testImplements( self, interface ):
-        """ Can't access Interface.isImplementedBy() directly in ZPT. """
-        return interface.isImplementedBy( self )
+        """ Can't access Interface.providedBy() directly in ZPT. """
+        return interface.providedBy( self )
 
     security.declareProtected( ManageUsers, 'manage_activateInterfaces' )
     def manage_activateInterfaces( self, interfaces, RESPONSE=None ):
