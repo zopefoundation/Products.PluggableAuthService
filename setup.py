@@ -35,7 +35,7 @@ setup(name='Products.PluggableAuthService',
         "License :: OSI Approved :: Zope Public License",
         "Programming Language :: Python",
         "Topic :: Software Development",
-        "Topic :: System :: Security",
+        "Topic :: Security",
         "Topic :: System :: Systems Administration :: "
                 "Authentication/Directory",
         ],
