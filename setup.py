@@ -49,6 +49,8 @@ setup(name='Products.PluggableAuthService',
       namespace_packages=['Products'],
       zip_safe=False,
       #install_requires=['Zope >= 2.10']
+      extras_require={'ip_range': ['IPy'],
+                     },
       entry_points="""
       [zope2.initialize]
       Products.PluggableAuthService = Products.PluggableAuthService:initialize

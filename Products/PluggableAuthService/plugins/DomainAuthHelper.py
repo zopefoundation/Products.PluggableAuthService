@@ -19,7 +19,16 @@ __doc__     = """ Authentication Plugin for Domain authentication """
 __version__ = '$Revision$'[11:-2]
 
 # General Python imports
-import socket, os, time, copy, re
+import socket
+import os
+import time
+import copy
+import re
+
+try:
+    from IPy import IP
+except ImportError:
+    IP = None
 
 # General Zope imports
 from BTrees.OOBTree import OOBTree
@@ -45,9 +54,59 @@ class IDomainAuthHelper(Interface):
     """ Marker interface.
     """
 
-_MATCH_EQUALS = 'equals'
-_MATCH_ENDSWITH = 'endswith'
-_MATCH_REGEX = 'regex'
+class EqualsFilter:
+
+    def __init__(self, matchstring):
+        self.match_string = matchstring
+
+    def __call__(self, candidate):
+        return candidate == self.match_string
+
+class StartsWithFilter:
+
+    def __init__(self, matchstring):
+        self.match_string = matchstring
+
+    def __call__(self, candidate):
+        return candidate.startswith(self.match_string)
+
+class EndsWithFilter:
+
+    def __init__(self, matchstring):
+        self.match_string = matchstring
+
+    def __call__(self, candidate):
+        return candidate.endswith(self.match_string)
+
+class RegexFilter:
+
+    def __init__(self, matchstring):
+        self.regex = re.compile(matchstring)
+
+    def __call__(self, candidate):
+        return self.regex.match(candidate)
+
+_MATCH_TYPE_FILTERS = {
+    'equals': EqualsFilter,
+    'startswith': EndsWithFilter,
+    'endswith': EndsWithFilter,
+    'regex': RegexFilter,
+}
+
+if IP is not None:
+    class IPFilter:
+
+        def __init__(self, matchstring):
+            self.ip = IP(matchstring)
+
+        def __call__(self, candidate):
+            try:
+                c_ip = IP(candidate)
+            except ValueError:
+                return False
+            return c_ip in self.ip
+
+    _MATCH_TYPE_FILTERS['ip'] = IPFilter
 
 manage_addDomainAuthHelperForm = PageTemplateFile(
     'www/daAdd', globals(), __name__='manage_addDomainAuthHelperForm' )
@@ -194,16 +253,13 @@ class DomainAuthHelper(BasePlugin):
         for match_info in all_info:
             m = []
             m_type = match_info['match_type']
-            m_real = match_info['match_real']
+            m_string = match_info['match_string']
+            filter = match_info.get('match_filter')
 
-            if m_type == _MATCH_EQUALS:
-                m = [match_info for x in candidates if x == m_real]
-            elif m_type == _MATCH_ENDSWITH:
-                m = [match_info for x in candidates if x.endswith(m_real)]
-            elif m_type == _MATCH_REGEX:
-                m = [match_info for x in candidates if m_real.search(x)]
+            if filter is None:  # legacy data
+                filter = _MATCH_TYPE_FILTERS[m_type](m_string)
 
-            matches.extend(m)
+            matches.extend([match_info for x in candidates if filter(x)])
 
         return tuple(matches)
 
@@ -211,7 +267,7 @@ class DomainAuthHelper(BasePlugin):
     security.declareProtected(manage_users, 'listMatchTypes')
     def listMatchTypes(self):
         """ Return a sequence of possible match types """
-        return (_MATCH_EQUALS, _MATCH_ENDSWITH, _MATCH_REGEX)
+        return _MATCH_TYPE_FILTERS.keys()
 
 
     security.declareProtected(manage_users, 'listMappingsForUser')
@@ -243,17 +299,17 @@ class DomainAuthHelper(BasePlugin):
         """ Add a mapping for a user """
         msg = ''
 
-        if match_type not in (_MATCH_EQUALS, _MATCH_ENDSWITH, _MATCH_REGEX):
+        try:
+            filter = _MATCH_TYPE_FILTERS[match_type](match_string)
+        except KeyError:
             msg = 'Unknown match type %s' % match_type
+        except re.error:
+            msg = 'Invalid regular expression %s' % match_string
+        except ValueError, e:
+            msg = 'Invalid match string %s (%s)' % (match_string, e)
 
         if not match_string:
             msg = 'No match string specified'
-
-        if match_type == _MATCH_REGEX:
-            try:
-                re.compile(match_string, re.IGNORECASE)
-            except re.error:
-                msg = 'Invalid regular expression %s' % match_string
 
         if msg:
             if REQUEST is not None:
@@ -262,14 +318,10 @@ class DomainAuthHelper(BasePlugin):
             raise ValueError, msg
 
         record = self._domain_map.get(user_id, [])
-        if match_type == _MATCH_REGEX:
-            real_match = re.compile(match_string, re.IGNORECASE)
-        else:
-            real_match = match_string
 
         match = { 'match_type' : match_type
                 , 'match_string' : match_string
-                , 'match_real' : real_match
+                , 'match_filter' : filter
                 , 'match_id' : '%s_%s' % (user_id, str(time.time()))
                 , 'username' : user_id or username or 'Remote User'
                 , 'roles' : roles

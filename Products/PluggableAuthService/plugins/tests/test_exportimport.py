@@ -704,6 +704,8 @@ else:
             self.assertEqual( content_type, 'text/xml' )
 
         def test_import_empty(self):
+            from Products.PluggableAuthService.plugins.DomainAuthHelper \
+                import EqualsFilter
             TITLE = 'With Map'
             USER_ID = 'some_user_id'
             DOMAIN = 'host.example.com'
@@ -733,7 +735,9 @@ else:
             match = match_list[0]
             self.assertEqual(match['username'], USER_ID)
             self.assertEqual(match['match_string'], DOMAIN)
-            self.assertEqual(match['match_real'], DOMAIN)
+            filter = match['match_filter']
+            self.failUnless(isinstance(filter, EqualsFilter))
+            self.assertEquals(filter.match_string, DOMAIN)
             self.assertEqual(match['match_type'], 'equals')
             self.assertEqual(len(match['roles']), len(ROLES))
             for role in ROLES:

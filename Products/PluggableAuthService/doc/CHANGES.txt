@@ -4,8 +4,33 @@ PluggableAuthService changelog
 
     Features Added
 
-    Bugs Fixed
-  
+      - Factored out 'filter' logic into separate classes;  added filters
+        for 'startswith' test and (if the IPy module is present) IP-range
+        tests.
+
+  PluggableAuthService 1.5.2 (2007/11/28)
+
+    Bugs fixed
+
+      - DomainAuthHelper plugin:  fix glitch for plugins which have never
+        configured any "default" policy:  'authenticateCredentials' and
+        'getRolesForPrincipal' would raise ValueError.
+        (http://www.zope.org/Collectors/PAS/59)
+
+  PluggableAuthService 1.5.1 (2007/09/11)
+
+    Bugs fixed
+
+      - PluggableAuthService._verifyUser: changed to use exact_match to the 
+        enumerator, otherwise a user with login 'foobar' might get returned 
+        by _verifyUser for a query for login='foo' because the enumerator 
+        happened to return 'foobar' first in the results.
+
+    Others
+
+      - Add a test for manage_zmi_logout and replace a call to isImplementedBy
+        with providedBy.
+        (http://www.zope.org/Collectors/PAS/58)
 
   PluggableAuthService 1.5 (06/17/2007)
 

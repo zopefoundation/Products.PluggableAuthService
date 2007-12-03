@@ -14,6 +14,11 @@
 ##############################################################################
 import unittest
 
+try:
+    from IPy import IP
+except ImportError:
+    IP = None
+
 from Products.PluggableAuthService.tests.conformance \
      import IExtractionPlugin_conformance
 from Products.PluggableAuthService.tests.conformance \
@@ -121,22 +126,16 @@ class DomainAuthHelperTests( unittest.TestCase
         self.assertEqual(helper.authenticateCredentials(creds), (None, None))
 
     def test_authenticateCredentials_w_mapping_known_remote_host(self):
-        from Products.PluggableAuthService.plugins.DomainAuthHelper \
-            import _MATCH_EQUALS
-
         creds = {'login': 'qux', 'remote_host': 'bam'}
         helper = self._makeOne()
-        helper.manage_addMapping(match_type=_MATCH_EQUALS, match_string='bam')
+        helper.manage_addMapping(match_type='equals', match_string='bam')
 
         self.assertEqual(helper.authenticateCredentials(creds), ('qux', 'qux'))
 
     def test_authenticateCredentials_w_mapping_known_remote_addr(self):
-        from Products.PluggableAuthService.plugins.DomainAuthHelper \
-            import _MATCH_ENDSWITH
-
         creds = {'login': 'qux', 'remote_address': 'baz'}
         helper = self._makeOne()
-        helper.manage_addMapping(match_type=_MATCH_ENDSWITH,
+        helper.manage_addMapping(match_type='endswith',
                                  match_string='z',
                                  username='foo',
                                 )
@@ -144,12 +143,9 @@ class DomainAuthHelperTests( unittest.TestCase
         self.assertEqual(helper.authenticateCredentials(creds), ('qux', 'qux'))
 
     def test_authenticateCredentials_w_mapping_no_login_known_remote_host(self):
-        from Products.PluggableAuthService.plugins.DomainAuthHelper \
-            import _MATCH_EQUALS
-
         creds = {'remote_host': 'baz'}
         helper = self._makeOne()
-        helper.manage_addMapping(match_type=_MATCH_EQUALS,
+        helper.manage_addMapping(match_type='equals',
                                  match_string='baz',
                                  username='foo',
                                 )
@@ -158,12 +154,138 @@ class DomainAuthHelperTests( unittest.TestCase
 
     # TODO  add tests for getRolesForPrincipal, etc.
 
+class EqualsFilterTests(unittest.TestCase):
+
+    def _getTargetClass(self):
+        from Products.PluggableAuthService.plugins.DomainAuthHelper \
+            import EqualsFilter
+        return EqualsFilter
+
+    def _makeOne(self, matchstring):
+        return self._getTargetClass()(matchstring)
+
+    def test_hit(self):
+        filter = self._makeOne('hitme')
+        self.failUnless(filter('hitme'))
+
+    def test_miss(self):
+        filter = self._makeOne('hitme')
+        self.failIf(filter('miss'))
+
+class StartsWithFilterTests(unittest.TestCase):
+
+    def _getTargetClass(self):
+        from Products.PluggableAuthService.plugins.DomainAuthHelper \
+            import StartsWithFilter
+        return StartsWithFilter
+
+    def _makeOne(self, matchstring):
+        return self._getTargetClass()(matchstring)
+
+    def test_hit_exact(self):
+        filter = self._makeOne('hitme')
+        self.failUnless(filter('hitme'))
+
+    def test_hit_prefix(self):
+        filter = self._makeOne('hit')
+        self.failUnless(filter('hitme'))
+
+    def test_miss(self):
+        filter = self._makeOne('hitme')
+        self.failIf(filter('miss'))
+
+class EndsWithFilterTests(unittest.TestCase):
+
+    def _getTargetClass(self):
+        from Products.PluggableAuthService.plugins.DomainAuthHelper \
+            import EndsWithFilter
+        return EndsWithFilter
+
+    def _makeOne(self, matchstring):
+        return self._getTargetClass()(matchstring)
+
+    def test_hit_exact(self):
+        filter = self._makeOne('hitme')
+        self.failUnless(filter('hitme'))
+
+    def test_hit_suffix(self):
+        filter = self._makeOne('tme')
+        self.failUnless(filter('hitme'))
+
+    def test_miss(self):
+        filter = self._makeOne('hitme')
+        self.failIf(filter('miss'))
+
+class RegexFilterTests(unittest.TestCase):
+
+    def _getTargetClass(self):
+        from Products.PluggableAuthService.plugins.DomainAuthHelper \
+            import RegexFilter
+        return RegexFilter
+
+    def _makeOne(self, matchstring):
+        return self._getTargetClass()(matchstring)
+
+    def test_hit_exact(self):
+        filter = self._makeOne('^hitme$')
+        self.failUnless(filter('hitme'))
+
+    def test_hit_pattern(self):
+        filter = self._makeOne('^h.*tme$')
+        self.failUnless(filter('hitme'))
+
+    def test_miss(self):
+        filter = self._makeOne('^hitme$')
+        self.failIf(filter('miss'))
+
+class IPFilterTests(unittest.TestCase):
+
+    def _getTargetClass(self):
+        from Products.PluggableAuthService.plugins.DomainAuthHelper \
+            import IPFilter
+        return IPFilter
+
+    def _makeOne(self, matchstring):
+        return self._getTargetClass()(matchstring)
+
+    def test_hit_exact(self):
+        filter = self._makeOne('192.168.1.24')
+        self.failUnless(filter('192.168.1.24'))
+
+    def test_miss_exact(self):
+        filter = self._makeOne('192.168.1.24')
+        self.failIf(filter('192.168.1.13'))
+
+    def test_hit_prefix(self):
+        filter = self._makeOne('192.168.1.0/24')
+        self.failUnless(filter('192.168.1.13'))
+
+    def test_miss_prefix(self):
+        filter = self._makeOne('192.168.1.0/24')
+        self.failIf(filter('192.168.0.13'))
+
+    def test_hit_range(self):
+        filter = self._makeOne('192.168.1.0-192.168.1.255')
+        self.failUnless(filter('192.168.1.13'))
+
+    def test_miss_range(self):
+        filter = self._makeOne('192.168.1.0-192.168.1.255')
+        self.failIf(filter('192.168.0.13'))
 
 if __name__ == "__main__":
     unittest.main()
 
 def test_suite():
-    return unittest.TestSuite((
+    tests = (
         unittest.makeSuite( DomainAuthHelperTests ),
-        ))
+        unittest.makeSuite( EqualsFilterTests ),
+        unittest.makeSuite( StartsWithFilterTests ),
+        unittest.makeSuite( EndsWithFilterTests ),
+        unittest.makeSuite( RegexFilterTests ),
+        )
+
+    if IP is not None:
+        tests += (unittest.makeSuite( IPFilterTests ),)
+
+    return unittest.TestSuite(tests)
 
