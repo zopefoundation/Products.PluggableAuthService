@@ -6,7 +6,7 @@ PluggableAuthService changelog
 
       - Factored out 'filter' logic into separate classes;  added filters
         for 'startswith' test and (if the IPy module is present) IP-range
-        tests.
+        tests.  See https://bugs.launchpad.net/zope-pas/+bug/173580 .
 
   PluggableAuthService 1.5.2 (2007/11/28)
 
