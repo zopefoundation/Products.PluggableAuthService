@@ -1,8 +1,15 @@
 PluggableAuthService changelog
 
+  PluggableAuthService 1.5.2.1 (2007/12/07)
+
+    Bugs Fixed
+
+      - Packaging error:  the 1.5.2 distribution was made from an
+        'svn export', and thus was missing package data files.
+
   PluggableAuthService 1.5.2 (2007/11/28)
 
-    Bugs fixed
+    Bugs Fixed
 
       - DomainAuthHelper plugin:  fix glitch for plugins which have never
         configured any "default" policy:  'authenticateCredentials' and
@@ -11,7 +18,7 @@ PluggableAuthService changelog
 
   PluggableAuthService 1.5.1 (2007/09/11)
 
-    Bugs fixed
+    Bugs Fixed
 
       - PluggableAuthService._verifyUser: changed to use exact_match to the 
         enumerator, otherwise a user with login 'foobar' might get returned 
