@@ -50,6 +50,7 @@ setup(name='Products.PluggableAuthService',
       zip_safe=False,
       install_requires=['Products.PluginRegistry >= 1.1'],
       extras_require={'exportimport': ['Products.GenericSetup >= 1.3'],
+                     },
       entry_points="""
       [zope2.initialize]
       Products.PluggableAuthService = Products.PluggableAuthService:initialize
