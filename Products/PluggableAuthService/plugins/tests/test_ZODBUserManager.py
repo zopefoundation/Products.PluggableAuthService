@@ -264,6 +264,24 @@ class ZODBUserManagerTests( unittest.TestCase
                                         exact_match=False )
         self.assertEqual( len( info_list ), 0 )
 
+    def test_enumerateUsers_unicode( self ):
+
+        from Products.PluggableAuthService.tests.test_PluggableAuthService \
+            import FauxRoot
+
+        root = FauxRoot()
+        zum = self._makeOne( id='partial' ).__of__( root )
+
+        ID_LIST = ( 'foo', 'bar', 'baz', 'bam' )
+
+        for id in ID_LIST:
+
+            zum.addUser( id, '%s@example.com' % id, 'password' )
+
+        info_list = zum.enumerateUsers( id = u'abc',
+                                        exact_match=False )
+        self.assertEqual( len( info_list ), 0 )
+
     def test_enumerateUsers_exact_nonesuch( self ):
 
         from Products.PluggableAuthService.tests.test_PluggableAuthService \
