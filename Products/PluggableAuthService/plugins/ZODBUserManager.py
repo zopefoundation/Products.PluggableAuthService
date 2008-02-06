@@ -139,10 +139,10 @@ class ZODBUserManager( BasePlugin, Cacheable ):
         view_name = createViewName('enumerateUsers', id or login)
 
 
-        if isinstance( id, str ):
+        if isinstance( id, basestring ):
             id = [ id ]
 
-        if isinstance( login, str ):
+        if isinstance( login, basestring ):
             login = [ login ]
 
         # Look in the cache first...
