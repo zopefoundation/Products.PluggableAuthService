@@ -8,6 +8,12 @@ PluggableAuthService changelog
         for 'startswith' test and (if the IPy module is present) IP-range
         tests.  See https://bugs.launchpad.net/zope-pas/+bug/173580 .
 
+    Bugs fixed
+
+      - plugins/ZODBRoleManager: added logging in case searchPrincipial()
+        returning more than one result (which might happen in case of 
+        having duplicate id within difference user sources)
+
   PluggableAuthService 1.5.2 (2007/11/28)
 
     Bugs fixed

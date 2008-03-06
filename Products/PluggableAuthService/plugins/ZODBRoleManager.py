@@ -37,6 +37,10 @@ from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.utils import classImplements
 from Products.PluggableAuthService.utils import postonly
 
+import logging 
+
+LOG = logging.getLogger('PluggableAuthService')
+
 class IZODBRoleManager(Interface):
     """ Marker interface.
     """
@@ -271,7 +275,10 @@ class ZODBRoleManager( BasePlugin ):
 
                 parent = aq_parent( self )
                 info = parent.searchPrincipals( id=k, exact_match=True )
-                assert( len( info ) in ( 0, 1 ) )
+
+                LOG.error('searchPrincipals() returned more than one result '
+                          'id=%s' % k)
+                assert len(info) <= 1
                 if len( info ) == 0:
                     title = '<%s: not found>' % k
                 else:
