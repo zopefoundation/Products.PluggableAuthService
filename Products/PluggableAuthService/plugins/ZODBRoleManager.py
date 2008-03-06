@@ -276,9 +276,10 @@ class ZODBRoleManager( BasePlugin ):
                 parent = aq_parent( self )
                 info = parent.searchPrincipals( id=k, exact_match=True )
 
-                LOG.error('searchPrincipals() returned more than one result '
-                          'for id=%s' % k)
-                assert len(info) <= 1
+                if len(info) > 1:
+                    LOG.error('searchPrincipals() returned more than one result '
+                              'for id=%s' % k)
+                assert len(info) in (0, 1)
                 if len( info ) == 0:
                     title = '<%s: not found>' % k
                 else:
