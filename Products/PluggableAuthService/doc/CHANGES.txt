@@ -7,6 +7,11 @@ PluggableAuthService changelog
       - ZODBUserManager plugin:  allow unicode arguments to 'enumerateUsers'.
         (https://bugs.launchpad.net/zope-pas/+bug/189627)
 
+      - plugins/ZODBRoleManager: added logging in case searchPrincipial()
+        returning more than one result (which might happen in case of 
+        having duplicate id within difference user sources)
+
+
   PluggableAuthService 1.5.2.1 (2007/12/07)
 
     Bugs Fixed
