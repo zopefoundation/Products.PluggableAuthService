@@ -21,7 +21,13 @@ from OFS.PropertyManager import PropertyManager
 from Acquisition import aq_parent, aq_inner
 from AccessControl import ClassSecurityInfo
 from App.class_init import default__class_init__ as InitializeClass
-from Interface.Implements import flattenInterfaces
+try:
+    from zope.interface import Interface
+except ImportError:
+    from Interface.Implements import flattenInterfaces
+else:
+    def flattenInterfaces(implemented):
+        return implemented.flattened()
 
 from zope.interface import implementedBy
 from zope.interface import providedBy

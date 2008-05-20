@@ -8,6 +8,9 @@ PluggableAuthService changelog
         for 'startswith' test and (if the IPy module is present) IP-range
         tests.  See https://bugs.launchpad.net/zope-pas/+bug/173580 .
 
+      - Zope 2.12 compatibility - removed Interface.Implements import if
+        zope.interface available.
+
     Bugs fixed
 
       - plugins/ZODBRoleManager: added logging in case searchPrincipial()
