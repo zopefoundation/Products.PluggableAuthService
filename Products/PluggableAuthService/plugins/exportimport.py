@@ -241,7 +241,11 @@ class ZODBRoleManagerExportImport(SimpleXMLExportImport):
             title = self._getNodeAttr(role, 'title', None)
             description = self._getNodeAttr(role, 'description', None)
 
-            self.context.addRole(role_id, title, description)
+            try:
+                self.context.addRole(role_id, title, description)
+            except KeyError:
+                # it's fine if the role already exists
+                pass
 
             for principal in role.getElementsByTagName('principal'):
                 principal_id = self._getNodeAttr(principal, 'principal_id', None)

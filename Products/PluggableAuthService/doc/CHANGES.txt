@@ -17,6 +17,9 @@ PluggableAuthService changelog
         returning more than one result (which might happen in case of 
         having duplicate id within difference user sources)
 
+      - Ensure ZODBRoleManagerExportImport doesn't fail if it tries to add a
+        role that already exists (idempotence is desirable in GS importers)
+
   PluggableAuthService 1.5.2 (2007/11/28)
 
     Bugs fixed
