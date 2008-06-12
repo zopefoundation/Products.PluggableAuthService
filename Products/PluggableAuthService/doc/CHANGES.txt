@@ -48,7 +48,7 @@ PluggableAuthService 1.5.1 (2007-09-11)
   (http://www.zope.org/Collectors/PAS/58)
 
 
-PluggableAuthService 1.5 (2006-06-17)
+PluggableAuthService 1.5 (2007-06-17)
 -------------------------------------
 
 - Add support for property plugins returning an IPropertySheet
