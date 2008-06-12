@@ -18,9 +18,8 @@ while VERSION and VERSION[0] in '-_.':
     VERSION = VERSION[1:]
 
 _boundary = '\n' + ('-' * 60) + '\n'
-README = (open(os.path.join(here, 'README.txt')).read()
-        + _boundary + _package_doc('README.txt')
-        + _boundary + _package_doc('doc/CHANGES.txt')
+README = ( _package_doc('README.txt')
+         + _boundary + _package_doc('doc/CHANGES.txt')
          )
 
 setup(name='Products.PluggableAuthService',

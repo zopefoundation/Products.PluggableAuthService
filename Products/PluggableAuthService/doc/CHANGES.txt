@@ -1,431 +1,412 @@
 PluggableAuthService changelog
+==============================
 
-  PluggableAuthService 1.5.4 (Unreleased)
+PluggableAuthService 1.5.4 (Unreleased)
+---------------------------------------
 
-    Bugs Fixed
+- Ensure ZODBRoleManagerExportImport doesn't fail if it tries to add a
+  role that already exists (idempotence is desirable in GS importers)
 
-      - Ensure ZODBRoleManagerExportImport doesn't fail if it tries to add a
-        role that already exists (idempotence is desirable in GS importers)
 
+PluggableAuthService 1.5.3 (2008-02-06)
+---------------------------------------
 
-  PluggableAuthService 1.5.3 (2008/02/06)
+- ZODBUserManager plugin:  allow unicode arguments to 'enumerateUsers'.
+  (https://bugs.launchpad.net/zope-pas/+bug/189627)
 
-    Bugs Fixed
+- plugins/ZODBRoleManager: added logging in case searchPrincipial()
+  returning more than one result (which might happen in case of 
+  having duplicate id within difference user sources)
 
-      - ZODBUserManager plugin:  allow unicode arguments to 'enumerateUsers'.
-        (https://bugs.launchpad.net/zope-pas/+bug/189627)
 
-      - plugins/ZODBRoleManager: added logging in case searchPrincipial()
-        returning more than one result (which might happen in case of 
-        having duplicate id within difference user sources)
+PluggableAuthService 1.5.2.1 (2007-12-07)
+-----------------------------------------
 
+- Packaging error:  the 1.5.2 distribution was made from an
+  'svn export', and thus was missing package data files.
 
-  PluggableAuthService 1.5.2.1 (2007/12/07)
 
-    Bugs Fixed
+PluggableAuthService 1.5.2 (2007-11-28)
+---------------------------------------
 
-      - Packaging error:  the 1.5.2 distribution was made from an
-        'svn export', and thus was missing package data files.
+- DomainAuthHelper plugin:  fix glitch for plugins which have never
+  configured any "default" policy:  'authenticateCredentials' and
+  'getRolesForPrincipal' would raise ValueError.
+  (http://www.zope.org/Collectors/PAS/59)
 
-  PluggableAuthService 1.5.2 (2007/11/28)
 
-    Bugs Fixed
+PluggableAuthService 1.5.1 (2007-09-11)
+---------------------------------------
 
-      - DomainAuthHelper plugin:  fix glitch for plugins which have never
-        configured any "default" policy:  'authenticateCredentials' and
-        'getRolesForPrincipal' would raise ValueError.
-        (http://www.zope.org/Collectors/PAS/59)
+- PluggableAuthService._verifyUser: changed to use exact_match to the 
+  enumerator, otherwise a user with login 'foobar' might get returned 
+  by _verifyUser for a query for login='foo' because the enumerator 
+  happened to return 'foobar' first in the results.
 
-  PluggableAuthService 1.5.1 (2007/09/11)
+- Add a test for manage_zmi_logout and replace a call to isImplementedBy
+  with providedBy.
+  (http://www.zope.org/Collectors/PAS/58)
 
-    Bugs Fixed
 
-      - PluggableAuthService._verifyUser: changed to use exact_match to the 
-        enumerator, otherwise a user with login 'foobar' might get returned 
-        by _verifyUser for a query for login='foo' because the enumerator 
-        happened to return 'foobar' first in the results.
+PluggableAuthService 1.5 (2006-06-17)
+-------------------------------------
 
-    Others
+- Add support for property plugins returning an IPropertySheet
+  to PropertiedUser. Added addPropertysheet to the IPropertiedUser.
 
-      - Add a test for manage_zmi_logout and replace a call to isImplementedBy
-        with providedBy.
-        (http://www.zope.org/Collectors/PAS/58)
+- Added a method to the IRoleAssignerPlugin to remove roles from a
+  principal, and an implementation for it on the ZODBRoleManager.
+  (http://www.zope.org/Collectors/PAS/57)
 
+- Added events infrastructure. Enabled new IPrincipalCreatedEvent and
+  ICredentialsUpdatedEvent events.
 
-  PluggableAuthService 1.5 (2006/06/17)
+- Added support for registering plugin types via ZCML.
 
-    Features Added
+- Implemented authentication caching in _extractUserIds.
 
-      - Add support for property plugins returning an IPropertySheet
-        to PropertiedUser. Added addPropertysheet to the IPropertiedUser.
+- Ported standard user folder tests from the AccessControl test suite.
 
-      - Added a method to the IRoleAssignerPlugin to remove roles from a
-        principal, and an implementation for it on the ZODBRoleManager.
-        (http://www.zope.org/Collectors/PAS/57)
+- Passwords with ":" characters would break authentication
+  (http://www.zope.org/Collectors/PAS/51)
 
-      - Added events infrastructure. Enabled new IPrincipalCreatedEvent and
-        ICredentialsUpdatedEvent events.
+- Corrected documented software dependencies
 
-      - Added support for registering plugin types via ZCML.
+- Converted to publishable security sensitive methods to only accept
+  POST requests to prevent XSS attacks.  See
+  http://www.zope.org/Products/Zope/Hotfix-2007-03-20/announcement and
+  http://dev.plone.org/plone/ticket/6310
 
-      - Implemented authentication caching in _extractUserIds.
+- Fixed issue in the user search filter where unrecognized keyword
+  arguments were ignored resulting in duplicate search entries.
+  (http://dev.plone.org/plone/ticket/6300)
 
-      - Ported standard user folder tests from the AccessControl test suite.
+- Made sure the Extensions.upgrade script does not commit full
+  transactions but only sets (optimistic) savepoints. Removed bogus
+  Zope 2.7 compatibility in the process.
+  (http://www.zope.org/Collectors/PAS/55)
 
-    Bugs Fixed
+- Made the CookieAuthHelper only use the '__ac_name' field if
+  '__ac_password' is also present. This fixes a login problem for
+  CMF sites where the login name was remembered between sessions with
+  an '__ac_name' cookie.
 
-      - Passwords with ":" characters would break authentication
-        (http://www.zope.org/Collectors/PAS/51)
+- Made the DomainAuthHelper return the remote address, even it the
+  remote host is not available (http://www.zope.org/Collectors/PAS/49).
 
-      - Corrected documented software dependencies
+- Fixed bug in DelegatingMultiPlugin which attempted to validate the
+  supplied password directly against the user password - updated to use
+  AuthEncoding.pw_validate to handle encoding issues
 
-      - Converted to publishable security sensitive methods to only accept
-        POST requests to prevent XSS attacks.  See
-        http://www.zope.org/Products/Zope/Hotfix-2007-03-20/announcement and
-        http://dev.plone.org/plone/ticket/6310
+- Fixed serious security hole in DelegatingMultiPlugin which allowed
+  Authentication if the EmergencyUser login was passed in.  Added
+  password validation utilizing AuthEncoding.pw_validate
 
-      - Fixed issue in the user search filter where unrecognized keyword
-        arguments were ignored resulting in duplicate search entries.
-        (http://dev.plone.org/plone/ticket/6300)
+- Fixed a set of tests that tested values computed from dictionaries 
+  and could break since dictionaries are not guaranteed to have any 
+  sort order.
 
-      - Made sure the Extensions.upgrade script does not commit full
-        transactions but only sets (optimistic) savepoints. Removed bogus
-        Zope 2.7 compatibility in the process.
-        (http://www.zope.org/Collectors/PAS/55)
+- Fixed test breakage induced by use of Z3 pagetemplates in Zope
+  2.10+.
 
-      - Made the CookieAuthHelper only use the '__ac_name' field if
-        '__ac_password' is also present. This fixes a login problem for
-        CMF sites where the login name was remembered between sessions with
-        an '__ac_name' cookie.
+- BasePlugin: The listInterfaces method only considered the old-style
+  __implements__ machinery when determining interfaces provided by
+  a plugin instance.
 
-      - Made the DomainAuthHelper return the remote address, even it the
-        remote host is not available (http://www.zope.org/Collectors/PAS/49).
+- ZODBUserManager: Already encrypted passwords were encrypted again in
+  addUser and updateUserPassword.
+  (http://www.zope.org/Collectors/Zope/1926)
 
-      - Fixed bug in DelegatingMultiPlugin which attempted to validate the
-        supplied password directly against the user password - updated to use
-        AuthEncoding.pw_validate to handle encoding issues
+- Made sure the emergency user via HTTP basic auth always wins, no matter
+  how borken the plugin landscape.
 
-      - Fixed serious security hole in DelegatingMultiPlugin which allowed
-        Authentication if the EmergencyUser login was passed in.  Added
-        password validation utilizing AuthEncoding.pw_validate
+- cleaned up code in CookieAuthHelper which allowed the form to override
+  login/password if a cookie had already been set.
 
-      - Fixed a set of tests that tested values computed from dictionaries 
-        and could break since dictionaries are not guaranteed to have any 
-        sort order.
+- Removed some BBB code for Zope versions < 2.8, which is not needed 
+  since we require Zope > 2.8.5 nowadays.
 
-      - Fixed test breakage induced by use of Z3 pagetemplates in Zope
-        2.10+.
 
-      - BasePlugin: The listInterfaces method only considered the old-style
-        __implements__ machinery when determining interfaces provided by
-        a plugin instance.
+PluggableAuthService 1.4 (2006-08-28)
+-------------------------------------
 
-      - ZODBUserManager: Already encrypted passwords were encrypted again in
-        addUser and updateUserPassword.
-        (http://www.zope.org/Collectors/Zope/1926)
+- Extended the DomainAuthHelper to function as its own extraction
+  plugin, to allow for the case that another extractor is registered,
+  but does not return any credentials.
+  (http://www.zope.org/Collectors/PAS/46)
 
-      - Made sure the emergency user via HTTP basic auth always wins, no matter
-        how borken the plugin landscape.
+- Re-worded parts of the README so they don't point to specific or 
+  non-existing files (http://www.zope.org/Collectors/PAS/6 and
+  http://www.zope.org/Collectors/PAS/47)
 
-    Other
 
-      - cleaned up code in CookieAuthHelper which allowed the form to override
-        login/password if a cookie had already been set.
+PluggableAuthService 1.4-beta (2006-08-07)
+------------------------------------------
 
-      - Removed some BBB code for Zope versions < 2.8, which is not needed 
-        since we require Zope > 2.8.5 nowadays.
+- Created a "Configured PAS" entry in the ZMI add list, which
+  allows creating a PAS using base and extension GenericSetup profiles
+  registered for IPluggableAuthService.  This entry should eventually
+  replace the "stock" PAS entry (assuming that we make GenericSetup
+  a "hard" dependency).
 
-  PluggableAuthService 1.4 (2006/08/28)
+- Added an "empty" GenericSetup profile, which creates a PAS containing
+  only a plugin registry and a setup tool.
 
-    Bugs Fixed
+- Repaired the "simple" GenericSetup profile to be useful, rather than
+  catastrophic, to apply:  it now creates and registers a set of
+  ZODB-based user / group / role plugins, along with a basic auth
+  helper.
 
-      - Extended the DomainAuthHelper to function as its own extraction
-        plugin, to allow for the case that another extractor is registered,
-        but does not return any credentials.
-        (http://www.zope.org/Collectors/PAS/46)
+- ZODBUserManager: Extend the "notional IZODBUserManager interface"
+  with the left-out updateUser facility and a corresponding
+  manage_updateUser method for ZMI use. Removed any responsibility
+  for updating a user's login from the updateUserPassword and
+  manage_updateUserPassword methods. This fixes the breakage
+  described in the collector issue below, and makes the ZMI view
+  for updating users work in a sane way.
+  (http://www.zope.org/Collectors/PAS/42)
 
-      - Re-worded parts of the README so they don't point to specific or 
-        non-existing files (http://www.zope.org/Collectors/PAS/6 and
-        http://www.zope.org/Collectors/PAS/47)
+- CookieAuthHelper: If expireCookie was called and extractCredentials
+  was hit in the same request, the CookieAuthHelper would throw an
+  exception (http://www.zope.org/Collectors/PAS/43)
 
-  PluggableAuthService 1.4-beta (2006/08/07)
+- Added a DEPENDENCIES.txt. (http://www.zope.org/Collectors/PAS/44)
 
-    Features Added
 
-      - Created a "Configured PAS" entry in the ZMI add list, which
-        allows creating a PAS using base and extension GenericSetup profiles
-        registered for IPluggableAuthService.  This entry should eventually
-        replace the "stock" PAS entry (assuming that we make GenericSetup
-        a "hard" dependency).
+PluggableAuthService 1.3 (2006-06-09)
+-------------------------------------
 
-      - Added an "empty" GenericSetup profile, which creates a PAS containing
-        only a plugin registry and a setup tool.
+- No changes from version 1.3-beta
 
-    Bugs Fixed
 
-      - Repaired the "simple" GenericSetup profile to be useful, rather than
-        catastrophic, to apply:  it now creates and registers a set of
-        ZODB-based user / group / role plugins, along with a basic auth
-        helper.
+PluggableAuthService 1.3-beta (2006-06-03)
+------------------------------------------
 
-      - ZODBUserManager: Extend the "notional IZODBUserManager interface"
-        with the left-out updateUser facility and a corresponding
-        manage_updateUser method for ZMI use. Removed any responsibility
-        for updating a user's login from the updateUserPassword and
-        manage_updateUserPassword methods. This fixes the breakage
-        described in the collector issue below, and makes the ZMI view
-        for updating users work in a sane way.
-        (http://www.zope.org/Collectors/PAS/42)
+- Modify CookieAuthHelper to prefer __ac form variables to the cookie
+  when extracting credentials.
+  (https://dev.plone.org/plone/ticket/5355)
 
-      - CookieAuthHelper: If expireCookie was called and extractCredentials
-        was hit in the same request, the CookieAuthHelper would throw an
-        exception (http://www.zope.org/Collectors/PAS/43)
 
-    Other
+PluggableAuthService 1.2 (2006-05-14)
+-------------------------------------
 
-      - Added a DEPENDENCIES.txt. (http://www.zope.org/Collectors/PAS/44)
+- Fix manage_zmi_logout which stopped working correctly as soon as the
+  PluggableAuthService product code was installed by correcting the
+  monkeypatch for it in __init__.py.
+  (http://www.zope.org/Collectors/PAS/12)
 
-  PluggableAuthService 1.3 (2006/06/09)
+- Add missing interface for IPropertiedUser and tests
+  (http://www.zope.org/Collectors/PAS/16)
 
-    No changes from version 1.3-beta
+- Removed STX links from README.txt which do nothing but return 
+  404s when clicked from the README on zope.org.
+  (http://www.zope.org/Collectors/PAS/6)
 
+- Fixing up inconsistent searching in the listAvailablePrincipals
+  method of the ZODBRoleManager and ZODBGroupManager plugins. Now both
+  constrain searches by ID.
+  (http://www.zope.org/Collectors/PAS/11)
 
-  PluggableAuthService 1.3-beta (2006/06/03)
+- Convert from using zLOG to using the Python logging module.
+  (http://www.zope.org/Collectors/PAS/14)
 
-    Other
 
-      - Modify CookieAuthHelper to prefer __ac form variables to the cookie
-        when extracting credentials.
-        (https://dev.plone.org/plone/ticket/5355)
+PluggableAuthService 1.2-beta (2006-02-25)
+------------------------------------------
 
+- Added suppport for exporting / importing a PAS and its content via
+  the GenericSetup file export framework.
 
-  PluggableAuthService 1.2 (2006/05/14)
+- Made ZODBRoleManager plugin check grants to the principal's groups,
+  as well as those made to the principal directly.
 
-    Bugs Fixed
+- Added two new interfaces, IChallengeProtocolChooser and
+  IRequestTypeSniffer. Those are used to select the 'authorization
+  protocol' or 'challenger protocol' to be used for challenging
+  according to the incoming request type.
 
-      - Fix manage_zmi_logout which stopped working correctly as soon as the
-        PluggableAuthService product code was installed by correcting the
-        monkeypatch for it in __init__.py.
-        (http://www.zope.org/Collectors/PAS/12)
+- Repaired warings appearing in Zope 2.8.5 due to a couple typos
+  in security declarations.
 
-      - Add missing interface for IPropertiedUser and tests
-        (http://www.zope.org/Collectors/PAS/16)
+- Repaired DeprecationWarnings due to use of Zope2 interface verification.
 
-    Other
+- Repaired unit test breakage (unittest.TestCase instances have
+  'failUnless'/'failIf', rather than 'assertTrue'/'assertFalse').
 
-      - Removed STX links from README.txt which do nothing but return 
-        404s when clicked from the README on zope.org.
-        (http://www.zope.org/Collectors/PAS/6)
+- Fixed a couple more places where Zope 2-style ``__implements__``
+  were being used to standardize on using ``classImplements``.
 
-      - Fixing up inconsistent searching in the listAvailablePrincipals
-        method of the ZODBRoleManager and ZODBGroupManager plugins. Now both
-        constrain searches by ID.
-        (http://www.zope.org/Collectors/PAS/11)
+- Fixed fallback implementations of ``providedBy`` and
+  ``implementedBy`` to always return a tuple.
 
-      - Convert from using zLOG to using the Python logging module.
-        (http://www.zope.org/Collectors/PAS/14)
+- Make sure challenge doesn't break if existing instances of the
+  PluginRegistry don't yet have ``IChallengeProtocolChooser`` as a
+  registered interface. (Would be nice to have some sort of
+  migration for the PluginRegistry between PAS releases)
 
+- Don't assume that just because zope.interface can be imported
+  that Five is present.
 
-  PluggableAuthService 1.2-beta (2006/02/25)
 
-    New Features
+PluggableAuthService 1.1b2 (2005-07-14)
+---------------------------------------
 
-      - Added suppport for exporting / importing a PAS and its content via
-        the GenericSetup file export framework.
+- Repaired a missing 'nocall:' in the Interfaces activation form.
 
-      - Made ZODBRoleManager plugin check grants to the principal's groups,
-        as well as those made to the principal directly.
 
-      - Added two new interfaces, IChallengeProtocolChooser and
-        IRequestTypeSniffer. Those are used to select the 'authorization
-        protocol' or 'challenger protocol' to be used for challenging
-        according to the incoming request type.
+PluggableAuthService 1.1b1 (2005-07-06)
+---------------------------------------
 
-    Bugs Fixed
+- PAS-level id mangling is no more. All (optional) mangling is now
+  done on a per-plugin basis.
 
-      - Repaired warings appearing in Zope 2.8.5 due to a couple typos
-        in security declarations.
+- Interfaces used by PAS are now usable in both Zope 2.7 and 2.8
+  (Five compatible)
 
-      - Repaired DeprecationWarnings due to use of Zope2 interface verification.
 
-      - Repaired unit test breakage (unittest.TestCase instances have
-        'failUnless'/'failIf', rather than 'assertTrue'/'assertFalse').
+PluggableAuthService 1.0.5 (2005-01-31)
+---------------------------------------
 
-      - Fixed a couple more places where Zope 2-style ``__implements__``
-        were being used to standardize on using ``classImplements``.
+- Simplified detection of the product directory using 'package_home'.
 
-      - Fixed fallback implementations of ``providedBy`` and
-        ``implementedBy`` to always return a tuple.
+- Set a default value for the 'login' attribute of a PAS, to avoid
+  UnboundLocalError.
 
-      - Make sure challenge doesn't break if existing instances of the
-        PluginRegistry don't yet have ``IChallengeProtocolChooser`` as a
-        registered interface. (Would be nice to have some sort of
-        migration for the PluginRegistry between PAS releases)
+PluggableAuthService 1.0.4 (2005-01-27)
+---------------------------------------
 
-      - Don't assume that just because zope.interface can be imported
-        that Five is present.
+- Made 'Extensions' a package, to allow importing its scripts
+  as modules.
 
-  PluggableAuthService 1.1b2 (2005/07/14)
+- Declared new 'IPluggableAuthService' interface, describing additional
+  PAS-specific API.
 
-    Bugs Fixed
+- Exposed PAS' 'resetCredentials' and 'updateCredentials' as public
+  methods.
 
-      - Repaired a missing 'nocall:' in the Interfaces activation form.
+- Monkey-patch ZMI's logout to invoke PAS' 'resetCredentials', if
+  present.
 
-  PluggableAuthService 1.1b1 (2005/07/06)
+- CookieAuth plugin now encodes and decodes cookies in the same
+  format as CookieCrumbler to provide compatibility between
+  sites running PAS and CC.
 
-    New Features
+- Add a publicly callable "logout" method on the PluggableAuthService
+  instance that will call resetCredentials on all activated 
+  ICredentialsRest plugins, thus effecting a logout.
 
-      - PAS-level id mangling is no more. All (optional) mangling is now
-        done on a per-plugin basis.
+- Enabled the usage of the CookieAuthHelper login screen functionality
+  without actually using the CookieAuthHelper to maintain the 
+  credentials store in its own auth cookie by ensuring that only
+  active updateCredentials plugins are informed about a successful
+  login so they can store the credentials.
 
-      - Interfaces used by PAS are now usable in both Zope 2.7 and 2.8
-        (Five compatible)
+- Added a _getPAS method to the BasePlugin base class to be used
+  as the canonical way of getting at the PAS instance from within
+  plugins.
 
-  PluggableAuthService 1.0.5 (2005/01/31)
+- Group and user plugins can now specify their own title for a
+  principal entry (PAS will not compute one if they do).
 
-    Bugs Fixed
+- PAS and/or plugins can now take advantage of caching using the
+  Zope ZCacheable framework with RAM Cache Managers. See
+  doc/caching.stx for the details.
 
-      - Simplified detection of the product directory using 'package_home'.
+- Make 'getUserById' pass the 'login' to '_findUser', so that
+  the returned user object can answer 'getUserName' sanely.
 
-      - Set a default value for the 'login' attribute of a PAS, to avoid
-        UnboundLocalError.
+- Harden 'logout' against missing HTTP_REFERRER.
 
-  PluggableAuthService 1.0.4 (2005/01/27)
+- Avoid triggering "Emergency user cannot own" when adding a
+  CookieAuthHelper plugin as that user.
 
-    Features Added
+- Detect and prevent recursive redirecting in the CookieAuthHelper
+  if the login_form cannot be reached by the Anonymous User.
 
-      - Made 'Extensions' a package, to allow importing its scripts
-        as modules.
+- Made logging when swallowing exceptions much less noisy (they
+  *don't* necessarily require attention).
 
-      - Declared new 'IPluggableAuthService' interface, describing additional
-        PAS-specific API.
+- Clarified interface of IAuthenticationPlugin, which should return
+  None rather than raising an exception if asked to authenticate an
+  unknown principal;  adjusted ZODBUserManager accordingly.
 
-      - Exposed PAS' 'resetCredentials' and 'updateCredentials' as public
-        methods.
+- Don't log an error in zodb_user_plugin's authenticateCredentials
+  if we don't have a record for a particular username, just return None.
 
-      - Monkey-patch ZMI's logout to invoke PAS' 'resetCredentials', if
-        present.
+- If an IAuthenticationPlugin returns None instead of a tuple
+  from authenticateCredentials, don't log a tuple-unpack error in PAS
+  itself.
 
-      - CookieAuth plugin now encodes and decodes cookies in the same
-        format as CookieCrumbler to provide compatibility between
-        sites running PAS and CC.
 
-      - Add a publicly callable "logout" method on the PluggableAuthService
-        instance that will call resetCredentials on all activated 
-        ICredentialsRest plugins, thus effecting a logout.
+PluggableAuthService 1.0.3 (2004-10-16)
+---------------------------------------
 
-      - Enabled the usage of the CookieAuthHelper login screen functionality
-        without actually using the CookieAuthHelper to maintain the 
-        credentials store in its own auth cookie by ensuring that only
-        active updateCredentials plugins are informed about a successful
-        login so they can store the credentials.
+- Implemented support for issuing challenges via IChallengePlugins.
 
-      - Added a _getPAS method to the BasePlugin base class to be used
-        as the canonical way of getting at the PAS instance from within
-        plugins.
+  - three challenge styles in particular:
 
-      - Group and user plugins can now specify their own title for a
-        principal entry (PAS will not compute one if they do).
+    - HTTP Basic Auth
 
-      - PAS and/or plugins can now take advantage of caching using the
-        Zope ZCacheable framework with RAM Cache Managers. See
-        doc/caching.stx for the details.
+    - CookieCrumbler-like redirection
 
-    Bugs Fixed
+    - Inline authentication form
 
-      - Make 'getUserById' pass the 'login' to '_findUser', so that
-        the returned user object can answer 'getUserName' sanely.
+- Made unit tests pass when run with cAccessControl.
 
-      - Harden 'logout' against missing HTTP_REFERRER.
+- plugins/ZODBRoleManager.py: don't claim authority for 'Authenticated'
+  or 'Anonymous' roles, which are managed by PAS.
 
-      - Avoid triggering "Emergency user cannot own" when adding a
-        CookieAuthHelper plugin as that user.
+- plugins/ZODBRoleManager.py: don't freak out if a previously assigned
+  principal goes away.
 
-      - Detect and prevent recursive redirecting in the CookieAuthHelper
-        if the login_form cannot be reached by the Anonymous User.
+- plugins/ZODBGroupManager.py: don't freek out if a previously assigned
+  principal goes away.
 
-      - Made logging when swallowing exceptions much less noisy (they
-        *don't* necessarily require attention).
+- plugins/ZODBUserManager.py: plugin now uses AuthEncoding for its
+  password encryption so that we can more easily support migrating
+  existing UserFolders. Since PAS has been out for a while,
+  though, we still will authenticate against old credentials
 
-      - Clarified interface of IAuthenticationPlugin, which should return
-        None rather than raising an exception if asked to authenticate an
-        unknown principal;  adjusted ZODBUserManager accordingly.
+- Repaired arrow images in two-list ZMI views.
 
-      - Don't log an error in zodb_user_plugin's authenticateCredentials
-        if we don't have a record for a particular username, just return None.
+- searchPrincipals will work for exact matches when a plugin supports
+  both 'enumerateUsers' and 'enumerateGroups'.
 
-      - If an IAuthenticationPlugin returns None instead of a tuple
-        from authenticateCredentials, don't log a tuple-unpack error in PAS
-	    itself.
+- 'Authenticated' Role is now added dynamically by the
+  PluggableAuthService, not by any role manager
 
-  PluggableAuthService 1.0.3 (2004/10/16)
+- Added WARNING-level logs with tracebacks for all swallowed
+  plugin exceptions, so that you notice that there is something
+  wrong with the plugins.
 
-    Bugs Fixed
+- All authenticateCredentials() returned a single None when they
+  could not authenticate, although all calls expected a tuple.
 
-      - Implemented support for issuing challenges via IChallengePlugins.
+- The user id in extract user now calls _verifyUser to get the ID
+  mangled by the enumeration plugin, instead of mangling it with the
+  authentication ID, thereby allowing the authentication and
+  enumeration plugins to be different plugins.
 
-        - three challenge styles in particular:
 
-          - HTTP Basic Auth
+PluggableAuthService 1.0.2 (2004-07-15)
+---------------------------------------
 
-          - CookieCrumbler-like redirection
+- ZODBRoleManager and ZODBGroupManager needed the "two_lists" view,
+  and associated images, which migrated to the PluginRegsitry product
+  when they split;  restored them.
 
-          - Inline authentication form
 
-      - Made unit tests pass when run with cAccessControl.
+PluggableAuthService 1.0.1 (2004-05-18)
+---------------------------------------
 
-      - plugins/ZODBRoleManager.py: don't claim authority for 'Authenticated'
-        or 'Anonymous' roles, which are managed by PAS.
+- CookieAuth plugin didn't successfully set cookies (first, because
+  of a NameError, then, due to a glitch with long lines).
 
-      - plugins/ZODBRoleManager.py: don't freak out if a previously assigned
-        principal goes away.
+- Missing ZPL in most modules.
 
-      - plugins/ZODBGroupManager.py: don't freek out if a previously assigned
-        principal goes away.
 
-      - plugins/ZODBUserManager.py: plugin now uses AuthEncoding for its
-        password encryption so that we can more easily support migrating
-        existing UserFolders. Since PAS has been out for a while,
-        though, we still will authenticate against old credentials
+PluggableAuthService 1.0 (2004-04-29)
+-------------------------------------
 
-      - Repaired arrow images in two-list ZMI views.
+- Initial release
 
-      - searchPrincipals will work for exact matches when a plugin supports
-        both 'enumerateUsers' and 'enumerateGroups'.
-
-      - 'Authenticated' Role is now added dynamically by the
-        PluggableAuthService, not by any role manager
-
-      - Added WARNING-level logs with tracebacks for all swallowed
-        plugin exceptions, so that you notice that there is something
-        wrong with the plugins.
-
-      - All authenticateCredentials() returned a single None when they
-        could not authenticate, although all calls expected a tuple.
-
-      - The user id in extract user now calls _verifyUser to get the ID
-        mangled by the enumeration plugin, instead of mangling it with the
-        authentication ID, thereby allowing the authentication and
-        enumeration plugins to be different plugins.
-
-
-  PluggableAuthService 1.0.2 (2004/07/15)
-
-    Bugs Fixed
-
-      - ZODBRoleManager and ZODBGroupManager needed the "two_lists" view,
-        and associated images, which migrated to the PluginRegsitry product
-        when they split;  restored them.
-
-  PluggableAuthService 1.0.1 (2004/05/18)
-
-    Bugs Fixed
-
-      - CookieAuth plugin didn't successfully set cookies (first, because
-        of a NameError, then, due to a glitch with long lines).
-
-      - Missing ZPL in most modules.
-
-  PluggableAuthService 1.0 (2004/04/29)
-
-    - Initial release
