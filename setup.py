@@ -20,6 +20,7 @@ while VERSION and VERSION[0] in '-_.':
 _boundary = '\n' + ('-' * 60) + '\n'
 README = ( _package_doc('README.txt')
          + _boundary + _package_doc('doc/CHANGES.txt')
+         + _boundary + "\nDownload\n========"
          )
 
 setup(name='Products.PluggableAuthService',
