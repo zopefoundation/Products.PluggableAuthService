@@ -4,6 +4,8 @@ PluggableAuthService changelog
 PluggableAuthService 1.6 (unreleased)
 -------------------------------------
 
+- Launchpad #15569586:  docstring fix.
+
 - Factored out 'filter' logic into separate classes;  added filters
   for 'startswith' test and (if the IPy module is present) IP-range
   tests.  See https://bugs.launchpad.net/zope-pas/+bug/173580 .
