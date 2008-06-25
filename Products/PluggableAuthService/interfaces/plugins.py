@@ -222,7 +222,7 @@ class IPropertiesPlugin( Interface ):
         o User will implement IPropertiedUser.
 
         o Plugin should return a dictionary or an object providing
-          IPropertiesPlugin.
+          IPropertySheet.
 
         o Plugin may scribble on the user, if needed (but must still
           return a mapping, even if empty).
