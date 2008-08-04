@@ -305,6 +305,7 @@ class ZODBRoleManager( BasePlugin ):
         if not already:
             new = current + ( role_id, )
             self._principal_roles[ principal_id ] = new
+            self._invalidatePrincipalCache( principal_id )
 
         return not already
     assignRoleToPrincipal = postonly(assignRoleToPrincipal)
@@ -329,6 +330,7 @@ class ZODBRoleManager( BasePlugin ):
 
         if already:
             self._principal_roles[ principal_id ] = new
+            self._invalidatePrincipalCache( principal_id )
 
         return already
     removeRoleFromPrincipal = postonly(removeRoleFromPrincipal)

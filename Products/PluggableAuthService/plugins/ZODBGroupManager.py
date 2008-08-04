@@ -70,6 +70,7 @@ class ZODBGroupManager( BasePlugin ):
         self._groups = OOBTree()
         self._principal_groups = OOBTree()
 
+
     #
     #   IGroupEnumerationPlugin implementation
     #
@@ -279,6 +280,7 @@ class ZODBGroupManager( BasePlugin ):
         if not already:
             new = current + ( group_id, )
             self._principal_groups[ principal_id ] = new
+            self._invalidatePrincipalCache( principal_id )
 
         return not already
     addPrincipalToGroup = postonly(addPrincipalToGroup)
@@ -304,6 +306,7 @@ class ZODBGroupManager( BasePlugin ):
 
         if already:
             self._principal_groups[ principal_id ] = new
+            self._invalidatePrincipalCache( principal_id )
 
         return already
     removePrincipalFromGroup = postonly(removePrincipalFromGroup)
