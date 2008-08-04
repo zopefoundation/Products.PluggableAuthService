@@ -18,7 +18,7 @@ $Id$
 """
 from OFS.SimpleItem import SimpleItem
 from OFS.PropertyManager import PropertyManager
-from Acquisition import aq_parent, aq_inner
+from Acquisition import aq_base, aq_parent, aq_inner
 from AccessControl import ClassSecurityInfo
 from App.class_init import default__class_init__ as InitializeClass
 from Interface.Implements import flattenInterfaces
@@ -30,6 +30,7 @@ from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
 from Products.PluggableAuthService.utils import classImplements
 from Products.PluggableAuthService.permissions import ManageUsers
+from Products.PluggableAuthService.utils import createViewName
 
 class BasePlugin(SimpleItem, PropertyManager):
 
@@ -106,6 +107,13 @@ class BasePlugin(SimpleItem, PropertyManager):
     def _getPAS( self ):
         """ Canonical way to get at the PAS instance from a plugin """
         return aq_parent( aq_inner( self ) )
+
+    security.declarePrivate( '_invalidatePrincipalCache' )
+    def _invalidatePrincipalCache( self, id ):
+        pas = self._getPAS()
+        if pas is not None and hasattr( aq_base(pas), 'ZCacheable_invalidate'):
+            view_name = createViewName('_findUser', id)
+            pas.ZCacheable_invalidate(view_name)
 
 classImplements(BasePlugin, *implementedBy(SimpleItem))
 

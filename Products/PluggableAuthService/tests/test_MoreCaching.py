@@ -247,24 +247,66 @@ class CachingTests(pastc.PASTestCase):
 
         self.assertCacheStats(0, 0, 0)
 
-        self.pas._doAddUser(user_id, password, [pastc.user_role], [])
+        self.pas._doAddUser(user_id, password, [], [])
 
-        # XXX: _doAddUser calls getUser
         self.assertCacheStats(2, 2, 0)
 
-        # XXX: As a result the user is now cached, but without roles
         user = self.pas.getUserById(user_id)
         self.failIf(user is None)
         self.assertEqual(user.getId(), user_id)
         self.assertEqual(user.getRoles(), ['Authenticated'])
 
-        # XXX: Must clear cache to get roles
-        self.pas.ZCacheable_invalidate()
+        self.assertCacheStats(3, 3, 1)
 
-        user = self.pas.getUserById(user_id)
-        self.failIf(user is None)
-        self.assertEqual(user.getId(), user_id)
-        self.assertEqual(user.getRoles(), ['Authenticated', pastc.user_role])
+    def test_addingRoleResetsCache(self):
+        user_id = 'test_user_2_'
+        password = 'secret'
+
+        self.pas._doAddUser(user_id, password, [], [])
+        self.assertCacheStats(2, 2, 0)
+        self.pas.roles.assignRoleToPrincipal( pastc.user_role, user_id )
+        self.assertCacheStats(0, 0, 0)
+
+    def test_removingRoleResetsCache(self):
+        user_id = 'test_user_2_'
+        password = 'secret'
+
+        self.pas._doAddUser(user_id, password, [], [])
+        self.assertCacheStats(2, 2, 0)
+        self.pas.roles._principal_roles[ user_id ] = (pastc.user_role, )
+        self.pas.roles.removeRoleFromPrincipal( pastc.user_role, user_id )
+        self.assertCacheStats(0, 0, 0)
+
+    def test_addPrincipalToGroupResetsCache(self):
+        group_id = 'test_group_1_'
+        user_id = 'test_user_2_'
+        password = 'secret'
+
+        factory = self.pas.manage_addProduct['PluggableAuthService']
+        factory.addZODBGroupManager( 'groups' )
+        self.pas._doAddUser(user_id, password, [], [])
+        groups = self.pas.groups
+        groups.addGroup( group_id )
+        self.assertCacheStats(2, 2, 0)
+
+        groups.addPrincipalToGroup( user_id, group_id)
+        self.assertCacheStats(0, 0, 0)
+
+    def test_removePrincipalFromGroupResetsCache(self):
+        group_id = 'test_group_1_'
+        user_id = 'test_user_2_'
+        password = 'secret'
+
+        factory = self.pas.manage_addProduct['PluggableAuthService']
+        factory.addZODBGroupManager( 'groups' )
+        self.pas._doAddUser(user_id, password, [], [])
+        groups = self.pas.groups
+        groups.addGroup( group_id )
+        groups._principal_groups[user_id] = (group_id,)
+        self.assertCacheStats(2, 2, 0)
+
+        groups.removePrincipalFromGroup( user_id, group_id)
+        self.assertCacheStats(0, 0, 0)
 
 
 def test_suite():
