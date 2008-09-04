@@ -25,6 +25,8 @@ PluggableAuthService 1.6 (unreleased)
 
 - Fixed tests so they run with Zope 2.11.
 
+- Split up large permission tests into individual tests.
+
 
 PluggableAuthService 1.5.2 (2007-11-28)
 ---------------------------------------

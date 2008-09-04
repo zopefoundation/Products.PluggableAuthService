@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2001 Zope Corporation and Contributors. All Rights
+# Copyright (c) 2001-2008 Zope Corporation and Contributors. All Rights
 # Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
@@ -478,7 +478,7 @@ class DynamicGroupsPlugin( unittest.TestCase
         self.assertEqual( len( groups ), 1 )
         self.failUnless( 'ggp_effable' in groups )
 
-    def testPOSTProtections(self):
+    def test_removeGroup_POST_permissions(self):
         from zExceptions import Forbidden
 
         GROUP_ID = 'testgroup'

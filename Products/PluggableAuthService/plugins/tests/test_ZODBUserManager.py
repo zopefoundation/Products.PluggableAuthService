@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2001 Zope Corporation and Contributors. All Rights
+# Copyright (c) 2001-2008 Zope Corporation and Contributors. All Rights
 # Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
@@ -13,6 +13,9 @@
 #
 ##############################################################################
 import unittest
+
+from AccessControl.AuthEncoding import pw_encrypt
+from zExceptions import Forbidden
 
 from Products.PluggableAuthService.tests.conformance \
     import IAuthenticationPlugin_conformance
@@ -581,19 +584,15 @@ class ZODBUserManagerTests( unittest.TestCase
         self.assertEqual(user_id, 'user1')
         self.assertEqual(login, 'user2@example.com')
 
-    def testPOSTProtections(self):
-        from AccessControl.AuthEncoding import pw_encrypt
-        from zExceptions import Forbidden
+    def test_manage_updateUserPassword_POST_permissions(self):
         USER_ID = 'testuser'
         PASSWORD = 'password'
-
         ENCRYPTED = pw_encrypt(PASSWORD)
 
         zum = self._makeOne()
         zum.addUser(USER_ID, USER_ID, '')
 
         req, res = makeRequestAndResponse()
-        # test manage_updateUserPassword
         # Fails with a GET
         req.set('REQUEST_METHOD', 'GET')
         req.set('method', 'GET')
@@ -604,14 +603,30 @@ class ZODBUserManagerTests( unittest.TestCase
         req.set('method', 'POST')
         zum.manage_updateUserPassword(USER_ID, PASSWORD, PASSWORD, REQUEST=req)
 
-        # test manage_updatePassword
+    def test_manage_updatePassword_POST_permissions(self):
+        USER_ID = 'testuser'
+        PASSWORD = 'password'
+        ENCRYPTED = pw_encrypt(PASSWORD)
+
+        zum = self._makeOne()
+        zum.addUser(USER_ID, USER_ID, '')
+
+        req, res = makeRequestAndResponse()
         req.set('REQUEST_METHOD', 'GET')
         req.set('method', 'GET')
         self.assertRaises(Forbidden, zum.manage_updatePassword,
                           USER_ID, PASSWORD, PASSWORD, REQUEST=req)
         # XXX: This method is broken
 
-        # test manage_removeUsers
+    def test_manage_removeUsers_POST_permissions(self):
+        USER_ID = 'testuser'
+        PASSWORD = 'password'
+        ENCRYPTED = pw_encrypt(PASSWORD)
+
+        zum = self._makeOne()
+        zum.addUser(USER_ID, USER_ID, '')
+
+        req, res = makeRequestAndResponse()
         req.set('REQUEST_METHOD', 'GET')
         req.set('method', 'GET')
         self.assertRaises(Forbidden, zum.manage_removeUsers,

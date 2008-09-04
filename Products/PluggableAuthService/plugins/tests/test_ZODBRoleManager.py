@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2001 Zope Corporation and Contributors. All Rights
+# Copyright (c) 2001-2008 Zope Corporation and Contributors. All Rights
 # Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
@@ -13,6 +13,8 @@
 #
 ##############################################################################
 import unittest
+
+from zExceptions import Forbidden
 
 from Products.PluggableAuthService.tests.conformance \
     import IRolesPlugin_conformance
@@ -58,7 +60,7 @@ class ZODBRoleManagerTests( unittest.TestCase
             import FauxRoot
 
         root = FauxRoot()
-        zrm = self._makeOne().__of__( root )
+        zrm = self._makeOne().__of__(root)
 
         zrm.addRole( 'roleid', 'Role', 'This is a role' )
 
@@ -92,7 +94,7 @@ class ZODBRoleManagerTests( unittest.TestCase
             import FauxRoot
 
         root = FauxRoot()
-        zrm = self._makeOne().__of__( root )
+        zrm = self._makeOne().__of__(root)
 
         zrm.addRole( 'roleid', 'Role', 'This is a role' )
         zrm.addRole( 'doomed', 'Fatal', 'rust never sleeps' )
@@ -110,7 +112,7 @@ class ZODBRoleManagerTests( unittest.TestCase
             import FauxRoot
 
         root = FauxRoot()
-        zrm = self._makeOne( id='no_crit' ).__of__( root )
+        zrm = self._makeOne( id='no_crit' ).__of__(root)
 
         ID_LIST = ( 'foo', 'bar', 'baz', 'bam' )
 
@@ -141,7 +143,7 @@ class ZODBRoleManagerTests( unittest.TestCase
             import FauxRoot
 
         root = FauxRoot()
-        zrm = self._makeOne( id='exact' ).__of__( root )
+        zrm = self._makeOne( id='exact' ).__of__(root)
 
         ID_LIST = ( 'foo', 'bar', 'baz', 'bam' )
 
@@ -170,7 +172,7 @@ class ZODBRoleManagerTests( unittest.TestCase
             import FauxRoot
 
         root = FauxRoot()
-        zrm = self._makeOne( id='partial' ).__of__( root )
+        zrm = self._makeOne( id='partial' ).__of__(root)
 
         ID_LIST = ( 'foo', 'bar', 'baz', 'bam' )
 
@@ -205,7 +207,7 @@ class ZODBRoleManagerTests( unittest.TestCase
             import FauxRoot
 
         root = FauxRoot()
-        zrm = self._makeOne( id='partial' ).__of__( root )
+        zrm = self._makeOne( id='partial' ).__of__(root)
 
         ID_LIST = ( 'foo', 'bar', 'baz', 'bam' )
 
@@ -235,7 +237,7 @@ class ZODBRoleManagerTests( unittest.TestCase
             import FauxRoot
 
         root = FauxRoot()
-        zgm = self._makeOne( id='exact_nonesuch' ).__of__( root )
+        zgm = self._makeOne( id='exact_nonesuch' ).__of__(root)
 
         ID_LIST = ( 'foo', 'bar', 'baz', 'bam' )
 
@@ -252,7 +254,7 @@ class ZODBRoleManagerTests( unittest.TestCase
             import FauxRoot
 
         root = FauxRoot()
-        zrm = self._makeOne( id='assign_nonesuch' ).__of__( root )
+        zrm = self._makeOne( id='assign_nonesuch' ).__of__(root)
 
         self.assertRaises( KeyError, zrm.assignRoleToPrincipal, 'test', 'foo' )
 
@@ -262,7 +264,7 @@ class ZODBRoleManagerTests( unittest.TestCase
             import FauxRoot
 
         root = FauxRoot()
-        zrm = self._makeOne( id='assign_user' ).__of__( root )
+        zrm = self._makeOne( id='assign_user' ).__of__(root)
         zrm.addRole( 'test1' )
         zrm.addRole( 'test2' )
         user = DummyUser( 'foo' )
@@ -289,7 +291,7 @@ class ZODBRoleManagerTests( unittest.TestCase
             import FauxRoot
 
         root = FauxRoot()
-        zrm = self._makeOne( id='assign_user' ).__of__( root )
+        zrm = self._makeOne( id='assign_user' ).__of__(root)
         zrm.addRole( 'test1' )
         zrm.addRole( 'test2' )
         user = DummyUser( 'foo', ( 'qux', ) )
@@ -306,7 +308,7 @@ class ZODBRoleManagerTests( unittest.TestCase
     def test_assignRoleToPrincipal_new( self ):
 
         root = FauxPAS()
-        zrm = self._makeOne( id='assign_new' ).__of__( root )
+        zrm = self._makeOne( id='assign_new' ).__of__(root)
 
         zrm.addRole( 'test' )
         self.assertEqual( len( zrm.listAssignedPrincipals( 'test' ) ), 0 )
@@ -323,7 +325,7 @@ class ZODBRoleManagerTests( unittest.TestCase
     def test_assignRoleToPrincipal_already( self ):
 
         root = FauxPAS()
-        zrm = self._makeOne( id='assign_already' ).__of__( root )
+        zrm = self._makeOne( id='assign_already' ).__of__(root)
 
         zrm.addRole( 'test' )
 
@@ -342,7 +344,7 @@ class ZODBRoleManagerTests( unittest.TestCase
         root = FauxSmartPAS()
         root.user_ids['foo'] = 'foo'
 
-        zrm = self._makeOne( id='assign_before_remove' ).__of__( root )
+        zrm = self._makeOne( id='assign_before_remove' ).__of__(root)
 
         zrm.addRole( 'test' )
         self.assertEqual( len( zrm.listAssignedPrincipals( 'test' ) ), 0 )
@@ -369,7 +371,7 @@ class ZODBRoleManagerTests( unittest.TestCase
             import FauxRoot
 
         root = FauxRoot()
-        zrm = self._makeOne( id='remove_nonesuch' ).__of__( root )
+        zrm = self._makeOne( id='remove_nonesuch' ).__of__(root)
 
         self.assertRaises( KeyError, zrm.removeRoleFromPrincipal
                          , 'test', 'foo' )
@@ -377,7 +379,7 @@ class ZODBRoleManagerTests( unittest.TestCase
     def test_removeRoleFromPrincipal_existing( self ):
 
         root = FauxPAS()
-        zrm = self._makeOne( id='remove_existing' ).__of__( root )
+        zrm = self._makeOne(id='remove_existing').__of__(root)
 
         zrm.addRole( 'test' )
 
@@ -404,7 +406,7 @@ class ZODBRoleManagerTests( unittest.TestCase
     def test_removeRoleFromPrincipal_noop( self ):
 
         root = FauxPAS()
-        zrm = self._makeOne( id='remove_noop' ).__of__( root )
+        zrm = self._makeOne( id='remove_noop' ).__of__(root)
 
         zrm.addRole( 'test' )
 
@@ -426,7 +428,7 @@ class ZODBRoleManagerTests( unittest.TestCase
             import FauxRoot
 
         root = FauxRoot()
-        zrm = self._makeOne( id='update_nonesuch' ).__of__( root )
+        zrm = self._makeOne( id='update_nonesuch' ).__of__(root)
 
         self.assertRaises( KeyError, zrm.updateRole
                          , 'nonesuch', 'title', 'description' )
@@ -437,7 +439,7 @@ class ZODBRoleManagerTests( unittest.TestCase
             import FauxRoot
 
         root = FauxRoot()
-        zrm = self._makeOne( id='update_normal' ).__of__( root )
+        zrm = self._makeOne( id='update_normal' ).__of__(root)
 
         zrm.addRole( 'role', 'Original Title', 'Original description' )
 
@@ -459,7 +461,7 @@ class ZODBRoleManagerTests( unittest.TestCase
             import FauxRoot
 
         root = FauxRoot()
-        zrm = self._makeOne( id='remove_then_add' ).__of__( root )
+        zrm = self._makeOne( id='remove_then_add' ).__of__(root)
         user = DummyUser( 'foo' )
 
         zrm.addRole( 'test' )
@@ -471,23 +473,18 @@ class ZODBRoleManagerTests( unittest.TestCase
 
         self.failIf( 'test' in zrm.getRolesForPrincipal( user ) )
 
-    def testPOSTProtections(self):
-        from zExceptions import Forbidden
-
+    def test_assignRoleToPrincipal_POST_permissions(self):
         USER_ID = 'testuser'
         ROLE_ID = 'myrole'
 
         root = FauxPAS()
-        zrm = self._makeOne( id='remove_existing' ).__of__( root )
+        zrm = self._makeOne(id='remove_existing').__of__(root)
         zrm = self._makeOne()
         zrm.addRole(ROLE_ID)
-
-        user = DummyUser( USER_ID )
 
         req, res = makeRequestAndResponse()
 
         # Fails with a GET
-        # test assignRoleToPrincipal
         req.set('REQUEST_METHOD', 'GET')
         req.set('method', 'GET')
         self.assertRaises(Forbidden, zrm.assignRoleToPrincipal,
@@ -497,28 +494,56 @@ class ZODBRoleManagerTests( unittest.TestCase
         req.set('method', 'POST')
         zrm.assignRoleToPrincipal(ROLE_ID, USER_ID, REQUEST=req)
 
-        # test removeRoleFromPricipal
+    def test_removeRoleFromPricipal_POST_permission(self):
+        USER_ID = 'testuser'
+        ROLE_ID = 'myrole'
+
+        root = FauxPAS()
+        zrm = self._makeOne(id='remove_existing').__of__(root)
+        zrm = self._makeOne()
+        zrm.addRole(ROLE_ID)
+
+        req, res = makeRequestAndResponse()
+
         req.set('REQUEST_METHOD', 'GET')
         req.set('method', 'GET')
         self.assertRaises(Forbidden, zrm.removeRoleFromPrincipal,
                           ROLE_ID, USER_ID, REQUEST=req)
+        # Works with a POST
         req.set('REQUEST_METHOD', 'POST')
         req.set('method', 'POST')
         zrm.removeRoleFromPrincipal(ROLE_ID, USER_ID, REQUEST=req)
 
-        # test removeRole
+    def test_removeRole_POST_permissions(self):
+        ROLE_ID = 'myrole'
+
+        root = FauxPAS()
+        zrm = self._makeOne(id='remove_existing').__of__(root)
+        zrm = self._makeOne()
+        zrm.addRole(ROLE_ID)
+
+        req, res = makeRequestAndResponse()
+
         req.set('REQUEST_METHOD', 'GET')
         req.set('method', 'GET')
         self.assertRaises(Forbidden, zrm.removeRole,
                           ROLE_ID, REQUEST=req)
+        # Works with a POST
         req.set('REQUEST_METHOD', 'POST')
         req.set('method', 'POST')
         zrm.removeRole(ROLE_ID, REQUEST=req)
 
-        # Readd the role for the manage_* methods
+    def test_manage_assignRoleToPrincipal_POST_permissions(self):
+        USER_ID = 'testuser'
+        ROLE_ID = 'myrole'
+
+        root = FauxPAS()
+        zrm = self._makeOne(id='remove_existing').__of__(root)
+        zrm = self._makeOne()
         zrm.addRole(ROLE_ID)
 
-        # test manage_assignRoleToPrincipal
+        req, res = makeRequestAndResponse()
+
         req.set('REQUEST_METHOD', 'GET')
         req.set('method', 'GET')
         self.assertRaises(Forbidden, zrm.manage_assignRoleToPrincipals,
@@ -528,7 +553,17 @@ class ZODBRoleManagerTests( unittest.TestCase
         zrm.manage_assignRoleToPrincipals(ROLE_ID, [USER_ID], RESPONSE=res,
                                           REQUEST=req)
 
-        # test manage_removeRoleFromPricipal
+    def test_manage_removeRoleFromPricipal_POS_permissionsT(self):
+        USER_ID = 'testuser'
+        ROLE_ID = 'myrole'
+
+        root = FauxPAS()
+        zrm = self._makeOne(id='remove_existing').__of__(root)
+        zrm = self._makeOne()
+        zrm.addRole(ROLE_ID)
+
+        req, res = makeRequestAndResponse()
+
         req.set('REQUEST_METHOD', 'GET')
         req.set('method', 'GET')
         self.assertRaises(Forbidden, zrm.manage_removeRoleFromPrincipals,
@@ -538,7 +573,15 @@ class ZODBRoleManagerTests( unittest.TestCase
         zrm.manage_removeRoleFromPrincipals(ROLE_ID, [USER_ID], RESPONSE=res,
                                             REQUEST=req)
 
-        # test manage_removeRoles
+    def test_manage_removeRoles_POST_permissions(self):
+        ROLE_ID = 'myrole'
+
+        root = FauxPAS()
+        zrm = self._makeOne(id='remove_existing').__of__(root)
+        zrm = self._makeOne()
+        zrm.addRole(ROLE_ID)
+
+        req, res = makeRequestAndResponse()
         req.set('REQUEST_METHOD', 'GET')
         req.set('method', 'GET')
         self.assertRaises(Forbidden, zrm.manage_removeRoles,
@@ -548,12 +591,10 @@ class ZODBRoleManagerTests( unittest.TestCase
         zrm.manage_removeRoles([ROLE_ID], RESPONSE=res, REQUEST=req)
 
 
-
 if __name__ == "__main__":
     unittest.main()
 
 def test_suite():
     return unittest.TestSuite((
         unittest.makeSuite( ZODBRoleManagerTests ),
-        ))               
-    
+        ))
