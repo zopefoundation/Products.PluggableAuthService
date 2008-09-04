@@ -4,6 +4,9 @@ PluggableAuthService changelog
 PluggableAuthService 1.6 (unreleased)
 -------------------------------------
 
+- Fixed another deprecation for manage_afterAdd occurring when used
+  together with Five (this time for the ZODBRoleManager class).
+
 - Ensure the _findUser cache is invalidated if the roles or groups for
   a principal change.
 

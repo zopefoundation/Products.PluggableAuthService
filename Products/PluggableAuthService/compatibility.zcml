@@ -6,4 +6,7 @@
      class="Products.PluggableAuthService.PluggableAuthService.PluggableAuthService" 
      />
 
+  <five:deprecatedManageAddDelete
+      class="Products.PluggableAuthService.plugins.ZODBRoleManager.ZODBRoleManager" />
+
 </configure>
