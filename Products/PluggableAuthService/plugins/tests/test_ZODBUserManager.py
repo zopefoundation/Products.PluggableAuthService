@@ -596,23 +596,28 @@ class ZODBUserManagerTests( unittest.TestCase
         # test manage_updateUserPassword
         # Fails with a GET
         req.set('REQUEST_METHOD', 'GET')
+        req.set('method', 'GET')
         self.assertRaises(Forbidden, zum.manage_updateUserPassword,
                           USER_ID, PASSWORD, PASSWORD, REQUEST=req)
         # Works with a POST
         req.set('REQUEST_METHOD', 'POST')
+        req.set('method', 'POST')
         zum.manage_updateUserPassword(USER_ID, PASSWORD, PASSWORD, REQUEST=req)
 
         # test manage_updatePassword
         req.set('REQUEST_METHOD', 'GET')
+        req.set('method', 'GET')
         self.assertRaises(Forbidden, zum.manage_updatePassword,
                           USER_ID, PASSWORD, PASSWORD, REQUEST=req)
         # XXX: This method is broken
 
         # test manage_removeUsers
         req.set('REQUEST_METHOD', 'GET')
+        req.set('method', 'GET')
         self.assertRaises(Forbidden, zum.manage_removeUsers,
                           [USER_ID], REQUEST=req)
         req.set('REQUEST_METHOD', 'POST')
+        req.set('method', 'POST')
         zum.manage_removeUsers([USER_ID], REQUEST=req)
 
 

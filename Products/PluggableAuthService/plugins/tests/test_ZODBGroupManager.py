@@ -282,40 +282,50 @@ class ZODBGroupManagerTests( unittest.TestCase
         # test addPrincipalToGroup
         # Fails with a GET
         req.set('REQUEST_METHOD', 'GET')
+        req.set('method', 'GET')
         self.assertRaises(Forbidden, zgm.addPrincipalToGroup,
                           USER_ID, GROUP_ID, REQUEST=req)
         # Works with a POST
         req.set('REQUEST_METHOD', 'POST')
+        req.set('method', 'POST')
         zgm.addPrincipalToGroup(USER_ID, GROUP_ID, REQUEST=req)
 
         # test removePrincipalFromGroup
         req.set('REQUEST_METHOD', 'GET')
+        req.set('method', 'GET')
         self.assertRaises(Forbidden, zgm.removePrincipalFromGroup,
                           USER_ID, GROUP_ID, REQUEST=req)
         # Works with a POST
         req.set('REQUEST_METHOD', 'POST')
+        req.set('method', 'POST')
         zgm.removePrincipalFromGroup(USER_ID, GROUP_ID, REQUEST=req)
 
         # test manage_addPrincipalsToGroup
         req.set('REQUEST_METHOD', 'GET')
+        req.set('method', 'GET')
         self.assertRaises(Forbidden, zgm.manage_addPrincipalsToGroup,
                           GROUP_ID, [USER_ID], REQUEST=req)
         req.set('REQUEST_METHOD', 'POST')
+        req.set('method', 'POST')
         zgm.manage_addPrincipalsToGroup(GROUP_ID, [USER_ID], REQUEST=req)
 
         # test manage_removePrincipalsFromGroup
         req.set('REQUEST_METHOD', 'GET')
+        req.set('method', 'GET')
         self.assertRaises(Forbidden, zgm.manage_removePrincipalsFromGroup,
                           GROUP_ID, [USER_ID], REQUEST=req)
         req.set('REQUEST_METHOD', 'POST')
+        req.set('method', 'POST')
         zgm.manage_removePrincipalsFromGroup(GROUP_ID, [USER_ID], REQUEST=req)
 
         # test manage_removeGroup
         req.set('REQUEST_METHOD', 'GET')
+        req.set('method', 'GET')
         self.assertRaises(Forbidden, zgm.manage_removeGroups,
                           [GROUP_ID], REQUEST=req)
         # Works with a POST
         req.set('REQUEST_METHOD', 'POST')
+        req.set('method', 'POST')
         zgm.manage_removeGroups([GROUP_ID], REQUEST=req)
 
 if __name__ == "__main__":

@@ -494,10 +494,12 @@ class DynamicGroupsPlugin( unittest.TestCase
         # Fails with a GET
         # test removeGroup
         req.set('REQUEST_METHOD', 'GET')
+        req.set('method', 'GET')
         self.assertRaises(Forbidden, dpg.removeGroup,
                           GROUP_ID, REQUEST=req)
         # Works with a POST
         req.set('REQUEST_METHOD', 'POST')
+        req.set('method', 'POST')
         dpg.removeGroup(GROUP_ID, REQUEST=req)
 
 if __name__ == "__main__":

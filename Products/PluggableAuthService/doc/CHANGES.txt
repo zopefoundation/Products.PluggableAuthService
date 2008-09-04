@@ -23,6 +23,8 @@ PluggableAuthService 1.6 (unreleased)
 - Ensure ZODBRoleManagerExportImport doesn't fail if it tries to add a
   role that already exists (idempotence is desirable in GS importers)
 
+- Fixed tests so they run with Zope 2.11.
+
 
 PluggableAuthService 1.5.2 (2007-11-28)
 ---------------------------------------
