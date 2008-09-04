@@ -6,4 +6,6 @@
 
   <include file="events.zcml" />
 
+  <include file="compatibility.zcml" />
+
 </configure>
