@@ -26,6 +26,8 @@ PluggableAuthService 1.6 (unreleased)
 - Fixed deprecation warning occurring when used together with
   Five. (manage_afterAdd got undeprecated.)
 
+- Added buildout.
+
 
 PluggableAuthService 1.5.3 (2008-02-06)
 ---------------------------------------

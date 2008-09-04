@@ -50,6 +50,8 @@ setup(name='Products.PluggableAuthService',
       zip_safe=False,
       install_requires=[
           'setuptools',
+          'Products.PluginRegistry',
+          'Products.GenericSetup',
 #          'Zope >= 2.10',
           ],
       extras_require={'ip_range': ['IPy'],
