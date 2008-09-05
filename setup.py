@@ -31,7 +31,6 @@ setup(name='Products.%s' % NAME,
         "License :: OSI Approved :: Zope Public License",
         "Programming Language :: Python",
         "Topic :: Software Development",
-        "Topic :: System :: Security",
         "Topic :: System :: Systems Administration :: "
                 "Authentication/Directory",
         ],
