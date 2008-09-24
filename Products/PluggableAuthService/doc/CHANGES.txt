@@ -4,6 +4,9 @@ PluggableAuthService changelog
 PluggableAuthService 1.7 (unreleased)
 -------------------------------------
 
+- Launchpad #273680: _verifyUser() for Anonymous could result in very
+  expensive lookup of all users for some implementations,
+  eg. Membrane.
 
 PluggableAuthService 1.6 (2008-08-05)
 -------------------------------------
