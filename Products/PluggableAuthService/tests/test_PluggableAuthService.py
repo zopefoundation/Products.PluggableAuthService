@@ -61,6 +61,7 @@ class DummyUserEnumerator( DummyPlugin ):
 
         return ()
 
+
 class DummyMultiUserEnumerator( DummyPlugin ):
 
     def __init__( self, pluginid, *users ):
@@ -99,6 +100,11 @@ class DummyMultiUserEnumerator( DummyPlugin ):
                 results.append(info)
 
         return tuple(results)
+
+class WantonUserEnumerator(DummyMultiUserEnumerator):
+    def enumerateUsers( self, *args, **kw):
+        # Always returns everybody.
+        return self.users
 
 class DummyGroupEnumerator( DummyPlugin ):
 
@@ -1104,6 +1110,31 @@ class PluggableAuthServiceTests( unittest.TestCase
             zcuf._verifyUser(plugins, login='foo')['id'] == 'bar')
         self.failUnless(
             zcuf._verifyUser(plugins, login='foobar')['id'] == 'foo')
+
+    def test__verifyUser_no_login_or_userid( self ):
+        # setup cargo-culted from other tests...
+        from Products.PluggableAuthService.interfaces.plugins \
+             import IUserEnumerationPlugin
+        plugins = self._makePlugins()
+        zcuf = self._makeOne( plugins )
+
+        users = ({'id': 'foo', 'login': 'foobar'},
+                 {'id': 'bar', 'login': 'foo'})
+        enumerator = WantonUserEnumerator('enumerator', *users)
+        directlyProvides( enumerator, IUserEnumerationPlugin )
+        zcuf._setObject( 'enumerator', enumerator )
+        plugins = zcuf._getOb( 'plugins' )
+        plugins.activatePlugin( IUserEnumerationPlugin, 'enumerator' )
+
+        # Our enumerator plugin normally returns something, even if
+        # you ask for a nonexistent user.
+        self.failUnless(zcuf._verifyUser(plugins, login='qux') in users)
+        
+        # But with no criteria, we should always get None.
+        self.assertEqual(zcuf._verifyUser(plugins, login=None, user_id=None),
+                         None)
+        self.assertEqual(zcuf._verifyUser(plugins), None)
+
 
     def test__findUser_no_plugins( self ):
 
