@@ -4,6 +4,9 @@ PluggableAuthService changelog
 PluggableAuthService 1.6.1 (unreleased)
 ---------------------------------------
 
+- Launchpad #273680:  Avoid expensive / incorrect dive into 'enumerateUsers'
+  when trying to validate w/o either a real ID or login.
+
 - Launchpad #300321:  ZODBGroupManager.enumerateGroups failed to find
   groups with unicode IDs.
 
