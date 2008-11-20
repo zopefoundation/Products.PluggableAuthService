@@ -90,10 +90,10 @@ class ZODBGroupManager( BasePlugin ):
         group_ids = []
         plugin_id = self.getId()
 
-        if isinstance( id, str ):
+        if isinstance( id, basestring ):
             id = [ id ]
 
-        if isinstance( title, str ):
+        if isinstance( title, basestring ):
             title = [ title ]
 
         if exact_match and ( id or title ):
