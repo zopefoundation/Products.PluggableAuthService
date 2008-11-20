@@ -758,9 +758,13 @@ class PluggableAuthService( Folder, Cacheable ):
 
     security.declarePrivate( '_verifyUser' )
     def _verifyUser( self, plugins, user_id=None, login=None ):
-
         """ user_id -> info_dict or None
         """
+        if user_id is None and login is None:
+            # Avoid possible hugely expensive and/or wrong behavior of
+            # plugin enumerators.
+            return None
+
         criteria = {'exact_match': True}
 
         if user_id is not None:
@@ -769,35 +773,34 @@ class PluggableAuthService( Folder, Cacheable ):
         if login is not None:
             criteria[ 'login' ] = login
 
-        if criteria:
-            view_name = createViewName('_verifyUser', user_id or login)
-            keywords = createKeywords(**criteria)
-            cached_info = self.ZCacheable_get( view_name=view_name
-                                             , keywords=keywords
-                                             , default=None
-                                             )
+        view_name = createViewName('_verifyUser', user_id or login)
+        keywords = createKeywords(**criteria)
+        cached_info = self.ZCacheable_get( view_name=view_name
+                                            , keywords=keywords
+                                            , default=None
+                                            )
 
-            if cached_info is not None:
-                return cached_info
+        if cached_info is not None:
+            return cached_info
 
 
-            enumerators = plugins.listPlugins( IUserEnumerationPlugin )
+        enumerators = plugins.listPlugins( IUserEnumerationPlugin )
 
-            for enumerator_id, enumerator in enumerators:
-                try:
-                    info = enumerator.enumerateUsers( **criteria )
+        for enumerator_id, enumerator in enumerators:
+            try:
+                info = enumerator.enumerateUsers( **criteria )
 
-                    if info:
-                        # Put the computed value into the cache
-                        self.ZCacheable_set( info[0]
-                                           , view_name=view_name
-                                           , keywords=keywords
-                                           )
-                        return info[0]
+                if info:
+                    # Put the computed value into the cache
+                    self.ZCacheable_set( info[0]
+                                        , view_name=view_name
+                                        , keywords=keywords
+                                        )
+                    return info[0]
 
-                except _SWALLOWABLE_PLUGIN_EXCEPTIONS:
-                    msg = 'UserEnumerationPlugin %s error' % enumerator_id
-                    logger.debug(msg, exc_info=True)
+            except _SWALLOWABLE_PLUGIN_EXCEPTIONS:
+                msg = 'UserEnumerationPlugin %s error' % enumerator_id
+                logger.debug(msg, exc_info=True)
 
         return None
 
