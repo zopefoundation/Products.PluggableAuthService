@@ -4,6 +4,9 @@ PluggableAuthService changelog
 PluggableAuthService 1.5.4 (Unreleased)
 ---------------------------------------
 
+- Launchpad #300321:  ZODBGroupManager.enumerateGroups failed to find
+  groups with unicode IDs.
+
 - Ensure the _findUser cache is invalidated if the roles or groups for
   a principal change.
 

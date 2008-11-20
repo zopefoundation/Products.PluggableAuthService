@@ -199,6 +199,38 @@ class ZODBGroupManagerTests( unittest.TestCase
         self.assertEqual( zgm.enumerateGroups( id='qux', exact_match=True )
                         , () )
 
+    def test_enumerateGroups_exact_string( self ):
+        from Products.PluggableAuthService.tests.test_PluggableAuthService \
+            import FauxRoot
+
+        root = FauxRoot()
+        zgm = self._makeOne(id='exact_nonesuch').__of__(root)
+
+        ID_LIST = ('foo', 'bar', 'baz', 'bam')
+
+        for id in ID_LIST:
+            zgm.addGroup(id, 'Group %s' % id, 'This is group, %s' % id)
+
+        info = zgm.enumerateGroups(id='foo', exact_match=True)
+        self.assertEqual(len(info), 1)
+        self.assertEqual(info[0]['id'], 'foo')
+
+    def test_enumerateGroups_exact_unicode( self ):
+        from Products.PluggableAuthService.tests.test_PluggableAuthService \
+            import FauxRoot
+
+        root = FauxRoot()
+        zgm = self._makeOne(id='exact_nonesuch').__of__(root)
+
+        ID_LIST = ('foo', 'bar', 'baz', 'bam')
+
+        for id in ID_LIST:
+            zgm.addGroup(id, 'Group %s' % id, 'This is group, %s' % id)
+
+        info = zgm.enumerateGroups(id=u'foo', exact_match=True)
+        self.assertEqual(len(info), 1)
+        self.assertEqual(info[0]['id'], 'foo')
+
     def test_enumerateGroups_multiple( self ):
 
         from Products.PluggableAuthService.tests.test_PluggableAuthService \
@@ -210,7 +242,6 @@ class ZODBGroupManagerTests( unittest.TestCase
         ID_LIST = ( 'foo', 'bar', 'baz', 'bam' )
 
         for id in ID_LIST:
-
             zrm.addGroup( id, 'Group %s' % id, 'This is group, %s' % id )
 
         info_list = zrm.enumerateGroups( id=ID_LIST, exact_match=False )
