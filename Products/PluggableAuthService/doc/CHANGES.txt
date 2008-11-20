@@ -5,7 +5,7 @@ PluggableAuthService 1.6.2 (unreleased)
 ---------------------------------------
 
 
-PluggableAuthService 1.6.1 (2006-11-20)
+PluggableAuthService 1.6.1 (2008-11-20)
 ---------------------------------------
 
 - Launchpad #273680:  Avoid expensive / incorrect dive into 'enumerateUsers'
