@@ -17,10 +17,10 @@ if VERSION.startswith(NAME):
 while VERSION and VERSION[0] in '-_.':
     VERSION = VERSION[1:]
 
-_boundary = '\n' + ('-' * 60) + '\n'
+_boundary = '\n' + ('-' * 60) + '\n\n'
 README = ( _package_doc('README.txt')
          + _boundary + _package_doc('doc/CHANGES.txt')
-         + _boundary + "\nDownload\n========"
+         + _boundary + "Download\n========"
          )
 
 setup(name='Products.PluggableAuthService',
