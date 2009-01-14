@@ -89,8 +89,12 @@ class UtilityTests(unittest.TestCase):
                 {'keywords': hashed})
 
 def _createHashedValue(items):
-    import sha
-    hasher = sha.new()
+    try:
+        from hashlib import sha1 as sha
+    except:
+        from sha import new as sha
+
+    hasher = sha()
     items = list(items)
     items.sort()
     for k, v in items:

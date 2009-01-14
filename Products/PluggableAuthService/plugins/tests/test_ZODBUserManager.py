@@ -368,13 +368,16 @@ class ZODBUserManagerTests( unittest.TestCase
 
     def test_authenticateWithOldPasswords( self ):
 
-        import sha
+        try:
+            from hashlib import sha1 as sha
+        except:
+            from sha import sha
 
         zum = self._makeOne()
 
         # synthesize an older account
 
-        old_password = sha.sha( 'old_password' ).hexdigest()
+        old_password = sha( 'old_password' ).hexdigest()
         zum._user_passwords[ 'old_user' ] = old_password
         zum._login_to_userid[ 'old_user@example.com' ] = 'old_user'
         zum._userid_to_login[ 'old_user' ] = 'old_user@example.com'

@@ -32,7 +32,7 @@ except ImportError:
 
 # General Zope imports
 from BTrees.OOBTree import OOBTree
-from Globals import InitializeClass
+from App.class_init import InitializeClass
 from AccessControl import ClassSecurityInfo
 from AccessControl.Permissions import manage_users
 
