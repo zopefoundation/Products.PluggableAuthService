@@ -1,6 +1,8 @@
 PluggableAuthService historic changes
 =====================================
 
+- Changed HTTPBasicAuthHelper to not rely on two obscure features of the
+  HTTPResponse.
 
 PluggableAuthService 1.4 (2006-08-28)
 -------------------------------------

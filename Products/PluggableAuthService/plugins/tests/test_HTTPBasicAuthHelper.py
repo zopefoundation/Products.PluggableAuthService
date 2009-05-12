@@ -43,7 +43,6 @@ class FauxHTTPResponse:
 
     _unauthorized_called = 0
     realm = 'unit test'
-    debug_mode = 0
     headers = {}
 
     def unauthorized( self ):
@@ -55,10 +54,6 @@ class FauxHTTPResponse:
         self.status = status
 
     def setHeader(self, name, value, literal=0):
-
-        self.headers[name] = value
-
-    def addHeader(self, name, value):
 
         self.headers[name] = value
 
@@ -100,8 +95,6 @@ class HTTPBasicAuthHelperTests( unittest.TestCase
                             'remote_host': '', 'remote_address': '' } )
 
     def test_challenge( self ):
-        from zExceptions import Unauthorized
-
         helper = self._makeOne()
         request = FauxHTTPRequest()
         response = FauxHTTPResponse()
