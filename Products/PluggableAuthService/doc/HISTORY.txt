@@ -1,8 +1,14 @@
 PluggableAuthService historic changes
 =====================================
 
-- Changed HTTPBasicAuthHelper to not rely on two obscure features of the
+PluggableAuthService 1.7dev
+---------------------------
+
+- Added test for multiple auth header support in the HTTPBasicAuthHelper.
+
+- Changed HTTPBasicAuthHelper to not rely on one obscure feature of the
   HTTPResponse.
+
 
 PluggableAuthService 1.4 (2006-08-28)
 -------------------------------------

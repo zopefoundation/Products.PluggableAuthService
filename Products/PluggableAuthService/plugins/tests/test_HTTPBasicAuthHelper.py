@@ -57,6 +57,13 @@ class FauxHTTPResponse:
 
         self.headers[name] = value
 
+    def addHeader(self, name, value):
+        previous = self.headers.get(name)
+        if previous:
+            self.headers[name] = [previous, value]
+        else:
+            self.headers[name] = value
+
     def setBody(self, body, is_error=0):
         self.body = body
 
@@ -104,6 +111,22 @@ class HTTPBasicAuthHelperTests( unittest.TestCase
         self.failUnless(response.status, 401)
         self.failUnless(response.headers['WWW-Authenticate'],
             'basic realm="unit test"')
+
+    def test_multi_challenge( self ):
+        # It is possible for HTTP headers to contain multiple auth headers
+        helper = self._makeOne()
+        request = FauxHTTPRequest()
+        response = FauxHTTPResponse()
+
+        self.failIf( response._unauthorized_called )
+        helper.challenge(request, response)
+
+        response.realm = 'second realm'
+        helper.challenge(request, response)
+
+        self.failUnless(response.status, 401)
+        self.failUnless(response.headers['WWW-Authenticate'],
+            ['basic realm="unit test"', 'basic realm="second realm"'])
 
 
     def test_resetCredentials( self ):
