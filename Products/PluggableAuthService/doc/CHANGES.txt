@@ -4,6 +4,8 @@ PluggableAuthService changelog
 PluggableAuthService 1.7 (unreleased)
 -------------------------------------
 
+- Fixed broken markup.
+
 - Don't fail on users defined in multiple user sources on the ZODBGroupManager
   listing page.
 
