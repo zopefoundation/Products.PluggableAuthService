@@ -1475,7 +1475,7 @@ class PluggableAuthServiceTests( unittest.TestCase
         zcuf = self._makeOne( plugins )
 
         foo = self._makeUserEnumerator( 'foo' )
-        foo.identifier = 'foo/'
+        foo.identifier = 'foo:'
         zcuf._setObject( 'foo', foo )
 
         bar = self._makeUserEnumerator( 'bar', 'bar@example.com' )
@@ -1490,7 +1490,7 @@ class PluggableAuthServiceTests( unittest.TestCase
         self.assertEqual( zcuf.getUser( 'zope' ), None )
 
         user = zcuf.getUser( 'foo' )
-        self.assertEqual( user.getId(), 'foo/foo' )
+        self.assertEqual( user.getId(), 'foo:foo' )
 
         self.assertEqual( zcuf.getUser( 'who_knows' ), None )
 
@@ -1506,17 +1506,17 @@ class PluggableAuthServiceTests( unittest.TestCase
         zcuf = self._makeOne( plugins )
 
         bar = self._makeUserEnumerator( 'bar', 'bar@example.com' )
-        bar.identifier = 'bar/'
+        bar.identifier = 'bar:'
         zcuf._setObject( 'bar', bar )
 
         zcuf.plugins.activatePlugin(IUserEnumerationPlugin, 'bar')
         # Fetch the new user by ID and name, and check we get the same.
-        user = zcuf.getUserById('bar/bar')
-        self.assertEqual( user.getId(), 'bar/bar')
+        user = zcuf.getUserById('bar:bar')
+        self.assertEqual( user.getId(), 'bar:bar')
         self.assertEqual( user.getUserName(), 'bar@example.com' )
 
         user2 = zcuf.getUser('bar@example.com')
-        self.assertEqual( user2.getId(), 'bar/bar')
+        self.assertEqual( user2.getId(), 'bar:bar')
         self.assertEqual( user2.getUserName(), 'bar@example.com' )
 
     def test_simple_getUserGroups_with_Groupplugin(self):

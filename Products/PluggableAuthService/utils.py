@@ -210,3 +210,24 @@ def createKeywords(**kw):
 
     return {'keywords': keywords.hexdigest()}
 
+
+#
+#   Masquerading helpers
+#
+_ENVAR = 'PAS_MASQUERADING'
+
+def masquerading( enabled=None ):
+    value = os.environ.get(_ENVAR, 'off')
+    if enabled is not None:
+        os.environ[_ENVAR] = enabled and 'on' or 'off'
+    return value == 'on'
+
+_MASQ = '/'
+
+def splitmasq( user_id ):
+    if user_id is not None:
+        split = user_id.split(_MASQ, 1)
+        if len(split) == 2 and '' not in split:
+            return tuple(split)
+    return user_id, None
+

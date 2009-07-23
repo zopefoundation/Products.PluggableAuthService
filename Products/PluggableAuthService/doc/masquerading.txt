@@ -1,0 +1,11 @@
+Masquerading
+============
+
+If the environment variable ``PAS_MASQUERADING`` is set to ``on``, masquerading
+is enabled.
+
+Then, logging in as AUTHUSER/ROLEUSER (e.g. 'admin/jdoe') authenticates against 
+AUTHUSER but returns ROLEUSER. As a security precaution, AUTHUSER must have
+the Manager or the Masquerader role. 
+
+Note: AUTHUSER and ROLEUSER must live in the same user folder.
