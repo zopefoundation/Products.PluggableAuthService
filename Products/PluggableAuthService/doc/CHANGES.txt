@@ -15,7 +15,7 @@ PluggableAuthService 1.7 (unreleased)
 - Fixed deprecation warnings for use of Globals and avoid deprecation
   warnings for the md5 and sha modules.
 
-- Launchpad #273680:  Avoid expensive / incorrect dive into 'enumerateUsers'
+- Launchpad #273680:  Avoid expensive / incorrect dive into ``enumerateUsers``
   when trying to validate w/o either a real ID or login.
 
 - Launchpad #300321:  ZODBGroupManager.enumerateGroups failed to find
@@ -32,8 +32,8 @@ PluggableAuthService 1.6 (2008-08-05)
 
 - Launchpad #15569586:  docstring fix.
 
-- Factored out 'filter' logic into separate classes;  added filters
-  for 'startswith' test and (if the IPy module is present) IP-range
+- Factored out ``filter`` logic into separate classes;  added filters
+  for ``startswith`` test and (if the IPy module is present) IP-range
   tests.  See https://bugs.launchpad.net/zope-pas/+bug/173580 .
 
 - Zope 2.12 compatibility - removed Interface.Implements import if
@@ -56,7 +56,7 @@ PluggableAuthService 1.5.3 (2008-02-06)
 ---------------------------------------
 
 - ZODBUserManager plugin: allow unicode arguments to
-  'enumerateUsers'. (https://bugs.launchpad.net/zope-pas/+bug/189627)
+  ``enumerateUsers``. (https://bugs.launchpad.net/zope-pas/+bug/189627)
 
 - plugins/ZODBRoleManager: added logging in case searchPrincipial()
   returning more than one result (which might happen in case of having
@@ -67,8 +67,8 @@ PluggableAuthService 1.5.2 (2007-11-28)
 ---------------------------------------
 
 - DomainAuthHelper plugin:  fix glitch for plugins which have never
-  configured any "default" policy:  'authenticateCredentials' and
-  'getRolesForPrincipal' would raise ValueError.
+  configured any "default" policy:  ``authenticateCredentials`` and
+  ``getRolesForPrincipal`` would raise ValueError.
   (http://www.zope.org/Collectors/PAS/59)
 
 
@@ -76,8 +76,8 @@ PluggableAuthService 1.5.1 (2007-09-11)
 ---------------------------------------
 
 - PluggableAuthService._verifyUser: changed to use exact_match to the 
-  enumerator, otherwise a user with login 'foobar' might get returned 
-  by _verifyUser for a query for login='foo' because the enumerator 
+  enumerator, otherwise a user with login ``foobar`` might get returned 
+  by _verifyUser for a query for ``login='foo'`` because the enumerator 
   happened to return 'foobar' first in the results.
 
 - Add a test for manage_zmi_logout and replace a call to isImplementedBy
@@ -123,10 +123,10 @@ PluggableAuthService 1.5 (2006-06-17)
   Zope 2.7 compatibility in the process.
   (http://www.zope.org/Collectors/PAS/55)
 
-- Made the CookieAuthHelper only use the '__ac_name' field if
-  '__ac_password' is also present. This fixes a login problem for
+- Made the CookieAuthHelper only use the ``__ac_name`` field if
+  ``__ac_password`` is also present. This fixes a login problem for
   CMF sites where the login name was remembered between sessions with
-  an '__ac_name' cookie.
+  an ``__ac_name`` cookie.
 
 - Made the DomainAuthHelper return the remote address, even it the
   remote host is not available (http://www.zope.org/Collectors/PAS/49).
