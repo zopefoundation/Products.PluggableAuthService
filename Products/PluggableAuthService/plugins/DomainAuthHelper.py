@@ -88,7 +88,7 @@ class RegexFilter:
 
 _MATCH_TYPE_FILTERS = {
     'equals': EqualsFilter,
-    'startswith': EndsWithFilter,
+    'startswith': StartsWithFilter,
     'endswith': EndsWithFilter,
     'regex': RegexFilter,
 }
