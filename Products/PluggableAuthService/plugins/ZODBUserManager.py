@@ -16,8 +16,11 @@
 
 $Id$
 """
-import sha
 import copy
+try:
+    from hashlib import sha1 as sha
+except:
+    from sha import sha
 
 from AccessControl import ClassSecurityInfo, AuthEncoding
 from AccessControl.SecurityManagement import getSecurityManager
@@ -111,7 +114,7 @@ class ZODBUserManager( BasePlugin, Cacheable ):
                 return userid, login
 
         # Support previous naive behavior
-        digested = sha.sha( password ).hexdigest()
+        digested = sha( password ).hexdigest()
 
         if reference == digested:
             return userid, login

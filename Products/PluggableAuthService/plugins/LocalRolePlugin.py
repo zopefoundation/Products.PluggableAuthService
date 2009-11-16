@@ -17,7 +17,7 @@
 $Id$
 """
 from AccessControl import ClassSecurityInfo
-from Globals import InitializeClass
+from App.class_init import InitializeClass
 
 from zope.interface import Interface
 

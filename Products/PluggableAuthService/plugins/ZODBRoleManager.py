@@ -19,7 +19,7 @@ $Id$
 from Acquisition import aq_parent, aq_inner
 from AccessControl import ClassSecurityInfo
 from BTrees.OOBTree import OOBTree
-from Globals import InitializeClass
+from App.class_init import InitializeClass
 
 from zope.interface import Interface
 
