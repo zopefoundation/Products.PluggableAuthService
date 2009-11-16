@@ -1,8 +1,8 @@
 Change Log
 ==========
 
-1.7 (unreleased)
-----------------
+1.7.0b1 (2009-11-16)
+--------------------
 
 - This release requires for Zope2 >= 2.12.
 
