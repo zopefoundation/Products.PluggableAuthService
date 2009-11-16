@@ -1,37 +1,52 @@
 Change Log
 ==========
 
-1.6.1 (unreleased)
-------------------
+1.7 (unreleased)
+----------------
 
-- Launchpad #420319:  Fix misconfigured ``startswith`` match type filter
-  in ``plugins.DomainAuthHelper``.
+- This release requires for Zope2 >= 2.12.
 
-- Fixed test setup for tests using page templates relying on the
-  DefaultTraversable adapter.
-
-- Fixed broken markup.
+- Simplified buildout to just what is needed to run tests.
 
 - Don't fail on users defined in multiple user sources on the
   ZODBGroupManager listing page.
 
-- Fixed deprecation warnings for use of Globals and avoid deprecation
-  warnings for the md5 and sha modules.
+- Fixed deprecation warnings for use of ``Globals under Zope 2.12.
+
+- Fixed deprecation warnings for the ``md5`` and ``sha`` modules under
+  Python >= 2.6.
+
+
+1.6.2 (2009-11-16)
+------------------
+
+- Launchpad #420319:  Fix misconfigured ``startswith`` match type filter
+  in ``Products.PluggableAuthService.plugins.DomainAuthHelper``.
+
+- Fixed test setup for tests using page templates relying on the
+  ``DefaultTraversable`` adapter.
+
+- Fixed broken markup in templates.
+
+
+1.6.1 (2008-11-20)
+------------------
 
 - Launchpad #273680:  Avoid expensive / incorrect dive into ``enumerateUsers``
   when trying to validate w/o either a real ID or login.
 
-- Launchpad #300321:  ZODBGroupManager.enumerateGroups failed to find
-  groups with unicode IDs.
+- Launchpad #300321: 
+  ``Products.PluggableAuthService.pluginsZODBGroupManager.enumerateGroups``
+  failed to find groups with unicode IDs.
 
 
 1.6 (2008-08-05)
 ----------------
 
-- Fixed another deprecation for manage_afterAdd occurring when used
-  together with Five (this time for the ZODBRoleManager class).
+- Fixed another deprecation for ``manage_afterAdd`` occurring when used
+  together with Five (this time for the ``ZODBRoleManager`` class).
 
-- Ensure the _findUser cache is invalidated if the roles or groups for
+- Ensure the ``_findUser`` cache is invalidated if the roles or groups for
   a principal change.
 
 - Launchpad #15569586:  docstring fix.
@@ -40,10 +55,10 @@ Change Log
   for ``startswith`` test and (if the IPy module is present) IP-range
   tests.  See https://bugs.launchpad.net/zope-pas/+bug/173580 .
 
-- Zope 2.12 compatibility - removed Interface.Implements import if
-  zope.interface available.
+- Zope 2.12 compatibility - removed ``Interface.Implements`` import if
+  ``zope.interface`` available.
 
-- Ensure ZODBRoleManagerExportImport doesn't fail if it tries to add a
+- Ensure ``ZODBRoleManagerExportImport`` doesn't fail if it tries to add a
   role that already exists (idempotence is desirable in GS importers)
 
 - Fixed tests so they run with Zope 2.11.
@@ -51,7 +66,7 @@ Change Log
 - Split up large permission tests into individual tests.
 
 - Fixed deprecation warning occurring when used together with
-  Five. (manage_afterAdd got undeprecated.)
+  Five. (``manage_afterAdd`` got undeprecated.)
 
 - Added buildout.
 
