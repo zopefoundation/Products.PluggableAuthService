@@ -1,0 +1,12 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:five="http://namespaces.zope.org/five">
+
+  <five:deprecatedManageAddDelete
+     class="Products.PluggableAuthService.PluggableAuthService.PluggableAuthService" 
+     />
+
+  <five:deprecatedManageAddDelete
+      class="Products.PluggableAuthService.plugins.ZODBRoleManager.ZODBRoleManager" />
+
+</configure>
