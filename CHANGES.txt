@@ -1,8 +1,8 @@
-PluggableAuthService changelog
-==============================
+Change Log
+==========
 
-PluggableAuthService 1.7 (unreleased)
--------------------------------------
+1.6.1 (unreleased)
+------------------
 
 - Launchpad #420319:  Fix misconfigured ``startswith`` match type filter
   in ``plugins.DomainAuthHelper``.
@@ -12,8 +12,8 @@ PluggableAuthService 1.7 (unreleased)
 
 - Fixed broken markup.
 
-- Don't fail on users defined in multiple user sources on the ZODBGroupManager
-  listing page.
+- Don't fail on users defined in multiple user sources on the
+  ZODBGroupManager listing page.
 
 - Fixed deprecation warnings for use of Globals and avoid deprecation
   warnings for the md5 and sha modules.
@@ -24,8 +24,9 @@ PluggableAuthService 1.7 (unreleased)
 - Launchpad #300321:  ZODBGroupManager.enumerateGroups failed to find
   groups with unicode IDs.
 
-PluggableAuthService 1.6 (2008-08-05)
--------------------------------------
+
+1.6 (2008-08-05)
+----------------
 
 - Fixed another deprecation for manage_afterAdd occurring when used
   together with Five (this time for the ZODBRoleManager class).
@@ -55,8 +56,8 @@ PluggableAuthService 1.6 (2008-08-05)
 - Added buildout.
 
 
-PluggableAuthService 1.5.3 (2008-02-06)
----------------------------------------
+1.5.3 (2008-02-06)
+------------------
 
 - ZODBUserManager plugin: allow unicode arguments to
   ``enumerateUsers``. (https://bugs.launchpad.net/zope-pas/+bug/189627)
@@ -66,8 +67,8 @@ PluggableAuthService 1.5.3 (2008-02-06)
   duplicate id within difference user sources)
 
 
-PluggableAuthService 1.5.2 (2007-11-28)
----------------------------------------
+1.5.2 (2007-11-28)
+------------------
 
 - DomainAuthHelper plugin:  fix glitch for plugins which have never
   configured any "default" policy:  ``authenticateCredentials`` and
@@ -75,8 +76,8 @@ PluggableAuthService 1.5.2 (2007-11-28)
   (http://www.zope.org/Collectors/PAS/59)
 
 
-PluggableAuthService 1.5.1 (2007-09-11)
----------------------------------------
+1.5.1 (2007-09-11)
+------------------
 
 - PluggableAuthService._verifyUser: changed to use exact_match to the 
   enumerator, otherwise a user with login ``foobar`` might get returned 
@@ -88,8 +89,8 @@ PluggableAuthService 1.5.1 (2007-09-11)
   (http://www.zope.org/Collectors/PAS/58)
 
 
-PluggableAuthService 1.5 (2006-06-17)
--------------------------------------
+1.5 (2006-06-17)
+----------------
 
 - Add support for property plugins returning an IPropertySheet
   to PropertiedUser. Added addPropertysheet to the IPropertiedUser.
@@ -160,7 +161,7 @@ PluggableAuthService 1.5 (2006-06-17)
 - Made sure the emergency user via HTTP basic auth always wins, no matter
   how borken the plugin landscape.
 
-- cleaned up code in CookieAuthHelper which allowed the form to override
+- Cleaned up code in CookieAuthHelper which allowed the form to override
   login/password if a cookie had already been set.
 
 - Removed some BBB code for Zope versions < 2.8, which is not needed 
