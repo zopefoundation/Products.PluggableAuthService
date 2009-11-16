@@ -42,7 +42,7 @@ class UserPropertySheetTests( unittest.TestCase
     _STRING_VALUE = 'string'
     _INT_VALUE = 42
     _FLOAT_VALUE = 9.8
-    _LONG_VALUE = 1000000000000
+    _LONG_VALUE = 10000000000000000000
     _DATE_VALUE = DateTime()
     _LIST_VALUE = [ 'a', 'b', 'c' ]
     _TUPLE_VALUE = ( 'd', 'e', 'f' )
