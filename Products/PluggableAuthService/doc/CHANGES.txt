@@ -1,10 +1,6 @@
 PluggableAuthService changelog
 ==============================
 
-PluggableAuthService 1.6.2 (unreleased)
----------------------------------------
-
-
 PluggableAuthService 1.6.1 (2008-11-20)
 ---------------------------------------
 
