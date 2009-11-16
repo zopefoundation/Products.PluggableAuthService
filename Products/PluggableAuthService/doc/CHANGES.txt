@@ -1,7 +1,7 @@
 PluggableAuthService changelog
 ==============================
 
-PluggableAuthService 1.6.2 (unreleased)
+PluggableAuthService 1.6.2 (2009-11-16)
 ---------------------------------------
 
 - Launchpad #420319:  Fix misconfigured ``startswith`` match type filter
