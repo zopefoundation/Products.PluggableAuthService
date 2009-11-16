@@ -17,6 +17,8 @@
 $Id$
 """
 
+from zExceptions import Unauthorized
+
 from AccessControl.SecurityInfo import ClassSecurityInfo
 from App.class_init import default__class_init__ as InitializeClass
 
@@ -100,6 +102,11 @@ class HTTPBasicAuthHelper( BasePlugin ):
             response.addHeader('WWW-Authenticate',
                                'basic realm="%s"' % realm)
         m = "<strong>You are not authorized to access this resource.</strong>"
+        if response.debug_mode:
+            if response._auth:
+                m = m + '<p>\nUsername and password are not correct.'
+            else:
+                m = m + '<p>\nNo Authorization header found.'
 
         response.setBody(m, is_error=1)
         response.setStatus(401)

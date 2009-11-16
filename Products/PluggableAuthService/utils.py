@@ -13,14 +13,10 @@
 #
 ##############################################################################
 import os
+import sha
 import unittest
-try:
-    from hashlib import sha1 as sha
-except:
-    from sha import new as sha
 
-
-from App.Common import package_home
+from Globals import package_home
 
 try:
     from Products.Five.bridge import fromZ2Interface
@@ -204,7 +200,7 @@ def createKeywords(**kw):
         Keywords are hashed so we don't accidentally expose sensitive
         information.
     """
-    keywords = sha()
+    keywords = sha.new()
 
     items = kw.items()
     items.sort()

@@ -26,7 +26,7 @@ from urllib import quote_plus
 # Zope imports
 from Acquisition import aq_base
 from OFS.Folder import Folder
-from App.class_init import InitializeClass
+from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
 from AccessControl.SpecialUsers import emergency_user
 

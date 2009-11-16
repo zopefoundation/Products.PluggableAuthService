@@ -24,7 +24,7 @@ from OFS.SimpleItem import SimpleItem
 from OFS.PropertyManager import PropertyManager
 from OFS.Folder import Folder
 from OFS.Cache import Cacheable
-from App.class_init import InitializeClass
+from Globals import InitializeClass
 from Persistence import PersistentMapping
 
 from zope.interface import Interface

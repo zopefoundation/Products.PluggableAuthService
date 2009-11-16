@@ -19,7 +19,7 @@ $Id$
 
 from Acquisition import aq_parent
 from AccessControl import ClassSecurityInfo
-from App.class_init import InitializeClass
+from Globals import InitializeClass
 from ZServer.FTPRequest import FTPRequest
 from ZPublisher import xmlrpc
 

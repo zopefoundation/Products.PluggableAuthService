@@ -18,7 +18,7 @@ $Id$
 """
 from Acquisition import aq_parent
 from AccessControl import ClassSecurityInfo
-from App.class_init import InitializeClass
+from Globals import InitializeClass
 from BTrees.OOBTree import OOBTree
 
 from zope.interface import Interface

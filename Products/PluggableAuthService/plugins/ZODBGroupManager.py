@@ -18,7 +18,7 @@ $Id$
 """
 from Acquisition import aq_parent
 from AccessControl import ClassSecurityInfo
-from App.class_init import InitializeClass
+from Globals import InitializeClass
 from BTrees.OOBTree import OOBTree
 
 from zope.interface import Interface
@@ -250,12 +250,14 @@ class ZODBGroupManager( BasePlugin ):
 
         for k, v in self._principal_groups.items():
             if group_id in v:
+                # should be one and only one mapping to 'k'
+
                 parent = aq_parent( self )
                 info = parent.searchPrincipals( id=k, exact_match=True )
+                assert( len( info ) in ( 0, 1 ) )
                 if len( info ) == 0:
                     title = '<%s: not found>' % k
                 else:
-                    # always use the title of the first principal found
                     title = info[0].get( 'title', k )
                 result.append( ( k, title ) )
 

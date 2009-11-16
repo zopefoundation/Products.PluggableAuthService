@@ -37,8 +37,6 @@ else:
     from Products.GenericSetup.tests.common import BaseRegistryTests
     from Products.GenericSetup.tests.common import DummyExportContext
     from Products.GenericSetup.tests.common import DummyImportContext
-    
-    from Products.PluggableAuthService.tests.utils import _setUpDefaultTraversable
 
     class _TestBase(BaseRegistryTests,
                     ConformsToIFilesystemExporter,
@@ -76,8 +74,6 @@ else:
             self.assertEqual(len(info['users']), 0)
 
         def test_export_empty(self):
-            _setUpDefaultTraversable()
-            
             plugin = self._makePlugin('empty').__of__(self.root)
             adapter = self._makeOne(plugin)
 
@@ -115,8 +111,7 @@ else:
                 self.assertEqual(x['password_hash'], y['password_hash'])
 
         def test_export_with_users(self):
-            _setUpDefaultTraversable()
-            
+
             plugin = self._makePlugin('with_users').__of__(self.root)
             plugin.title = 'Plugin Title'
 
@@ -220,8 +215,6 @@ else:
             self.assertEqual(len(info['groups']), 0)
 
         def test_export_empty(self):
-            _setUpDefaultTraversable()
-            
             plugin = self._makePlugin('empty').__of__(self.root)
             adapter = self._makeOne(plugin)
 
@@ -254,8 +247,7 @@ else:
                 self.assertEqual(x, y)
 
         def test_export_with_groups(self):
-            _setUpDefaultTraversable()
-            
+
             plugin = self._makePlugin('with_groups').__of__(self.root)
             plugin.title = 'Plugin Title'
 
@@ -365,8 +357,6 @@ else:
             self.assertEqual(len(info['roles']), 0)
 
         def test_export_empty(self):
-            _setUpDefaultTraversable()
-            
             plugin = self._makePlugin('empty').__of__(self.root)
             adapter = self._makeOne(plugin)
 
@@ -399,8 +389,7 @@ else:
                 self.assertEqual(x, y)
 
         def test_export_with_roles(self):
-            _setUpDefaultTraversable()
-            
+
             plugin = self._makePlugin('with_roles').__of__(self.root)
             plugin.title = 'Plugin Title'
 
@@ -514,8 +503,6 @@ else:
             self.assertEqual(info['login_path'], CookieAuthHelper.login_path)
 
         def test_export_default(self):
-            _setUpDefaultTraversable()
-            
             from Products.PluggableAuthService.plugins.CookieAuthHelper \
                 import CookieAuthHelper as CAH
             plugin = self._makePlugin('default').__of__(self.root)
@@ -549,8 +536,6 @@ else:
             self.assertEqual(info['login_path'], LOGIN_PATH)
 
         def test_export_explicitly_set(self):
-            _setUpDefaultTraversable()
-            
             TITLE = 'Plugin Title'
             COOKIE_NAME = 'COOKIE_NAME'
             LOGIN_PATH = 'LOGIN_PATH'
@@ -648,8 +633,6 @@ else:
             self.assertEqual(len(info['map']), 0)
 
         def test_export_empty(self):
-            _setUpDefaultTraversable()
-            
             plugin = self._makePlugin('empty', None).__of__(self.root)
             adapter = self._makeOne(plugin)
 
@@ -690,8 +673,6 @@ else:
             self.assertEqual(match['roles'], ','.join(ROLES))
 
         def test_export_with_map(self):
-            _setUpDefaultTraversable()
-            
             TITLE = 'With Map'
             USER_ID = 'some_user_id'
             DOMAIN = 'host.example.com'
@@ -852,8 +833,6 @@ else:
             self.assertEqual(info['title'], 'Plugin Title')
 
         def test_export_no_title(self):
-            _setUpDefaultTraversable()
-            
             plugin = self._makePlugin('no_title', None).__of__(self.root)
             adapter = self._makeOne(plugin)
 
@@ -867,8 +846,6 @@ else:
             self.assertEqual( content_type, 'text/xml' )
 
         def test_export_with_title(self):
-            _setUpDefaultTraversable()
-            
             TITLE = 'Plugin Title'
             plugin = self._makePlugin('with_title', None).__of__(self.root)
             plugin.title = TITLE
@@ -947,8 +924,6 @@ else:
             self.assertEqual(info['delegate'], '')
 
         def test_export_default(self):
-            _setUpDefaultTraversable()
-            
             plugin = self._makePlugin('default').__of__(self.root)
             adapter = self._makeOne(plugin)
 
@@ -974,8 +949,6 @@ else:
             self.assertEqual(info['delegate'], DELEGATE_PATH)
 
         def test_export_explicitly_set(self):
-            _setUpDefaultTraversable()
-            
             TITLE = 'Plugin Title'
             DELEGATE_PATH = 'path/to/delegate'
             plugin = self._makePlugin('explicit').__of__(self.root)
@@ -1057,8 +1030,6 @@ else:
             self.assertEqual(len(info['groups']), 0)
 
         def test_export_empty(self):
-            _setUpDefaultTraversable()
-            
             plugin = self._makePlugin('empty', None).__of__(self.root)
             adapter = self._makeOne(plugin)
 
@@ -1094,8 +1065,7 @@ else:
                 self.assertEqual(x, y)
 
         def test_export_with_groups(self):
-            _setUpDefaultTraversable()
-            
+
             plugin = self._makePlugin('with_groups').__of__(self.root)
             plugin.title = 'Plugin Title'
 

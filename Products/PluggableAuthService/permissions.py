@@ -20,7 +20,7 @@ from AccessControl import ModuleSecurityInfo
 from AccessControl import Permissions
 from AccessControl.Permission import _registeredPermissions
 from AccessControl.Permission import pname
-from AccessControl.Permission import ApplicationDefaultPermissions
+from Globals import ApplicationDefaultPermissions
 import Products
 
 security = ModuleSecurityInfo( 'Products.PluggableAuthService.permissions' )
