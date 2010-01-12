@@ -186,16 +186,17 @@ class ZODBGroupManager( BasePlugin ):
                                    }
 
     security.declarePrivate( 'updateGroup' )
-    def updateGroup( self, group_id, title, description ):
+    def updateGroup( self, group_id, title=None, description=None ):
 
         """ Update properties for 'group_id'
 
         o Raise KeyError if group_id doesn't already exist.
         """
-        self._groups[ group_id ].update({ 'title' : title
-                                        , 'description' : description
-                                        })
-        self._groups[ group_id ] = self._groups[ group_id ]
+        if title is not None:
+            self._groups[group_id]['title'] = title
+        if description is not None:
+            self._groups[group_id]['description'] = description
+        self._groups[group_id] = self._groups[group_id]
 
     security.declarePrivate( 'removeGroup' )
     def removeGroup( self, group_id ):

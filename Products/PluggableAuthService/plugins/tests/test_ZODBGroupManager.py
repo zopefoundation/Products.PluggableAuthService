@@ -95,6 +95,19 @@ class ZODBGroupManagerTests( unittest.TestCase
         group_info = zgm.getGroupInfo( 'group' )
         self.assertEqual( group_info['title'], 'group_title_changed' )
 
+    def test_updateGroup_independent(self):
+        zgm = self._makeOne()
+
+        zgm.addGroup( 'group', 'group_title', 'group_desc' )
+
+        zgm.updateGroup( 'group', title='group_title_changed_again')
+        group_info = zgm.getGroupInfo( 'group' )
+        self.assertEqual( group_info['description'], 'group_desc' )
+        zgm.updateGroup( 'group', description='group_description_changed_again')
+        group_info = zgm.getGroupInfo( 'group' )
+        self.assertEqual( group_info['title'], 'group_title_changed_again' )
+        
+
     def test_addPrincipalToGroup( self ):
         zgm = self._makeOne()
 
