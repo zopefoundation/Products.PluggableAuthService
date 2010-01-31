@@ -1,11 +1,11 @@
 Change Log
 ==========
 
-
-1.7.0b2 (Unreleased)
+1.7.0b2 (2010-01-31)
 --------------------
 
 - Modify ZODBGroupManager to update group title and description independently.
+
 
 1.7.0b1 (2009-11-16)
 --------------------
