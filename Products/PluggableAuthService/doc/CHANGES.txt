@@ -4,6 +4,9 @@ PluggableAuthService changelog
 PluggableAuthService 1.6.3 (unreleased)
 ---------------------------------------
 
+- Fixed xml templates directory path computation to allow reuse of 
+  ``SimpleXMLExportImport`` class outside ``Products.PluggableAuthService``.
+
 PluggableAuthService 1.6.2 (2009-11-16)
 ---------------------------------------
 
