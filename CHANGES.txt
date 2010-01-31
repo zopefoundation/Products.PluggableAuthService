@@ -17,7 +17,7 @@ Change Log
 - Don't fail on users defined in multiple user sources on the
   ZODBGroupManager listing page.
 
-- Fixed deprecation warnings for use of ``Globals under Zope 2.12.
+- Fixed deprecation warnings for use of ``Globals`` under Zope 2.12.
 
 - Fixed deprecation warnings for the ``md5`` and ``sha`` modules under
   Python >= 2.6.
