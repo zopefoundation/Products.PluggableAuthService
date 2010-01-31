@@ -54,6 +54,8 @@ TODO:
 
 $Id$
 """
+import os, sys
+
 from xml.dom.minidom import parseString
 
 from Acquisition import Implicit
@@ -69,6 +71,10 @@ try:
 except ImportError: # BBB
     from Products.PageTemplates.PageTemplateFile \
         import PageTemplateFile as PageTemplateResource
+
+def getPackagePath(instance):
+    module = sys.modules[instance.__module__]
+    return os.path.dirname(module.__file__)
 
 class SimpleXMLExportImport(Implicit):
     """ Base for plugins whose configuration can be dumped to an XML file.
@@ -95,8 +101,9 @@ class SimpleXMLExportImport(Implicit):
     def export(self, export_context, subdir, root=False):
         """ See IFilesystemExporter.
         """
+        package_path = getPackagePath(self)
         template = PageTemplateResource('xml/%s' % self._FILENAME,
-                                        globals()).__of__(self.context)
+                                        package_path).__of__(self.context)
         info = self._getExportInfo()
         export_context.writeDataFile('%s.xml' % self.context.getId(),
                                      template(info=info),
@@ -209,7 +216,7 @@ class ZODBGroupManagerExportImport(SimpleXMLExportImport):
                     'title': ginfo['title'],
                     'description': ginfo['description'],
                    }
-            info['principals'] = self._listGroupPrincipals(group_id) 
+            info['principals'] = self._listGroupPrincipals(group_id)
             group_info.append(info)
         return {'title': self.context.title,
                 'groups': group_info,
@@ -260,7 +267,7 @@ class ZODBRoleManagerExportImport(SimpleXMLExportImport):
                     'title': rinfo['title'],
                     'description': rinfo['description'],
                    }
-            info['principals'] = self._listRolePrincipals(role_id) 
+            info['principals'] = self._listRolePrincipals(role_id)
             role_info.append(info)
 
         return {'title': self.context.title,

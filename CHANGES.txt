@@ -4,6 +4,9 @@ Change Log
 1.7.0 (unreleased)
 ------------------
 
+- Fixed xml templates directory path computation to allow reuse of 
+  ``SimpleXMLExportImport`` class outside ``Products.PluggableAuthService``.
+
 
 1.7.0b2 (2010-01-31)
 --------------------
