@@ -1,11 +1,12 @@
 PluggableAuthService changelog
 ==============================
 
-PluggableAuthService 1.6.3 (unreleased)
+PluggableAuthService 1.6.3 (2010-02-01)
 ---------------------------------------
 
 - Fixed xml templates directory path computation to allow reuse of 
   ``SimpleXMLExportImport`` class outside ``Products.PluggableAuthService``.
+
 
 PluggableAuthService 1.6.2 (2009-11-16)
 ---------------------------------------
@@ -18,6 +19,7 @@ PluggableAuthService 1.6.2 (2009-11-16)
 
 - Fixed broken markup.
 
+
 PluggableAuthService 1.6.1 (2008-11-20)
 ---------------------------------------
 
@@ -26,6 +28,7 @@ PluggableAuthService 1.6.1 (2008-11-20)
 
 - Launchpad #300321:  ZODBGroupManager.enumerateGroups failed to find
   groups with unicode IDs.
+
 
 PluggableAuthService 1.6 (2008-08-05)
 -------------------------------------
