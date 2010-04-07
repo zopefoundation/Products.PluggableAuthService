@@ -218,7 +218,7 @@ class CookieAuthHelper(Folder, BasePlugin):
     security.declarePrivate('getLoginURL')
     def getLoginURL(self):
         """ Where to send people for logging in """
-        if self.login_path.startswith('/'):
+        if self.login_path.startswith('/') or '://' in self.login_path:
             return self.login_path
         elif self.login_path != '':
             return '%s/%s' % (self.absolute_url(), self.login_path)

@@ -4,6 +4,9 @@ Change Log
 1.7.0 (unreleased)
 ------------------
 
+- Allow CookieAuthHelper's login_path to be set to an absolute url for
+  integration with external authentication mechanisms.
+
 - Fixed xml templates directory path computation to allow reuse of 
   ``SimpleXMLExportImport`` class outside ``Products.PluggableAuthService``.
 
