@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-1.7.0 (unreleased)
+1.7.0 (2010-04-08)
 ------------------
 
 - Allow CookieAuthHelper's login_path to be set to an absolute url for
