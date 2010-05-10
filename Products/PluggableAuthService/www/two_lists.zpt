@@ -55,7 +55,7 @@ by the including template:
              width="29" height="30" border="0"
              name="left_to_right:method"
              tal:attributes="name string:${left_to_right}:method"/>
-      <br><br>
+      <br/><br/>
       <input type="image" src="arrow_left_gif" 
              width="29" height="30" border="0"
              name="right_to_left:method"
@@ -80,7 +80,7 @@ by the including template:
              width="29" height="30" border="0"
              name="move_up:method"
              tal:attributes="name string:${move_up}:method"/>
-      <br><br>
+      <br/><br/>
       <input type="image" src="arrow_down_gif" 
              width="29" height="30" border="0"
              name="move_down:method"
