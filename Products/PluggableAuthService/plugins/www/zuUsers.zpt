@@ -44,7 +44,7 @@
   </td>
   <td class="form-text">
    <a href="?passwd=1"
-      tal:attributes="href string:?user_id=${info/user_id}&passwd=1"
+      tal:attributes="href string:?user_id=${info/user_id}&amp;passwd=1"
    >Password</a>
   </td>
   <td class="form-text" tal:content="info/login_name">LOGIN_NAME</td>
@@ -172,8 +172,8 @@
                  login_name info/login_name;
                 "
 >
-<h3> Update User <a href="?user_id=XXX&passwd=1"
-                    tal:attributes="href string:?user_id=${user_id}&passwd=1"
+<h3> Update User <a href="?user_id=XXX&amp;passwd=1"
+                    tal:attributes="href string:?user_id=${user_id}&amp;passwd=1"
                  >(change password)</a></h3>
 
 <form action="manage_updateUser" method="POST">
