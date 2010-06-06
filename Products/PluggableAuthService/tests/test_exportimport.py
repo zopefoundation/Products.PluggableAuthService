@@ -36,10 +36,10 @@ else:
     from zope.interface import Interface
 
     try:
-        from zope.app.testing.placelesssetup import PlacelessSetup
+        from zope.component.testing import PlacelessSetup
     except ImportError:
-        # BBB for Zope 2.8
-        from zope.app.tests.placelesssetup import PlacelessSetup
+        # BBB for Zope 2.11
+        from zope.app.testing.placelesssetup import PlacelessSetup
 
     class _TestBase(PlacelessSetup, BaseRegistryTests):
 
@@ -63,14 +63,9 @@ else:
         def _setUpAdapters(self):
             from zope.app.testing import ztapi
 
-            try:
-                from OFS.interfaces import IObjectManager
-                from OFS.interfaces import ISimpleItem
-                from OFS.interfaces import IPropertyManager
-            except ImportError: # BBB
-                from Products.Five.interfaces import IObjectManager
-                from Products.Five.interfaces import ISimpleItem
-                from Products.Five.interfaces import IPropertyManager
+            from OFS.interfaces import IObjectManager
+            from OFS.interfaces import ISimpleItem
+            from OFS.interfaces import IPropertyManager
 
             from Products.GenericSetup.interfaces import IContentFactoryName
             from Products.GenericSetup.interfaces import ICSVAware
@@ -217,14 +212,9 @@ else:
         def _setUpAdapters(self):
             from zope.app.testing import ztapi
 
-            try:
-                from OFS.interfaces import IObjectManager
-                from OFS.interfaces import IPropertyManager
-                from OFS.interfaces import ISimpleItem
-            except ImportError: # BBB
-                from Products.Five.interfaces import IObjectManager
-                from Products.Five.interfaces import IPropertyManager
-                from Products.Five.interfaces import ISimpleItem
+            from OFS.interfaces import IObjectManager
+            from OFS.interfaces import IPropertyManager
+            from OFS.interfaces import ISimpleItem
 
             from Products.GenericSetup.interfaces import IContentFactory
             from Products.GenericSetup.interfaces import ICSVAware

@@ -22,6 +22,7 @@ except:
     from sha import sha
 
 from AccessControl import ClassSecurityInfo, AuthEncoding
+from AccessControl.requestmethod import postonly
 from AccessControl.SecurityManagement import getSecurityManager
 from App.class_init import default__class_init__ as InitializeClass
 from BTrees.OOBTree import OOBTree
@@ -43,7 +44,7 @@ from Products.PluggableAuthService.permissions import SetOwnPassword
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.utils import classImplements
 from Products.PluggableAuthService.utils import createViewName
-from Products.PluggableAuthService.utils import postonly
+
 
 class IZODBUserManager(Interface):
     """ Marker interface.

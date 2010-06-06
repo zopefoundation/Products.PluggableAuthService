@@ -18,10 +18,8 @@ $Id$
 # Eventually, those interfaces should be moved to Zope and imported
 # here as aliases for backward compatibility.
 
-try:
-    from zope.interface import Interface
-except ImportError:
-    from Interface import Interface
+from zope.interface import Interface
+
 
 class IRequest( Interface ):
 

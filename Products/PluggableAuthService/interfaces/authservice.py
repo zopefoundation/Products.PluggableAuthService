@@ -16,10 +16,7 @@
 $Id$
 """
 
-try:
-    from zope.interface import Interface
-except ImportError:
-    from Interface import Interface
+from zope.interface import Interface
 from AccessControl.ZopeSecurityPolicy import _noroles
 
 

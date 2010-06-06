@@ -19,6 +19,7 @@ import copy
 
 from Acquisition import aq_inner, aq_parent
 from AccessControl import ClassSecurityInfo
+from AccessControl.requestmethod import postonly
 from OFS.SimpleItem import SimpleItem
 from OFS.PropertyManager import PropertyManager
 from OFS.Folder import Folder
@@ -39,7 +40,7 @@ from Products.PluggableAuthService.permissions import ManageGroups
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.utils import createViewName
 from Products.PluggableAuthService.utils import classImplements
-from Products.PluggableAuthService.utils import postonly
+
 
 class IDynamicGroupsPlugin(Interface):
     """ Marker interface.

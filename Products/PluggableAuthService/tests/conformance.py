@@ -16,10 +16,7 @@
 $Id$
 """
 
-try:
-    from zope.interface.verify import verifyClass
-except ImportError:
-    from Interface.Verify import verifyClass
+from zope.interface.verify import verifyClass
 
 
 class IExtractionPlugin_conformance:

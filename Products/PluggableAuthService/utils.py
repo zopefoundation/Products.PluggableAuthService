@@ -21,48 +21,22 @@ except:
 
 from App.Common import package_home
 
-try:
-    from Products.Five.bridge import fromZ2Interface
-except ImportError:
-    def fromZ2Interface(i):
-        # Raise ValueError to work around a cornerish case where
-        # zope.interface is available but Five is not.
-        raise ValueError, i
 
 from zope import interface
 def directlyProvides(obj, *interfaces):
-    # convert any Zope 2 interfaces to Zope 3 using fromZ2Interface
     normalized_interfaces = []
     for i in interfaces:
-        try:
-            i = fromZ2Interface(i)
-        except ValueError: # already a Zope 3 interface
-            pass
         normalized_interfaces.append(i)
     return interface.directlyProvides(obj, *normalized_interfaces)
 
 def classImplements(class_, *interfaces):
-    # convert any Zope 2 interfaces to Zope 3 using fromZ2Interface
     normalized_interfaces = []
     for i in interfaces:
-        try:
-            i = fromZ2Interface(i)
-        except ValueError: # already a Zope 3 interface
-            pass
         normalized_interfaces.append(i)
     return interface.classImplements(class_, *normalized_interfaces)
 
-# postonly protection
-try:
-    # Zope 2.8.9, 2.9.7 and 2.10.3 (and up)
-    from AccessControl.requestmethod import postonly
-except ImportError:
-    try:
-        # Try the hotfix too
-        from Products.Hotfix_20070320 import postonly
-    except:
-        def postonly(callable): return callable
-
+# BBB import
+from AccessControl.requestmethod import postonly
 
 product_dir = package_home( globals() )
 product_prefix = os.path.join( os.path.split(product_dir)[:-1] )

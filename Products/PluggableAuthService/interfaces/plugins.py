@@ -16,10 +16,8 @@
 $Id$
 """
 
-try:
-    from zope.interface import Interface
-except ImportError:
-    from Interface import Interface
+from zope.interface import Interface
+
 
 class IExtractionPlugin( Interface ):
 

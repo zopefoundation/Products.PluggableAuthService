@@ -17,6 +17,7 @@ $Id$
 """
 from Acquisition import aq_parent, aq_inner
 from AccessControl import ClassSecurityInfo
+from AccessControl.requestmethod import postonly
 from BTrees.OOBTree import OOBTree
 from App.class_init import InitializeClass
 
@@ -34,7 +35,6 @@ from Products.PluggableAuthService.interfaces.plugins \
 from Products.PluggableAuthService.permissions import ManageUsers
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.utils import classImplements
-from Products.PluggableAuthService.utils import postonly
 
 import logging 
 

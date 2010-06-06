@@ -18,19 +18,11 @@ $Id$
 from types import IntType
 from types import FloatType
 from types import LongType
-from types import TupleType
-from types import ListType
 from types import InstanceType
 from types import BooleanType
 
-try:
-    from types import StringTypes
-except ImportError:
-    from types import StringType
-    from types import UnicodeType
-    StringTypes = ( StringType, UnicodeType )
-
-_SequenceTypes = ( TupleType, ListType )
+StringTypes = (str, unicode, )
+_SequenceTypes = (tuple, list, )
 
 from DateTime.DateTime import DateTime
 

@@ -17,14 +17,8 @@ $Id$
 """
 
 def _setUpDefaultTraversable():
-    # Work around behavior change in Zope 2.10 due to its use of the 
-    # Zope 3 pagetemplates
-    try:
-        from zope.interface import Interface
-        from zope.component import provideAdapter
-        from zope.traversing.interfaces import ITraversable
-        from zope.traversing.adapters import DefaultTraversable
-        provideAdapter(DefaultTraversable, (Interface,), ITraversable)
-    except ImportError:
-        # Zope < 2.10 - no need to do anything
-        pass
+    from zope.interface import Interface
+    from zope.component import provideAdapter
+    from zope.traversing.interfaces import ITraversable
+    from zope.traversing.adapters import DefaultTraversable
+    provideAdapter(DefaultTraversable, (Interface,), ITraversable)
