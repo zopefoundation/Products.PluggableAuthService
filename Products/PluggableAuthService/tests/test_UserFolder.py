@@ -330,8 +330,8 @@ class UserEvents(pastc.PASTestCase):
         self.uf._data=[]
         self.uf._original=self.uf.updateCredentials
         self.uf.updateCredentials=wrap
+        self.assertEqual(len(self.uf._data), 0)
         event.notify(CredentialsUpdated(self.uf.getUserById("user1"), "testpassword"))
-        self.assertEqual(len(self.uf._data), 1)
         self.assertEqual(self.uf._data[0][2], "user1")
         self.assertEqual(self.uf._data[0][3], "testpassword")
 

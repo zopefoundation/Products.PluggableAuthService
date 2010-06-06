@@ -4,6 +4,8 @@ Change Log
 1.7.1 (unreleased)
 ------------------
 
+- Avoid dependency on zope.app.testing.
+
 - Cleaned out a number of old imports, we require Zope >= 2.12.
 
 - Updated setDefaultRoles to use the addPermission API if available.

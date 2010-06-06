@@ -17,14 +17,11 @@ $Id$
 """
 import unittest
 from csv import reader
-from ConfigParser import ConfigParser
 from StringIO import StringIO
 
 try:
     import Products.GenericSetup
 except ImportError:  # No GenericSetup, so no tests
-
-    print 'XXXX:  No GenericSetup!'
     def test_suite():
         return unittest.TestSuite()
 
@@ -33,19 +30,12 @@ else:
     from Products.PluggableAuthService.tests.utils import \
             _setUpDefaultTraversable
 
-    from zope.interface import Interface
-
-    try:
-        from zope.component.testing import PlacelessSetup
-    except ImportError:
-        # BBB for Zope 2.11
-        from zope.app.testing.placelesssetup import PlacelessSetup
+    from zope.component.testing import PlacelessSetup
 
     class _TestBase(PlacelessSetup, BaseRegistryTests):
 
         def _initPAS(self, plugin_type_info=(), plugins={}):
             from OFS.Folder import Folder
-            from OFS.SimpleItem import SimpleItem
             from Products.PluggableAuthService.PluggableAuthService \
                 import addPluggableAuthService
 
@@ -61,10 +51,8 @@ else:
     class Test_exportPAS(_TestBase):
 
         def _setUpAdapters(self):
-            from zope.app.testing import ztapi
-
+            from zope.component import provideAdapter
             from OFS.interfaces import IObjectManager
-            from OFS.interfaces import ISimpleItem
             from OFS.interfaces import IPropertyManager
 
             from Products.GenericSetup.interfaces import IContentFactoryName
@@ -90,45 +78,36 @@ else:
             from Products.PluggableAuthService.exportimport \
                 import PAS_CF_Namer
 
-            ztapi.provideAdapter(IObjectManager,
-                                 IFilesystemExporter,
-                                 FolderishExporterImporter,
-                                )
+            provideAdapter(FolderishExporterImporter,
+                           (IObjectManager,),
+                           IFilesystemExporter)
 
-            ztapi.provideAdapter(IPropertyManager,
-                                 IINIAware,
-                                 SimpleINIAware,
-                                )
+            provideAdapter(SimpleINIAware,
+                           (IPropertyManager, ),
+                           IINIAware)
 
-            ztapi.provideAdapter(ICSVAware,
-                                 IFilesystemExporter,
-                                 CSVAwareFileAdapter,
-                                )
+            provideAdapter(CSVAwareFileAdapter,
+                           (ICSVAware, ),
+                           IFilesystemExporter)
 
-            ztapi.provideAdapter(IINIAware,
-                                 IFilesystemExporter,
-                                 INIAwareFileAdapter,
-                                )
+            provideAdapter(INIAwareFileAdapter,
+                           (IINIAware, ),
+                           IFilesystemExporter)
 
-            ztapi.provideAdapter(IDAVAware,
-                                 IFilesystemExporter,
-                                 DAVAwareFileAdapter,
-                                )
+            provideAdapter(DAVAwareFileAdapter,
+                           (IDAVAware, ),
+                           IFilesystemExporter)
 
-            ztapi.provideAdapter(IPluginRegistry,
-                                 IFilesystemExporter,
-                                 PluginRegistryFileExportImportAdapter,
-                                )
+            provideAdapter(PluginRegistryFileExportImportAdapter,
+                           (IPluginRegistry, ),
+                           IFilesystemExporter)
 
-            ztapi.provideAdapter(IPluginRegistry,
-                                 IContentFactoryName,
-                                 PAS_CF_Namer,
-                                )
+            provideAdapter(PAS_CF_Namer,
+                           (IPluginRegistry, ),
+                           IContentFactoryName)
 
         def test_empty(self):
-            from Products.GenericSetup.utils import _getDottedName
             from Products.GenericSetup.tests.common import DummyExportContext
-            from Products.PluginRegistry.PluginRegistry import PluginRegistry
             from Products.PluggableAuthService.exportimport import exportPAS
 
             _setUpDefaultTraversable()
@@ -162,7 +141,6 @@ else:
             from Products.GenericSetup.tests.faux_objects \
                 import TestCSVAware
             from Products.GenericSetup.utils import _getDottedName
-            from Products.PluginRegistry.PluginRegistry import PluginRegistry
             from Products.PluggableAuthService.exportimport import exportPAS
 
             _setUpDefaultTraversable()
@@ -210,11 +188,9 @@ else:
     class Test_importPAS(_TestBase):
 
         def _setUpAdapters(self):
-            from zope.app.testing import ztapi
-
+            from zope.component import provideAdapter
             from OFS.interfaces import IObjectManager
             from OFS.interfaces import IPropertyManager
-            from OFS.interfaces import ISimpleItem
 
             from Products.GenericSetup.interfaces import IContentFactory
             from Products.GenericSetup.interfaces import ICSVAware
@@ -242,46 +218,37 @@ else:
             from Products.PluggableAuthService.exportimport \
                 import PAS_PR_ContentFactory
 
-            ztapi.provideAdapter(IObjectManager,
-                                 IFilesystemImporter,
-                                 FolderishExporterImporter,
-                                )
+            provideAdapter(FolderishExporterImporter,
+                           (IObjectManager, ),
+                           IFilesystemImporter)
 
-            ztapi.provideAdapter(IPropertyManager,
-                                 IINIAware,
-                                 SimpleINIAware,
-                                )
+            provideAdapter(SimpleINIAware,
+                           (IPropertyManager, ),
+                           IINIAware)
 
-            ztapi.provideAdapter(ICSVAware,
-                                 IFilesystemImporter,
-                                 CSVAwareFileAdapter,
-                                )
+            provideAdapter(CSVAwareFileAdapter,
+                           (ICSVAware, ),
+                           IFilesystemImporter)
 
-            ztapi.provideAdapter(IINIAware,
-                                 IFilesystemImporter,
-                                 INIAwareFileAdapter,
-                                )
+            provideAdapter(INIAwareFileAdapter,
+                           (IINIAware, ),
+                           IFilesystemImporter)
 
-            ztapi.provideAdapter(IDAVAware,
-                                 IFilesystemImporter,
-                                 DAVAwareFileAdapter,
-                                )
+            provideAdapter(DAVAwareFileAdapter,
+                           (IDAVAware, ),
+                           IFilesystemImporter)
 
-            ztapi.provideAdapter(IPluginRegistry,
-                                 IFilesystemImporter,
-                                 PluginRegistryFileExportImportAdapter,
-                                )
+            provideAdapter(PluginRegistryFileExportImportAdapter,
+                           (IPluginRegistry, ),
+                           IFilesystemImporter)
 
-            ztapi.provideAdapter(IPluggableAuthService,
-                                 IContentFactory,
-                                 PAS_PR_ContentFactory,
-                                 name='plugins',
-                                )
+            provideAdapter(PAS_PR_ContentFactory,
+                           (IPluggableAuthService, ),
+                           IContentFactory,
+                           name='plugins')
 
         def test_empty_modifying_plugin_types(self):
             from Products.GenericSetup.tests.common import DummyImportContext
-            from Products.GenericSetup.utils import _getDottedName
-            from Products.PluginRegistry.PluginRegistry import PluginRegistry
             from Products.PluggableAuthService.exportimport import importPAS
 
             self._setUpAdapters()
@@ -301,8 +268,6 @@ else:
             from Products.GenericSetup.tests.common import DummyImportContext
             from Products.GenericSetup.tests.faux_objects \
                 import TestCSVAware, KNOWN_CSV
-            from Products.GenericSetup.utils import _getDottedName
-            from Products.PluginRegistry.PluginRegistry import PluginRegistry
             from Products.PluggableAuthService.exportimport import importPAS
 
             self._setUpAdapters()
@@ -356,6 +321,3 @@ title =
             unittest.makeSuite( Test_exportPAS ),
             unittest.makeSuite( Test_importPAS ),
             ))
-
-if __name__ == "__main__":
-    unittest.main(defaultTest='test_suite')
