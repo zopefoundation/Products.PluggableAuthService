@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+1.7.1 (unreleased)
+------------------
+
+- Updated setDefaultRoles to use the addPermission API if available.
+
+
 1.7.0 (2010-04-08)
 ------------------
 

@@ -17,10 +17,6 @@ $Id$
 """
 from AccessControl import ModuleSecurityInfo
 from AccessControl import Permissions
-from AccessControl.Permission import _registeredPermissions
-from AccessControl.Permission import pname
-from AccessControl.Permission import ApplicationDefaultPermissions
-import Products
 
 security = ModuleSecurityInfo( 'Products.PluggableAuthService.permissions' )
 
@@ -30,24 +26,32 @@ ManageUsers = Permissions.manage_users
 security.declarePublic( 'ManageGroups' )
 ManageGroups = "Manage Groups"
 
+addPermission = None
+try:
+    from AccessControl.Permission import addPermission
+except ImportError:
+    pass
+
 security.declarePrivate( 'setDefaultRoles' )
 def setDefaultRoles( permission, roles ):
-
     """ Set the defaults roles for a permission.
-
-    o XXX This ought to be in AccessControl.SecurityInfo.
     """
-    registered = _registeredPermissions
+    if addPermission is not None:
+        addPermission(permission, roles)
+    else:
+        # BBB This is in AccessControl starting in Zope 2.13
+        from AccessControl.Permission import _registeredPermissions
+        from AccessControl.Permission import pname
+        from AccessControl.Permission import ApplicationDefaultPermissions
+        import Products
+        registered = _registeredPermissions
+        if not registered.has_key( permission ):
+            registered[ permission ] = 1
+            Products.__ac_permissions__=(
+                Products.__ac_permissions__+((permission,(),roles),))
+            mangled = pname(permission)
+            setattr(ApplicationDefaultPermissions, mangled, roles)
 
-    if not registered.has_key( permission ):
-
-        registered[ permission ] = 1
-        Products.__ac_permissions__=( Products.__ac_permissions__
-                                    + ( ( permission, (), roles ), )
-                                    )
-
-        mangled = pname(permission)
-        setattr(ApplicationDefaultPermissions, mangled, roles)
 
 security.declarePublic( 'SearchPrincipals' )
 SearchPrincipals = 'Search for principals'
