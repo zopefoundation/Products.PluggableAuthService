@@ -89,7 +89,7 @@ def manage_zmi_logout(self, REQUEST, RESPONSE):
     if IPluggableAuthService.providedBy(acl_users):
         acl_users.resetCredentials(REQUEST, RESPONSE)
     else:
-        raise Unauthorized, '<p>You have been logged out.</p>'
+        raise Unauthorized('<p>You have been logged out.</p>')
 
     RESPONSE.setStatus(401)
     RESPONSE.setBody("""<html>

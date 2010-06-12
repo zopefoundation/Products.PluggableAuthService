@@ -266,7 +266,7 @@ class FauxResponse:
 
     def unauthorized(self):
         self._unauthorized()
-        raise Unauthorized, 'You can not do this!'
+        raise Unauthorized('You can not do this!')
 
     def exception(self):
         self._unauthorized()
