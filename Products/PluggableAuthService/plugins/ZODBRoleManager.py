@@ -40,6 +40,9 @@ import logging
 
 LOG = logging.getLogger('PluggableAuthService')
 
+class MultiplePrincipalError(Exception):
+    pass
+
 class IZODBRoleManager(Interface):
     """ Marker interface.
     """
@@ -276,9 +279,12 @@ class ZODBRoleManager( BasePlugin ):
                 info = parent.searchPrincipals( id=k, exact_match=True )
 
                 if len(info) > 1:                    
-                    LOG.error('searchPrincipals() returned more than one result '
-                              'for id=%s' % k)
-                assert len(info) in (0, 1)
+                    message = ("Multiple groups or users exist with the "
+                               "name '%s'. Remove one of the duplicate groups "
+                               "or users." % (k))
+                    LOG.error(message)
+                    raise MultiplePrincipalError(message)
+
                 if len( info ) == 0:
                     title = '<%s: not found>' % k
                 else:

@@ -4,6 +4,10 @@ Change Log
 1.7.1 (unreleased)
 ------------------
 
+- Made ``ZODBRoleManager.assignRoleToPrincipal`` raise and log a more
+  informative error when detecting a duplicate principal.
+  https://bugs.launchpad.net/zope-pas/+bug/348795
+
 - Updated ``DynamicGroupsPlugin.enumerateGroups`` to return an empty sequence
   for an unknown group ID, rather than raising KeyError.
   https://bugs.launchpad.net/zope-pas/+bug/585365

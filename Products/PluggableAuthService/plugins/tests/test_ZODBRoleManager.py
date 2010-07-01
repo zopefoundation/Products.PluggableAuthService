@@ -421,6 +421,26 @@ class ZODBRoleManagerTests( unittest.TestCase
 
         self.failIf( removed )
 
+    def test_listAssignedPrincipals_duplicate_principals( self ):
+        from Products.PluggableAuthService.plugins.ZODBRoleManager \
+            import MultiplePrincipalError
+        
+        class FauxDuplicatePAS( FauxSmartPAS ):
+            """Returns duplicate user ids when searched."""
+
+            def searchPrincipals( self, **kw ):
+                return [ {'id':'foo', 'title':'User 1'},
+                         {'id':'foo', 'title':'User 2'} ]
+        
+        root = FauxDuplicatePAS()
+        zrm = self._makeOne(id='assign_new').__of__(root)
+        
+        zrm.addRole('test')
+        zrm.assignRoleToPrincipal('test', 'foo')
+        
+        self.assertRaises(MultiplePrincipalError,
+                          zrm.listAssignedPrincipals, 'test' )
+
     def test_updateRole_nonesuch( self ):
 
         from Products.PluggableAuthService.tests.test_PluggableAuthService \
