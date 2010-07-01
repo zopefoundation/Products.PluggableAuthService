@@ -250,22 +250,25 @@ class DynamicGroupsPlugin( Folder, BasePlugin, Cacheable ):
             group_ids = self.listGroupIds()
             group_filter = _DynamicGroupFilter( id, **kw )
 
+        known = self.listGroupIds()
         for group_id in group_ids:
+            g_info = self.getGroupInfo(group_id, raise_keyerror=False)
+            if g_info is not None:
 
-            url = '/%s/%s/manage_propertiesForm' % ( self.absolute_url( 1 )
-                                                   , group_id )
-            info = {}
-            info.update( self.getGroupInfo( group_id ) )
+                url = '/%s/%s/manage_propertiesForm' % (
+                            self.absolute_url(1), group_id)
+                info = {}
+                info.update( self.getGroupInfo( group_id ) )
 
-            info[ 'pluginid' ] = plugin_id
-            info[ 'properties_url' ] = url
-            info[ 'members_url' ] = url
+                info[ 'pluginid' ] = plugin_id
+                info[ 'properties_url' ] = url
+                info[ 'members_url' ] = url
 
-            info[ 'id' ] = '%s%s' % (self.prefix, info['id'])
+                info[ 'id' ] = '%s%s' % (self.prefix, info['id'])
 
-            if not group_filter or group_filter( info ):
-                if info[ 'active' ]:
-                    group_info.append( info )
+                if not group_filter or group_filter( info ):
+                    if info[ 'active' ]:
+                        group_info.append( info )
 
         # Put the computed value into the cache
         self.ZCacheable_set(group_info, view_name=view_name, keywords=keywords)
@@ -283,12 +286,13 @@ class DynamicGroupsPlugin( Folder, BasePlugin, Cacheable ):
         return self.objectIds( DynamicGroupDefinition.meta_type )
 
     security.declareProtected( ManageGroups, 'getGroupInfo' )
-    def getGroupInfo( self, group_id ):
+    def getGroupInfo( self, group_id, raise_keyerror=True ):
 
         """ Return a mappings describing one dynamic group we manage.
 
-        o Raise KeyError if we don't have an existing group definition
-          for 'group_ id'.
+        o If 'raise_keyerror' is True, raise KeyError if we don't have an
+          existing group definition for 'group_ id'.  Otherwise, return
+          None.
 
         o Keys include:
 
@@ -304,10 +308,16 @@ class DynamicGroupsPlugin( Folder, BasePlugin, Cacheable ):
             try:
                 original = self._getOb( group_id[len(self.prefix):] )
             except AttributeError:
-                raise KeyError, group_id
+                if raise_keyerror:
+                    raise KeyError, group_id
+                else:
+                    return None
 
         if not isinstance( original, DynamicGroupDefinition ):
-            raise KeyError, group_id
+            if raise_keyerror:
+                raise KeyError, group_id
+            else:
+                return None
 
         info = {}
 

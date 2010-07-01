@@ -4,9 +4,13 @@ Change Log
 1.7.1 (unreleased)
 ------------------
 
-- Raise new-style exceptions.
+- Updated ``DynamicGroupsPlugin.enumerateGroups`` to return an empty sequence
+  for an unknown group ID, rather than raising KeyError.
+  https://bugs.launchpad.net/zope-pas/+bug/585365
 
-- Avoid dependency on zope.app.testing.
+- Updated all code to raise new-style exceptions.
+
+- Removed dependency on ``zope.app.testing``.
 
 - Cleaned out a number of old imports, we require Zope >= 2.12.
 

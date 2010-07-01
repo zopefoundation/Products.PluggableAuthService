@@ -302,6 +302,23 @@ class DynamicGroupsPlugin( unittest.TestCase
         self.assertEqual( info[ 'properties_url' ], URL )
         self.assertEqual( info[ 'members_url' ], URL )
 
+    def test_enumerateGroups_exact_miss( self ):
+        # See https://bugs.launchpad.net/zope-pas/+bug/585365
+
+        from Products.PluggableAuthService.tests.test_PluggableAuthService \
+            import FauxRoot
+
+        root = FauxRoot()
+        dpg = self._makeOne( 'enumerating' ).__of__( root )
+
+        dpg.addGroup( 'everyone', 'python:True', 'Everyone', '', True )
+        dpg.addGroup( 'noone', 'python:False', active=True )
+        dpg.addGroup( 'hohum', 'nothing', active=True )
+
+        info_list = dpg.enumerateGroups( id='nonesuch', exact_match=True )
+
+        self.assertEqual( len( info_list ), 0 )
+
     def test_enumerateGroups_skip_inactive( self ):
 
         from Products.PluggableAuthService.tests.test_PluggableAuthService \
