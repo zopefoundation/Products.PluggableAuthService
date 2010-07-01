@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-1.7.1 (unreleased)
+1.7.1 (2010-07-01)
 ------------------
 
 - Made ``ZODBRoleManager.assignRoleToPrincipal`` raise and log a more
@@ -16,15 +16,15 @@ Change Log
 
 - Removed dependency on ``zope.app.testing``.
 
-- Cleaned out a number of old imports, we require Zope >= 2.12.
+- Cleaned out a number of old imports, because we now require Zope >= 2.12.
 
-- Updated setDefaultRoles to use the addPermission API if available.
+- Updated ``setDefaultRoles`` to use the ``addPermission`` API if available.
 
 
 1.7.0 (2010-04-08)
 ------------------
 
-- Allow CookieAuthHelper's login_path to be set to an absolute url for
+- Allow CookieAuthHelper's ``login_path`` to be set to an absolute url for
   integration with external authentication mechanisms.
 
 - Fixed xml templates directory path computation to allow reuse of 
