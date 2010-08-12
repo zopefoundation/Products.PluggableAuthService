@@ -737,11 +737,15 @@ class PluggableAuthService( Folder, Cacheable ):
             rolemakers = plugins.listPlugins( IRolesPlugin )
 
             for rolemaker_id, rolemaker in rolemakers:
-
-                roles = rolemaker.getRolesForPrincipal( user, request )
-
-                if roles:
-                    user._addRoles( roles )
+                try:
+                    roles = rolemaker.getRolesForPrincipal( user, request )
+                except _SWALLOWABLE_PLUGIN_EXCEPTIONS:
+                    logger.debug( 'IRolesPlugin %s error' % rolemaker_id
+                                , exc_info=True
+                                )
+                else:
+                    if roles:
+                        user._addRoles( roles )
 
             user._addRoles( ['Authenticated'] )
 

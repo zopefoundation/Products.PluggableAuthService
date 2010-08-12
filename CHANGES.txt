@@ -4,8 +4,12 @@ Change Log
 1.7.2 (unreleased)
 ------------------
 
-- Fixed possible TypeError in extractCredentials of CookieAuthHelper
-  when the __ac cookie is not ours (but e.g. from plone.session,
+- Trap "swallowable" exceptions from ``IRoles`` plugins.  Thanks to
+  Willi Langenburger for the patch.  Fixes
+  https://bugs.launchpad.net/zope-pas/+bug/615474 .
+
+- Fixed possible TypeError in ``extractCredentials`` of CookieAuthHelper
+  when the ``__ac`` cookie is not ours (but e.g. from plone.session,
   though even then only in a corner case).
 
 

@@ -28,6 +28,11 @@ from conformance import IUserFolder_conformance
 class DummyPlugin(Implicit):
     pass
 
+class FaultyRolesPlugin(DummyPlugin):
+
+    def getRolesForPrincipal(self, principal, request=None):
+        raise KeyError("intentional KeyError from FaultyRolesPlugin")
+
 class DummyUserEnumerator( DummyPlugin ):
 
     def __init__( self, user_id, login=None ):
@@ -444,6 +449,16 @@ class PluggableAuthServiceTests( unittest.TestCase
         object = FauxObject( 'object' ).__of__( folder )
 
         return rc, root, folder, object
+
+    def _makeFaultyRolemaker( self ):
+
+        from Products.PluggableAuthService.interfaces.plugins \
+             import IRolesPlugin
+
+        rolemaker = FaultyRolesPlugin()
+        directlyProvides( rolemaker, IRolesPlugin )
+
+        return rolemaker
 
     def _makeUserEnumerator( self, user_id, login=None ):
 
@@ -1006,6 +1021,30 @@ class PluggableAuthServiceTests( unittest.TestCase
         self.assertEqual( n, 'index_html' )
         self.assertEqual( v, published )
 
+
+    def test__faultyRolemaker( self ):
+
+        from Products.PluggableAuthService.interfaces.plugins \
+             import IUserEnumerationPlugin, IRolesPlugin
+
+        plugins = self._makePlugins()
+        zcuf = self._makeOne( plugins )
+
+        ue = self._makeUserEnumerator( 'foo' )
+        zcuf._setObject( 'ue', ue )
+
+        rm = self._makeFaultyRolemaker()
+        zcuf._setObject( 'rm', rm )
+
+        plugins = zcuf._getOb( 'plugins' )
+
+        plugins.activatePlugin( IUserEnumerationPlugin, 'ue' )
+        plugins.activatePlugin( IRolesPlugin, 'rm' )
+
+        try:
+            zcuf.getUser('foo')
+        except KeyError, e:
+            self.fail('exception should be caught by PAS: %s' % e)
 
     def test__verifyUser_no_plugins( self ):
 
