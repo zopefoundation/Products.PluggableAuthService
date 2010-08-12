@@ -125,8 +125,12 @@ class CookieAuthHelper(Folder, BasePlugin):
                 # Cookie is in a different format, so it is not ours
                 return creds
 
-            creds['login'] = login.decode('hex')
-            creds['password'] = password.decode('hex')
+            try:
+                creds['login'] = login.decode('hex')
+                creds['password'] = password.decode('hex')
+            except TypeError:
+                # Cookie is in a different format, so it is not ours
+                return creds
 
         if creds:
             creds['remote_host'] = request.get('REMOTE_HOST', '')
