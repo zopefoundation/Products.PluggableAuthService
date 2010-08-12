@@ -12,18 +12,8 @@
 #
 ##############################################################################
 """ Classes: PluggableAuthService
-
-$Id$
 """
-
 import logging
-import sys
-import re
-import types
-
-from ZPublisher import BeforeTraverse
-
-from Acquisition import Implicit, aq_parent, aq_base, aq_inner
 
 from AccessControl import ClassSecurityInfo, ModuleSecurityInfo
 from AccessControl.SecurityManagement import newSecurityManager
@@ -32,59 +22,54 @@ from AccessControl.SecurityManagement import noSecurityManager
 from AccessControl.Permissions import manage_users as ManageUsers
 from AccessControl.User import nobody
 from AccessControl.SpecialUsers import emergency_user
-
+from Acquisition import Implicit
+from Acquisition import aq_parent
+from Acquisition import aq_base
+from Acquisition import aq_inner
+from App.class_init import default__class_init__ as InitializeClass
 from App.ImageFile import ImageFile
-
-from zExceptions import Unauthorized
-from Persistence import PersistentMapping
 from OFS.Folder import Folder
 from OFS.Cache import Cacheable
+from OFS.interfaces import IObjectManager
+from OFS.interfaces import IPropertyManager
 from Products.StandardCacheManagers.RAMCacheManager import RAMCacheManager
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from zExceptions import Unauthorized
+from ZPublisher import BeforeTraverse
 from ZTUtils import Batch
-from App.class_init import default__class_init__ as InitializeClass
-
-from OFS.interfaces import IObjectManager
-from OFS.interfaces import ISimpleItem
-from OFS.interfaces import IPropertyManager
+from zope.event import notify
 
 from Products.PluginRegistry.PluginRegistry import PluginRegistry
-import Products
 
-from zope import event
-
-from interfaces.authservice import IPluggableAuthService
-from interfaces.authservice import _noroles
-from interfaces.plugins import IExtractionPlugin
-from interfaces.plugins import ILoginPasswordHostExtractionPlugin
-from interfaces.plugins import IAuthenticationPlugin
-from interfaces.plugins import IChallengePlugin
-from interfaces.plugins import ICredentialsUpdatePlugin
-from interfaces.plugins import ICredentialsResetPlugin
-from interfaces.plugins import IUserFactoryPlugin
-from interfaces.plugins import IAnonymousUserFactoryPlugin
-from interfaces.plugins import IPropertiesPlugin
-from interfaces.plugins import IGroupsPlugin
-from interfaces.plugins import IRolesPlugin
-from interfaces.plugins import IUpdatePlugin
-from interfaces.plugins import IValidationPlugin
-from interfaces.plugins import IUserEnumerationPlugin
-from interfaces.plugins import IUserAdderPlugin
-from interfaces.plugins import IGroupEnumerationPlugin
-from interfaces.plugins import IRoleEnumerationPlugin
-from interfaces.plugins import IRoleAssignerPlugin
-from interfaces.plugins import IChallengeProtocolChooser
-from interfaces.plugins import IRequestTypeSniffer
-
-from events import PrincipalCreated
-
-from permissions import SearchPrincipals
-
-from PropertiedUser import PropertiedUser
-from utils import _wwwdir
-from utils import createViewName
-from utils import createKeywords
-from utils import classImplements
+from .events import PrincipalCreated
+from .interfaces.authservice import IPluggableAuthService
+from .interfaces.authservice import _noroles
+from .interfaces.plugins import IExtractionPlugin
+from .interfaces.plugins import ILoginPasswordHostExtractionPlugin
+from .interfaces.plugins import IAuthenticationPlugin
+from .interfaces.plugins import IChallengePlugin
+from .interfaces.plugins import ICredentialsUpdatePlugin
+from .interfaces.plugins import ICredentialsResetPlugin
+from .interfaces.plugins import IUserFactoryPlugin
+from .interfaces.plugins import IAnonymousUserFactoryPlugin
+from .interfaces.plugins import IPropertiesPlugin
+from .interfaces.plugins import IGroupsPlugin
+from .interfaces.plugins import IRolesPlugin
+from .interfaces.plugins import IUpdatePlugin
+from .interfaces.plugins import IValidationPlugin
+from .interfaces.plugins import IUserEnumerationPlugin
+from .interfaces.plugins import IUserAdderPlugin
+from .interfaces.plugins import IGroupEnumerationPlugin
+from .interfaces.plugins import IRoleEnumerationPlugin
+from .interfaces.plugins import IRoleAssignerPlugin
+from .interfaces.plugins import IChallengeProtocolChooser
+from .interfaces.plugins import IRequestTypeSniffer
+from .permissions import SearchPrincipals
+from .PropertiedUser import PropertiedUser
+from .utils import _wwwdir
+from .utils import createViewName
+from .utils import createKeywords
+from .utils import classImplements
 
 security = ModuleSecurityInfo(
     'Products.PluggableAuthService.PluggableAuthService' )
@@ -107,6 +92,7 @@ def registerMultiPlugin(meta_type):
         raise RuntimeError('Meta-type (%s) already available to Add List'
                            % meta_type)
     MultiPlugins.append(meta_type)
+
 
 class DumbHTTPExtractor( Implicit ):
 
@@ -445,7 +431,6 @@ class PluggableAuthService( Folder, Cacheable ):
     #
     # ZMI stuff
     #
-    
     arrow_right_gif = ImageFile( 'www/arrow-right.gif', globals() )
     arrow_left_gif = ImageFile( 'www/arrow-left.gif', globals() )
     arrow_up_gif = ImageFile( 'www/arrow-up.gif', globals() )
@@ -584,7 +569,8 @@ class PluggableAuthService( Folder, Cacheable ):
                     return [ ( user_id, name ) ]
 
                 # Now see if the user ids can be retrieved from the cache
-                view_name = createViewName('_extractUserIds', credentials.get('login'))
+                view_name = createViewName('_extractUserIds',
+                                           credentials.get('login'))
                 keywords = createKeywords(**credentials)
                 user_ids = self.ZCacheable_get( view_name=view_name
                                               , keywords=keywords
@@ -962,13 +948,14 @@ class PluggableAuthService( Folder, Cacheable ):
                     pass
 
         if user is not None:
-            event.notify(PrincipalCreated(user))
+            notify(PrincipalCreated(user))
 
 
     security.declarePublic('all_meta_types')
     def all_meta_types(self):
         """ What objects can be put in here?
         """
+        import Products
         allowed_types = tuple(MultiPlugins) + (RAMCacheManager.meta_type,)
 
         return [x for x in Products.meta_types if x['name'] in allowed_types]
@@ -1103,7 +1090,6 @@ class PluggableAuthService( Folder, Cacheable ):
         for updater_id, updater in cred_updaters:
             updater.updateCredentials(request, response, login, new_password)
 
-
     security.declarePublic('logout')
     def logout(self, REQUEST):
         """Publicly accessible method to log out a user
@@ -1113,7 +1099,7 @@ class PluggableAuthService( Folder, Cacheable ):
         # Little bit of a hack: Issuing a redirect to the same place
         # where the user was so that in the second request the now-destroyed
         # credentials can be acted upon to e.g. go back to the login page
-        referrer = REQUEST.get('HTTP_REFERER') # HTTP_REFERER is optional header
+        referrer = REQUEST.get('HTTP_REFERER') # optional header
         if referrer:
             REQUEST['RESPONSE'].redirect(referrer)
 
@@ -1134,6 +1120,7 @@ classImplements( PluggableAuthService
                )
 
 InitializeClass( PluggableAuthService )
+
 
 class ResponseCleanup:
     def __init__(self, resp):
