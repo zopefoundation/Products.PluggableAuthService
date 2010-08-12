@@ -4,6 +4,10 @@ Change Log
 1.7.1 (2010-07-01)
 ------------------
 
+- Fixed possible TypeError in extractCredentials of CookieAuthHelper
+  when the __ac cookie is not ours (but e.g. from plone.session,
+  though even then only in a corner case).
+
 - Made ``ZODBRoleManager.assignRoleToPrincipal`` raise and log a more
   informative error when detecting a duplicate principal.
   https://bugs.launchpad.net/zope-pas/+bug/348795
