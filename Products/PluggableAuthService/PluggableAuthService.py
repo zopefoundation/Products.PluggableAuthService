@@ -83,6 +83,14 @@ _SWALLOWABLE_PLUGIN_EXCEPTIONS = ( NameError
                                  , TypeError
                                  , ValueError
                                  )
+# except if they tell us not to do so
+def reraise(plugin):
+    try:
+        doreraise = plugin._dont_swallow_my_exceptions
+    except AttributeError:
+        return
+    if doreraise:
+        raise
 
 MultiPlugins = []
 def registerMultiPlugin(meta_type):
@@ -299,6 +307,7 @@ class PluggableAuthService( Folder, Cacheable ):
                     result.append(info)
 
             except _SWALLOWABLE_PLUGIN_EXCEPTIONS:
+                reraise(enum)
                 logger.debug( 'UserEnumerationPlugin %s error' % enumerator_id
                             , exc_info=True
                             )
@@ -355,6 +364,7 @@ class PluggableAuthService( Folder, Cacheable ):
                         info[ 'title' ] = "(Group) %s" % info[ 'groupid' ]
                     result.append(info)
             except _SWALLOWABLE_PLUGIN_EXCEPTIONS:
+                reraise(enum)
                 logger.debug( 'GroupEnumerationPlugin %s error' % enumerator_id
                             , exc_info=True
                             )
@@ -542,6 +552,7 @@ class PluggableAuthService( Folder, Cacheable ):
             try:
                 credentials = extractor.extractCredentials( request )
             except _SWALLOWABLE_PLUGIN_EXCEPTIONS:
+                reraise(extractor)
                 logger.debug( 'ExtractionPlugin %s error' % extractor_id
                             , exc_info=True
                             )
@@ -555,6 +566,8 @@ class PluggableAuthService( Folder, Cacheable ):
                     items = credentials.items()
                     items.sort()
                 except _SWALLOWABLE_PLUGIN_EXCEPTIONS:
+                    # XXX: would reraise be good here, and which plugin to ask
+                    # whether not to swallow the exception - the extractor?
                     logger.debug( 'Credentials error: %s' % credentials
                                 , exc_info=True
                                 )
@@ -591,6 +604,7 @@ class PluggableAuthService( Folder, Cacheable ):
                             user_id, info = uid_and_info
 
                         except _SWALLOWABLE_PLUGIN_EXCEPTIONS:
+                            reraise(auth)
                             msg = 'AuthenticationPlugin %s error' % ( 
                                     authenticator_id, )
                             logger.debug(msg, exc_info=True) 
@@ -788,6 +802,7 @@ class PluggableAuthService( Folder, Cacheable ):
                     return info[0]
 
             except _SWALLOWABLE_PLUGIN_EXCEPTIONS:
+                reraise(enumerator)
                 msg = 'UserEnumerationPlugin %s error' % enumerator_id
                 logger.debug(msg, exc_info=True)
 
@@ -942,6 +957,7 @@ class PluggableAuthService( Folder, Cacheable ):
                 try:
                     roleassigner.doAssignRoleToPrincipal( user.getId(), role )
                 except _SWALLOWABLE_PLUGIN_EXCEPTIONS:
+                    reraise(roleassigner)
                     logger.debug( 'RoleAssigner %s error' % roleassigner_id
                                 , exc_info=True
                                 )
