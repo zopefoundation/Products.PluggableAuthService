@@ -210,7 +210,11 @@ class CookieAuthHelper(Folder, BasePlugin):
                     # in an endless redirect loop.
                     return 0
 
-            url = url + '?came_from=%s' % quote(came_from)
+            if '?' in url:
+                sep = '&'
+            else:
+                sep = '?'
+            url = '%s%scame_from=%s' % (url, sep, quote(came_from))
             resp.redirect(url, lock=1)
             return 1
 

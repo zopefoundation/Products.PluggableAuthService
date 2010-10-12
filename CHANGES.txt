@@ -4,6 +4,8 @@ Change Log
 1.7.2 (unreleased)
 ------------------
 
+- Allow for a query string in CookieAuthHelper's ``login_path``.
+
 - Trap "swallowable" exceptions from ``IRoles`` plugins.  Thanks to
   Willi Langenburger for the patch.  Fixes
   https://bugs.launchpad.net/zope-pas/+bug/615474 .
