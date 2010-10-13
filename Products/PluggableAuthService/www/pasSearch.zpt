@@ -96,17 +96,17 @@
                 tal:condition="request/previous_batch_url|nothing">
             <a href=""
                tal:attributes="href request/previous_batch_url">
-              << Previous
+              &lt;&lt; Previous
             </a>
           </span>
           <span class="form-label"
                 tal:condition="request/next_batch_url|nothing">
             <a href=""
                tal:attributes="href request/next_batch_url">
-              &nbsp;&nbsp;Next >>
+              &nbsp;&nbsp;Next &gt;&gt;
             </a>
           </span>
-        <td>
+        </td>
       </tr>
 
       <tbody tal:condition="results">

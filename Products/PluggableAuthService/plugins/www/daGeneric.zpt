@@ -32,7 +32,7 @@
     <form method="post" action=""
           tal:condition="user_map"
           tal:attributes="action string:${my_url}/manage_removeMappings">
-      <input type="hidden" name="user_id" value="">
+      <input type="hidden" name="user_id" value=""/>
 
       <table width="98%">
         <tr>
@@ -89,7 +89,7 @@
 
     <form method="post" action=""
           tal:attributes="action string:${my_url}/manage_addMapping">
-      <input type="hidden" name="user_id" value="">
+      <input type="hidden" name="user_id" value="" />
       <table width="98%" cellpaddding="2">
         <tr>
           <td class="form-label"> Match Type </td>

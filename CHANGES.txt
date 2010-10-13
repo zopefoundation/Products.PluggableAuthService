@@ -14,6 +14,8 @@ Change Log
   when the ``__ac`` cookie is not ours (but e.g. from plone.session,
   though even then only in a corner case).
 
+- Fixed chameleon incompatibilities
+
 
 1.7.1 (2010-07-01)
 ------------------

@@ -49,8 +49,8 @@
   <td class="form-text" width="25%"
       tal:content="info/description">GROUP DESCRIPTION</td>
   <td class="form-text" width="50%">
-    <a href="?group_id=foo&assign=1"
-       tal:attributes="href string:?group_id=${info/id}&assign=1"
+    <a href="?group_id=foo&amp;assign=1"
+       tal:attributes="href string:?group_id=${info/id}&amp;assign=1"
     >?</a>
     <span
        tal:content="python:','.join( 
@@ -136,9 +136,9 @@
                 "
 >
 <h3> Update Group: <span tal:replace="group_id">GROUP_ID</span>
-     <a href="manage_groups?group_id=group_id&assign=1"
+     <a href="manage_groups?group_id=group_id&amp;assign=1"
         tal:define="url here/absolute_url;
-                    qs string:group_id=${group_id}&assign=1;
+                    qs string:group_id=${group_id}&amp;assign=1;
                    "
         tal:attributes="href string:${url}/manage_groups?${qs}"
      >(Assign)</a>
