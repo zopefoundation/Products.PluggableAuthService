@@ -4,6 +4,8 @@ PluggableAuthService changelog
 PluggableAuthService 1.6.4 (unreleased)
 ---------------------------------------
 
+- Don't fail on users defined in multiple user sources on the ZODBGroupManager
+  listing page.
 
 PluggableAuthService 1.6.3 (2010-02-01)
 ---------------------------------------
