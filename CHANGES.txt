@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-1.7.2 (unreleased)
+1.7.2 (2010-11-11)
 ------------------
 
 - Allow for a query string in CookieAuthHelper's ``login_path``.
