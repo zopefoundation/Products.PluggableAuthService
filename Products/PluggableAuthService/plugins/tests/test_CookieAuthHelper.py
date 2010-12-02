@@ -202,6 +202,20 @@ class CookieAuthHelperTests( unittest.TestCase
         self.assertEqual(helper.extractCredentials(request),
                         {})
 
+    def test_extractCredentials_from_cookie_with_bad_binascii(self):
+        # this might happen between browser implementations
+        from base64 import encodestring
+
+        helper = self._makeOne()
+        response = FauxCookieResponse()
+        request = FauxSettableRequest(RESPONSE=response)
+
+        cookie_val = 'NjE2NDZkNjk2ZTo3MDZjNmY2ZTY1MzQ3NQ%3D%3D'[:-1]
+        request.set(helper.cookie_name, cookie_val)
+
+        self.assertEqual(helper.extractCredentials(request),
+                        {})
+
 
 if __name__ == "__main__":
     unittest.main()
