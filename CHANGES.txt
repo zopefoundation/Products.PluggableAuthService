@@ -4,6 +4,9 @@ Change Log
 1.7.3 (unreleased)
 ------------------
 
+- Return the created user in _doAddUser, to match change in
+  AccessControl 2.13.4.
+
 - Fixed possible ``binascii.Error`` in ``extractCredentials`` of
   CookieAuthHelper. This is a corner case that might happen after
   a browser upgrade.

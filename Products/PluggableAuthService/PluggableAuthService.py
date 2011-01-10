@@ -951,6 +951,8 @@ class PluggableAuthService( Folder, Cacheable ):
                 break
 
         # XXX What should we do if no useradder was succesfull?
+        if user is None:
+            return
 
         for roleassigner_id, roleassigner in roleassigners:
             for role in roles:
@@ -965,7 +967,7 @@ class PluggableAuthService( Folder, Cacheable ):
 
         if user is not None:
             notify(PrincipalCreated(user))
-
+        return user
 
     security.declarePublic('all_meta_types')
     def all_meta_types(self):

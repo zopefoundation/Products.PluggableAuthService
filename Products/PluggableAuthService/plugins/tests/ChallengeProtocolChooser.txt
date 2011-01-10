@@ -60,7 +60,7 @@ Create a user for testing:
 
   >>> username, password  = 'test_user_', 'test_user_pw'
   >>> pas._doAddUser(username, password, ['Manager'], [])
-
+  <PropertiedUser 'test_user_'>
   >>> pas.getUserById('test_user_') is None
   False
 
