@@ -950,7 +950,7 @@ class PluggableAuthService( Folder, Cacheable ):
                 user = self.getUser( login )
                 break
 
-        # XXX What should we do if no useradder was succesfull?
+        # No useradder was successful.
         if user is None:
             return
 
