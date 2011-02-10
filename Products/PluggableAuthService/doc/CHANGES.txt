@@ -1,7 +1,7 @@
 PluggableAuthService changelog
 ==============================
 
-PluggableAuthService 1.6.4 (unreleased)
+PluggableAuthService 1.6.5 (unreleased)
 ---------------------------------------
 
 - Launchpad #672694: In the ZODBRoleManager made it clearer that
