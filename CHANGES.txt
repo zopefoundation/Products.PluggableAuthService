@@ -4,6 +4,11 @@ Change Log
 1.7.3 (unreleased)
 ------------------
 
+- In the ZODBRoleManager made it clearer that adding a removing a role
+  does not have much effect if you do not do the same in the root of
+  the site (at the bottom of the Security tab at manage_access).
+  Fixes https://bugs.launchpad.net/zope-pas/+bug/672694
+
 - Return the created user in _doAddUser, to match change in
   AccessControl 2.13.4.
 

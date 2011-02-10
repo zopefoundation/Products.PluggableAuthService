@@ -17,6 +17,11 @@
 
 <h3> Current Roles <a href="?adding=1">(Add a role)</a></h3>
 
+<p>
+  Note that adding or removing a role here does not have much effect
+  if you do not do the same in the root of the site (at the bottom of
+  the Security tab at manage_access).
+</p>
 <table width="100%" cellpadding="2" cellspacing="0">
 
  <tr>
@@ -62,7 +67,7 @@
   <td colspan="3">
     <input type="hidden" name="role_ids:list:default" value="" />
     <input type="submit" name="manage_removeRoles:method"
-           value=" Remove Roles " />
+           value=" Remove Role Assignment " />
   </td>
  </tr>
 
