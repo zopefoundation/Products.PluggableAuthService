@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-1.7.3 (unreleased)
+1.7.3 (2011-02-10)
 ------------------
 
 - In the ZODBRoleManager made it clearer that adding a removing a role
@@ -15,6 +15,7 @@ Change Log
 - Fixed possible ``binascii.Error`` in ``extractCredentials`` of
   CookieAuthHelper. This is a corner case that might happen after
   a browser upgrade.
+
 
 1.7.2 (2010-11-11)
 ------------------
