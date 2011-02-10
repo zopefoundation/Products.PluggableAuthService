@@ -223,6 +223,10 @@ class ZODBRoleManager( BasePlugin ):
         """ Remove 'role_id' from the list of roles managed by this object.
 
         o Raise KeyError if not found.
+
+        Note that if you really want to remove a role you should first
+        remove it from the roles in the root of the site (at the
+        bottom of the Security tab at manage_access).
         """
         for principal_id in self._principal_roles.keys():
             self.removeRoleFromPrincipal( role_id, principal_id )
@@ -397,7 +401,11 @@ class ZODBRoleManager( BasePlugin ):
                           , RESPONSE
                           , REQUEST=None
                           ):
-        """ Remove one or more roles via the ZMI.
+        """ Remove one or more role assignments via the ZMI.
+
+        Note that if you really want to remove a role you should first
+        remove it from the roles in the root of the site (at the
+        bottom of the Security tab at manage_access).
         """
         role_ids = filter( None, role_ids )
 
@@ -409,7 +417,7 @@ class ZODBRoleManager( BasePlugin ):
             for role_id in role_ids:
                 self.removeRole( role_id )
 
-            message = 'Roles+removed'
+            message = 'Role+assignments+removed'
 
         RESPONSE.redirect( '%s/manage_roles?manage_tabs_message=%s'
                          % ( self.absolute_url(), message )

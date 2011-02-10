@@ -4,13 +4,18 @@ PluggableAuthService changelog
 PluggableAuthService 1.6.4 (unreleased)
 ---------------------------------------
 
-- TBD
+- Launchpad #672694: In the ZODBRoleManager made it clearer that
+  adding a removing a role does not have much effect if you do not do
+  the same in the root of the site (at the bottom of the Security tab
+  at manage_access).
+
 
 PluggableAuthService 1.6.4 (2010-11-04)
 ---------------------------------------
 
 - Don't fail on users defined in multiple user sources on the ZODBGroupManager
   listing page.
+
 
 PluggableAuthService 1.6.3 (2010-02-01)
 ---------------------------------------
