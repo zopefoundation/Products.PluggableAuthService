@@ -59,6 +59,9 @@ def _guessSchema( kw ):
 
             ptype = 'lines'
 
+        elif type( v ) is DateTime:
+            ptype = 'date'
+
         elif type( v ) is InstanceType:
 
             if isinstance( v, DateTime ):
