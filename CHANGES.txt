@@ -1,10 +1,11 @@
 Change Log
 ==========
 
-1.7.4 (unreleased)
+1.7.4 (2011-05-13)
 ------------------
 
 - Added forward compatibility with DateTime 3.
+
 
 1.7.3 (2011-02-10)
 ------------------
