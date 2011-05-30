@@ -4,6 +4,8 @@ Change Log
 1.7.5 (unreleased)
 ------------------
 
+- Set appropriate cache headers on CookieAuthHelper login redirects to prevent
+  caching by proxy servers.
 
 1.7.4 (2011-05-13)
 ------------------

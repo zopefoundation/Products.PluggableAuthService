@@ -223,6 +223,8 @@ class CookieAuthHelper(Folder, BasePlugin):
                 sep = '?'
             url = '%s%scame_from=%s' % (url, sep, quote(came_from))
             resp.redirect(url, lock=1)
+            resp.setHeader('Expires', 'Sat, 01 Jan 2000 00:00:00 GMT')
+            resp.setHeader('Cache-Control', 'no-cache')
             return 1
 
         # Could not challenge.

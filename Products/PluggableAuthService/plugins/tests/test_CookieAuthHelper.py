@@ -47,6 +47,9 @@ class FauxCookieResponse(FauxResponse):
         self.status = status
         self.headers['Location'] = location
 
+    def setHeader(self, name, value):
+        self.headers[name] = value
+
 class CookieAuthHelperTests( unittest.TestCase
                            , ILoginPasswordHostExtractionPlugin_conformance
                            , IChallengePlugin_conformance
@@ -124,8 +127,10 @@ class CookieAuthHelperTests( unittest.TestCase
 
         helper.challenge(request, response)
         self.assertEqual(response.status, 302)
-        self.assertEqual(len(response.headers), 1)
+        self.assertEqual(len(response.headers), 3)
         self.failUnless(response.headers['Location'].endswith(urllib.quote(testURL)))
+        self.assertEqual(response.headers['Cache-Control'], 'no-cache')
+        self.assertEqual(response.headers['Expires'], 'Sat, 01 Jan 2000 00:00:00 GMT')        
 
     def test_challenge_with_vhm( self ):
         rc, root, folder, object = self._makeTree()
@@ -141,9 +146,11 @@ class CookieAuthHelperTests( unittest.TestCase
 
         helper.challenge(request, response)
         self.assertEqual(response.status, 302)
-        self.assertEqual(len(response.headers), 1)
+        self.assertEqual(len(response.headers), 3)
         self.failUnless(response.headers['Location'].endswith(urllib.quote(actualURL)))
         self.failIf(response.headers['Location'].endswith(urllib.quote(vhmURL)))
+        self.assertEqual(response.headers['Cache-Control'], 'no-cache')
+        self.assertEqual(response.headers['Expires'], 'Sat, 01 Jan 2000 00:00:00 GMT')
 
     def test_resetCredentials( self ):
         helper = self._makeOne()
