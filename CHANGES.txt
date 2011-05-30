@@ -4,6 +4,8 @@ Change Log
 1.7.5 (unreleased)
 ------------------
 
+- Launchpad #789858:  don't allow conflicting login name in 'updateUser'.
+
 - Set appropriate cache headers on CookieAuthHelper login redirects to prevent
   caching by proxy servers.
 

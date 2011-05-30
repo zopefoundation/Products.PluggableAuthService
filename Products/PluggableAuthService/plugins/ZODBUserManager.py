@@ -299,9 +299,14 @@ class ZODBUserManager( BasePlugin, Cacheable ):
         # The following raises a KeyError if the user_id is invalid
         old_login = self.getLoginForUserId(user_id)
 
-        del self._login_to_userid[old_login]
-        self._login_to_userid[login_name] = user_id
-        self._userid_to_login[user_id] = login_name
+        if old_login != login_name:
+
+            if self._login_to_userid.get(login_name) is not None:
+                raise ValueError('Login name not available: %s' % login_name)
+
+            del self._login_to_userid[old_login]
+            self._login_to_userid[login_name] = user_id
+            self._userid_to_login[user_id] = login_name
 
     security.declarePrivate( 'removeUser' )
     def removeUser( self, user_id ):
