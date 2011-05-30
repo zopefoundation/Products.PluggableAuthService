@@ -4,6 +4,8 @@ PluggableAuthService changelog
 PluggableAuthService 1.6.5 (unreleased)
 ---------------------------------------
 
+- Launchpad #789858:  don't allow conflicting login name in 'updateUser'.
+
 - Launchpad #672694: In the ZODBRoleManager made it clearer that
   adding a removing a role does not have much effect if you do not do
   the same in the root of the site (at the bottom of the Security tab
