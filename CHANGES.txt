@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-1.7.5 (unreleased)
+1.7.5 (2011-05-30)
 ------------------
 
 - Launchpad #789858:  don't allow conflicting login name in 'updateUser'.
