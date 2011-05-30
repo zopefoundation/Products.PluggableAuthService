@@ -1,7 +1,7 @@
 PluggableAuthService changelog
 ==============================
 
-PluggableAuthService 1.5.5 (unreleased)
+PluggableAuthService 1.5.5 (2011-05-30)
 ---------------------------------------
 
 - Launchpad #789858:  don't allow conflicting login name in 'updateUser'.
