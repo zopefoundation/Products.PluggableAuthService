@@ -4,6 +4,8 @@ PluggableAuthService changelog
 PluggableAuthService 1.5.5 (unreleased)
 ---------------------------------------
 
+- Launchpad #789858:  don't allow conflicting login name in 'updateUser'.
+
 - Fixed broken markup.
 
 - Don't fail on users defined in multiple user sources on the ZODBGroupManager

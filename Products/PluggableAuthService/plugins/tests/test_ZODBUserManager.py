@@ -440,6 +440,17 @@ class ZODBUserManagerTests( unittest.TestCase
         self.assertEqual(user_id, 'user1')
         self.assertEqual(login, 'user1@foobar.com')
 
+    def test_updateUser_login_name_conflicts(self):
+        # See https://bugs.launchpad.net/zope-pas/+bug/789858
+        zum = self._makeOne()
+
+        # Create a user and make sure we can authenticate with it
+        zum.addUser( 'user1', 'user1@example.com', 'password' )
+        zum.addUser( 'user2', 'user2@example.com', 'other' )
+
+        self.assertRaises(ValueError,
+                          zum.updateUser, 'user1', 'user2@example.com')
+
     def test_enumerateUsersWithOptionalMangling(self):
 
         zum = self._makeOne()
