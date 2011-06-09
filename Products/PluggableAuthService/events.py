@@ -1,16 +1,39 @@
+##############################################################################
+#
+# Copyright (c) 2007 Zope Foundation and Contributors
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this
+# distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+##############################################################################
 from Acquisition import aq_parent
 from zope.component import adapter
 from zope.component import subscribers
 from zope.interface import implements
-from Products.PluggableAuthService.interfaces.events import *
+
 from Products.PluggableAuthService.interfaces.authservice import IBasicUser
+from Products.PluggableAuthService.interfaces.events \
+    import ICredentialsUpdatedEvent
+from Products.PluggableAuthService.interfaces.events import IPASEvent
+from Products.PluggableAuthService.interfaces.events \
+    import IPrincipalCreatedEvent
+from Products.PluggableAuthService.interfaces.events \
+    import IPrincipalDeletedEvent
+from Products.PluggableAuthService.interfaces.events \
+    import IPropertiesUpdatedEvent
+
 
 class PASEvent(object):
     implements(IPASEvent)
 
     def __init__(self, principal):
-        self.principal=principal
-        self.object=principal
+        self.principal = principal
+        self.object = principal
 
 
 class PrincipalCreated(PASEvent):
@@ -26,15 +49,15 @@ class CredentialsUpdated(PASEvent):
 
     def __init__(self, principal, password):
         super(CredentialsUpdated, self).__init__(principal)
-        self.password=password
+        self.password = password
 
 
 class PropertiesUpdated(PASEvent):
     implements(IPropertiesUpdatedEvent)
 
     def __init__(self, principal, properties):
-        super(CredentialsUpdated, self).__init__(principal)
-        self.properties=properties
+        super(PropertiesUpdated, self).__init__(principal)
+        self.properties = properties
 
 
 @adapter(IBasicUser, ICredentialsUpdatedEvent)
