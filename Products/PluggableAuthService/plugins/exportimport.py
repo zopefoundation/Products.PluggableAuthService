@@ -105,7 +105,7 @@ class SimpleXMLExportImport(Implicit):
                                         package_path).__of__(self.context)
         info = self._getExportInfo()
         export_context.writeDataFile('%s.xml' % self.context.getId(),
-                                     template(info=info),
+                                     template(info=info).encode('utf-8'),
                                      'text/xml',
                                      subdir,
                                     )
@@ -124,7 +124,7 @@ class SimpleXMLExportImport(Implicit):
             self._purgeContext()
 
         data = import_context.readDataFile('%s.xml' % self.context.getId(),
-                                           subdir)
+                                           subdir).decode('utf-8')
 
         if data is not None:
 
