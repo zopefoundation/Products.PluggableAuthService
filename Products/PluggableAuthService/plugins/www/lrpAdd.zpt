@@ -5,12 +5,12 @@
     tal:replace="structure here/manage_form_title">Form Title</h2>
 
 
-<p class="form-help"> 
+<p class="form-help">
 Local Role Plugins assign roles to principals based on the
 __ac_local_roles__ mappings found in the Root Folder.
 </p>
 
-<form action="addLocalRolePlugin" method="post" 
+<form action="addLocalRolePlugin" method="post"
  enctype="multipart/form-data">
 <table cellspacing="0" cellpadding="2" border="0">
   <tr>
@@ -38,8 +38,8 @@ __ac_local_roles__ mappings found in the Root Folder.
     </td>
     <td align="left" valign="top">
     <div class="form-element">
-    <input class="form-element" type="submit" name="submit" 
-     value=" Add " /> 
+    <input class="form-element" type="submit" name="submit"
+     value=" Add " />
     </div>
     </td>
   </tr>

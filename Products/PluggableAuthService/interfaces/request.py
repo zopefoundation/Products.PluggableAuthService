@@ -52,4 +52,4 @@ class IFTPRequest( IRequest ):
 
     """ FTP Request
     """
-    
+

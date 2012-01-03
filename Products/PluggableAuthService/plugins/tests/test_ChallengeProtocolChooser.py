@@ -21,7 +21,7 @@ from Products.PluggableAuthService.tests.conformance \
     import IChallengeProtocolChooser_conformance
 
 class ChallengeProtocolChooser( unittest.TestCase
-                                , IChallengeProtocolChooser_conformance 
+                                , IChallengeProtocolChooser_conformance
                               ):
 
 
@@ -39,9 +39,9 @@ class ChallengeProtocolChooser( unittest.TestCase
 
 if __name__ == "__main__":
     unittest.main()
-        
+
 def test_suite():
     return unittest.TestSuite((
         unittest.makeSuite( ChallengeProtocolChooser ),
         ))
-        
+

@@ -108,7 +108,7 @@ class ZODBUserManager( BasePlugin, Cacheable ):
 
         if reference is None:
             return None
-        
+
         if AuthEncoding.is_encrypted( reference ):
             if AuthEncoding.pw_validate( reference, password ):
                 return userid, login
@@ -205,7 +205,7 @@ class ZODBUserManager( BasePlugin, Cacheable ):
                        , 'login' : self._userid_to_login[ user_id ]
                        , 'pluginid' : plugin_id
                        , 'editurl' : '%s?%s' % (e_url, qs)
-                       } 
+                       }
 
                 if not user_filter or user_filter( info ):
                     user_info.append( info )
@@ -253,7 +253,7 @@ class ZODBUserManager( BasePlugin, Cacheable ):
 
         o Return one mapping per user, with the following keys:
 
-          - 'user_id' 
+          - 'user_id'
           - 'login_name'
         """
         return [ self.getUserInfo( x ) for x in self._user_passwords.keys() ]
@@ -349,7 +349,7 @@ class ZODBUserManager( BasePlugin, Cacheable ):
     #
     #   ZMI
     #
-    manage_options = ( ( { 'label': 'Users', 
+    manage_options = ( ( { 'label': 'Users',
                            'action': 'manage_users', }
                          ,
                        )
@@ -383,7 +383,7 @@ class ZODBUserManager( BasePlugin, Cacheable ):
             message = 'password+and+confirm+do+not+match'
 
         else:
-        
+
             if not login_name:
                 login_name = user_id
 
@@ -412,7 +412,7 @@ class ZODBUserManager( BasePlugin, Cacheable ):
             message = 'password+and+confirm+do+not+match'
 
         else:
-        
+
             self.updateUserPassword( user_id, password )
 
             message = 'password+updated'
@@ -455,7 +455,7 @@ class ZODBUserManager( BasePlugin, Cacheable ):
             message = 'no+users+selected'
 
         else:
-        
+
             for user_id in user_ids:
                 self.removeUser( user_id )
 
@@ -500,7 +500,7 @@ class ZODBUserManager( BasePlugin, Cacheable ):
             message = 'password+and+confirm+do+not+match'
 
         else:
-        
+
             if not login_name:
                 login_name = user_id
 

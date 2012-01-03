@@ -2,7 +2,7 @@
 <h2 tal:replace="structure here/manage_tabs"> TABS </h2>
 
 <p class="form-help">
-  Choose the functionality this 
+  Choose the functionality this
   <span tal:replace="here/meta_type"> Foo Plugin </span>
   will perform.
 </p>
@@ -23,9 +23,9 @@
         tal:condition="python:here.testImplements(interface)">
         <input type="checkbox" name="interfaces:list" value=""
            tal:attributes="value interface_name;
-               checked python:here.getId() in act_ids and 'checked' or ''" 
+               checked python:here.getId() in act_ids and 'checked' or ''"
         />&nbsp;
-        <a href="" 
+        <a href=""
            tal:attributes="href string:${pau}?plugin_type=${info/id}">
           <span tal:replace="title/title"/></a>
         <i>(<span tal:replace="method"/>)</i>
@@ -36,8 +36,8 @@
     </td>
     <td align="left" valign="top">
     <div class="form-element">
-    <input class="form-element" type="submit" name="submit" 
-     value=" Update " /> 
+    <input class="form-element" type="submit" name="submit"
+     value=" Update " />
     </div>
     </td>
   </tr>

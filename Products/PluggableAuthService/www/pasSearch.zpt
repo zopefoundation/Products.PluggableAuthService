@@ -40,7 +40,7 @@
           <option value="id"> User ID </option>
         </select>
       </td>
-      <td class="form-element"> 
+      <td class="form-element">
         <input type="text" width="30" name="s_term" />
       </td>
       <td class="form-element">

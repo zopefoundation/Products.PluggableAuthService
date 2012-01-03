@@ -24,7 +24,7 @@ class FauxPAS( FauxContainer ):
 
     def __init__( self ):
         self._id = 'acl_users'
-        
+
     def _getGroupsForPrincipal( self, principal, request=None, plugins=None
                               , ignore_plugins=None ):
         all_groups = []
@@ -42,14 +42,14 @@ class FauxPAS( FauxContainer ):
         return all_groups
 
 class DummyPrincipal:
-    
+
     def __init__( self, id, groups=() ):
         self._id = id
         self._groups = groups
-        
+
     def getId( self ):
         return self._id
-        
+
     def getGroups( self ):
         return self._groups
 
@@ -62,10 +62,10 @@ class DummyGroupsManager( SimpleItem ):
 
     def getId( self ):
         return self._id
-    
+
     def addGroup( self, group_id ):
         self._groups[group_id] = 1
-        
+
     def addPrincipalToGroup( self, prin, group_id ):
         prin_id = prin.getId()
         already_in = self._prin_to_group.get( prin_id, () )
@@ -92,7 +92,7 @@ class RecursiveGroupsPluginTests( unittest.TestCase
         return self._getTargetClass()( id=id, *args, **kw )
 
     def test_simple_flattening( self ):
-        
+
         pas = FauxPAS()
         dgm = DummyGroupsManager( 'dummy' )
         rgp = self._makeOne( 'rgp' )
@@ -103,20 +103,20 @@ class RecursiveGroupsPluginTests( unittest.TestCase
         dgm = pas._getOb( 'dgm' )
         dgm.addGroup( 'group1' )
         dgm.addGroup( 'group2' )
-        
+
         rgp = pas._getOb( 'rgp' )
 
         user = DummyPrincipal( 'user1', ( 'dummy:group1', ) )
-                
+
         dgm.addPrincipalToGroup( user, 'group1' )
         dgm.addPrincipalToGroup( DummyPrincipal( 'dummy:group1' ), 'group2' )
-        
+
         self.assertEqual( rgp.getGroupsForPrincipal( user )
-                        , ( 'dummy:group1', 'dummy:group2' ) 
+                        , ( 'dummy:group1', 'dummy:group2' )
                         )
 
     def test_complex_flattening( self ):
-        
+
         pas = FauxPAS()
         dgm = DummyGroupsManager( 'dummy' )
         odgm = DummyGroupsManager( 'other_dummy' )
@@ -135,16 +135,16 @@ class RecursiveGroupsPluginTests( unittest.TestCase
         odgm.addGroup( 'group4' )
 
         rgp = pas._getOb( 'rgp' )
-        
+
         user = DummyPrincipal( 'user1', ( 'dummy:group1'
                                         , 'other_dummy:group3' ) )
-                
+
         dgm.addPrincipalToGroup( user, 'group1' )
         dgm.addPrincipalToGroup( DummyPrincipal( 'dummy:group1' ), 'group2' )
 
         odgm.addPrincipalToGroup( user, 'group3' )
         odgm.addPrincipalToGroup( DummyPrincipal( 'dummy:group2' ), 'group4' )
-        
+
         groups = rgp.getGroupsForPrincipal( user )
         self.assertEqual( len( groups ), 4 )
         self.failUnless( 'dummy:group1' in groups )
@@ -153,7 +153,7 @@ class RecursiveGroupsPluginTests( unittest.TestCase
         self.failUnless( 'other_dummy:group4' in groups )
 
     def test_cross_nested_flattening( self ):
-        
+
         pas = FauxPAS()
         dgm = DummyGroupsManager( 'dummy' )
         odgm = DummyGroupsManager( 'other_dummy' )
@@ -170,17 +170,17 @@ class RecursiveGroupsPluginTests( unittest.TestCase
         odgm.addGroup( 'group2' )
 
         rgp = pas._getOb( 'rgp' )
-        
+
         user = DummyPrincipal( 'user1', ( 'dummy:group1'
                                         , 'other_dummy:group2' ) )
-                
+
         dgm.addPrincipalToGroup( user, 'group1' )
         dgm.addPrincipalToGroup( DummyPrincipal( 'other_dummy:group1' )
                                , 'group1' )
 
         odgm.addPrincipalToGroup( user, 'group2' )
         odgm.addPrincipalToGroup( DummyPrincipal( 'dummy:group1' ), 'group2' )
-        
+
         groups = rgp.getGroupsForPrincipal( user )
         self.assertEqual( len( groups ), 2 )
         self.failUnless( 'dummy:group1' in groups )

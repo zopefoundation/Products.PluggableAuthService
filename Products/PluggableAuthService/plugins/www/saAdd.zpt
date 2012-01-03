@@ -5,10 +5,10 @@
 
 <p class="form-help">
 Session Auth Helpers manage the details of Session-based Authentication for
-Pluggable Auth Service functionality. 
+Pluggable Auth Service functionality.
 </p>
 
-<form action="manage_addSessionAuthHelper" method="post" 
+<form action="manage_addSessionAuthHelper" method="post"
  enctype="multipart/form-data">
 <table cellspacing="0" cellpadding="2" border="0">
   <tr>
@@ -36,8 +36,8 @@ Pluggable Auth Service functionality.
     </td>
     <td align="left" valign="top">
     <div class="form-element">
-    <input class="form-element" type="submit" name="submit" 
-     value=" Add " /> 
+    <input class="form-element" type="submit" name="submit"
+     value=" Add " />
     </div>
     </td>
   </tr>

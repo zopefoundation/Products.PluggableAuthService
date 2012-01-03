@@ -45,7 +45,7 @@ class PAS_PR_ContentFactory(object):
         registry._setId(object_id)
         self.context._setObject(object_id, registry)
         return registry
-    
+
 class PAS_CF_Namer(object):
 
     implements(IContentFactoryName)

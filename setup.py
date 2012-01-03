@@ -13,7 +13,7 @@ def _package_doc(name):
 
 _boundary = '\n\n'
 README = ( open('README.txt').read()
-         + _boundary 
+         + _boundary
          + open('CHANGES.txt').read()
          )
 

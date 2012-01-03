@@ -105,7 +105,7 @@ class ZODBGroupManagerTests( unittest.TestCase
         zgm.updateGroup( 'group', description='group_description_changed_again')
         group_info = zgm.getGroupInfo( 'group' )
         self.assertEqual( group_info['title'], 'group_title_changed_again' )
-        
+
 
     def test_addPrincipalToGroup( self ):
         zgm = self._makeOne()
@@ -149,7 +149,7 @@ class ZODBGroupManagerTests( unittest.TestCase
         zgm.addGroup( 'group' )
 
         user = DummyUser( 'userid' )
-        
+
         zgm.addPrincipalToGroup( user.getId(), 'group' )
         zgm.removePrincipalFromGroup( user.getId(), 'group' )
         groups = zgm.getGroupsForPrincipal( user )
@@ -161,7 +161,7 @@ class ZODBGroupManagerTests( unittest.TestCase
         zgm.addGroup( 'group' )
 
         user = DummyUser( 'userid' )
-        
+
         zgm.addPrincipalToGroup( user.getId(), 'group' )
         zgm.removeGroup( 'group' )
         group_ids = zgm.listGroupIds()
@@ -172,13 +172,13 @@ class ZODBGroupManagerTests( unittest.TestCase
     def test_multiplePrincipalsPerGroup( self ):
         pas = FauxPAS()
         zgm = self._makeOne().__of__( pas )
-        
+
         zgm.addGroup( 'group1' )
         zgm.addGroup( 'group2' )
 
         user1 = DummyUser( 'userid1' )
         user2 = DummyUser( 'userid2' )
-        
+
         zgm.addPrincipalToGroup( user1.getId(), 'group1' )
         zgm.addPrincipalToGroup( user1.getId(), 'group2' )
         zgm.addPrincipalToGroup( user2.getId(), 'group2' )

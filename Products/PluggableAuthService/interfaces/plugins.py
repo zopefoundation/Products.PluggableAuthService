@@ -41,8 +41,8 @@ class ILoginPasswordExtractionPlugin( IExtractionPlugin ):
 
     def extractCredentials( request ):
 
-        """ request -> { 'login' : login 
-                       , 'password' : password 
+        """ request -> { 'login' : login
+                       , 'password' : password
                        , k1 : v1
                        ,   ...
                        , kN : vN
@@ -62,8 +62,8 @@ class ILoginPasswordHostExtractionPlugin( ILoginPasswordExtractionPlugin ):
 
     def extractCredentials( request ):
 
-        """ request -> { 'login' : login 
-                       , 'password' : password 
+        """ request -> { 'login' : login
+                       , 'password' : password
                        , 'remote_host' : remote_host
                        , 'remote_addr' : remote_addr
                        , k1 : v1
@@ -90,7 +90,7 @@ class IAuthenticationPlugin( Interface ):
 
         o 'credentials' will be a mapping, as returned by IExtractionPlugin.
 
-        o Return a  tuple consisting of user ID (which may be different 
+        o Return a  tuple consisting of user ID (which may be different
           from the login name) and login
 
         o If the credentials cannot be authenticated, return None.
@@ -237,7 +237,7 @@ class IGroupsPlugin( Interface ):
 
         """ principal -> ( group_1, ... group_N )
 
-        o Return a sequence of group names to which the principal 
+        o Return a sequence of group names to which the principal
           (either a user or another group) belongs.
 
         o May assign groups based on values in the REQUEST object, if present
@@ -325,7 +325,7 @@ class IUserEnumerationPlugin( Interface ):
           plugin should return mappings for all users satisfying the criteria.
 
         o Minimal keys in the returned mappings:
-        
+
           'id' -- (required) the user ID, which may be different than
                   the login name
 
@@ -366,8 +366,8 @@ class IGroupEnumerationPlugin( Interface ):
           return at most one mapping per supplied ID ('id' and 'login'
           may be sequences).
 
-        o If 'exact_match' is False, then 'id' may be treated by 
-          the plugin as "contains" searches (more complicated searches 
+        o If 'exact_match' is False, then 'id' may be treated by
+          the plugin as "contains" searches (more complicated searches
           may be supported by some plugins using other keyword arguments).
 
         o If 'sort_by' is passed, the results will be sorted accordingly.
@@ -375,11 +375,11 @@ class IGroupEnumerationPlugin( Interface ):
 
         o If 'max_results' is specified, it must be a positive integer,
           limiting the number of returned mappings.  If unspecified, the
-          plugin should return mappings for all groups satisfying the 
+          plugin should return mappings for all groups satisfying the
           criteria.
 
         o Minimal keys in the returned mappings:
-        
+
           'id' -- (required) the group ID
 
           'pluginid' -- (required) the plugin ID (as returned by getId())
@@ -417,8 +417,8 @@ class IRoleEnumerationPlugin( Interface ):
           return at most one mapping per supplied ID ('id' and 'login'
           may be sequences).
 
-        o If 'exact_match' is False, then 'id' may be treated by 
-          the plugin as "contains" searches (more complicated searches 
+        o If 'exact_match' is False, then 'id' may be treated by
+          the plugin as "contains" searches (more complicated searches
           may be supported by some plugins using other keyword arguments).
 
         o If 'sort_by' is passed, the results will be sorted accordingly.
@@ -426,11 +426,11 @@ class IRoleEnumerationPlugin( Interface ):
 
         o If 'max_results' is specified, it must be a positive integer,
           limiting the number of returned mappings.  If unspecified, the
-          plugin should return mappings for all roles satisfying the 
+          plugin should return mappings for all roles satisfying the
           criteria.
 
         o Minimal keys in the returned mappings:
-        
+
           'id' -- (required) the role ID
 
           'pluginid' -- (required) the plugin ID (as returned by getId())
@@ -464,7 +464,7 @@ class IChallengeProtocolChooser( Interface ):
     """
     def chooseProtocols( request ):
         """ -> ( protocol_1, ... protocol_N) | None
-        
+
         o If a set of protocols is returned, the first plugin with a
             protocol that is in the set will define the protocol to be
             used for the current request.

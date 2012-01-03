@@ -19,7 +19,7 @@ Choose the functionality this Scriptable Plugin will perform.
         <input type="checkbox" name="interfaces:list" value=""
            tal:attributes="value interface_name;
                checked python:implements and 'checked' or '';
-               disabled python:not here.hasMethod(method) and 'checked' or ''" 
+               disabled python:not here.hasMethod(method) and 'checked' or ''"
         />&nbsp;
         <span tal:replace="title/title"/>
         <i>(<span tal:replace="method"/>)</i>
@@ -30,8 +30,8 @@ Choose the functionality this Scriptable Plugin will perform.
     </td>
     <td align="left" valign="top">
     <div class="form-element">
-    <input class="form-element" type="submit" name="submit" 
-     value=" Update " /> 
+    <input class="form-element" type="submit" name="submit"
+     value=" Update " />
     </div>
     </td>
   </tr>

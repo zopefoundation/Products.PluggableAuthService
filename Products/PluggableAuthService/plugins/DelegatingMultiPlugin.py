@@ -64,7 +64,7 @@ def manage_addDelegatingMultiPlugin( self
                                    , REQUEST=None
                                    ):
     """ Factory method to instantiate a DelegatingMultiPlugin """
-    # Make sure we really are working in our container (the 
+    # Make sure we really are working in our container (the
     # PluggableAuthService object)
     self = self.this()
 
@@ -219,7 +219,7 @@ class DelegatingMultiPlugin(Folder, BasePlugin):
                                , 'login' : user.getUserName()
                                , 'pluginid' : plugin_id
                                , 'editurl' : '%s' % edit_url
-                               } ) 
+                               } )
         else:
             l_results = []
             seen = []

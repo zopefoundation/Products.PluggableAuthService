@@ -10,7 +10,7 @@ Request Type Sniffer Plugins detect the kind of a incoming request for
 later use by other plugins.
 </p>
 
-<form action="addRequestTypeSnifferPlugin" method="post" 
+<form action="addRequestTypeSnifferPlugin" method="post"
  enctype="multipart/form-data">
 <table cellspacing="0" cellpadding="2" border="0">
   <tr>
@@ -38,8 +38,8 @@ later use by other plugins.
     </td>
     <td align="left" valign="top">
     <div class="form-element">
-    <input class="form-element" type="submit" name="submit" 
-     value=" Add " /> 
+    <input class="form-element" type="submit" name="submit"
+     value=" Add " />
     </div>
     </td>
   </tr>

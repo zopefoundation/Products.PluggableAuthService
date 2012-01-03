@@ -12,7 +12,7 @@
 #
 ##############################################################################
 """ SearchPrincipalsPlugin   Plugin to delegate enumerateUsers
-                             and enumerateGroups requests to another 
+                             and enumerateGroups requests to another
                              PluggableAuthService
 """
 

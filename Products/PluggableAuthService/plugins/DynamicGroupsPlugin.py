@@ -370,7 +370,7 @@ class DynamicGroupsPlugin( Folder, BasePlugin, Cacheable ):
         # This method changes the enumerateGroups return value
         view_name = createViewName('enumerateGroups')
         self.ZCacheable_invalidate(view_name=view_name)
-            
+
     security.declareProtected( ManageGroups, 'updateGroup' )
     def updateGroup( self
                    , group_id
@@ -408,7 +408,7 @@ class DynamicGroupsPlugin( Folder, BasePlugin, Cacheable ):
         self.ZCacheable_invalidate(view_name=view_name)
         view_name = createViewName('enumerateGroups', group_id)
         self.ZCacheable_invalidate(view_name=view_name)
-            
+
     security.declareProtected( ManageGroups, 'removeGroup' )
     def removeGroup( self, group_id, REQUEST=None ):
 
@@ -513,7 +513,7 @@ class DynamicGroupsPlugin( Folder, BasePlugin, Cacheable ):
             message = 'no+groups+selected'
 
         else:
-        
+
             for group_id in group_ids:
                 self.removeGroup( group_id )
 

@@ -72,7 +72,7 @@ class IPropertiedUser( IBasicUser ):
     """
 
     def addPropertysheet( id, data ):
-        
+
         """ Add a new property sheet to the user.
 
         The property sheet has to be a map or an IPropertySheet instance.

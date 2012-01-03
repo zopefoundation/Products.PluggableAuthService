@@ -104,7 +104,7 @@ class CookieAuthHelperTests( unittest.TestCase
         # http://www.zope.org/Collectors/PAS/43
         # Edge case: The ZPublisher sets a cookie's value to "deleted"
         # in the current request if expireCookie is called. If we hit
-        # extractCredentials in the same request after this, it would 
+        # extractCredentials in the same request after this, it would
         # blow up trying to deal with the invalid cookie value.
         helper = self._makeOne()
         response = FauxCookieResponse()
@@ -130,7 +130,7 @@ class CookieAuthHelperTests( unittest.TestCase
         self.assertEqual(len(response.headers), 3)
         self.failUnless(response.headers['Location'].endswith(urllib.quote(testURL)))
         self.assertEqual(response.headers['Cache-Control'], 'no-cache')
-        self.assertEqual(response.headers['Expires'], 'Sat, 01 Jan 2000 00:00:00 GMT')        
+        self.assertEqual(response.headers['Expires'], 'Sat, 01 Jan 2000 00:00:00 GMT')
 
     def test_challenge_with_vhm( self ):
         rc, root, folder, object = self._makeTree()
@@ -173,27 +173,27 @@ class CookieAuthHelperTests( unittest.TestCase
         helper.login()
         self.assertEqual(len(response.cookies), 0)
 
-    def test_extractCredentials_from_cookie_with_colon_in_password(self): 
+    def test_extractCredentials_from_cookie_with_colon_in_password(self):
         # http://www.zope.org/Collectors/PAS/51
         # Passwords with ":" characters broke authentication
-        from base64 import encodestring 
+        from base64 import encodestring
 
-        helper = self._makeOne() 
-        response = FauxCookieResponse() 
-        request = FauxSettableRequest(RESPONSE=response) 
+        helper = self._makeOne()
+        response = FauxCookieResponse()
+        request = FauxSettableRequest(RESPONSE=response)
 
         cookie_str = '%s:%s' % ('foo'.encode('hex'), 'b:ar'.encode('hex'))
         cookie_val = encodestring(cookie_str)
-        cookie_val = cookie_val.rstrip() 
-        request.set(helper.cookie_name, cookie_val) 
+        cookie_val = cookie_val.rstrip()
+        request.set(helper.cookie_name, cookie_val)
 
-        self.assertEqual(helper.extractCredentials(request), 
-                        {'login': 'foo', 
-                         'password': 'b:ar', 
-                         'remote_host': '', 
-                         'remote_address': ''}) 
+        self.assertEqual(helper.extractCredentials(request),
+                        {'login': 'foo',
+                         'password': 'b:ar',
+                         'remote_host': '',
+                         'remote_address': ''})
 
-    def test_extractCredentials_from_cookie_with_colon_that_is_not_ours(self): 
+    def test_extractCredentials_from_cookie_with_colon_that_is_not_ours(self):
         # http://article.gmane.org/gmane.comp.web.zope.plone.product-developers/5145
         from base64 import encodestring
 

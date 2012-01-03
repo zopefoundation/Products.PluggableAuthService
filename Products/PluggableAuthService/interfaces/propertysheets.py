@@ -22,7 +22,7 @@ from zope.interface import Interface
 class IPropertySheet( Interface ):
 
     """ Interface for queryable property sheets.
-    
+
     o Objects implementing this interface can play in read-only fashion
       in OFS.PropertySheets' framework.
     """

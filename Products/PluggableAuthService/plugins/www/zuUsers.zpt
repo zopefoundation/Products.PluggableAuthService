@@ -29,7 +29,7 @@
  <form action="." method="POST">
 
  <tr class="row-hilite"
-     tal:repeat="info here/listUserInfo" 
+     tal:repeat="info here/listUserInfo"
      tal:attributes="class python:repeat['info'].odd() and 'row-normal' or default"
      >
   <td>

@@ -159,7 +159,7 @@ class ZODBGroupManager( BasePlugin ):
 
         o Return one mapping per group, with the following keys:
 
-          - 'id' 
+          - 'id'
         """
         return self._groups.values()
 
@@ -289,7 +289,7 @@ class ZODBGroupManager( BasePlugin ):
 
         """ Remove a prinicpal from from a group.
 
-        o Return a boolean indicating whether the principal was already 
+        o Return a boolean indicating whether the principal was already
           a member of the group.
 
         o Raise KeyError if 'group_id' is unknown.
@@ -313,7 +313,7 @@ class ZODBGroupManager( BasePlugin ):
     #
     #   ZMI
     #
-    manage_options = ( ( { 'label': 'Groups', 
+    manage_options = ( ( { 'label': 'Groups',
                            'action': 'manage_groups', }
                          ,
                        )
@@ -430,7 +430,7 @@ class ZODBGroupManager( BasePlugin ):
     manage_addPrincipalsToGroup = postonly(manage_addPrincipalsToGroup)
 
     security.declareProtected( ManageGroups
-                             , 'manage_removePrincipalsFromGroup' 
+                             , 'manage_removePrincipalsFromGroup'
                              )
     def manage_removePrincipalsFromGroup( self
                                         , group_id

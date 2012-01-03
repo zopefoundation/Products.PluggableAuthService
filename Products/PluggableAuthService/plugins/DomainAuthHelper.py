@@ -228,14 +228,14 @@ class DomainAuthHelper(BasePlugin):
 
         if not r_host and not r_address:
             return tuple(matches)
-        
+
         all_info = list(self._domain_map.get(login, []))
         all_info.extend(self._domain_map.get('', []))
-        
+
         if not r_host:
             try:
                 r_host = socket.gethostbyaddr(r_address)[0]
-            except socket.error: 
+            except socket.error:
                 pass
 
         if not r_address:
@@ -282,7 +282,7 @@ class DomainAuthHelper(BasePlugin):
                            , 'roles' : match_info['roles']
                            , 'username' : match_info['username']
                            } )
-        
+
         return result
 
 

@@ -34,7 +34,7 @@
  <form action="." method="POST">
 
  <tr class="row-hilite"
-     tal:repeat="info here/listRoleInfo" 
+     tal:repeat="info here/listRoleInfo"
      tal:attributes="class python:repeat['info'].odd() and 'row-normal' or default"
      >
   <td>
@@ -56,7 +56,7 @@
        tal:attributes="href string:?role_id=${info/id}&amp;assign=1"
     >?</a>
     <span
-       tal:content="python:','.join( 
+       tal:content="python:','.join(
             [x[1] for x in here.listAssignedPrincipals(info['id'])] )"
     >ROLE ASSIGNMENTS</span>
   </td>

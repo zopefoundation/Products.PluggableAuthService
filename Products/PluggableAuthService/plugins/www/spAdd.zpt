@@ -5,7 +5,7 @@
 
 <p class="form-help">
 Scriptable Plugins are containers for disparate scripting solutions for
-Pluggable Auth Service functionality. 
+Pluggable Auth Service functionality.
 </p>
 
 <form action="addScriptablePlugin" method="post">
@@ -35,8 +35,8 @@ Pluggable Auth Service functionality.
     </td>
     <td align="left" valign="top">
     <div class="form-element">
-    <input class="form-element" type="submit" name="submit" 
-     value=" Add " /> 
+    <input class="form-element" type="submit" name="submit"
+     value=" Add " />
     </div>
     </td>
   </tr>

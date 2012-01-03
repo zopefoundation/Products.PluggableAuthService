@@ -102,7 +102,7 @@ class PropertiedUser( BasicUser ):
         principal_ids = list( group_ids )
         principal_ids.insert( 0, user_id )
 
-        local ={} 
+        local ={}
         object = aq_inner( object )
 
         while 1:

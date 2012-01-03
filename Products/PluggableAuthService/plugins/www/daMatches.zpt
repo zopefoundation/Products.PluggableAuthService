@@ -102,7 +102,7 @@
         <tr class="list-header">
           <td class="list-header">
             <span class="form-label">
-              Add new domain mapping for user 
+              Add new domain mapping for user
               <span tal:replace="user_id"> foo </span>.
             </span>
           </td>

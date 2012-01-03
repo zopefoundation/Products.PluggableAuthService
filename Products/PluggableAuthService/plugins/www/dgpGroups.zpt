@@ -28,7 +28,7 @@
  <form action="." method="POST">
 
  <tr class="row-hilite"
-     tal:repeat="info here/listGroupInfo" 
+     tal:repeat="info here/listGroupInfo"
      tal:attributes="class
             python:repeat['info'].odd() and 'row-normal' or default"
      >

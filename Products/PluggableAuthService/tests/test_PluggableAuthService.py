@@ -1167,7 +1167,7 @@ class PluggableAuthServiceTests( unittest.TestCase
         # Our enumerator plugin normally returns something, even if
         # you ask for a nonexistent user.
         self.failUnless(zcuf._verifyUser(plugins, login='qux') in users)
-        
+
         # But with no criteria, we should always get None.
         self.assertEqual(zcuf._verifyUser(plugins, login=None, user_id=None),
                          None)

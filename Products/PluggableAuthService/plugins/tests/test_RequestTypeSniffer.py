@@ -21,7 +21,7 @@ from Products.PluggableAuthService.tests.conformance \
     import IRequestTypeSniffer_conformance
 
 class RequestTypeSniffer( unittest.TestCase
-                          , IRequestTypeSniffer_conformance 
+                          , IRequestTypeSniffer_conformance
                         ):
 
 
@@ -39,9 +39,9 @@ class RequestTypeSniffer( unittest.TestCase
 
 if __name__ == "__main__":
     unittest.main()
-        
+
 def test_suite():
     return unittest.TestSuite((
         unittest.makeSuite( RequestTypeSniffer ),
         ))
-        
+

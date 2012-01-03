@@ -36,7 +36,7 @@ from Products.PluggableAuthService.permissions import ManageUsers
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.utils import classImplements
 
-import logging 
+import logging
 
 LOG = logging.getLogger('PluggableAuthService')
 
@@ -282,7 +282,7 @@ class ZODBRoleManager( BasePlugin ):
                 parent = aq_parent( self )
                 info = parent.searchPrincipals( id=k, exact_match=True )
 
-                if len(info) > 1:                    
+                if len(info) > 1:
                     message = ("Multiple groups or users exist with the "
                                "name '%s'. Remove one of the duplicate groups "
                                "or users." % (k))
@@ -347,7 +347,7 @@ class ZODBRoleManager( BasePlugin ):
     #
     #   ZMI
     #
-    manage_options = ( ( { 'label': 'Roles', 
+    manage_options = ( ( { 'label': 'Roles',
                            'action': 'manage_roles', }
                          ,
                        )

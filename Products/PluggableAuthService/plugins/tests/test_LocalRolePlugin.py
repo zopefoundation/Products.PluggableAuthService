@@ -44,7 +44,7 @@ class FauxContainer( FauxObject, ObjectManager ):
 class FauxRoot( FauxContainer ):
 
     isTopLevelPrincipiaApplicationObject = 1
-    
+
     def getPhysicalRoot( self ):
         return self
 
@@ -106,7 +106,7 @@ class LocalRolePluginTestCase( unittest.TestCase
     def test_no_local_roles( self ):
 
         rc, root, folder, object = self._makeTree()
-        
+
         lrp = self._makeOne( 'no_roles' ).__of__(root)
 
         user = FauxUser( 'loser' ).__of__(root)
@@ -118,7 +118,7 @@ class LocalRolePluginTestCase( unittest.TestCase
         rc, root, folder, object = self._makeTree()
 
         root.__ac_local_roles__ = { 'some_manager' : [ 'Manager' ] }
-        
+
         lrp = self._makeOne( 'roles' ).__of__(root)
 
         user = FauxUser( 'some_manager' ).__of__(root)
@@ -128,8 +128,8 @@ class LocalRolePluginTestCase( unittest.TestCase
 if __name__ == "__main__":
     unittest.main()
 
-    
+
 def test_suite():
     return unittest.TestSuite((
         unittest.makeSuite( LocalRolePluginTestCase ),
-        ))               
+        ))

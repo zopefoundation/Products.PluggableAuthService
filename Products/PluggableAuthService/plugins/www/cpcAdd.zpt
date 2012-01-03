@@ -10,7 +10,7 @@ Challenge Protocol Chooser Plugins select the protocol to be used for
 challenge based on the incoming request.
 </p>
 
-<form action="addChallengeProtocolChooserPlugin" method="post" 
+<form action="addChallengeProtocolChooserPlugin" method="post"
  enctype="multipart/form-data">
 <table cellspacing="0" cellpadding="2" border="0">
   <tr>
@@ -38,8 +38,8 @@ challenge based on the incoming request.
     </td>
     <td align="left" valign="top">
     <div class="form-element">
-    <input class="form-element" type="submit" name="submit" 
-     value=" Add " /> 
+    <input class="form-element" type="submit" name="submit"
+     value=" Add " />
     </div>
     </td>
   </tr>

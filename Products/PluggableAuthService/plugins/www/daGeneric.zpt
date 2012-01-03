@@ -48,13 +48,13 @@
             <input type="checkbox" name="match_ids:list" value=""
                    tal:attributes="value match_info/match_id" />
           </td>
-          <td class="form-text" 
-              tal:content="match_info/match_type"> 
-            type 
+          <td class="form-text"
+              tal:content="match_info/match_type">
+            type
           </td>
-          <td class="form-text" 
-              tal:content="match_info/match_string"> 
-            string 
+          <td class="form-text"
+              tal:content="match_info/match_string">
+            string
           </td>
           <td class="form-text"
               tal:content="match_info/username">

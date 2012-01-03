@@ -3,7 +3,7 @@
    xmlns:five="http://namespaces.zope.org/five">
 
   <five:deprecatedManageAddDelete
-     class="Products.PluggableAuthService.PluggableAuthService.PluggableAuthService" 
+     class="Products.PluggableAuthService.PluggableAuthService.PluggableAuthService"
      />
 
   <five:deprecatedManageAddDelete
