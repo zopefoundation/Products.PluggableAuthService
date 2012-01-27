@@ -6,10 +6,12 @@ Change Log
 
 - Explicitly encode/decode data for GS
 
+
 1.7.6 (2011-10-31)
 ------------------
 
 - Launchpad #795086:  fixed creation of PropertiesUpdated event.
+
 
 1.7.5 (2011-05-30)
 ------------------
@@ -18,6 +20,7 @@ Change Log
 
 - Set appropriate cache headers on CookieAuthHelper login redirects to prevent
   caching by proxy servers.
+
 
 1.7.4 (2011-05-13)
 ------------------
