@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-1.7.7 (unreleased)
+1.7.7 (2012-02-27)
 ------------------
 
 - Explicitly encode/decode data for GS
