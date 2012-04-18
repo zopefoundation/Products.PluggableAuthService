@@ -102,7 +102,21 @@ class ZODBUserManager( BasePlugin, Cacheable ):
         if login is None or password is None:
             return None
 
-        userid = self._login_to_userid.get( login, login )
+        # Do we have a link between login and userid?  Do NOT fall
+        # back to using the login as userid when there is no match, as
+        # that gives a high chance of seeming to log in successfully,
+        # but in reality failing.
+        userid = self._login_to_userid.get(login)
+        if userid is None:
+            # Someone may be logging in with a userid instead of a
+            # login name and the two are not the same.  We could try
+            # turning those around, but really we should just fail.
+            #
+            # userid = login
+            # login = self._userid_to_login.get(userid)
+            # if login is None:
+            #     return None
+            return None
 
         reference = self._user_passwords.get(userid)
 

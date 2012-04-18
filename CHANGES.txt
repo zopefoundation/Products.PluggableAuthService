@@ -4,6 +4,11 @@ Change Log
 1.7.8 (unreleased)
 ------------------
 
+- In authenticateCredentials do NOT fall back to using the login as
+  userid when there is no match, as that gives a high chance of
+  seeming to log in successfully, but in reality failing.
+  [maurits]
+
 
 1.7.7 (2012-02-27)
 ------------------

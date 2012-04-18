@@ -146,6 +146,20 @@ class ZODBUserManagerTests( unittest.TestCase
         self.assertEqual( user_id, 'userid' )
         self.assertEqual( login, 'userid@example.com' )
 
+    def test_authenticateCredentials_only_matches_login_name( self ):
+        # When userid and login name are different, then
+        # authentication with the userid should fail.  Alternatively,
+        # perhaps it would not be too bad, but we should definitely
+        # NOT return the userid as the login name, which was the
+        # previous behaviour, as this makes us appear to login but it
+        # fails a bit later on anyway.
+        zum = self._makeOne()
+
+        zum.addUser( 'userid', 'userid@example.com', 'password' )
+
+        self.assertEqual(zum.authenticateCredentials(
+            { 'login' : 'userid' , 'password' : 'password'}), None)
+
     def test_enumerateUsers_no_criteria( self ):
 
         from Products.PluggableAuthService.tests.test_PluggableAuthService \
