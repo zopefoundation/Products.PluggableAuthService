@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-1.7.8 (unreleased)
+1.7.8 (2012-05-08)
 ------------------
 
 - In authenticateCredentials do NOT fall back to using the login as
