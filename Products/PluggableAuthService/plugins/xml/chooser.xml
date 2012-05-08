@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<challenge-protocol-chooser
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    title="PLUGIN TITLE"
+    tal:define="info options/info "
+    tal:attributes="title info/title;
+                            "
+>
+ <mapping label="LABEL"
+        protocols="PROTOCOL"
+        tal:repeat="req_type info/request_types"
+        tal:attributes="label req_type/label;
+                        protocols python:','.join(req_type['protocols']);
+                       " />
+</challenge-protocol-chooser>

@@ -1186,8 +1186,144 @@ else:
             self.assertEqual(len(plugin.listGroupIds()), 0)
             self.assertEqual(plugin.title, None)
 
+
+    class ChallengeProtocolChooserExportImportTests(_TestBase):
+
+        def _getTargetClass(self):
+            from Products.PluggableAuthService.plugins.exportimport \
+                import ChallengeProtocolChooserExportImport
+            return ChallengeProtocolChooserExportImport
+
+        def _makePlugin(self, id, *args, **kw):
+            from \
+              Products.PluggableAuthService.plugins.ChallengeProtocolChooser \
+                import ChallengeProtocolChooser
+
+            return ChallengeProtocolChooser(id, *args, **kw)
+
+        def test_listExportableItems(self):
+            plugin = self._makePlugin('lEI').__of__(self.root)
+            adapter = self._makeOne(plugin)
+            self.assertEqual(len(adapter.listExportableItems()), 0)
+            plugin.manage_updateProtocolMapping({'WebDAV': ('http',)})
+            self.assertEqual(len(adapter.listExportableItems()), 0)
+
+        def test__getExportInfo_empty(self):
+            from \
+              Products.PluggableAuthService.plugins.ChallengeProtocolChooser \
+                import listRequestTypesLabels
+            labels = sorted(listRequestTypesLabels())
+            plugin = self._makePlugin('empty', None).__of__(self.root)
+            adapter = self._makeOne(plugin)
+
+            info = adapter._getExportInfo()
+            self.assertEqual(info['title'], None)
+            self.assertEqual(len(info['request_types']), len(labels))
+            for r_type, label in zip(info['request_types'], labels):
+                self.assertEqual(r_type['label'], label)
+                self.assertEqual(r_type['protocols'], [])
+
+        def test_export_empty(self):
+            _setUpDefaultTraversable()
+
+            plugin = self._makePlugin('empty', None).__of__(self.root)
+            adapter = self._makeOne(plugin)
+
+            context = DummyExportContext(plugin)
+            adapter.export(context, 'plugins', False)
+
+            self.assertEqual( len( context._wrote ), 1 )
+            filename, text, content_type = context._wrote[ 0 ]
+            self.assertEqual( filename, 'plugins/empty.xml' )
+            self._compareDOM( text, _EMPTY_CHOOSER )
+            self.assertEqual( content_type, 'text/xml' )
+
+        def test__getExportInfo_non_empty(self):
+            from \
+              Products.PluggableAuthService.plugins.ChallengeProtocolChooser \
+                import listRequestTypesLabels
+            labels = sorted(listRequestTypesLabels())
+            plugin = self._makePlugin('non_empty', None).__of__(self.root)
+            plugin.title = 'TITLE'
+            plugin.manage_updateProtocolMapping({'WebDAV': ('http',),
+                                                 'FTP': ('http',),
+                                                 'XML-RPC': ('http',),
+                                                })
+            adapter = self._makeOne(plugin)
+
+            info = adapter._getExportInfo()
+            self.assertEqual(info['title'], 'TITLE')
+            self.assertEqual(len(info['request_types']), len(labels))
+            for r_type, label in zip(info['request_types'], labels):
+                self.assertEqual(r_type['label'], label)
+                if label == 'Browser':
+                    self.assertEqual(r_type['protocols'], [])
+                else:
+                    self.assertEqual(r_type['protocols'], ['http'])
+
+        def test_export_with_map(self):
+            _setUpDefaultTraversable()
+
+            plugin = self._makePlugin('with_map').__of__(self.root)
+            plugin.title = 'Plugin Title'
+            plugin.manage_updateProtocolMapping({'WebDAV': ('http', 'digest'),
+                                                 'FTP': ('http',),
+                                                 'XML-RPC': ('http', 'digest'),
+                                                })
+
+
+            adapter = self._makeOne(plugin)
+            context = DummyExportContext(plugin)
+            adapter.export(context, 'plugins', False)
+
+            self.assertEqual( len(context._wrote), 1)
+            filename, text, content_type = context._wrote[ 0 ]
+            self.assertEqual(filename, 'plugins/with_map.xml')
+            self._compareDOM(text, _FILLED_CHOOSER)
+            self.assertEqual(content_type, 'text/xml')
+
+        def test_import_empty(self):
+            from \
+              Products.PluggableAuthService.plugins.ChallengeProtocolChooser \
+                import listRequestTypesLabels
+            plugin = self._makePlugin('empty', None).__of__(self.root)
+            adapter = self._makeOne(plugin)
+
+            context = DummyImportContext(plugin, encoding='ascii')
+            context._files['plugins/empty.xml'] = _EMPTY_CHOOSER
+            self.assertEqual(plugin.title, None)
+
+            adapter.import_(context, 'plugins', False)
+
+            for label in  listRequestTypesLabels():
+                protocols = sorted(plugin._map.get(label, ()))
+                self.assertEqual(protocols, [])
+
+        def test_import_non_empty(self):
+            from \
+              Products.PluggableAuthService.plugins.ChallengeProtocolChooser \
+                import listRequestTypesLabels
+            plugin = self._makePlugin('non_empty', None).__of__(self.root)
+            adapter = self._makeOne(plugin)
+
+            context = DummyImportContext(plugin, encoding='ascii')
+            context._files['plugins/non_empty.xml'] = _FILLED_CHOOSER
+            self.assertEqual(plugin.title, None)
+
+            adapter.import_(context, 'plugins', False)
+
+            for label in  listRequestTypesLabels():
+                protocols = sorted(plugin._map.get(label, ()))
+                if label == 'Browser':
+                    self.assertEqual(protocols, [])
+                elif label == 'FTP':
+                    self.assertEqual(protocols, ['http'])
+                else:
+                    self.assertEqual(protocols, ['digest', 'http'])
+
+
     def test_suite():
-        suite = unittest.TestSuite((
+        return unittest.TestSuite((
             unittest.makeSuite(ZODBUserManagerExportImportTests),
             unittest.makeSuite(ZODBGroupManagerExportImportTests),
             unittest.makeSuite(ZODBRoleManagerExportImportTests),
@@ -1196,8 +1332,8 @@ else:
             unittest.makeSuite(TitleOnlyExportImportTests),
             unittest.makeSuite(DelegatePathExportImportTests),
             unittest.makeSuite(DynamicGroupsPluginExportImportTests),
-                        ))
-        return suite
+            unittest.makeSuite(ChallengeProtocolChooserExportImportTests),
+        ))
 
 _EMPTY_ZODB_USERS = """\
 <?xml version="1.0" ?>
@@ -1374,6 +1510,38 @@ _FILLED_DYNAMIC_GROUPS = """\
     active="False"
     />
 </dynamic-groups>
+"""
+
+_EMPTY_CHOOSER = """\
+<?xml version="1.0" ?>
+<challenge-protocol-chooser>
+<mapping label="Browser" protocols="" />
+<mapping label="FTP" protocols="" />
+<mapping label="WebDAV" protocols="" />
+<mapping label="XML-RPC" protocols="" />
+</challenge-protocol-chooser>
+"""
+
+_FILLED_CHOOSER = """\
+<?xml version="1.0" ?>
+<challenge-protocol-chooser title="Plugin Title">
+<mapping
+    label="Browser"
+    protocols=""
+    />
+<mapping
+    label="FTP"
+    protocols="http"
+    />
+<mapping
+    label="WebDAV"
+    protocols="digest,http"
+    />
+<mapping
+    label="XML-RPC"
+    protocols="digest,http"
+    />
+</challenge-protocol-chooser>
 """
 
 if __name__ == '__main__':

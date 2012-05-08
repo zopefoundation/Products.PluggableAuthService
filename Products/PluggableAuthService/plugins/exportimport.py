@@ -437,6 +437,37 @@ class DynamicGroupsPluginExportImport(SimpleXMLExportImport):
                 'groups': group_info,
                }
 
+class ChallengeProtocolChooserExportImport(SimpleXMLExportImport):
+    """ Adapter for dumping / loading ChallengeProtocolChooser to an XML file.
+    """
+    _FILENAME = 'chooser.xml'
+    _ROOT_TAGNAME = 'challenge-protocol-chooser'
+
+    def _purgeContext(self):
+        self.context._map.clear()
+
+    def _updateFromDOM(self, root):
+        for mapping in root.getElementsByTagName('mapping'):
+            label = self._getNodeAttr(mapping, 'label', None)
+            protocols = self._getNodeAttr(mapping, 'protocols', '').split(',')
+            self.context._map[label] = tuple(filter(None, protocols))
+
+    def _getExportInfo(self):
+        from Products.PluggableAuthService.plugins.ChallengeProtocolChooser \
+            import listRequestTypesLabels
+
+        request_type_info = []
+
+        for label in sorted(listRequestTypesLabels()):
+            protocols = sorted(self.context._map.get(label, []))
+            request_type_info.append({'label': label,
+                                      'protocols': protocols,
+                                     })
+
+        return {'title': self.context.title,
+                'request_types': request_type_info,
+               }
+
 class ScriptablePluginExportImport(FolderishExporterImporter):
     """ Export / import the Scriptable type plugin.
     """

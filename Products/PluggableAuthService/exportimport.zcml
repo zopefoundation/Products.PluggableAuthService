@@ -22,13 +22,13 @@
       />
 
   <adapter
-      factory=".plugins.exportimport.TitleOnlyExportImport"
+      factory=".plugins.exportimport.ChallengeProtocolChooserExportImport"
       provides="Products.GenericSetup.interfaces.IFilesystemExporter"
       for=".plugins.ChallengeProtocolChooser.IChallengeProtocolChooserPlugin"
       />
 
   <adapter
-      factory=".plugins.exportimport.TitleOnlyExportImport"
+      factory=".plugins.exportimport.ChallengeProtocolChooserExportImport"
       provides="Products.GenericSetup.interfaces.IFilesystemImporter"
       for=".plugins.ChallengeProtocolChooser.IChallengeProtocolChooserPlugin"
       />
