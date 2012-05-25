@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<not-competent-by-roles xmlns:tal="http://xml.zope.org/namespaces/tal"
+    title="TITLE"
+    tal:define="info options/info"
+    tal:attributes="title info/title;">
+ <role tal:repeat="role info/roles"
+       tal:content="role">ROLE</role>
+</not-competent-by-roles>

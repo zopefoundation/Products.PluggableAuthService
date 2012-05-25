@@ -33,7 +33,7 @@ TODO:
 
    - [X] LocalRolePlugin (TitleOnlyExportImport)
 
-   - [_] NotCompetent_byRoles
+   - [X] NotCompetent_byRoles (NotCompetent_byRolesExportImport)
 
    - [X] RecursiveGroupsPlugin (TitleOnlyExportImport)
 
@@ -490,3 +490,24 @@ class PythonScriptFileAdapter(DAVAwareFileAdapter):
         """ Return the name under which our file data is stored.
         """
         return '%s.py' % self.context.getId()
+
+class NotCompetent_byRolesExportImport(SimpleXMLExportImport):
+    """ Adapter for dumping / loading NCbR plugin.
+    """
+    _FILENAME = 'notcompetent.xml'
+    _ROOT_TAGNAME = 'not-competent-by-roles'
+
+    def _purgeContext(self):
+        pass
+
+    def _updateFromDOM(self, root):
+        roles = []
+        for node in root.getElementsByTagName('role'):
+            role = node.firstChild.wholeText
+            roles.append(role.strip())
+        self.context.roles = tuple(roles)
+
+    def _getExportInfo(self):
+        return {'title': self.context.title,
+                'roles': self.context.roles,
+               }

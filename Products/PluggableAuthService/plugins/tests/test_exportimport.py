@@ -1322,6 +1322,104 @@ else:
                     self.assertEqual(protocols, ['digest', 'http'])
 
 
+    class NotCompetent_byRolesExportImportTests(_TestBase):
+
+        def _getTargetClass(self):
+            from Products.PluggableAuthService.plugins.exportimport \
+                import NotCompetent_byRolesExportImport
+            return NotCompetent_byRolesExportImport
+
+        def _makePlugin(self, id, *args, **kw):
+            from \
+              Products.PluggableAuthService.plugins.NotCompetentHelper \
+                import NotCompetent_byRoles
+
+            return NotCompetent_byRoles(id, *args, **kw)
+
+        def test_listExportableItems(self):
+            plugin = self._makePlugin('ncwr').__of__(self.root)
+            adapter = self._makeOne(plugin)
+            self.assertEqual(len(adapter.listExportableItems()), 0)
+            plugin.roles = ('Manager',)
+            self.assertEqual(len(adapter.listExportableItems()), 0)
+
+        def test__getExportInfo_empty(self):
+            plugin = self._makePlugin('empty').__of__(self.root)
+            adapter = self._makeOne(plugin)
+
+            info = adapter._getExportInfo()
+            self.assertEqual(info['title'], '')
+            self.assertEqual(len(info['roles']), 0)
+
+        def test_export_empty(self):
+            _setUpDefaultTraversable()
+
+            plugin = self._makePlugin('empty', 'Plugin Title'
+                                     ).__of__(self.root)
+            adapter = self._makeOne(plugin)
+
+            context = DummyExportContext(plugin)
+            adapter.export(context, 'plugins', False)
+
+            self.assertEqual( len( context._wrote ), 1 )
+            filename, text, content_type = context._wrote[ 0 ]
+            self.assertEqual( filename, 'plugins/empty.xml' )
+            self._compareDOM( text, _EMPTY_NONCOMPETENT )
+            self.assertEqual( content_type, 'text/xml' )
+
+        def test__getExportInfo_non_empty(self):
+            plugin = self._makePlugin('non_empty', 'TITLE').__of__(self.root)
+            plugin.roles = ('Manager',)
+            adapter = self._makeOne(plugin)
+
+            info = adapter._getExportInfo()
+            self.assertEqual(info['title'], 'TITLE')
+            self.assertEqual(len(info['roles']), 1)
+            self.assertEqual(info['roles'][0], 'Manager')
+
+        def test_export_non_empty(self):
+            _setUpDefaultTraversable()
+
+            plugin = self._makePlugin('non_empty', 'Plugin Title'
+                                     ).__of__(self.root)
+            plugin.roles = ('Manager',)
+            adapter = self._makeOne(plugin)
+            context = DummyExportContext(plugin)
+
+            adapter.export(context, 'plugins', False)
+
+            self.assertEqual( len(context._wrote), 1)
+            filename, text, content_type = context._wrote[ 0 ]
+            self.assertEqual(filename, 'plugins/non_empty.xml')
+            self._compareDOM(text, _FILLED_NONCOMPETENT)
+            self.assertEqual(content_type, 'text/xml')
+
+        def test_import_empty(self):
+            plugin = self._makePlugin('empty', 'BEFORE').__of__(self.root)
+            plugin.roles = ('Manager',)
+            adapter = self._makeOne(plugin)
+
+            context = DummyImportContext(plugin, encoding='ascii')
+            context._files['plugins/empty.xml'] = _EMPTY_NONCOMPETENT
+
+            adapter.import_(context, 'plugins', False)
+
+            self.assertEqual(plugin.title, 'Plugin Title')
+            self.assertEqual(plugin.roles, ())
+
+        def test_import_non_empty(self):
+            plugin = self._makePlugin('non_empty', 'BEFORE').__of__(self.root)
+            adapter = self._makeOne(plugin)
+
+            context = DummyImportContext(plugin, encoding='ascii')
+            context._files['plugins/non_empty.xml'] = _FILLED_NONCOMPETENT
+
+            adapter.import_(context, 'plugins', False)
+
+            self.assertEqual(plugin.title, 'Plugin Title')
+            self.assertEqual(plugin.roles, ('Manager',))
+
+
     def test_suite():
         return unittest.TestSuite((
             unittest.makeSuite(ZODBUserManagerExportImportTests),
@@ -1333,6 +1431,7 @@ else:
             unittest.makeSuite(DelegatePathExportImportTests),
             unittest.makeSuite(DynamicGroupsPluginExportImportTests),
             unittest.makeSuite(ChallengeProtocolChooserExportImportTests),
+            unittest.makeSuite(NotCompetent_byRolesExportImportTests),
         ))
 
 _EMPTY_ZODB_USERS = """\
@@ -1544,5 +1643,15 @@ _FILLED_CHOOSER = """\
 </challenge-protocol-chooser>
 """
 
-if __name__ == '__main__':
-    unittest.main(defaultTest='test_suite')
+_EMPTY_NONCOMPETENT = """\
+<?xml version="1.0" ?>
+<not-competent-by-roles title="Plugin Title">
+</not-competent-by-roles>
+"""
+
+_FILLED_NONCOMPETENT = """\
+<?xml version="1.0" ?>
+<not-competent-by-roles title="Plugin Title">
+<role>Manager</role>
+</not-competent-by-roles>
+"""

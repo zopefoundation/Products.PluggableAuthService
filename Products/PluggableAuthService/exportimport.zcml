@@ -112,6 +112,18 @@
       />
 
   <adapter
+      factory=".plugins.exportimport.NotCompetent_byRolesExportImport"
+      provides="Products.GenericSetup.interfaces.IFilesystemExporter"
+      for=".plugins.NotCompetentHelper.NotCompetent_byRoles"
+      />
+
+  <adapter
+      factory=".plugins.exportimport.NotCompetent_byRolesExportImport"
+      provides="Products.GenericSetup.interfaces.IFilesystemImporter"
+      for=".plugins.NotCompetentHelper.NotCompetent_byRoles"
+      />
+
+  <adapter
       factory=".plugins.exportimport.TitleOnlyExportImport"
       provides="Products.GenericSetup.interfaces.IFilesystemExporter"
       for=".plugins.RecursiveGroupsPlugin.IRecursiveGroupsPlugin"
