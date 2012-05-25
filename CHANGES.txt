@@ -1,10 +1,13 @@
 Change Log
 ==========
 
-1.8.1 (unreleased)
+1.9.0 (unreleased)
 ------------------
 
-- TBD
+- Launchpad #649596:  add a protocol for plugins which check whether a
+  non-top-level PAS instance is "competent" to authenticate a given request;
+  if not, the instance defers to higher-level instances.  Thanks to Dieter
+  Maurer for the patch.
 
 
 1.8.0 (2012-05-08)
