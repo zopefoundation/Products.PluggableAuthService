@@ -17,7 +17,7 @@ TODO:
 
  o Add export / import adapters for all stock plugin types:
 
-   - [X] ChallengeProtocolChooser (TitleOnlyExportImport)
+   - [X] ChallengeProtocolChooser (ChallengeProtocolChooserExportImport)
 
    - [X] CookieAuthHelper (CookieAuthHelperExportImport)
 
@@ -33,11 +33,13 @@ TODO:
 
    - [X] LocalRolePlugin (TitleOnlyExportImport)
 
+   - [_] NotCompetent_byRoles
+
    - [X] RecursiveGroupsPlugin (TitleOnlyExportImport)
 
    - [X] RequestTypeSniffer (TitleOnlyExportImport)
 
-   - [?] ScriptablePlugin (stock GenericSetup folderish support?)
+   - [X] ScriptablePlugin (ScriptablePluginExportImport)
 
    - [X] SearchPrincipalsPlugin (DelegatePathExportImport)
 
