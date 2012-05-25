@@ -44,6 +44,7 @@ from plugins import RecursiveGroupsPlugin as RGP
 from plugins import DynamicGroupsPlugin as DGP
 from plugins import ChallengeProtocolChooser as CPC
 from plugins import RequestTypeSniffer as RTS
+from plugins import NotCompetentHelper as NCH
 
 registerMultiPlugin(HBAH.HTTPBasicAuthHelper.meta_type)
 registerMultiPlugin(IAH.InlineAuthHelper.meta_type)
@@ -61,6 +62,7 @@ registerMultiPlugin(RGP.RecursiveGroupsPlugin.meta_type)
 registerMultiPlugin(DGP.DynamicGroupsPlugin.meta_type)
 registerMultiPlugin(CPC.ChallengeProtocolChooser.meta_type)
 registerMultiPlugin(RTS.RequestTypeSniffer.meta_type)
+registerMultiPlugin(NCH.NotCompetent_byRoles.meta_type)
 
 try:
     from Products.GenericSetup import profile_registry
@@ -255,6 +257,14 @@ def initialize(context):
                             RTS.addRequestTypeSnifferPlugin, )
                          , visibility=None
                          , icon='plugins/www/DelegatingMultiPlugin.png'
+                         )
+
+    context.registerClass( NCH.NotCompetent_byRoles
+                         , permission=ManageUsers
+                         , constructors=(
+                            NCH.manage_addNotCompetent_byRolesForm,
+                            NCH.manage_addNotCompetent_byRoles, )
+                         , visibility=None
                          )
 
     if profile_registry is not None:

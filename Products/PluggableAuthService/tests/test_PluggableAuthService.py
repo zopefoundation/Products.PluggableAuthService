@@ -22,6 +22,8 @@ from OFS.Folder import Folder
 from zExceptions import Unauthorized, Redirect
 
 from Products.PluggableAuthService.utils import directlyProvides
+from zope.interface import implements
+from ..interfaces.plugins import INotCompetentPlugin
 
 from conformance import IUserFolder_conformance
 
@@ -216,6 +218,20 @@ class DummyCounterChallenger( DummyChallenger ):
     def challenge(self, request, response):
         self.count += 1
         return True
+
+class DummyNotCompetentPlugin( DummyPlugin ):
+    implements( INotCompetentPlugin )
+
+    def __init__( self, id, type ):
+        self.id, self.type = id, type
+
+    def getId( self ): return id
+
+    def isNotCompetentToAuthenticate( self, request ):
+        if self.type is None:
+            raise KeyError("purposeful `KeyError` by `isNotCompetentToAuthenticate`")
+        return self.type
+
 
 class FauxRequest( object ):
 
@@ -923,6 +939,46 @@ class PluggableAuthServiceTests( unittest.TestCase
             self.assertEqual( user_ids[0][0], 'foo' )
         finally:
             PluggableAuthService.emergency_user = old_eu
+
+
+
+    def _isNotCompetent_test( self, decisions, result):
+        from Products.PluggableAuthService.interfaces.plugins \
+            import INotCompetentPlugin
+
+        plugins = self._makePlugins( )
+        zcuf = self._makeOne( plugins )
+        plugins = zcuf._getOb("plugins") # acquisition wrap
+
+        for i, decision in enumerate( decisions ):
+            pid = "nc_%d" % i
+            p = DummyNotCompetentPlugin( pid, decision )
+            zcuf._setObject( pid, p )
+            plugins.activatePlugin( INotCompetentPlugin, pid )
+
+        self.assertEqual( zcuf._isNotCompetent( None, plugins ), result )
+
+    def test__isNotCompetent_empty( self ):
+        self._isNotCompetent_test( (), False )
+
+    def test__isNotCompetent_False( self ):
+        self._isNotCompetent_test( (False,), False )
+
+    def test__isNotCompetent_True( self ):
+        self._isNotCompetent_test( (True,), True )
+
+    def test__isNotCompetent_True_False( self ):
+        self._isNotCompetent_test( (True, False), True )
+
+    def test__isNotCompetent_False_True( self ):
+        self._isNotCompetent_test( (False, True), True )
+
+    def test__isNotCompetent_Broken( self ):
+        self._isNotCompetent_test( (None,), False )
+
+    def test__isNotCompetent_Broken_True( self ):
+        self._isNotCompetent_test( (None, True), True )
+
 
     def test__getObjectContext_no_steps( self ):
 
@@ -1772,6 +1828,82 @@ class PluggableAuthServiceTests( unittest.TestCase
         self.assertEqual( root_validated.getUserName(), 'New Anonymous User' )
         self.assertEqual( root_validated.getGroups()
                         , [ 'All People Everywhere Ever' ] )
+
+    def _setup_for_authentication( self ):
+        """return pas set up for authentication and associated request."""
+
+
+        from Products.PluggableAuthService.interfaces.plugins \
+            import IExtractionPlugin, \
+                   IAuthenticationPlugin, \
+                   IUserEnumerationPlugin, \
+                   IRolesPlugin
+
+        plugins = self._makePlugins()
+        zcuf = self._makeOne( plugins )
+
+        login = DummyPlugin()
+        directlyProvides( login, IExtractionPlugin, IAuthenticationPlugin )
+        login.extractCredentials = _extractLogin
+        login.authenticateCredentials = _authLogin
+        zcuf._setObject( 'login', login )
+
+        nc = DummyNotCompetentPlugin( 'nc', True )
+        zcuf._setObject( 'nc', nc )
+
+        olivier = DummyPlugin()
+        directlyProvides( olivier, IUserEnumerationPlugin, IRolesPlugin )
+        olivier.enumerateUsers = lambda id: id == 'foo' or None
+        olivier.getRolesForPrincipal = lambda user, req: (
+                     user.getId() == 'olivier' and ( 'Hamlet', ) or () )
+
+        zcuf._setObject( 'olivier', olivier )
+
+        plugins = zcuf._getOb( 'plugins' )
+        plugins.activatePlugin( IExtractionPlugin, 'login' )
+        plugins.activatePlugin( IAuthenticationPlugin, 'login' )
+        plugins.activatePlugin( IUserEnumerationPlugin, 'olivier' )
+        plugins.activatePlugin( IRolesPlugin, 'olivier' )
+        plugins.activatePlugin( INotCompetentPlugin, 'nc' )
+
+        rc, root, folder, object = self._makeTree()
+
+        index = FauxObject( 'index_html' )
+        index.__roles__ = ( 'Hamlet', )
+        acquired_index = index.__of__( root ).__of__( object )
+
+        request = self._makeRequest( ( 'folder', 'object', 'index_html' )
+                                   , RESPONSE=FauxResponse()
+                                   , PARENTS=[ object, folder, root ]
+                                   , PUBLISHED=acquired_index.__of__( object )
+                                   , form={ 'login' : 'olivier'
+                                          , 'password' : 'arras'
+                                          }
+                                   )
+
+        return zcuf, request
+
+
+    def _NotCompetent_validate_check( self, is_top ):
+
+        zcuf, request = self._setup_for_authentication( )
+        folder, root = request[ "PARENTS" ][ -2: ]
+
+        wrapped = zcuf.__of__( is_top and root or folder )
+
+        return wrapped.validate( request )
+
+    def test_validate_NotCompetent_isTop( self ):
+        self.assertEqual(
+            self._NotCompetent_validate_check( True ).getUserName(),
+            'olivier'
+            )
+
+    def test_validate_NotCompetent_not_isTop( self ):
+        self.assertEqual(
+            self._NotCompetent_validate_check( False ),
+            None
+            )
 
     def testAllowGroupsAttribute(self):
         # Verify that __allow_groups__ gets set and removed

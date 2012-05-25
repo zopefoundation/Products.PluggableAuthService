@@ -479,3 +479,18 @@ class IChallengeProtocolChooser( Interface ):
 #         has two different algorithms, based on whether or not the
 #         context object implements IPlacelessSecurity.
 #
+
+
+class INotCompetentPlugin( Interface ):
+
+    """check whether this user folder is not competent to authenticate.
+
+    Never used for a top level user folder;
+    primarily used to prevent shaddowing of authentications by higher level
+    user folders.
+    """
+
+    def isNotCompetentToAuthenticate(request):
+
+        """return true if this user folder should not authenticate *request*.
+        """

@@ -62,6 +62,7 @@ from .interfaces.plugins import IUserAdderPlugin
 from .interfaces.plugins import IGroupEnumerationPlugin
 from .interfaces.plugins import IRoleEnumerationPlugin
 from .interfaces.plugins import IRoleAssignerPlugin
+from .interfaces.plugins import INotCompetentPlugin
 from .interfaces.plugins import IChallengeProtocolChooser
 from .interfaces.plugins import IRequestTypeSniffer
 from .permissions import SearchPrincipals
@@ -222,6 +223,10 @@ class PluggableAuthService( Folder, Cacheable ):
         """
         plugins = self._getOb( 'plugins' )
         is_top = self._isTop()
+
+        if not is_top and self._isNotCompetent( request, plugins ):
+            # this user folder should not try to authenticate this request
+            return None
 
         user_ids = self._extractUserIds(request, plugins)
         ( accessed
@@ -521,6 +526,32 @@ class PluggableAuthService( Folder, Cacheable ):
     #
     #   Helper methods
     #
+    security.declarePrivate( '_isNotCompetent' )
+    def _isNotCompetent( self, request, plugins ):
+
+        """ return true when this user folder should not try authentication.
+
+        Never called for top level user folder.
+        """
+        try:
+            not_competents = plugins.listPlugins( INotCompetentPlugin )
+        except _SWALLOWABLE_PLUGIN_EXCEPTIONS:
+            logger.debug('NotCompetent plugin listing error', exc_info=True)
+            not_competents = ()
+
+        for not_competent_id, not_competent in not_competents:
+            try:
+                if not_competent.isNotCompetentToAuthenticate(request):
+                    return True
+            except _SWALLOWABLE_PLUGIN_EXCEPTIONS:
+                reraise(not_competent)
+                logger.debug( 'NotCompetentPlugin %s error' % not_competent_id
+                            , exc_info=True
+                            )
+                continue
+        return False
+
+        
     security.declarePrivate( '_extractUserIds' )
     def _extractUserIds( self, request, plugins ):
 
@@ -1272,6 +1303,15 @@ _PLUGIN_TYPE_INFO = (
     , 'IRequestTypeSniffer'
     , 'request_type_sniffer'
     , "Request Type Sniffer plugins detect the type of an incoming request."
+    )
+  , ( INotCompetentPlugin
+    , 'INotCompetentPlugin'
+    , 'notcompetent'
+    , "Not-Competent plugins check whether this user folder should not "
+      "authenticate the current request. "
+      "These plugins are not used for a top level user folder. "
+      "They are typically used to prevent shaddowing of authentications by "
+      "higher level user folders."
     )
   )
 

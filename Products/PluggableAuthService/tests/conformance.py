@@ -347,3 +347,21 @@ class IPropertySheet_conformance:
 
         verifyClass( IPropertySheet, self._getTargetClass() )
 
+
+class INotCompetentPlugin_conformance:
+
+    def test_INotCompetentPlugin_conformance( self ):
+
+        from Products.PluggableAuthService.interfaces.plugins \
+            import INotCompetentPlugin
+
+        verifyClass( INotCompetentPlugin, self._getTargetClass() )
+
+    def test_INotCompetentPlugin_listInterfaces(self):
+
+        from Products.PluggableAuthService.interfaces.plugins \
+            import INotCompetentPlugin
+
+        listed = self._makeOne().listInterfaces()
+        self.failUnless(INotCompetentPlugin.__name__ in listed)
+
