@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-1.9.0 (unreleased)
+1.9.0 (2012-08-30)
 ------------------
 
 - Launchpad #649596:  add a protocol for plugins which check whether a
