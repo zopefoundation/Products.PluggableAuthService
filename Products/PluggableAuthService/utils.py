@@ -12,8 +12,9 @@
 #
 ##############################################################################
 import binascii
+import functools
+import inspect
 import os
-import unittest
 try:
     from hashlib import sha1 as sha
 except:
@@ -124,6 +125,7 @@ def get_suite( file ):
     """
         Retrieve a TestSuite from 'file'.
     """
+    import unittest
     module_name = module_name_from_path( file )
     loader = unittest.defaultTestLoader
     try:
@@ -141,6 +143,7 @@ def allTests( from_dir=product_dir, test_prefix='test' ):
     """
         Walk the product and build a unittest.TestSuite aggregating tests.
     """
+    import unittest
     os.path.walk( from_dir, remove_stale_bytecode, None )
     test_files = find_unit_test_files( from_dir, test_prefix )
     test_files.sort()
@@ -215,6 +218,11 @@ def checkCSRFToken(request, token='csrf_token', raises=True):
 
 class CSRFToken(object):
     """ View helper for rendering CSRF token in templates.
+
+    E.g., in every protected form, add this::
+
+      <input type="hidden" name="csrf_token"
+             tal:attributes="value context/@@csrf_token" />
     """
     security = ClassSecurityInfo()
     security.declareObjectPublic()
@@ -223,3 +231,15 @@ class CSRFToken(object):
         self.request = request
     def __call__(self):
         return getCSRFToken(self.request)
+
+
+def csrf_only(wrapped):
+    args, varargs, kwargs, defaults = inspect.getargspec(wrapped)
+    if 'REQUEST' in args:
+        def wrapper(REQUEST, *a, **kw):
+            checkCSRFToken(REQUEST)
+            return wrapped(REQUEST=REQUEST, *a, **kw)
+    else:
+        raise ValueError("Method doesn't name request")
+    functools.update_wrapper(wrapper, wrapped)
+    return wrapper

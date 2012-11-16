@@ -202,6 +202,48 @@ class CSRFTokenTests(unittest.TestCase):
         self.assertEqual(token(), 'deadbeef')
 
 
+class Test_csrf_only(unittest.TestCase):
+
+    def _callFUT(self, *args, **kw):
+        from Products.PluggableAuthService.utils import csrf_only
+        return csrf_only(*args, **kw)
+
+    def test_w_function_no_REQUEST(self):
+        def no_request(foo, bar, **kw):
+            "I haz no REQUEST"
+        self.assertRaises(ValueError, self._callFUT, no_request)
+
+    def test_w_function_w_positional_REQUEST(self):
+        from ZPublisher import BadRequest
+        def w_positional_request(foo, bar, REQUEST):
+            "I haz REQUEST as positional arg"
+            return 42
+        wrapped = self._callFUT(w_positional_request)
+        self.assertEqual(wrapped.__name__, w_positional_request.__name__)
+        self.assertEqual(wrapped.__module__, w_positional_request.__module__)
+        self.assertEqual(wrapped.__doc__, w_positional_request.__doc__)
+        self.assertRaises(BadRequest, wrapped, foo=None, bar=None,
+                          REQUEST=_makeRequestWSession())
+        req = _makeRequestWSession(_csrft_='deadbeef')
+        req.form['csrf_token'] = 'deadbeef'
+        self.assertEqual(wrapped(foo=None, bar=None, REQUEST=req), 42)
+
+    def test_w_function_w_optional_REQUEST(self):
+        from ZPublisher import BadRequest
+        def w_optional_request(foo, bar, REQUEST=None):
+            "I haz REQUEST as kw arg"
+            return 42
+        wrapped = self._callFUT(w_optional_request)
+        self.assertEqual(wrapped.__name__, w_optional_request.__name__)
+        self.assertEqual(wrapped.__module__, w_optional_request.__module__)
+        self.assertEqual(wrapped.__doc__, w_optional_request.__doc__)
+        self.assertRaises(BadRequest,
+                         wrapped, foo=None, bar=None,
+                                  REQUEST=_makeRequestWSession())
+        req = _makeRequestWSession(_csrft_='deadbeef')
+        req.form['csrf_token'] = 'deadbeef'
+        self.assertEqual(wrapped(foo=None, bar=None, REQUEST=req), 42)
+
 def _createHashedValue(items):
     try:
         from hashlib import sha1 as sha
@@ -227,4 +269,5 @@ def test_suite():
         unittest.makeSuite(Test_getCSRFToken),
         unittest.makeSuite(Test_checkCSRFToken),
         unittest.makeSuite(CSRFTokenTests),
+        unittest.makeSuite(Test_csrf_only),
     ))
