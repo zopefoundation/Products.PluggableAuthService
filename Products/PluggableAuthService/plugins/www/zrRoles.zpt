@@ -32,6 +32,8 @@
  </tr>
 
  <form action="." method="POST">
+ <input type="hidden" name="csrf_token"
+        tal:attributes="value context/@@csrf_token" />
 
  <tr class="row-hilite"
      tal:repeat="info here/listRoleInfo"
@@ -87,6 +89,8 @@
 <h3> Add a Role </h3>
 
 <form action="manage_addRole" method="POST">
+<input type="hidden" name="csrf_token"
+       tal:attributes="value context/@@csrf_token" />
 <table
 >
 
@@ -148,6 +152,8 @@
 </h3>
 
 <form action="manage_updateRole" method="POST">
+<input type="hidden" name="csrf_token"
+       tal:attributes="value context/@@csrf_token" />
 <input type="hidden" name="role_id" value="ROLE_ID"
        tal:attributes="value role_id" />
 <table>
@@ -207,6 +213,8 @@
 
 <form action="HERE" method="POST"
       tal:attributes="action string:${here/absolute_url}/manage_roles">
+ <input type="hidden" name="csrf_token"
+       tal:attributes="value context/@@csrf_token" />
  <input type="hidden" name="role_id"
         tal:attributes="value role_id" />
  <input type="hidden" name="assign" value="1" />
@@ -239,6 +247,8 @@
                   right_is_ordered python:0;
                  "
 >
+<input type="hidden" name="csrf_token"
+       tal:attributes="value context/@@csrf_token" />
 
 <table metal:use-macro="here/manage_twoLists/macros/two_lists">
 

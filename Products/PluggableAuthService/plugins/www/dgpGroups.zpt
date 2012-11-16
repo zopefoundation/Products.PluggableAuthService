@@ -26,6 +26,8 @@
  </tr>
 
  <form action="." method="POST">
+ <input type="hidden" name="csrf_token"
+        tal:attributes="value context/@@csrf_token" />
 
  <tr class="row-hilite"
      tal:repeat="info here/listGroupInfo"
@@ -82,6 +84,8 @@
 <h3> Add a Dynamic Group </h3>
 
 <form action="manage_addGroup" method="POST">
+<input type="hidden" name="csrf_token"
+       tal:attributes="value context/@@csrf_token" />
 <table
 >
 
@@ -147,6 +151,8 @@
 <h3> Update Group: <span tal:replace="group_id">GROUP_ID</span> </h3>
 
 <form action="manage_updateGroup" method="POST">
+<input type="hidden" name="csrf_token"
+       tal:attributes="value context/@@csrf_token" />
 <input type="hidden" name="group_id" value="GROUP_ID"
        tal:attributes="value group_id" />
 <table>

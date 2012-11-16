@@ -4,6 +4,8 @@
 <h3> Update Your Password </h3>
 
 <form action="manage_updatePassword" method="POST">
+<input type="hidden" name="csrf_token"
+       tal:attributes="value context/@@csrf_token" />
 <table tal:define="info here/getOwnUserInfo;
                    user_id info/user_id;
                    login_name info/login_name;

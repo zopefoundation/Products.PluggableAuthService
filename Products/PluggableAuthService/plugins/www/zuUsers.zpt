@@ -27,6 +27,10 @@
  </tr>
 
  <form action="." method="POST">
+ <input type="hidden" name="csrf_token"
+        tal:attributes="value context/@@csrf_token" />
+ <input type="hidden" name="csrf_token"
+        tal:attributes="value context/@@csrf_token" />
 
  <tr class="row-hilite"
      tal:repeat="info here/listUserInfo"
@@ -74,6 +78,8 @@
 <h3> Add a User </h3>
 
 <form action="manage_addUser" method="POST">
+<input type="hidden" name="csrf_token"
+       tal:attributes="value context/@@csrf_token" />
 <table
 >
 
@@ -113,6 +119,8 @@
                           >(update user)</a></h3>
 
 <form action="manage_updateUserPassword" method="POST">
+<input type="hidden" name="csrf_token"
+       tal:attributes="value context/@@csrf_token" />
 <table>
 
  <tr valign="top">
@@ -177,6 +185,8 @@
                  >(change password)</a></h3>
 
 <form action="manage_updateUser" method="POST">
+<input type="hidden" name="csrf_token"
+       tal:attributes="value context/@@csrf_token" />
 <table>
 
  <tr valign="top">
