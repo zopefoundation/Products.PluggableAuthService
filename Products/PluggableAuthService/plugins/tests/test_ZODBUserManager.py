@@ -663,9 +663,6 @@ class ZODBUserManagerTests( unittest.TestCase
         zum.manage_removeUsers([USER_ID], REQUEST=req)
 
 
-if __name__ == "__main__":
-    unittest.main()
-
 def test_suite():
     return unittest.TestSuite((
         unittest.makeSuite( ZODBUserManagerTests ),
