@@ -11,6 +11,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
+import binascii
 import os
 import unittest
 try:
@@ -19,7 +20,9 @@ except:
     from sha import new as sha
 
 
+from AccessControl import ClassSecurityInfo
 from App.Common import package_home
+from ZPublisher import BadRequest
 
 
 from zope import interface
@@ -187,3 +190,36 @@ def createKeywords(**kw):
 
     return {'keywords': keywords.hexdigest()}
 
+def getCSRFToken(request):
+    session = request.SESSION
+    token = session.get('_csrft_', None)
+    if token is None:
+        token = session['_csrft_'] = binascii.hexlify(os.urandom(20))
+    return token
+
+def checkCSRFToken(request, token='csrf_token', raises=True):
+    """ Check CSRF token in session against token formdata.
+    
+    If the values don't match, and 'raises' is True, raise a BadRequest.
+    
+    If the values don't match, and 'raises' is False, return False.
+    
+    If the values match, return True.
+    """
+    if request.form.get(token) != getCSRFToken(request):
+        if raises:
+            raise BadRequest('incorrect CSRF token')
+        return False
+    return True
+
+
+class CSRFToken(object):
+    """ View helper for rendering CSRF token in templates.
+    """
+    security = ClassSecurityInfo()
+    security.declareObjectPublic()
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+    def __call__(self):
+        return getCSRFToken(self.request)

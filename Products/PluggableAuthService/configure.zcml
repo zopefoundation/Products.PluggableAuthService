@@ -1,6 +1,13 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
-    >
+    xmlns:browser="http://namespaces.zope.org/browser">
+
+  <browser:page
+      for="*"
+      name="csrf_token"
+      class=".utils.CSRFToken"
+      permission="zope.Public"
+      />
 
   <include file="exportimport.zcml" />
 
