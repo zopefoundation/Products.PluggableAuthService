@@ -33,6 +33,7 @@ from Products.PluggableAuthService.interfaces.plugins \
 from Products.PluggableAuthService.permissions import ManageGroups
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.utils import classImplements
+from Products.PluggableAuthService.utils import csrf_only
 
 
 class IZODBGroupManager(Interface):
@@ -262,8 +263,8 @@ class ZODBGroupManager( BasePlugin ):
 
         return result
 
-    security.declareProtected( ManageGroups, 'addPrincipalToGroup' )
-    def addPrincipalToGroup( self, principal_id, group_id, REQUEST=None ):
+    security.declarePrivate( 'addPrincipalToGroup' )
+    def addPrincipalToGroup( self, principal_id, group_id ):
 
         """ Add a principal to a group.
 
@@ -282,10 +283,9 @@ class ZODBGroupManager( BasePlugin ):
             self._invalidatePrincipalCache( principal_id )
 
         return not already
-    addPrincipalToGroup = postonly(addPrincipalToGroup)
 
-    security.declareProtected( ManageGroups, 'removePrincipalFromGroup' )
-    def removePrincipalFromGroup( self, principal_id, group_id, REQUEST=None ):
+    security.declarePrivate( 'removePrincipalFromGroup' )
+    def removePrincipalFromGroup( self, principal_id, group_id ):
 
         """ Remove a prinicpal from from a group.
 
@@ -308,7 +308,6 @@ class ZODBGroupManager( BasePlugin ):
             self._invalidatePrincipalCache( principal_id )
 
         return already
-    removePrincipalFromGroup = postonly(removePrincipalFromGroup)
 
     #
     #   ZMI
@@ -375,6 +374,8 @@ class ZODBGroupManager( BasePlugin ):
                              )
 
     security.declareProtected( ManageGroups, 'manage_removeGroups' )
+    @csrf_only
+    @postonly
     def manage_removeGroups( self
                            , group_ids
                            , RESPONSE=None
@@ -398,9 +399,10 @@ class ZODBGroupManager( BasePlugin ):
             RESPONSE.redirect( '%s/manage_groups?manage_tabs_message=%s'
                              % ( self.absolute_url(), message )
                              )
-    manage_removeGroups = postonly(manage_removeGroups)
 
     security.declareProtected( ManageGroups, 'manage_addPrincipalsToGroup' )
+    @csrf_only
+    @postonly
     def manage_addPrincipalsToGroup( self
                                    , group_id
                                    , principal_ids
@@ -427,11 +429,12 @@ class ZODBGroupManager( BasePlugin ):
                                + '&manage_tabs_message=%s'
                                ) % ( self.absolute_url(), group_id, message )
                              )
-    manage_addPrincipalsToGroup = postonly(manage_addPrincipalsToGroup)
 
     security.declareProtected( ManageGroups
                              , 'manage_removePrincipalsFromGroup'
                              )
+    @csrf_only
+    @postonly
     def manage_removePrincipalsFromGroup( self
                                         , group_id
                                         , principal_ids
@@ -458,7 +461,6 @@ class ZODBGroupManager( BasePlugin ):
                                + '&manage_tabs_message=%s'
                                ) % ( self.absolute_url(), group_id, message )
                              )
-    manage_removePrincipalsFromGroup = postonly(manage_removePrincipalsFromGroup)
 
 classImplements( ZODBGroupManager
                , IZODBGroupManager

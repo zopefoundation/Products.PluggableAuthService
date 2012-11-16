@@ -494,30 +494,6 @@ class DynamicGroupsPlugin( unittest.TestCase
         self.assertEqual( len( groups ), 1 )
         self.failUnless( 'ggp_effable' in groups )
 
-    def test_removeGroup_POST_permissions(self):
-        from zExceptions import Forbidden
-
-        GROUP_ID = 'testgroup'
-
-        dpg = self._makeOne( 'adding' )
-
-        dpg.addGroup( GROUP_ID, 'python:True', 'title', 'description', True )
-
-        req, res = makeRequestAndResponse()
-
-        req.set('REQUEST_METHOD', 'GET')
-
-        # Fails with a GET
-        # test removeGroup
-        req.set('REQUEST_METHOD', 'GET')
-        req.set('method', 'GET')
-        self.assertRaises(Forbidden, dpg.removeGroup,
-                          GROUP_ID, REQUEST=req)
-        # Works with a POST
-        req.set('REQUEST_METHOD', 'POST')
-        req.set('method', 'POST')
-        dpg.removeGroup(GROUP_ID, REQUEST=req)
-
 if __name__ == "__main__":
     unittest.main()
 

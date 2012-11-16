@@ -287,7 +287,7 @@ class ZODBGroupManagerTests( unittest.TestCase
         for info in info_list:
             self.failUnless( info[ 'id' ] in PRE_LIST )
 
-    def test_addPrincipalToGroup( self ):
+    def test_addPrincipalToGroup_w_prefix( self ):
         zgm = self._makeOne()
         zgm.prefix = 'prefixed_'
 
@@ -298,45 +298,6 @@ class ZODBGroupManagerTests( unittest.TestCase
         zgm.addPrincipalToGroup( user.getId(), 'group' )
         groups = zgm.getGroupsForPrincipal( user )
         self.assertEqual( groups, ( 'prefixed_group', ) )
-
-    def test_addPrincipalToGroup_POST_permissions(self):
-        USER_ID = 'testuser'
-        GROUP_ID = 'testgroup'
-
-        zgm = self._makeOne()
-        zgm.prefix = 'prefixed_'
-
-        zgm.addGroup(GROUP_ID)
-        req, res = makeRequestAndResponse()
-
-        # Fails with a GET
-        req.set('REQUEST_METHOD', 'GET')
-        req.set('method', 'GET')
-        self.assertRaises(Forbidden, zgm.addPrincipalToGroup,
-                          USER_ID, GROUP_ID, REQUEST=req)
-        # Works with a POST
-        req.set('REQUEST_METHOD', 'POST')
-        req.set('method', 'POST')
-        zgm.addPrincipalToGroup(USER_ID, GROUP_ID, REQUEST=req)
-
-    def test_removePrincipalFromGroup_POST_permissions(self):
-        USER_ID = 'testuser'
-        GROUP_ID = 'testgroup'
-
-        zgm = self._makeOne()
-        zgm.prefix = 'prefixed_'
-
-        zgm.addGroup(GROUP_ID)
-        req, res = makeRequestAndResponse()
-
-        req.set('REQUEST_METHOD', 'GET')
-        req.set('method', 'GET')
-        self.assertRaises(Forbidden, zgm.removePrincipalFromGroup,
-                          USER_ID, GROUP_ID, REQUEST=req)
-        # Works with a POST
-        req.set('REQUEST_METHOD', 'POST')
-        req.set('method', 'POST')
-        zgm.removePrincipalFromGroup(USER_ID, GROUP_ID, REQUEST=req)
 
     def test_manage_addPrincipalsToGroup_POST_permissions(self):
         USER_ID = 'testuser'
@@ -350,12 +311,18 @@ class ZODBGroupManagerTests( unittest.TestCase
 
         req.set('REQUEST_METHOD', 'GET')
         req.set('method', 'GET')
+        req.set('SESSION', {})
         self.assertRaises(Forbidden, zgm.manage_addPrincipalsToGroup,
                           GROUP_ID, [USER_ID], REQUEST=req)
 
-        # Works with a POST
         req.set('REQUEST_METHOD', 'POST')
         req.set('method', 'POST')
+        self.assertRaises(Forbidden, zgm.manage_addPrincipalsToGroup,
+                          GROUP_ID, [USER_ID], REQUEST=req)
+
+        # Works with a POST + CSRF token
+        req.form['csrf_token'] = 'deadbeef'
+        req.SESSION['_csrft_'] = 'deadbeef'
         zgm.manage_addPrincipalsToGroup(GROUP_ID, [USER_ID], REQUEST=req)
 
     def test_manage_removePrincipalsFromGroup_POST_permissions(self):
@@ -370,12 +337,19 @@ class ZODBGroupManagerTests( unittest.TestCase
 
         req.set('REQUEST_METHOD', 'GET')
         req.set('method', 'GET')
+        req.set('SESSION', {})
         self.assertRaises(Forbidden, zgm.manage_removePrincipalsFromGroup,
                           GROUP_ID, [USER_ID], REQUEST=req)
 
         # Works with a POST
         req.set('REQUEST_METHOD', 'POST')
         req.set('method', 'POST')
+        self.assertRaises(Forbidden, zgm.manage_removePrincipalsFromGroup,
+                          GROUP_ID, [USER_ID], REQUEST=req)
+
+        # Works with a POST + CSRF token
+        req.form['csrf_token'] = 'deadbeef'
+        req.SESSION['_csrft_'] = 'deadbeef'
         zgm.manage_removePrincipalsFromGroup(GROUP_ID, [USER_ID], REQUEST=req)
 
     def test_manage_removeGroup_POST_permissions(self):
@@ -388,16 +362,20 @@ class ZODBGroupManagerTests( unittest.TestCase
 
         req.set('REQUEST_METHOD', 'GET')
         req.set('method', 'GET')
+        req.set('SESSION', {})
         self.assertRaises(Forbidden, zgm.manage_removeGroups,
                           [GROUP_ID], REQUEST=req)
 
-        # Works with a POST
         req.set('REQUEST_METHOD', 'POST')
         req.set('method', 'POST')
+        self.assertRaises(Forbidden, zgm.manage_removeGroups,
+                          [GROUP_ID], REQUEST=req)
+
+        # Works with a POST + CSRF token
+        req.form['csrf_token'] = 'deadbeef'
+        req.SESSION['_csrft_'] = 'deadbeef'
         zgm.manage_removeGroups([GROUP_ID], REQUEST=req)
 
-if __name__ == "__main__":
-    unittest.main()
 
 def test_suite():
     return unittest.TestSuite((

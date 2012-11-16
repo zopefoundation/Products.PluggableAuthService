@@ -25,7 +25,6 @@ from OFS.PropertyManager import PropertyManager
 from OFS.Folder import Folder
 from OFS.Cache import Cacheable
 from App.class_init import InitializeClass
-from Persistence import PersistentMapping
 
 from zope.interface import Interface
 
@@ -40,6 +39,7 @@ from Products.PluggableAuthService.permissions import ManageGroups
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.utils import createViewName
 from Products.PluggableAuthService.utils import classImplements
+from Products.PluggableAuthService.utils import csrf_only
 
 
 class IDynamicGroupsPlugin(Interface):
@@ -341,7 +341,7 @@ class DynamicGroupsPlugin( Folder, BasePlugin, Cacheable ):
         """
         return [ self.getGroupInfo( x ) for x in self.listGroupIds() ]
 
-    security.declareProtected( ManageGroups, 'addGroup' )
+    security.declarePrivate( 'addGroup' )
     def addGroup( self
                 , group_id
                 , predicate
@@ -371,7 +371,7 @@ class DynamicGroupsPlugin( Folder, BasePlugin, Cacheable ):
         view_name = createViewName('enumerateGroups')
         self.ZCacheable_invalidate(view_name=view_name)
 
-    security.declareProtected( ManageGroups, 'updateGroup' )
+    security.declarePrivate( 'updateGroup' )
     def updateGroup( self
                    , group_id
                    , predicate
@@ -409,8 +409,8 @@ class DynamicGroupsPlugin( Folder, BasePlugin, Cacheable ):
         view_name = createViewName('enumerateGroups', group_id)
         self.ZCacheable_invalidate(view_name=view_name)
 
-    security.declareProtected( ManageGroups, 'removeGroup' )
-    def removeGroup( self, group_id, REQUEST=None ):
+    security.declarePrivate( 'removeGroup' )
+    def removeGroup( self, group_id ):
 
         """ Remove a group definition.
 
@@ -427,7 +427,6 @@ class DynamicGroupsPlugin( Folder, BasePlugin, Cacheable ):
         self.ZCacheable_invalidate(view_name=view_name)
         view_name = createViewName('enumerateGroups', group_id)
         self.ZCacheable_invalidate(view_name=view_name)
-    removeGroup = postonly(removeGroup)
 
     #
     #   ZMI
@@ -449,6 +448,8 @@ class DynamicGroupsPlugin( Folder, BasePlugin, Cacheable ):
                                     )
 
     security.declareProtected( ManageGroups, 'manage_addGroup' )
+    @csrf_only
+    @postonly
     def manage_addGroup( self
                        , group_id
                        , title
@@ -456,6 +457,7 @@ class DynamicGroupsPlugin( Folder, BasePlugin, Cacheable ):
                        , predicate
                        , active=True
                        , RESPONSE=None
+                       , REQUEST=None
                        ):
         """ Add a group via the ZMI.
         """
@@ -474,6 +476,8 @@ class DynamicGroupsPlugin( Folder, BasePlugin, Cacheable ):
                             )
 
     security.declareProtected( ManageGroups, 'manage_updateGroup' )
+    @csrf_only
+    @postonly
     def manage_updateGroup( self
                           , group_id
                           , predicate
@@ -481,6 +485,7 @@ class DynamicGroupsPlugin( Folder, BasePlugin, Cacheable ):
                           , description=None
                           , active=True
                           , RESPONSE=None
+                          , REQUEST=None
                           ):
         """ Update a group via the ZMI.
         """
@@ -500,6 +505,8 @@ class DynamicGroupsPlugin( Folder, BasePlugin, Cacheable ):
                              )
 
     security.declareProtected( ManageGroups, 'manage_removeGroups' )
+    @csrf_only
+    @postonly
     def manage_removeGroups( self
                            , group_ids
                            , RESPONSE=None
@@ -523,7 +530,6 @@ class DynamicGroupsPlugin( Folder, BasePlugin, Cacheable ):
             RESPONSE.redirect( '%s/manage_groups?manage_tabs_message=%s'
                              % ( self.absolute_url(), message )
                              )
-    manage_removeGroups = postonly(manage_removeGroups)
 
 classImplements( DynamicGroupsPlugin
                , IDynamicGroupsPlugin

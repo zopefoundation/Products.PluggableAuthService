@@ -492,66 +492,6 @@ class ZODBRoleManagerTests( unittest.TestCase
 
         self.failIf( 'test' in zrm.getRolesForPrincipal( user ) )
 
-    def test_assignRoleToPrincipal_POST_permissions(self):
-        USER_ID = 'testuser'
-        ROLE_ID = 'myrole'
-
-        root = FauxPAS()
-        zrm = self._makeOne(id='remove_existing').__of__(root)
-        zrm = self._makeOne()
-        zrm.addRole(ROLE_ID)
-
-        req, res = makeRequestAndResponse()
-
-        # Fails with a GET
-        req.set('REQUEST_METHOD', 'GET')
-        req.set('method', 'GET')
-        self.assertRaises(Forbidden, zrm.assignRoleToPrincipal,
-                          ROLE_ID, USER_ID, REQUEST=req)
-        # Works with a POST
-        req.set('REQUEST_METHOD', 'POST')
-        req.set('method', 'POST')
-        zrm.assignRoleToPrincipal(ROLE_ID, USER_ID, REQUEST=req)
-
-    def test_removeRoleFromPricipal_POST_permission(self):
-        USER_ID = 'testuser'
-        ROLE_ID = 'myrole'
-
-        root = FauxPAS()
-        zrm = self._makeOne(id='remove_existing').__of__(root)
-        zrm = self._makeOne()
-        zrm.addRole(ROLE_ID)
-
-        req, res = makeRequestAndResponse()
-
-        req.set('REQUEST_METHOD', 'GET')
-        req.set('method', 'GET')
-        self.assertRaises(Forbidden, zrm.removeRoleFromPrincipal,
-                          ROLE_ID, USER_ID, REQUEST=req)
-        # Works with a POST
-        req.set('REQUEST_METHOD', 'POST')
-        req.set('method', 'POST')
-        zrm.removeRoleFromPrincipal(ROLE_ID, USER_ID, REQUEST=req)
-
-    def test_removeRole_POST_permissions(self):
-        ROLE_ID = 'myrole'
-
-        root = FauxPAS()
-        zrm = self._makeOne(id='remove_existing').__of__(root)
-        zrm = self._makeOne()
-        zrm.addRole(ROLE_ID)
-
-        req, res = makeRequestAndResponse()
-
-        req.set('REQUEST_METHOD', 'GET')
-        req.set('method', 'GET')
-        self.assertRaises(Forbidden, zrm.removeRole,
-                          ROLE_ID, REQUEST=req)
-        # Works with a POST
-        req.set('REQUEST_METHOD', 'POST')
-        req.set('method', 'POST')
-        zrm.removeRole(ROLE_ID, REQUEST=req)
-
     def test_manage_assignRoleToPrincipal_POST_permissions(self):
         USER_ID = 'testuser'
         ROLE_ID = 'myrole'
@@ -565,14 +505,21 @@ class ZODBRoleManagerTests( unittest.TestCase
 
         req.set('REQUEST_METHOD', 'GET')
         req.set('method', 'GET')
+        req.set('SESSION', {})
         self.assertRaises(Forbidden, zrm.manage_assignRoleToPrincipals,
                           ROLE_ID, [USER_ID], RESPONSE=res, REQUEST=req)
+
         req.set('REQUEST_METHOD', 'POST')
         req.set('method', 'POST')
+        self.assertRaises(Forbidden, zrm.manage_assignRoleToPrincipals,
+                          ROLE_ID, [USER_ID], RESPONSE=res, REQUEST=req)
+
+        req.form['csrf_token'] = 'deadbeef'
+        req.SESSION['_csrft_'] = 'deadbeef'
         zrm.manage_assignRoleToPrincipals(ROLE_ID, [USER_ID], RESPONSE=res,
                                           REQUEST=req)
 
-    def test_manage_removeRoleFromPricipal_POS_permissionsT(self):
+    def test_manage_removeRoleFromPricipal_POST_permissionsT(self):
         USER_ID = 'testuser'
         ROLE_ID = 'myrole'
 
@@ -585,10 +532,17 @@ class ZODBRoleManagerTests( unittest.TestCase
 
         req.set('REQUEST_METHOD', 'GET')
         req.set('method', 'GET')
+        req.set('SESSION', {})
         self.assertRaises(Forbidden, zrm.manage_removeRoleFromPrincipals,
                           ROLE_ID, [USER_ID], RESPONSE=res, REQUEST=req)
+
         req.set('REQUEST_METHOD', 'POST')
         req.set('method', 'POST')
+        self.assertRaises(Forbidden, zrm.manage_removeRoleFromPrincipals,
+                          ROLE_ID, [USER_ID], RESPONSE=res, REQUEST=req)
+
+        req.form['csrf_token'] = 'deadbeef'
+        req.SESSION['_csrft_'] = 'deadbeef'
         zrm.manage_removeRoleFromPrincipals(ROLE_ID, [USER_ID], RESPONSE=res,
                                             REQUEST=req)
 
@@ -603,15 +557,19 @@ class ZODBRoleManagerTests( unittest.TestCase
         req, res = makeRequestAndResponse()
         req.set('REQUEST_METHOD', 'GET')
         req.set('method', 'GET')
+        req.set('SESSION', {})
         self.assertRaises(Forbidden, zrm.manage_removeRoles,
                           [ROLE_ID], RESPONSE=res, REQUEST=req)
+
         req.set('REQUEST_METHOD', 'POST')
         req.set('method', 'POST')
+        self.assertRaises(Forbidden, zrm.manage_removeRoles,
+                          [ROLE_ID], RESPONSE=res, REQUEST=req)
+
+        req.form['csrf_token'] = 'deadbeef'
+        req.SESSION['_csrft_'] = 'deadbeef'
         zrm.manage_removeRoles([ROLE_ID], RESPONSE=res, REQUEST=req)
 
-
-if __name__ == "__main__":
-    unittest.main()
 
 def test_suite():
     return unittest.TestSuite((

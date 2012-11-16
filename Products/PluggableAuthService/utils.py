@@ -23,7 +23,8 @@ except:
 
 from AccessControl import ClassSecurityInfo
 from App.Common import package_home
-from ZPublisher import BadRequest
+from ZPublisher import Forbidden
+from zope.publisher.interfaces.browser import IBrowserRequest
 
 
 from zope import interface
@@ -203,7 +204,7 @@ def getCSRFToken(request):
 def checkCSRFToken(request, token='csrf_token', raises=True):
     """ Check CSRF token in session against token formdata.
     
-    If the values don't match, and 'raises' is True, raise a BadRequest.
+    If the values don't match, and 'raises' is True, raise a Forbidden.
     
     If the values don't match, and 'raises' is False, return False.
     
@@ -211,7 +212,7 @@ def checkCSRFToken(request, token='csrf_token', raises=True):
     """
     if request.form.get(token) != getCSRFToken(request):
         if raises:
-            raise BadRequest('incorrect CSRF token')
+            raise Forbidden('incorrect CSRF token')
         return False
     return True
 
@@ -235,11 +236,26 @@ class CSRFToken(object):
 
 def csrf_only(wrapped):
     args, varargs, kwargs, defaults = inspect.getargspec(wrapped)
-    if 'REQUEST' in args:
-        def wrapper(REQUEST, *a, **kw):
-            checkCSRFToken(REQUEST)
-            return wrapped(REQUEST=REQUEST, *a, **kw)
-    else:
+    if 'REQUEST' not in args:
         raise ValueError("Method doesn't name request")
-    functools.update_wrapper(wrapper, wrapped)
-    return wrapper
+    r_index = args.index('REQUEST')
+ 
+    arglen = len(args)
+    if defaults is not None:
+        defaults = zip(args[arglen - len(defaults):], defaults)
+        arglen -= len(defaults)
+
+    spec = (args, varargs, kwargs, defaults)
+    argspec = inspect.formatargspec(formatvalue=lambda v: '=None', *spec)
+    callargs = inspect.formatargspec(formatvalue=lambda v: '', *spec)
+    lines = ['def wrapper' + argspec + ':',
+             '    if IBrowserRequest.providedBy(REQUEST):',
+             '        checkCSRFToken(REQUEST)',
+             '    return wrapped(' + ','.join(args) + ')',
+            ]
+    g = globals().copy()
+    l = locals().copy()
+    g['wrapped'] = wrapped
+    exec '\n'.join(lines) in g, l
+
+    return functools.wraps(wrapped)(l['wrapper'])

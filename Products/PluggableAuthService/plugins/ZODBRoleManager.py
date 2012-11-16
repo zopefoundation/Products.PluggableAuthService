@@ -15,6 +15,8 @@
 
 $Id$
 """
+import logging
+
 from Acquisition import aq_parent, aq_inner
 from AccessControl import ClassSecurityInfo
 from AccessControl.requestmethod import postonly
@@ -31,12 +33,11 @@ from Products.PluggableAuthService.interfaces.plugins \
     import IRoleEnumerationPlugin
 from Products.PluggableAuthService.interfaces.plugins \
     import IRoleAssignerPlugin
-
 from Products.PluggableAuthService.permissions import ManageUsers
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.utils import classImplements
+from Products.PluggableAuthService.utils import csrf_only
 
-import logging
 
 LOG = logging.getLogger('PluggableAuthService')
 
@@ -193,7 +194,7 @@ class ZODBRoleManager( BasePlugin ):
         """
         return self._roles[ role_id ]
 
-    security.declareProtected( ManageUsers, 'addRole' )
+    security.declarePrivate( 'addRole' )
     def addRole( self, role_id, title='', description='' ):
 
         """ Add 'role_id' to the list of roles managed by this object.
@@ -208,7 +209,7 @@ class ZODBRoleManager( BasePlugin ):
                                  , 'description' : description
                                  }
 
-    security.declareProtected( ManageUsers, 'updateRole' )
+    security.declarePrivate( 'updateRole' )
     def updateRole( self, role_id, title, description ):
 
         """ Update title and description for the role.
@@ -219,7 +220,7 @@ class ZODBRoleManager( BasePlugin ):
                                        , 'description' : description
                                        } )
 
-    security.declareProtected( ManageUsers, 'removeRole' )
+    security.declarePrivate( 'removeRole' )
     def removeRole( self, role_id, REQUEST=None ):
 
         """ Remove 'role_id' from the list of roles managed by this object.
@@ -234,7 +235,6 @@ class ZODBRoleManager( BasePlugin ):
             self.removeRoleFromPrincipal( role_id, principal_id )
 
         del self._roles[ role_id ]
-    removeRole = postonly(removeRole)
 
     #
     #   Role assignment API
@@ -297,8 +297,8 @@ class ZODBRoleManager( BasePlugin ):
 
         return result
 
-    security.declareProtected( ManageUsers, 'assignRoleToPrincipal' )
-    def assignRoleToPrincipal( self, role_id, principal_id, REQUEST=None ):
+    security.declarePrivate( 'assignRoleToPrincipal' )
+    def assignRoleToPrincipal( self, role_id, principal_id ):
 
         """ Assign a role to a principal (user or group).
 
@@ -317,10 +317,9 @@ class ZODBRoleManager( BasePlugin ):
             self._invalidatePrincipalCache( principal_id )
 
         return not already
-    assignRoleToPrincipal = postonly(assignRoleToPrincipal)
 
-    security.declareProtected( ManageUsers, 'removeRoleFromPrincipal' )
-    def removeRoleFromPrincipal( self, role_id, principal_id, REQUEST=None ):
+    security.declarePrivate( 'removeRoleFromPrincipal' )
+    def removeRoleFromPrincipal( self, role_id, principal_id ):
 
         """ Remove a role from a principal (user or group).
 
@@ -342,7 +341,6 @@ class ZODBRoleManager( BasePlugin ):
             self._invalidatePrincipalCache( principal_id )
 
         return already
-    removeRoleFromPrincipal = postonly(removeRoleFromPrincipal)
 
     #
     #   ZMI
@@ -367,11 +365,14 @@ class ZODBRoleManager( BasePlugin ):
                                       )
 
     security.declareProtected( ManageUsers, 'manage_addRole' )
+    @csrf_only
+    @postonly
     def manage_addRole( self
                       , role_id
                       , title
                       , description
-                      , RESPONSE
+                      , RESPONSE=None
+                      , REQUEST=None
                       ):
         """ Add a role via the ZMI.
         """
@@ -379,16 +380,20 @@ class ZODBRoleManager( BasePlugin ):
 
         message = 'Role+added'
 
-        RESPONSE.redirect( '%s/manage_roles?manage_tabs_message=%s'
-                         % ( self.absolute_url(), message )
-                         )
+        if RESPONSE is not None:
+            RESPONSE.redirect( '%s/manage_roles?manage_tabs_message=%s'
+                            % ( self.absolute_url(), message )
+                            )
 
     security.declareProtected( ManageUsers, 'manage_updateRole' )
+    @csrf_only
+    @postonly
     def manage_updateRole( self
                          , role_id
                          , title
                          , description
-                         , RESPONSE
+                         , RESPONSE=None
+                         , REQUEST=None
                          ):
         """ Update a role via the ZMI.
         """
@@ -396,14 +401,18 @@ class ZODBRoleManager( BasePlugin ):
 
         message = 'Role+updated'
 
-        RESPONSE.redirect( '%s/manage_roles?role_id=%s&manage_tabs_message=%s'
-                         % ( self.absolute_url(), role_id, message )
-                         )
+        if RESPONSE is not None:
+            RESPONSE.redirect( '%s/manage_roles?role_id=%s&'
+                               'manage_tabs_message=%s'
+                            % ( self.absolute_url(), role_id, message )
+                            )
 
     security.declareProtected( ManageUsers, 'manage_removeRoles' )
+    @csrf_only
+    @postonly
     def manage_removeRoles( self
                           , role_ids
-                          , RESPONSE
+                          , RESPONSE=None
                           , REQUEST=None
                           ):
         """ Remove one or more role assignments via the ZMI.
@@ -424,12 +433,14 @@ class ZODBRoleManager( BasePlugin ):
 
             message = 'Role+assignments+removed'
 
-        RESPONSE.redirect( '%s/manage_roles?manage_tabs_message=%s'
-                         % ( self.absolute_url(), message )
-                         )
-    manage_removeRoles = postonly(manage_removeRoles)
+        if RESPONSE is not None:
+            RESPONSE.redirect( '%s/manage_roles?manage_tabs_message=%s'
+                            % ( self.absolute_url(), message )
+                            )
 
     security.declareProtected( ManageUsers, 'manage_assignRoleToPrincipals' )
+    @csrf_only
+    @postonly
     def manage_assignRoleToPrincipals( self
                                      , role_id
                                      , principal_ids
@@ -451,17 +462,19 @@ class ZODBRoleManager( BasePlugin ):
                                                  , '+'.join( assigned )
                                                  )
 
-        RESPONSE.redirect( ( '%s/manage_roles?role_id=%s&assign=1'
-                           + '&manage_tabs_message=%s'
-                           ) % ( self.absolute_url(), role_id, message )
-                         )
-    manage_assignRoleToPrincipals = postonly(manage_assignRoleToPrincipals)
+        if RESPONSE is not None:
+            RESPONSE.redirect( ( '%s/manage_roles?role_id=%s&assign=1'
+                            + '&manage_tabs_message=%s'
+                            ) % ( self.absolute_url(), role_id, message )
+                            )
 
     security.declareProtected( ManageUsers, 'manage_removeRoleFromPrincipals' )
+    @csrf_only
+    @postonly
     def manage_removeRoleFromPrincipals( self
                                        , role_id
                                        , principal_ids
-                                       , RESPONSE
+                                       , RESPONSE=None
                                        , REQUEST=None
                                        ):
         """ Remove a role from one or more principals via the ZMI.
@@ -479,11 +492,11 @@ class ZODBRoleManager( BasePlugin ):
                                                   , '+'.join( removed )
                                                   )
 
-        RESPONSE.redirect( ( '%s/manage_roles?role_id=%s&assign=1'
-                           + '&manage_tabs_message=%s'
-                           ) % ( self.absolute_url(), role_id, message )
-                         )
-    manage_removeRoleFromPrincipals = postonly(manage_removeRoleFromPrincipals)
+        if RESPONSE is not None:
+            RESPONSE.redirect( ( '%s/manage_roles?role_id=%s&assign=1'
+                            + '&manage_tabs_message=%s'
+                            ) % ( self.absolute_url(), role_id, message )
+                            )
 
 classImplements( ZODBRoleManager
                , IZODBRoleManager

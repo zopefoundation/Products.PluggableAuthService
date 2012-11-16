@@ -96,6 +96,9 @@ class Test_createKeywords(unittest.TestCase):
 
 
 def _makeRequestWSession(**session):
+    from zope.interface import implementer
+    from zope.publisher.interfaces.browser import IBrowserRequest
+    @implementer(IBrowserRequest)
     class _Request(dict):
         pass
     request = _Request()
@@ -130,19 +133,19 @@ class Test_checkCSRFToken(unittest.TestCase):
         return checkCSRFToken(*args, **kw)
 
     def test_wo_token_in_session_or_form_w_raises(self):
-        from ZPublisher import BadRequest
+        from ZPublisher import Forbidden
         request = _makeRequestWSession()
-        self.assertRaises(BadRequest, self._callFUT, request)
+        self.assertRaises(Forbidden, self._callFUT, request)
 
     def test_wo_token_in_session_or_form_wo_raises(self):
         request = _makeRequestWSession()
         self.assertFalse(self._callFUT(request, raises=False))
 
     def test_wo_token_in_session_w_token_in_form_w_raises(self):
-        from ZPublisher import BadRequest
+        from ZPublisher import Forbidden
         request = _makeRequestWSession()
         request.form['csrf_token'] = 'deadbeef'
-        self.assertRaises(BadRequest, self._callFUT, request)
+        self.assertRaises(Forbidden, self._callFUT, request)
 
     def test_wo_token_in_session_w_token_in_form_wo_raises(self):
         request = _makeRequestWSession()
@@ -150,19 +153,19 @@ class Test_checkCSRFToken(unittest.TestCase):
         self.assertFalse(self._callFUT(request, raises=False))
 
     def test_w_token_in_session_wo_token_in_form_w_raises(self):
-        from ZPublisher import BadRequest
+        from ZPublisher import Forbidden
         request = _makeRequestWSession(_csrft_='deadbeef')
-        self.assertRaises(BadRequest, self._callFUT, request)
+        self.assertRaises(Forbidden, self._callFUT, request)
 
     def test_w_token_in_session_wo_token_in_form_wo_raises(self):
         request = _makeRequestWSession(_csrft_='deadbeef')
         self.assertFalse(self._callFUT(request, raises=False))
 
     def test_w_token_in_session_w_token_in_form_miss_w_raises(self):
-        from ZPublisher import BadRequest
+        from ZPublisher import Forbidden
         request = _makeRequestWSession(_csrft_='deadbeef')
         request.form['csrf_token'] = 'bab3l0f'
-        self.assertRaises(BadRequest, self._callFUT, request)
+        self.assertRaises(Forbidden, self._callFUT, request)
 
     def test_w_token_in_session_w_token_in_form_miss_wo_raises(self):
         request = _makeRequestWSession(_csrft_='deadbeef')
@@ -214,7 +217,7 @@ class Test_csrf_only(unittest.TestCase):
         self.assertRaises(ValueError, self._callFUT, no_request)
 
     def test_w_function_w_positional_REQUEST(self):
-        from ZPublisher import BadRequest
+        from ZPublisher import Forbidden
         def w_positional_request(foo, bar, REQUEST):
             "I haz REQUEST as positional arg"
             return 42
@@ -222,14 +225,14 @@ class Test_csrf_only(unittest.TestCase):
         self.assertEqual(wrapped.__name__, w_positional_request.__name__)
         self.assertEqual(wrapped.__module__, w_positional_request.__module__)
         self.assertEqual(wrapped.__doc__, w_positional_request.__doc__)
-        self.assertRaises(BadRequest, wrapped, foo=None, bar=None,
+        self.assertRaises(Forbidden, wrapped, foo=None, bar=None,
                           REQUEST=_makeRequestWSession())
         req = _makeRequestWSession(_csrft_='deadbeef')
         req.form['csrf_token'] = 'deadbeef'
         self.assertEqual(wrapped(foo=None, bar=None, REQUEST=req), 42)
 
     def test_w_function_w_optional_REQUEST(self):
-        from ZPublisher import BadRequest
+        from ZPublisher import Forbidden
         def w_optional_request(foo, bar, REQUEST=None):
             "I haz REQUEST as kw arg"
             return 42
@@ -237,7 +240,7 @@ class Test_csrf_only(unittest.TestCase):
         self.assertEqual(wrapped.__name__, w_optional_request.__name__)
         self.assertEqual(wrapped.__module__, w_optional_request.__module__)
         self.assertEqual(wrapped.__doc__, w_optional_request.__doc__)
-        self.assertRaises(BadRequest,
+        self.assertRaises(Forbidden,
                          wrapped, foo=None, bar=None,
                                   REQUEST=_makeRequestWSession())
         req = _makeRequestWSession(_csrft_='deadbeef')

@@ -553,8 +553,6 @@ class ZODBUserManagerTests( unittest.TestCase
         self.assertEqual(uid_and_info, (USER_ID, USER_ID))
 
     def test_updateUserPassword_with_preencrypted_password(self):
-        from AccessControl.AuthEncoding import pw_encrypt
-
         USER_ID = 'already_encrypted'
         PASSWORD = 'password'
 
@@ -594,11 +592,17 @@ class ZODBUserManagerTests( unittest.TestCase
             def getId( self ):
                 return self._id
 
+        req, res = makeRequestAndResponse()
+        req.set('REQUEST_METHOD', 'POST')
+        req.set('method', 'POST')
+        req.SESSION = {'_csrft_': 'deadbeef'}
+        req.form['csrf_token'] = 'deadbeef'
         newSecurityManager(None, FauxUser('user1'))
         try:
             zum.manage_updatePassword('user2@example.com',
                                       'new_password',
                                       'new_password',
+                                      REQUEST=req,
                                      )
         finally:
             noSecurityManager()
@@ -623,14 +627,33 @@ class ZODBUserManagerTests( unittest.TestCase
         # Fails with a GET
         req.set('REQUEST_METHOD', 'GET')
         req.set('method', 'GET')
+        req.set('SESSION', {})
         self.assertRaises(Forbidden, zum.manage_updateUserPassword,
                           USER_ID, PASSWORD, PASSWORD, REQUEST=req)
-        # Works with a POST
+
         req.set('REQUEST_METHOD', 'POST')
         req.set('method', 'POST')
+        self.assertRaises(Forbidden, zum.manage_updateUserPassword,
+                          USER_ID, PASSWORD, PASSWORD, REQUEST=req)
+
+        # Works with a POST + CSRF toekn
+        req.form['csrf_token'] = 'deadbeef'
+        req.SESSION['_csrft_'] = 'deadbeef'
         zum.manage_updateUserPassword(USER_ID, PASSWORD, PASSWORD, REQUEST=req)
 
     def test_manage_updatePassword_POST_permissions(self):
+        from AccessControl.SecurityManagement import newSecurityManager
+        from AccessControl.SecurityManagement import noSecurityManager
+        from Acquisition import Implicit
+        # Give the user a new password; attempting to authenticate with the
+        # old password must fail
+        class FauxUser(Implicit):
+
+            def __init__(self, id):
+                self._id = id
+
+            def getId( self ):
+                return self._id
         USER_ID = 'testuser'
         PASSWORD = 'password'
         ENCRYPTED = pw_encrypt(PASSWORD)
@@ -641,9 +664,23 @@ class ZODBUserManagerTests( unittest.TestCase
         req, res = makeRequestAndResponse()
         req.set('REQUEST_METHOD', 'GET')
         req.set('method', 'GET')
-        self.assertRaises(Forbidden, zum.manage_updatePassword,
-                          USER_ID, PASSWORD, PASSWORD, REQUEST=req)
-        # XXX: This method is broken
+        req.set('SESSION', {})
+        newSecurityManager(None, FauxUser(USER_ID))
+        try:
+            self.assertRaises(Forbidden, zum.manage_updatePassword,
+                            USER_ID, PASSWORD, PASSWORD, REQUEST=req)
+
+            req.set('REQUEST_METHOD', 'POST')
+            req.set('method', 'POST')
+            self.assertRaises(Forbidden, zum.manage_updatePassword,
+                            USER_ID, PASSWORD, PASSWORD, REQUEST=req)
+
+            # Works with a POST + CSRF toekn
+            req.form['csrf_token'] = 'deadbeef'
+            req.SESSION['_csrft_'] = 'deadbeef'
+            zum.manage_updatePassword(USER_ID, PASSWORD, PASSWORD, REQUEST=req)
+        finally:
+            noSecurityManager()
 
     def test_manage_removeUsers_POST_permissions(self):
         USER_ID = 'testuser'
@@ -656,10 +693,17 @@ class ZODBUserManagerTests( unittest.TestCase
         req, res = makeRequestAndResponse()
         req.set('REQUEST_METHOD', 'GET')
         req.set('method', 'GET')
+        req.set('SESSION', {})
         self.assertRaises(Forbidden, zum.manage_removeUsers,
                           [USER_ID], REQUEST=req)
+
         req.set('REQUEST_METHOD', 'POST')
         req.set('method', 'POST')
+        self.assertRaises(Forbidden, zum.manage_removeUsers,
+                          [USER_ID], REQUEST=req)
+
+        req.form['csrf_token'] = 'deadbeef'
+        req.SESSION['_csrft_'] = 'deadbeef'
         zum.manage_removeUsers([USER_ID], REQUEST=req)
 
 

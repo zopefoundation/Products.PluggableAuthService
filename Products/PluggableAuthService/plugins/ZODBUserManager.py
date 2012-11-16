@@ -44,6 +44,7 @@ from Products.PluggableAuthService.permissions import SetOwnPassword
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.utils import classImplements
 from Products.PluggableAuthService.utils import createViewName
+from Products.PluggableAuthService.utils import csrf_only
 
 
 class IZODBUserManager(Interface):
@@ -384,12 +385,15 @@ class ZODBUserManager( BasePlugin, Cacheable ):
                                    )
 
     security.declareProtected( ManageUsers, 'manage_addUser' )
+    @csrf_only
+    @postonly
     def manage_addUser( self
                       , user_id
                       , login_name
                       , password
                       , confirm
                       , RESPONSE=None
+                      , REQUEST=None
                       ):
         """ Add a user via the ZMI.
         """
@@ -413,6 +417,8 @@ class ZODBUserManager( BasePlugin, Cacheable ):
                              )
 
     security.declareProtected( ManageUsers, 'manage_updateUserPassword' )
+    @csrf_only
+    @postonly
     def manage_updateUserPassword( self
                                  , user_id
                                  , password
@@ -435,10 +441,16 @@ class ZODBUserManager( BasePlugin, Cacheable ):
             RESPONSE.redirect( '%s/manage_users?manage_tabs_message=%s'
                              % ( self.absolute_url(), message )
                              )
-    manage_updateUserPassword = postonly(manage_updateUserPassword)
 
     security.declareProtected( ManageUsers, 'manage_updateUser' )
-    def manage_updateUser(self, user_id, login_name, RESPONSE=None):
+    @csrf_only
+    @postonly
+    def manage_updateUser(self
+                         , user_id
+                         , login_name
+                         , RESPONSE=None
+                         , REQUEST=None
+                         ):
         """ Update a user's login name via the ZMI.
         """
         if not login_name:
@@ -456,6 +468,8 @@ class ZODBUserManager( BasePlugin, Cacheable ):
                              )
 
     security.declareProtected( ManageUsers, 'manage_removeUsers' )
+    @csrf_only
+    @postonly
     def manage_removeUsers( self
                           , user_ids
                           , RESPONSE=None
@@ -479,7 +493,6 @@ class ZODBUserManager( BasePlugin, Cacheable ):
             RESPONSE.redirect( '%s/manage_users?manage_tabs_message=%s'
                              % ( self.absolute_url(), message )
                              )
-    manage_removeUsers = postonly(manage_removeUsers)
 
     #
     #   Allow users to change their own login name and password.
@@ -500,6 +513,8 @@ class ZODBUserManager( BasePlugin, Cacheable ):
                                    )
 
     security.declareProtected( SetOwnPassword, 'manage_updatePassword' )
+    @csrf_only
+    @postonly
     def manage_updatePassword( self
                              , login_name
                              , password
@@ -529,7 +544,6 @@ class ZODBUserManager( BasePlugin, Cacheable ):
                                '?manage_tabs_message=%s'
                              % ( self.absolute_url(), message )
                              )
-    manage_updatePassword = postonly(manage_updatePassword)
 
 classImplements( ZODBUserManager
                , IZODBUserManager
