@@ -194,7 +194,7 @@ class CSRFTokenTests(unittest.TestCase):
     def test_wo_token_in_request(self):
         request = _makeRequestWSession()
         token = self._makeOne(request=request)
-        value = token()
+        value = token.token()
         self.assertTrue(isinstance(value, str))
         self.assertFalse(set(value) - set('0123456789abcdef'))
 
@@ -202,7 +202,14 @@ class CSRFTokenTests(unittest.TestCase):
         request = _makeRequestWSession()
         request.SESSION['_csrft_'] = 'deadbeef'
         token = self._makeOne(request=request)
-        self.assertEqual(token(), 'deadbeef')
+        self.assertEqual(token.token(), 'deadbeef')
+
+    def test___call___raises(self):
+        from ZPublisher import Forbidden
+        request = _makeRequestWSession()
+        request.SESSION['_csrft_'] = 'deadbeef'
+        token = self._makeOne(request=request)
+        self.assertRaises(Forbidden, token)
 
 
 class Test_csrf_only(unittest.TestCase):

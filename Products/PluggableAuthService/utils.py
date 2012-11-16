@@ -218,19 +218,21 @@ def checkCSRFToken(request, token='csrf_token', raises=True):
 
 
 class CSRFToken(object):
-    """ View helper for rendering CSRF token in templates.
-
-    E.g., in every protected form, add this::
-
-      <input type="hidden" name="csrf_token"
-             tal:attributes="value context/@@csrf_token" />
-    """
+    # View helper for rendering CSRF token in templates.
+    #
+    # E.g., in every protected form, add this::
+    #
+    #   <input type="hidden" name="csrf_token"
+    #          tal:attributes="value context/@@csrf_token" />
     security = ClassSecurityInfo()
     security.declareObjectPublic()
     def __init__(self, context, request):
         self.context = context
         self.request = request
     def __call__(self):
+        raise Forbidden()
+    def token(self):
+        # API for template use
         return getCSRFToken(self.request)
 
 

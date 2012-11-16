@@ -27,7 +27,7 @@
 
  <form action="." method="POST">
  <input type="hidden" name="csrf_token"
-        tal:attributes="value context/@@csrf_token" />
+        tal:attributes="value context/@@csrf_token/token" />
 
  <tr class="row-hilite"
      tal:repeat="info here/listGroupInfo"
@@ -85,7 +85,7 @@
 
 <form action="manage_addGroup" method="POST">
 <input type="hidden" name="csrf_token"
-       tal:attributes="value context/@@csrf_token" />
+       tal:attributes="value context/@@csrf_token/token" />
 <table
 >
 
@@ -152,7 +152,7 @@
 
 <form action="manage_updateGroup" method="POST">
 <input type="hidden" name="csrf_token"
-       tal:attributes="value context/@@csrf_token" />
+       tal:attributes="value context/@@csrf_token/token" />
 <input type="hidden" name="group_id" value="GROUP_ID"
        tal:attributes="value group_id" />
 <table>

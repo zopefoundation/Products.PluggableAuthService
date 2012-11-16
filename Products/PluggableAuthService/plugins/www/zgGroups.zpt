@@ -30,7 +30,7 @@
 
  <form action="." method="POST">
  <input type="hidden" name="csrf_token"
-        tal:attributes="value context/@@csrf_token" />
+        tal:attributes="value context/@@csrf_token/token" />
 
  <tr class="row-hilite"
      tal:repeat="info here/listGroupInfo"
@@ -87,7 +87,7 @@
 
 <form action="manage_addGroup" method="POST">
 <input type="hidden" name="csrf_token"
-       tal:attributes="value context/@@csrf_token" />
+       tal:attributes="value context/@@csrf_token/token" />
 <table
 >
 
@@ -150,7 +150,7 @@
 
 <form action="manage_updateGroup" method="POST">
 <input type="hidden" name="csrf_token"
-       tal:attributes="value context/@@csrf_token" />
+       tal:attributes="value context/@@csrf_token/token" />
 <input type="hidden" name="group_id" value="GROUP_ID"
        tal:attributes="value group_id" />
 <table>
@@ -211,7 +211,7 @@
 <form action="HERE" method="POST"
       tal:attributes="action string:${here/absolute_url}/manage_groups">
  <input type="hidden" name="csrf_token"
-        tal:attributes="value context/@@csrf_token" />
+        tal:attributes="value context/@@csrf_token/token" />
  <input type="hidden" name="group_id"
         tal:attributes="value group_id" />
  <input type="hidden" name="assign" value="1" />
@@ -245,7 +245,7 @@
                  "
 >
 <input type="hidden" name="csrf_token"
-       tal:attributes="value context/@@csrf_token" />
+       tal:attributes="value context/@@csrf_token/token" />
 
 <table metal:use-macro="here/manage_twoLists/macros/two_lists">
 

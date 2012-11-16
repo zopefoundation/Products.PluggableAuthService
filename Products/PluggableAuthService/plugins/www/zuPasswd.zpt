@@ -5,7 +5,7 @@
 
 <form action="manage_updatePassword" method="POST">
 <input type="hidden" name="csrf_token"
-       tal:attributes="value context/@@csrf_token" />
+       tal:attributes="value context/@@csrf_token/token" />
 <table tal:define="info here/getOwnUserInfo;
                    user_id info/user_id;
                    login_name info/login_name;
