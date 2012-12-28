@@ -159,7 +159,8 @@ class IUserAdderPlugin( Interface ):
     def doAddUser( login, password ):
 
         """ Add a user record to a User Manager, with the given login
-            and password.  The login is used as user id as well.
+            and password.  It is up to the implementation to determine
+            if the login is used as user id as well.
 
         o Return a Boolean indicating whether a user was added or not
         """
