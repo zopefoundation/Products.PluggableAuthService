@@ -325,6 +325,8 @@ class ZODBUserManager( BasePlugin, Cacheable ):
             del self._login_to_userid[old_login]
             self._login_to_userid[login_name] = user_id
             self._userid_to_login[user_id] = login_name
+        # Signal success.
+        return True
 
     security.declarePrivate('updateEveryLoginName')
     def updateEveryLoginName(self, quit_on_first_error=True):

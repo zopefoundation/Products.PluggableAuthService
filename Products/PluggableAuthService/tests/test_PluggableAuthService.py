@@ -117,7 +117,7 @@ class DummyMultiUserEnumerator( DummyPlugin ):
         for info in self.users:
             if info['id'] == user_id:
                 info['login'] = login_name
-                return
+                return True
 
     def updateEveryLoginName(self, quit_on_first_error=True):
         # Let's lowercase all login names.

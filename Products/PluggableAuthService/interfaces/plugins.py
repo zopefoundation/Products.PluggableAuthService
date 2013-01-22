@@ -347,6 +347,13 @@ class IUserEnumerationPlugin( Interface ):
 
     def updateUser( user_id, login_name ):
         """ Update the login name of the user with id user_id.
+
+        The plugin must return True (or any truth value) to indicate a
+        successful update, also when no update was needed.
+
+        When updating a login name makes no sense for a plugin (most
+        likely because it does not actually store login names) and it
+        does not do anything, it must return None or False.
         """
 
     def updateEveryLoginName(quit_on_first_error=True):

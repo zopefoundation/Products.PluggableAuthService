@@ -1308,14 +1308,15 @@ class PluggableAuthService( Folder, Cacheable ):
                             "IUserEnumerationPlugin.", updater_id)
                 continue
             try:
-                updater.updateUser(user_id, login_name)
+                result = updater.updateUser(user_id, login_name)
             except _SWALLOWABLE_PLUGIN_EXCEPTIONS:
                 reraise(updater)
                 logger.debug('UpdateLoginNamePlugin %s error' % updater_id,
                              exc_info=True)
             else:
-                success = True
-                logger.debug("login name changed to: %r", login_name)
+                if result:
+                    success = True
+                    logger.debug("login name changed to: %r", login_name)
 
         if not success:
             raise ValueError("Cannot update login name of user %r to %r. "
