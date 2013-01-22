@@ -4,6 +4,41 @@ Change Log
 1.10.0 (unreleased)
 -------------------
 
+- Added login_transform string property to PAS.
+
+- Added applyTransform method to PAS, which looks for a method on PAS
+  with the name specified in the login_transform property.
+
+- Added two possible transforms to PAS: lower and upper.
+
+- Changed the methods of PAS to call applyTransform wherever needed.
+
+- Added the existing updateUser method of ZODBUserManager to the
+  IUserEnumerationPlugin interface.
+
+- Added a new updateEveryLoginName method to ZODBUserManager and the
+  IUserEnumerationPlugin interface.
+
+- Added three methods to PAS and IPluggableAuthService:
+  updateLoginName, updateOwnLoginName, updateAllLoginNames. These
+  methods call updateUser or updateEveryLoginName on every
+  IUserEnumerationPlugin. Since these are later additions to the
+  plugin interface, we log a warning when a plugin does not have these
+  methods (for example the mutable_properties plugin of PlonePAS,
+  though I will update that one) but will not fail. When no plugin is
+  able to update a user, this will raise an exception: we do not want
+  to quietly let this pass when for example a login name is already
+  taken by another user.
+
+- Changing the login_transform property in the ZMI will call
+  PAS.updateAllLoginNames. If login_transform is the same or has
+  become an empty string, we do not do anything.
+
+- The new login_transform property is empty by default. In that case,
+  the behavior of PAS is the same as previously. The various
+  applyTransform calls will have a (presumably very small) performance
+  impact.
+
 - Launchpad #1079204:  Added CSRF protection for the ZODBUserManager,
   ZODBGroupManager, ZODBRoleManger, and DynamicGroupsPlugin plugins.
 
