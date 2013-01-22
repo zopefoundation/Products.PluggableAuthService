@@ -26,6 +26,7 @@ from Products.PluggableAuthService.tests.conformance \
 from Products.PluggableAuthService.plugins.tests.helpers \
      import makeRequestAndResponse
 
+
 class DummyUser:
 
     def __init__( self, id ):
@@ -33,6 +34,28 @@ class DummyUser:
 
     def getId( self ):
         return self._id
+
+
+class FakePAS(object):
+
+    def _get_login_transform_method(self):
+        return None
+
+    def applyTransform(self, value):
+        return value
+
+
+class FakeLowerCasePAS(object):
+
+    def _get_login_transform_method(self):
+        return self.lower
+
+    def lower(self, value):
+        return value.lower()
+
+    def applyTransform(self, value):
+        return value.lower()
+
 
 class ZODBUserManagerTests( unittest.TestCase
                           , IAuthenticationPlugin_conformance
@@ -469,6 +492,52 @@ class ZODBUserManagerTests( unittest.TestCase
 
         self.assertRaises(ValueError,
                           zum.updateUser, 'user1', 'user2@example.com')
+
+    def test_updateEveryLoginName(self):
+
+        zum = self._makeOne()
+        zum._getPAS = lambda: FakePAS()
+
+        # Create two users and make sure we can authenticate with it
+        zum.addUser( 'User1', 'User1@Example.Com', 'password' )
+        zum.addUser( 'User2', 'User2@Example.Com', 'password' )
+        info1 = { 'login' : 'User1@Example.Com', 'password' : 'password' }
+        info2 = { 'login' : 'User2@Example.Com', 'password' : 'password' }
+        user_id, login = zum.authenticateCredentials(info1)
+        self.assertEqual(user_id, 'User1')
+        self.assertEqual(login, 'User1@Example.Com')
+        user_id, login = zum.authenticateCredentials(info2)
+        self.assertEqual(user_id, 'User2')
+        self.assertEqual(login, 'User2@Example.Com')
+
+        # Give all users a new login, using the applyTransform method
+        # of PAS.  There should be no changes.
+        zum.updateEveryLoginName()
+        self.failUnless(zum.authenticateCredentials(info1))
+        self.failUnless(zum.authenticateCredentials(info2))
+
+        # Use a PAS configured to transform login names to lower case.
+        zum._getPAS = lambda: FakeLowerCasePAS()
+
+        # Update all login names
+        zum.updateEveryLoginName()
+
+        # The old mixed case logins no longer work.  Note that if you
+        # query PAS (via the validate or _extractUserIds method), PAS
+        # is responsible for transforming the login before passing it
+        # to our plugin.
+        self.failIf(zum.authenticateCredentials(info1))
+        self.failIf(zum.authenticateCredentials(info2))
+
+        # Authentication with all lowercase login works.
+        info1 = { 'login' : 'user1@example.com', 'password' : 'password' }
+        info2 = { 'login' : 'user2@example.com', 'password' : 'password' }
+        user_id, login = zum.authenticateCredentials(info1)
+        self.assertEqual(user_id, 'User1')
+        self.assertEqual(login, 'user1@example.com')
+        user_id, login = zum.authenticateCredentials(info2)
+        self.assertEqual(user_id, 'User2')
+        self.assertEqual(login, 'user2@example.com')
 
     def test_enumerateUsersWithOptionalMangling(self):
 

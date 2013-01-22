@@ -210,10 +210,30 @@ class IPluggableAuthService( IUserFolder ):
         default implementation redirects to HTTP_REFERER).
         """
 
-    def resetCredentials(self, request, response):
+    def resetCredentials(request, response):
         """Reset credentials by informing all active resetCredentials
         plugins
         """
+
+    def updateLoginName(user_id, login_name):
+        """Update login name of user.
+        """
+
+    def updateOwnLoginName(login_name):
+        """Update own login name of authenticated user.
+        """
+
+    def updateAllLoginNames(quit_on_first_error=True):
+        """Update login names of all users to their canonical value.
+
+        This should be done after changing the login_transform
+        property of PAS.
+
+        You can set quit_on_first_error to False to report all errors
+        before quitting with an error.  This can be useful if you want
+        to know how many problems there are, if any.
+        """
+
 
 # The IMutableUserFolder and IEnumerableFolder are not supported
 # out-of-the-box by the pluggable authentication service.  These

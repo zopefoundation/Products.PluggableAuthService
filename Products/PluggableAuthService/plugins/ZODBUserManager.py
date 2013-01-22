@@ -16,6 +16,7 @@
 $Id$
 """
 import copy
+import logging
 try:
     from hashlib import sha1 as sha
 except:
@@ -45,6 +46,8 @@ from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.utils import classImplements
 from Products.PluggableAuthService.utils import createViewName
 from Products.PluggableAuthService.utils import csrf_only
+
+logger = logging.getLogger('PluggableAuthService')
 
 
 class IZODBUserManager(Interface):
@@ -322,6 +325,62 @@ class ZODBUserManager( BasePlugin, Cacheable ):
             del self._login_to_userid[old_login]
             self._login_to_userid[login_name] = user_id
             self._userid_to_login[user_id] = login_name
+
+    security.declarePrivate('updateEveryLoginName')
+    def updateEveryLoginName(self, quit_on_first_error=True):
+        # Update all login names to their canonical value.  This
+        # should be done after changing the login_transform property
+        # of pas.  You can set quit_on_first_error to False to report
+        # all errors before quitting with an error.  This can be
+        # useful if you want to know how many problems there are, if
+        # any.
+        pas = self._getPAS()
+        transform = pas._get_login_transform_method()
+        if not transform:
+            logger.warn("PAS has a non-existing, empty or wrong "
+                        "login_transform property.")
+            return
+
+        # Make a fresh mapping, as we do not want to add or remove
+        # items to the original mapping while we are iterating over
+        # it.
+        new_login_to_userid = OOBTree()
+        errors = []
+        for old_login_name, user_id in self._login_to_userid.items():
+            new_login_name = transform(old_login_name)
+            if new_login_name in new_login_to_userid:
+                logger.error("User id %s: login name %r already taken.",
+                             user_id, new_login_name)
+                errors.append(new_login_name)
+                if quit_on_first_error:
+                    break
+            new_login_to_userid[new_login_name] = user_id
+            if new_login_name != old_login_name:
+                self._userid_to_login[user_id] = new_login_name
+                # Also, remove from the cache
+                view_name = createViewName('enumerateUsers', user_id)
+                self.ZCacheable_invalidate(view_name=view_name)
+                logger.debug("User id %s: changed login name from %r to %r.",
+                             user_id, old_login_name, new_login_name)
+
+        # If there were errors, we do not want to save any changes.
+        if errors:
+            logger.error("There were %d errors when updating login names. "
+                         "quit_on_first_error was %r", len(errors),
+                         quit_on_first_error)
+            # Make sure the exception we raise is not swallowed.
+            self._dont_swallow_my_exceptions = True
+            raise ValueError("Transformed login names are not unique: %s." %
+                             ', '.join(errors))
+
+        # Make sure we did not lose any users.
+        assert(len(self._login_to_userid.keys())
+               == len(new_login_to_userid.keys()))
+        # Empty the main cache.
+        view_name = createViewName('enumerateUsers')
+        self.ZCacheable_invalidate(view_name=view_name)
+        # Store the new login mapping.
+        self._login_to_userid = new_login_to_userid
 
     security.declarePrivate( 'removeUser' )
     def removeUser( self, user_id ):

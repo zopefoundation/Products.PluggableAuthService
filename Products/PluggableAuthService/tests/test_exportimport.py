@@ -128,9 +128,11 @@ else:
             self.assertEqual(filename, 'PAS/.properties')
             self.assertEqual(content_type, 'text/plain')
             lines = filter(None, [x.strip() for x in text.splitlines()])
-            self.assertEqual(len(lines), 2)
+            lines = sorted(lines)
+            self.assertEqual(len(lines), 3)
             self.assertEqual(lines[0], '[DEFAULT]')
-            self.assertEqual(lines[1], 'title =')
+            self.assertEqual(lines[1], 'login_transform =')
+            self.assertEqual(lines[2], 'title =')
 
             filename, text, content_type = context._wrote[2]
             self.assertEqual(filename, 'PAS/pluginregistry.xml')
@@ -173,9 +175,11 @@ else:
             self.assertEqual(filename, 'PAS/.properties')
             self.assertEqual(content_type, 'text/plain')
             lines = filter(None, [x.strip() for x in text.splitlines()])
-            self.assertEqual(len(lines), 2)
+            lines = sorted(lines)
+            self.assertEqual(len(lines), 3)
             self.assertEqual(lines[0], '[DEFAULT]')
-            self.assertEqual(lines[1], 'title =')
+            self.assertEqual(lines[1], 'login_transform =')
+            self.assertEqual(lines[2], 'title =')
 
             filename, text, content_type = context._wrote[2]
             self.assertEqual(filename, 'PAS/pluginregistry.xml')

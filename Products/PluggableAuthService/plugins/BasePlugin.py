@@ -117,6 +117,23 @@ class BasePlugin(SimpleItem, PropertyManager):
             view_name = createViewName('_findUser', id)
             pas.ZCacheable_invalidate(view_name)
 
+    security.declarePublic( 'applyTransform' )
+    def applyTransform( self, value ):
+        """ Transform for login name.
+
+        Possibly transform the login, for example by making it lower
+        case.
+
+        Normally this is done in PAS itself, but in some cases a
+        method in a plugin may need to do it itself, when there is no
+        method in PAS that calls that method.
+        """
+        pas = self._getPAS()
+        if pas is not None:
+            return pas.applyTransform(value)
+        return value
+
+
 classImplements(BasePlugin, *implementedBy(SimpleItem))
 
 InitializeClass(BasePlugin)

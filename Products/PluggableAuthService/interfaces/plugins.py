@@ -345,6 +345,21 @@ class IUserEnumerationPlugin( Interface ):
           scaling issues for some implementations.
         """
 
+    def updateUser( user_id, login_name ):
+        """ Update the login name of the user with id user_id.
+        """
+
+    def updateEveryLoginName(quit_on_first_error=True):
+        """Update login names of all users to their canonical value.
+
+        This should be done after changing the login_transform
+        property of PAS.
+
+        You can set quit_on_first_error to False to report all errors
+        before quitting with an error.  This can be useful if you want
+        to know how many problems there are, if any.
+        """
+
 class IGroupEnumerationPlugin( Interface ):
 
     """ Allow querying groups by ID, and searching for groups.
@@ -364,8 +379,8 @@ class IGroupEnumerationPlugin( Interface ):
         o Return mappings for groups matching the given criteria.
 
         o 'id' in combination with 'exact_match' true, will
-          return at most one mapping per supplied ID ('id' and 'login'
-          may be sequences).
+          return at most one mapping per supplied ID ('id'
+          may be a sequence).
 
         o If 'exact_match' is False, then 'id' may be treated by
           the plugin as "contains" searches (more complicated searches
@@ -415,8 +430,8 @@ class IRoleEnumerationPlugin( Interface ):
         o Return mappings for roles matching the given criteria.
 
         o 'id' in combination with 'exact_match' true, will
-          return at most one mapping per supplied ID ('id' and 'login'
-          may be sequences).
+          return at most one mapping per supplied ID ('id'
+          may be a sequence).
 
         o If 'exact_match' is False, then 'id' may be treated by
           the plugin as "contains" searches (more complicated searches

@@ -181,6 +181,18 @@ class PluggableAuthService( Folder, Cacheable ):
 
     maxlistusers = -1   # Don't allow local role form to try to list us!
 
+    # Method for transforming a login name.  This needs to be the name
+    # of a method on this plugin.  See the applyTransform method.
+    login_transform = ''
+
+    _properties = (
+        dict(id='title', type='string', mode='w',
+             label='Title'),
+        dict(id='login_transform', type='string', mode='w',
+             label='Transform to apply to login name'),
+             )
+
+
     def getId( self ):
 
         return self._id
@@ -195,6 +207,7 @@ class PluggableAuthService( Folder, Cacheable ):
         """
         plugins = self._getOb( 'plugins' )
 
+        name = self.applyTransform( name )
         user_info = self._verifyUser( plugins, login=name )
 
         if not user_info:
@@ -294,7 +307,10 @@ class PluggableAuthService( Folder, Cacheable ):
         if search_name:
             if kw.get('id') is not None:
                 del kw['id'] # don't even bother searching by id
-            kw['login'] = kw['name']
+            # Note: name can be a sequence.
+            kw['login'] = self.applyTransform( kw['name'] )
+        if kw.get('login', None):
+            kw['login'] = self.applyTransform( kw['login'] )
 
         plugins = self._getOb( 'plugins' )
         enumerators = plugins.listPlugins( IUserEnumerationPlugin )
@@ -400,9 +416,14 @@ class PluggableAuthService( Folder, Cacheable ):
             if not kw.has_key('title'):
                 kw['title'] = search_name
             kw['login'] = search_name
-
-        users = [ d.copy() for d in self.searchUsers( **kw ) ]
+            
+        # For groups we search the original name
+        # (e.g. Administrators), for users we apply the transform,
+        # which could lowercase the name.
         groups = [ d.copy() for d in self.searchGroups( **kw ) ]
+        if kw.get('login', None):
+            kw['login'] = self.applyTransform( kw['login'] )
+        users = [ d.copy() for d in self.searchUsers( **kw ) ]
 
         if groups_first:
             result = groups + users
@@ -613,6 +634,7 @@ class PluggableAuthService( Folder, Cacheable ):
                     return [ ( user_id, name ) ]
 
                 # Now see if the user ids can be retrieved from the cache
+                credentials['login'] = self.applyTransform( credentials.get('login') )
                 view_name = createViewName('_extractUserIds',
                                            credentials.get('login'))
                 keywords = createKeywords(**credentials)
@@ -723,6 +745,7 @@ class PluggableAuthService( Folder, Cacheable ):
 
         """ Allow IUserFactoryPlugins to create, or fall back to default.
         """
+        name = self.applyTransform( name )
         factories = plugins.listPlugins( IUserFactoryPlugin )
 
         for factory_id, factory in factories:
@@ -744,6 +767,7 @@ class PluggableAuthService( Folder, Cacheable ):
 
         # See if the user can be retrieved from the cache
         view_name = createViewName('_findUser', user_id)
+        name = self.applyTransform( name )
         keywords = createKeywords(user_id=user_id, name=name)
         user = self.ZCacheable_get( view_name=view_name
                                   , keywords=keywords
@@ -805,7 +829,7 @@ class PluggableAuthService( Folder, Cacheable ):
             criteria[ 'id' ] = user_id
 
         if login is not None:
-            criteria[ 'login' ] = login
+            criteria[ 'login' ] = self.applyTransform( login )
 
         view_name = createViewName('_verifyUser', user_id or login)
         keywords = createKeywords(**criteria)
@@ -969,6 +993,7 @@ class PluggableAuthService( Folder, Cacheable ):
         roleassigners = plugins.listPlugins( IRoleAssignerPlugin )
 
         user = None
+        login = self.applyTransform( login )
 
         if not (useradders and roleassigners):
             raise NotImplementedError( "There are no plugins"
@@ -1040,6 +1065,74 @@ class PluggableAuthService( Folder, Cacheable ):
         resp._unauthorized_stack = stack
         resp._unauthorized = self._unauthorized
         resp._has_challenged = False
+
+    security.declarePublic( 'applyTransform' )
+    def applyTransform( self, value ):
+        """ Transform for login name.
+
+        Possibly transform the login, for example by making it lower
+        case.
+
+        value must be a string (or unicode) or it may be a sequence
+        (list, tuple), in which case we need to iterate over it.
+        """
+        if not value:
+            return value
+        transform = self._get_login_transform_method()
+        if not transform:
+            return value
+        if isinstance(value, basestring):
+            return transform(value)
+        result = []
+        for v in value:
+            result.append(transform(v))
+        if isinstance(value, tuple):
+            return tuple(result)
+        return result
+
+    security.declarePrivate( '_get_login_transform_method' )
+    def _get_login_transform_method( self ):
+        """ Get the transform method for the login name or None.
+        """
+        login_transform = getattr(self, 'login_transform', None)
+        if not login_transform:
+            return
+        transform = getattr(self, login_transform.strip(), None)
+        if transform is None:
+            logger.debug("Transform method %r not found in plugin %r.",
+                         self.login_transform, self)
+            return
+        return transform
+
+    security.declarePrivate( '_setPropValue' )
+    def _setPropValue(self, id, value):
+        if id == 'login_transform':
+            orig_value = getattr(self, id)
+        super(PluggableAuthService, self)._setPropValue(id, value)
+        if id == 'login_transform' and value and value != orig_value:
+            logger.debug("login_transform changed from %r to %r. "
+                         "Updating existing login names.", orig_value, value)
+            self.updateAllLoginNames()
+
+    security.declarePublic( 'lower' )
+    def lower( self, value ):
+        """ Transform for login name.
+
+        Strip the value and lowercase it.
+
+        To use this, set login_tranform to 'lower'.
+        """
+        return value.strip().lower()
+
+    security.declarePublic( 'upper' )
+    def upper( self, value ):
+        """ Transform for login name.
+
+        Strip the value and uppercase it.
+
+        To use this, set login_tranform to 'upper'.
+        """
+        return value.strip().upper()
 
     #
     # Response override
@@ -1133,6 +1226,7 @@ class PluggableAuthService( Folder, Cacheable ):
         but the credentials are not stored in the CookieAuthHelper cookie
         but somewhere else, like in a Session.
         """
+        login = self.applyTransform(login)
         plugins = self._getOb('plugins')
         cred_updaters = plugins.listPlugins(ICredentialsUpdatePlugin)
 
@@ -1163,6 +1257,94 @@ class PluggableAuthService( Folder, Cacheable ):
 
             for resetter_id, resetter in cred_resetters:
                 resetter.resetCredentials(request, response)
+
+
+    security.declareProtected( ManageUsers, 'updateLoginName')
+    def updateLoginName(self, user_id, login_name):
+        """Update login name of user.
+        """
+        logger.debug("Called updateLoginName, user_id=%r, login_name=%r",
+                     user_id, login_name)
+        login_name = self.applyTransform(login_name)
+        # Note: we do not call self.getUserById(user_id) here to see
+        # if this user exists, or call getUserName() on the answer to
+        # compare it with the transformed login name, because the user
+        # may be reported with a login name that is transformed on the
+        # fly, for example in the _verifyUser call, even though the
+        # plugin has not actually transformed the login name yet in
+        # the backend.
+        self._updateLoginName(user_id, login_name)
+
+    security.declarePublic('updateOwnLoginName')
+    def updateOwnLoginName(self, login_name):
+        """Update own login name of authenticated user.
+        """
+        logger.debug("Called updateOwnLoginName, login_name=%r", login_name)
+        login_name = self.applyTransform(login_name)
+        user = getSecurityManager().getUser()
+        if aq_base(user) is nobody:
+            return
+        user_id = user.getId()
+        # Note: we do not compare the login name here.  See the
+        # comment in updateLoginName above.
+        self._updateLoginName(user_id, login_name)
+
+    def _updateLoginName(self, user_id, login_name):
+        # Note: we do not compare the login name here.  See the
+        # comment in updateLoginName above.
+        plugins = self._getOb('plugins')
+        updaters = plugins.listPlugins(IUserEnumerationPlugin)
+
+        # Call the updaters.  One of them *must* succeed without an
+        # exception, even if it does not change anything.  When a
+        # login name is already taken, we do not want to fail
+        # silently.
+        success = False
+        for updater_id, updater in updaters:
+            if not hasattr(updater, 'updateUser'):
+                # This was a later addition to the interface, so we
+                # are forgiving.
+                logger.warn("%s plugin lacks updateUser method of "
+                            "IUserEnumerationPlugin.", updater_id)
+                continue
+            try:
+                updater.updateUser(user_id, login_name)
+            except _SWALLOWABLE_PLUGIN_EXCEPTIONS:
+                reraise(updater)
+                logger.debug('UpdateLoginNamePlugin %s error' % updater_id,
+                             exc_info=True)
+            else:
+                success = True
+                logger.debug("login name changed to: %r", login_name)
+
+        if not success:
+            raise ValueError("Cannot update login name of user %r to %r. "
+                             "Possibly duplicate." % (user_id, login_name))
+
+    security.declareProtected( ManageUsers, 'updateLoginName')
+    def updateAllLoginNames(self, quit_on_first_error=True):
+        """Update login names of all users to their canonical value.
+
+        This should be done after changing the login_transform
+        property of PAS.
+
+        You can set quit_on_first_error to False to report all errors
+        before quitting with an error.  This can be useful if you want
+        to know how many problems there are, if any.
+        """
+        plugins = self._getOb('plugins')
+        updaters = plugins.listPlugins(IUserEnumerationPlugin)
+        for updater_id, updater in updaters:
+            if not hasattr(updater, 'updateEveryLoginName'):
+                # This was a later addition to the interface, so we
+                # are forgiving.
+                logger.warn("%s plugin lacks updateEveryLoginName method of "
+                            "IUserEnumerationPlugin.", updater_id)
+                continue
+            # Note: do not swallow any exceptions here.
+            updater.updateEveryLoginName(
+                quit_on_first_error=quit_on_first_error)
+
 
 classImplements( PluggableAuthService
                , (IPluggableAuthService, IObjectManager, IPropertyManager)

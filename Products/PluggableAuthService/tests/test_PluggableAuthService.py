@@ -13,13 +13,12 @@
 ##############################################################################
 import unittest
 
-from Acquisition import Implicit, aq_base, aq_parent
+from Acquisition import Implicit, aq_base
 from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import noSecurityManager
 from AccessControl.SecurityManager import setSecurityPolicy
 from OFS.ObjectManager import ObjectManager
-from OFS.Folder import Folder
-from zExceptions import Unauthorized, Redirect
+from zExceptions import Unauthorized
 
 from Products.PluggableAuthService.utils import directlyProvides
 from zope.interface import implements
@@ -59,10 +58,17 @@ class DummyUserEnumerator( DummyPlugin ):
                    , 'pluginid' : self.PLUGINID
                    } ]
 
-        if kw.get( 'id' ) == _id:
+        # Both id and login can be strings or sequences.
+        user_id = kw.get( 'id' )
+        if isinstance( user_id, basestring ):
+            user_id = [ user_id ]
+        if user_id and _id in user_id:
             return tuple(result)
 
-        if kw.get( 'login' ) == self._login:
+        login = kw.get( 'login' )
+        if isinstance( login, basestring ):
+            login = [ login ]
+        if login and self._login in login:
             return tuple(result)
 
         return ()
@@ -107,6 +113,18 @@ class DummyMultiUserEnumerator( DummyPlugin ):
 
         return tuple(results)
 
+    def updateUser(self, user_id, login_name):
+        for info in self.users:
+            if info['id'] == user_id:
+                info['login'] = login_name
+                return
+
+    def updateEveryLoginName(self, quit_on_first_error=True):
+        # Let's lowercase all login names.
+        for info in self.users:
+            info['login'] = info['login'].lower()
+        
+
 class WantonUserEnumerator(DummyMultiUserEnumerator):
     def enumerateUsers( self, *args, **kw):
         # Always returns everybody.
@@ -150,6 +168,7 @@ class DummySuperEnumerator(DummyUserEnumerator, DummyGroupEnumerator):
         self._login = login
         self._group_id = group_id
         self.identifier = None
+
 
 class DummyGroupPlugin(DummyPlugin):
 
@@ -262,10 +281,6 @@ class FauxRequest( object ):
     def __setitem__( self, key, value ):
 
         self._dict[ key ] = value
-
-    def has_key( self, key ):
-
-        return self._dict.has_key(key)
 
     def _hold(self, something):
         self._held.append(something)
@@ -525,6 +540,20 @@ class PluggableAuthServiceTests( unittest.TestCase
         directlyProvides( cp, IChallengePlugin )
         return cp
 
+    def _makeMultiUserEnumerator( self, *users ):
+        # users should be something like this:
+        # [{'id': 'Foo', 'login': 'foobar'},
+        #  {'id': 'Bar', 'login': 'BAR'}]
+
+        from Products.PluggableAuthService.interfaces.plugins \
+             import IUserEnumerationPlugin
+
+        enumerator = DummyMultiUserEnumerator('enumerator', *users)
+        directlyProvides( enumerator, IUserEnumerationPlugin )
+
+        return enumerator
+
+
     def test_empty( self ):
 
         zcuf = self._makeOne()
@@ -733,7 +762,7 @@ class PluggableAuthServiceTests( unittest.TestCase
     def test__extractUserIds_authenticate_emergency_user_with_broken_extractor( self ):
 
         from Products.PluggableAuthService.interfaces.plugins \
-            import IExtractionPlugin, IAuthenticationPlugin
+            import IExtractionPlugin
 
         from AccessControl.User import UnrestrictedUser
 
@@ -940,6 +969,87 @@ class PluggableAuthServiceTests( unittest.TestCase
         finally:
             PluggableAuthService.emergency_user = old_eu
 
+    def test__extractUserIds_transform( self ):
+
+        from Products.PluggableAuthService.interfaces.plugins \
+            import IExtractionPlugin, IAuthenticationPlugin
+
+        plugins = self._makePlugins()
+        zcuf = self._makeOne( plugins )
+
+        login = DummyPlugin()
+        directlyProvides( login, IExtractionPlugin, IAuthenticationPlugin )
+        login.extractCredentials = _extractLogin
+        login.authenticateCredentials = _authLogin
+        zcuf._setObject( 'login', login )
+        # Make login names lowercase.  User ids are not affected, but
+        # our dummy _authLogin simply reports a tuple with twice the
+        # login name.
+        zcuf.login_transform = 'lower'
+
+        plugins = zcuf._getOb( 'plugins' )
+        plugins.activatePlugin( IExtractionPlugin, 'login' )
+        plugins.activatePlugin( IAuthenticationPlugin, 'login' )
+
+        # Mixed case here.
+        request = self._makeRequest( form={ 'login' : 'Foo'
+                                          , 'password' : 'Bar' } )
+
+        user_ids = zcuf._extractUserIds( request=request
+                                       , plugins=zcuf.plugins
+                                       )
+
+        self.assertEqual( len( user_ids ), 1 )
+        # Lower case here.
+        self.assertEqual( user_ids[0][0], 'foo' )
+
+    def test__extractUserIds_emergency_user_always_wins_in_transform( self ):
+
+        from Products.PluggableAuthService.interfaces.plugins \
+            import IExtractionPlugin, IAuthenticationPlugin
+
+        from AccessControl.User import UnrestrictedUser
+
+        from Products.PluggableAuthService import PluggableAuthService
+
+        old_eu = PluggableAuthService.emergency_user
+
+        # Mixed case here.  We want to test if an emergency user with
+        # mixed (or upper) case login name is found also when the
+        # login_transform is to lower case the login.
+        eu = UnrestrictedUser( 'Foo', 'Bar', ( 'manage', ), () )
+
+        PluggableAuthService.emergency_user = eu
+
+        try:
+            plugins = self._makePlugins()
+            zcuf = self._makeOne( plugins )
+
+            login = DummyPlugin()
+            directlyProvides( login, IExtractionPlugin, IAuthenticationPlugin )
+            login.extractCredentials = lambda req: {'login': 'baz', 'password': ''}
+            login.authenticateCredentials = _authLogin
+
+            zcuf._setObject( 'login', login )
+            zcuf.login_transform = 'lower'
+
+            plugins = zcuf._getOb( 'plugins' )
+
+            plugins.activatePlugin( IExtractionPlugin, 'login' )
+            plugins.activatePlugin( IAuthenticationPlugin, 'login' )
+
+            request = self._makeRequest( form={ 'login' : eu.getUserName()
+                                              , 'password' : eu._getPassword() } )
+
+            # This should authenticate the emergency user and not 'baz'
+            user_ids = zcuf._extractUserIds( request=request
+                                           , plugins=zcuf.plugins
+                                           )
+
+            self.assertEqual( len( user_ids ), 1 )
+            self.assertEqual( user_ids[0][0], 'Foo' )
+        finally:
+            PluggableAuthService.emergency_user = old_eu
 
 
     def _isNotCompetent_test( self, decisions, result):
@@ -1229,6 +1339,66 @@ class PluggableAuthServiceTests( unittest.TestCase
                          None)
         self.assertEqual(zcuf._verifyUser(plugins), None)
 
+    def test__verifyUser_login_transform_lower( self ):
+
+        from Products.PluggableAuthService.interfaces.plugins \
+             import IUserEnumerationPlugin
+
+        plugins = self._makePlugins()
+        zcuf = self._makeOne( plugins )
+        zcuf.login_transform = 'lower'
+
+        enumerator = DummyMultiUserEnumerator(
+            'enumerator',
+            {'id': 'Foo', 'login': 'foobar'},
+            {'id': 'Bar', 'login': 'BAR'})
+        directlyProvides( enumerator, IUserEnumerationPlugin )
+        zcuf._setObject( 'enumerator', enumerator )
+
+        plugins = zcuf._getOb( 'plugins' )
+
+        plugins.activatePlugin( IUserEnumerationPlugin, 'enumerator' )
+
+        # No matter what we try as login parameter, it is always lower
+        # cased before verifying a user.
+        self.failIf(zcuf._verifyUser(plugins, login='BAR'))
+        self.failIf(zcuf._verifyUser(plugins, login='Bar'))
+        self.failIf(zcuf._verifyUser(plugins, login='bar'))
+        self.failUnless(
+            zcuf._verifyUser(plugins, login='FOOBAR')['id'] == 'Foo')
+        self.failUnless(
+            zcuf._verifyUser(plugins, login='Foobar')['id'] == 'Foo')
+        self.failUnless(
+            zcuf._verifyUser(plugins, login='foobar')['id'] == 'Foo')
+
+    def test__verifyUser_login_transform_upper( self ):
+
+        from Products.PluggableAuthService.interfaces.plugins \
+             import IUserEnumerationPlugin
+
+        plugins = self._makePlugins()
+        zcuf = self._makeOne( plugins )
+        zcuf.login_transform = 'upper'
+
+        enumerator = DummyMultiUserEnumerator(
+            'enumerator',
+            {'id': 'Foo', 'login': 'foobar'},
+            {'id': 'Bar', 'login': 'BAR'})
+        directlyProvides( enumerator, IUserEnumerationPlugin )
+        zcuf._setObject( 'enumerator', enumerator )
+
+        plugins = zcuf._getOb( 'plugins' )
+
+        plugins.activatePlugin( IUserEnumerationPlugin, 'enumerator' )
+
+        # No matter what we try as login parameter, it is always upper
+        # cased before verifying a user.
+        self.failUnless(zcuf._verifyUser(plugins, login='BAR')['id'] == 'Bar')
+        self.failUnless(zcuf._verifyUser(plugins, login='Bar')['id'] == 'Bar')
+        self.failUnless(zcuf._verifyUser(plugins, login='bar')['id'] == 'Bar')
+        self.failIf(zcuf._verifyUser(plugins, login='FOOBAR'))
+        self.failIf(zcuf._verifyUser(plugins, login='Foobar'))
+        self.failIf(zcuf._verifyUser(plugins, login='foobar'))
 
     def test__findUser_no_plugins( self ):
 
@@ -1291,6 +1461,42 @@ class PluggableAuthServiceTests( unittest.TestCase
 
         self.assertEqual( faux_user.getId(), 'someone' )
         self.assertEqual( faux_user.getUserName(), 'to watch over me' )
+
+        self.failUnless( faux_user.__class__ is FauxUser )
+
+    def test__findUser_with_userfactory_plugin_and_transform( self ):
+
+        from Products.PluggableAuthService.interfaces.plugins \
+            import IUserFactoryPlugin
+
+        plugins = self._makePlugins()
+        zcuf = self._makeOne( plugins )
+        zcuf.login_transform = 'lower'
+
+        bar = DummyPlugin()
+        directlyProvides( bar, IUserFactoryPlugin )
+
+        def _makeUser( user_id, name ):
+            user = FauxUser( user_id )
+            user._name = name
+            return user
+
+        bar.createUser = _makeUser
+
+        zcuf._setObject( 'bar', bar )
+
+        plugins = zcuf._getOb( 'plugins' )
+
+        real_user = zcuf._findUser( plugins, 'Mixed', 'Case' )
+        self.failIf( real_user.__class__ is FauxUser )
+
+        plugins.activatePlugin( IUserFactoryPlugin , 'bar' )
+
+        faux_user = zcuf._findUser( plugins, 'Mixed', 'Case' )
+
+        self.assertEqual( faux_user.getId(), 'Mixed' )
+        # This is lower case:
+        self.assertEqual( faux_user.getUserName(), 'case' )
 
         self.failUnless( faux_user.__class__ is FauxUser )
 
@@ -1613,6 +1819,35 @@ class PluggableAuthServiceTests( unittest.TestCase
         self.assertEqual( user2.getId(), 'bar/bar')
         self.assertEqual( user2.getUserName(), 'bar@example.com' )
 
+    def test_getUser_login_transform( self ):
+        from Products.PluggableAuthService.interfaces.plugins \
+             import IUserEnumerationPlugin
+
+        plugins = self._makePlugins()
+        zcuf = self._makeOne( plugins )
+        zcuf.login_transform = 'lower'
+
+        # The login_transform is applied in PAS, so we need to lower
+        # case the login ourselves in this test when passing it to a
+        # plugin.
+        bar = self._makeUserEnumerator( 'bar', 'bar@example.com' )
+        bar.identifier = 'bar/'
+        zcuf._setObject( 'bar', bar )
+
+        zcuf.plugins.activatePlugin(IUserEnumerationPlugin, 'bar')
+        # Fetch the new user by ID and name, and check we get the same.
+        user = zcuf.getUserById('bar/bar')
+        self.assertEqual( user.getId(), 'bar/bar')
+        self.assertEqual( user.getUserName(), 'bar@example.com' )
+
+        user2 = zcuf.getUser('bar@example.com')
+        self.assertEqual( user2.getId(), 'bar/bar')
+        self.assertEqual( user2.getUserName(), 'bar@example.com' )
+
+        user3 = zcuf.getUser('Bar@Example.Com')
+        self.assertEqual( user3.getId(), 'bar/bar')
+        self.assertEqual( user3.getUserName(), 'bar@example.com' )
+
     def test_simple_getUserGroups_with_Groupplugin(self):
 
         from Products.PluggableAuthService.interfaces.plugins \
@@ -1774,6 +2009,60 @@ class PluggableAuthServiceTests( unittest.TestCase
                                    , PARENTS=[ object, folder, root ]
                                    , PUBLISHED=acquired_index.__of__( object )
                                    , form={ 'login' : 'olivier'
+                                          , 'password' : 'arras'
+                                          }
+                                   )
+
+
+        wrapped = zcuf.__of__( root )
+
+        validated = wrapped.validate( request )
+        self.assertEqual( validated.getUserName(), 'olivier' )
+
+    def test_validate_simple_authenticated_transform( self ):
+
+        from Products.PluggableAuthService.interfaces.plugins \
+            import IExtractionPlugin, \
+                   IAuthenticationPlugin, \
+                   IUserEnumerationPlugin, \
+                   IRolesPlugin
+
+        plugins = self._makePlugins()
+        zcuf = self._makeOne( plugins )
+
+        login = DummyPlugin()
+        directlyProvides( login, IExtractionPlugin, IAuthenticationPlugin )
+        login.extractCredentials = _extractLogin
+        login.authenticateCredentials = _authLogin
+        zcuf._setObject( 'login', login )
+        # Lower case all logins.
+        zcuf.login_transform = 'lower'
+
+        olivier = DummyPlugin()
+        directlyProvides( olivier, IUserEnumerationPlugin, IRolesPlugin )
+        olivier.enumerateUsers = lambda id: id == 'foo' or None
+        olivier.getRolesForPrincipal = lambda user, req: (
+                     user.getId() == 'olivier' and ( 'Hamlet', ) or () )
+
+        zcuf._setObject( 'olivier', olivier )
+
+        plugins = zcuf._getOb( 'plugins' )
+        plugins.activatePlugin( IExtractionPlugin, 'login' )
+        plugins.activatePlugin( IAuthenticationPlugin, 'login' )
+        plugins.activatePlugin( IUserEnumerationPlugin, 'olivier' )
+        plugins.activatePlugin( IRolesPlugin, 'olivier' )
+
+        rc, root, folder, object = self._makeTree()
+
+        index = FauxObject( 'index_html' )
+        index.__roles__ = ( 'Hamlet', )
+        acquired_index = index.__of__( root ).__of__( object )
+
+        request = self._makeRequest( ( 'folder', 'object', 'index_html' )
+                                   , RESPONSE=FauxResponse()
+                                   , PARENTS=[ object, folder, root ]
+                                   , PUBLISHED=acquired_index.__of__( object )
+                                   , form={ 'login' : 'OLIVIER'
                                           , 'password' : 'arras'
                                           }
                                    )
@@ -1976,6 +2265,89 @@ class PluggableAuthServiceTests( unittest.TestCase
         self.failIf( plugins.listPlugins( IAuthenticationPlugin ) )
         self.failIf( plugins.listPlugins( IUserEnumerationPlugin ) )
 
+    def test_searchUsers( self ):
+
+        from Products.PluggableAuthService.interfaces.plugins \
+             import IUserEnumerationPlugin
+
+        plugins = self._makePlugins()
+        zcuf = self._makeOne( plugins )
+
+        foo = self._makeUserEnumerator( 'foo' )
+        zcuf._setObject( 'foo', foo )
+
+        plugins = zcuf._getOb( 'plugins' )
+        plugins.activatePlugin( IUserEnumerationPlugin, 'foo' )
+
+        # Search by id
+        self.failIf( zcuf.searchUsers( id='zope' ) )
+        self.failUnless( zcuf.searchUsers( id='foo' ) )
+        self.failUnless( len( zcuf.searchUsers( id='foo' )) == 1 )
+
+        # Search by login name
+        self.failIf( zcuf.searchUsers( name='zope' ) )
+        self.failUnless( zcuf.searchUsers( name='foo' ) )
+        self.failUnless( len( zcuf.searchUsers( name='foo' )) == 1 )
+
+        # Login name can be a sequence
+        self.failIf( zcuf.searchUsers( name=['zope'] ) )
+        self.failUnless( zcuf.searchUsers( name=['foo'] ) )
+        self.failUnless( len( zcuf.searchUsers( name=['foo'] )) == 1 )
+        self.failIf( zcuf.searchUsers( name=('zope', ) ) )
+        self.failUnless( zcuf.searchUsers( name=('foo', ) ) )
+        self.failUnless( len( zcuf.searchUsers( name=('foo', ) )) == 1 )
+        self.failUnless( zcuf.searchUsers( name=('foo', 'bar' ) ) )
+        self.failUnless( len( zcuf.searchUsers( name=('foo', 'bar') )) == 1 )
+
+    def test_searchUsers_transform( self ):
+
+        from Products.PluggableAuthService.interfaces.plugins \
+             import IUserEnumerationPlugin
+
+        plugins = self._makePlugins()
+        zcuf = self._makeOne( plugins )
+        zcuf.login_transform = 'lower'
+
+        # user id upper case, login name lower case
+        foo = self._makeUserEnumerator( 'FOO', 'foo' )
+        zcuf._setObject( 'foo', foo )
+        bar = self._makeUserEnumerator( 'BAR', 'bar' )
+        zcuf._setObject( 'bar', bar )
+
+        plugins = zcuf._getOb( 'plugins' )
+        # Note: we only activate 'foo' for now.
+        plugins.activatePlugin( IUserEnumerationPlugin, 'foo' )
+
+        # Search by id
+        self.failIf( zcuf.searchUsers( id='ZOPE' ) )
+        self.failUnless( zcuf.searchUsers( id='FOO' ) )
+        self.failUnless( len( zcuf.searchUsers( id='FOO' )) == 1 )
+
+        # Search by login name
+        self.failIf( zcuf.searchUsers( name='Zope' ) )
+        self.failUnless( zcuf.searchUsers( name='Foo' ) )
+        self.failUnless( len( zcuf.searchUsers( name='Foo' )) == 1 )
+
+        # Login name can be a sequence
+        self.failIf( zcuf.searchUsers( name=['Zope'] ) )
+        self.failUnless( zcuf.searchUsers( name=['Foo'] ) )
+        self.failUnless( len( zcuf.searchUsers( name=['Foo'] )) == 1 )
+        self.failIf( zcuf.searchUsers( name=('Zope', ) ) )
+        self.failUnless( zcuf.searchUsers( name=('Foo', ) ) )
+        self.failUnless( len( zcuf.searchUsers( name=('Foo', ) )) == 1 )
+
+        # Search for more ids or names.
+        self.failUnless( zcuf.searchUsers( id=['FOO', 'BAR', 'ZOPE'] ) )
+        self.failUnless( len( zcuf.searchUsers( id=['FOO', 'BAR', 'ZOPE'] )) == 1 )
+        self.failUnless( zcuf.searchUsers( name=('Foo', 'Bar' , 'Zope' ) ) )
+        self.failUnless( len( zcuf.searchUsers( name=('Foo', 'Bar', 'Zope') )) == 1 )
+
+        # Activate the bar plugin and try again.
+        plugins.activatePlugin( IUserEnumerationPlugin, 'bar' )
+        self.failUnless( len( zcuf.searchUsers( id=['FOO', 'BAR', 'ZOPE'] )) == 2 )
+        self.failUnless( len( zcuf.searchUsers( name=('Foo', 'Bar', 'Zope') )) == 2 )
+
+
     def test_searchGroups( self ):
 
         from Products.PluggableAuthService.interfaces.plugins \
@@ -2040,6 +2412,169 @@ class PluggableAuthServiceTests( unittest.TestCase
         self.failUnless(
             len( zcuf.searchPrincipals(id='group')) == 1 )
 
+    def test_searchPrincipals_transform( self ):
+
+        from Products.PluggableAuthService.interfaces.plugins \
+             import IUserEnumerationPlugin
+        from Products.PluggableAuthService.interfaces.plugins \
+             import IGroupEnumerationPlugin
+
+        plugins = self._makePlugins()
+        zcuf = self._makeOne( plugins )
+        zcuf.login_transform = 'lower'
+
+        foo = self._makeUserEnumerator( 'foo' )
+        zcuf._setObject( 'foo', foo )
+        foobar = self._makeGroupEnumerator( 'Foobar' )
+        zcuf._setObject( 'foobar', foobar )
+
+        plugins = zcuf._getOb( 'plugins' )
+        plugins.activatePlugin( IUserEnumerationPlugin, 'foo' )
+        plugins.activatePlugin( IGroupEnumerationPlugin, 'foobar' )
+
+        self.failIf( zcuf.searchPrincipals( name='zope' ) )
+        # Note that groups are never found by name, only by id.
+        self.failUnless( len( zcuf.searchPrincipals( name='foo' ) ) == 1 )
+        user1 = zcuf.searchPrincipals( name='foo' )[0]
+        self.assertEqual(user1['principal_type'], 'user')
+        self.assertEqual(user1['id'], 'foo')
+        self.assertEqual(user1['login'], 'foo')
+
+        # Search for mixed case.
+        self.failUnless( len( zcuf.searchPrincipals( name='Foo' ) ) == 1 )
+        user2 = zcuf.searchPrincipals( name='Foo' )[0]
+        self.assertEqual(user1, user2)
+
+        # Search for upper case.
+        self.failUnless( len( zcuf.searchPrincipals( name='FOO' ) ) == 1 )
+        user3 = zcuf.searchPrincipals( name='FOO' )[0]
+        self.assertEqual(user1, user3)
+
+    def test_updateLoginName( self ):
+
+        from Products.PluggableAuthService.interfaces.plugins \
+             import IUserEnumerationPlugin
+
+        plugins = self._makePlugins()
+        zcuf = self._makeOne( plugins )
+
+        foo = self._makeMultiUserEnumerator(
+            {'id': 'JOE', 'login': 'Joe'},
+            {'id': 'BART', 'login': 'Bart'})
+        zcuf._setObject( 'foo', foo )
+
+        plugins = zcuf._getOb( 'plugins' )
+        plugins.activatePlugin( IUserEnumerationPlugin, 'foo' )
+
+        users = zcuf.searchUsers(login='Joe')
+        self.assertEqual(len(users), 1)
+        self.assertEqual(users[0]['id'], 'JOE')
+        self.assertEqual(users[0]['login'], 'Joe')
+
+        # Change the login name.
+        zcuf.updateLoginName('JOE', 'James')
+        users = zcuf.searchUsers(login='James')
+        self.assertEqual(len(users), 1)
+        self.assertEqual(users[0]['id'], 'JOE')
+        self.assertEqual(users[0]['login'], 'James')
+
+        # Try lowercase
+        zcuf.login_transform = 'lower'
+        zcuf.updateLoginName('JOE', 'James')
+
+        users = zcuf.searchUsers(login='James')
+        self.assertEqual(len(users), 1)
+        self.assertEqual(users[0]['id'], 'JOE')
+        self.assertEqual(users[0]['login'], 'james')
+
+        users = zcuf.searchUsers(login='james')
+        self.assertEqual(len(users), 1)
+        self.assertEqual(users[0]['id'], 'JOE')
+        self.assertEqual(users[0]['login'], 'james')
+
+    def test_updateOwnLoginName( self ):
+
+        from Products.PluggableAuthService.interfaces.plugins \
+             import IUserEnumerationPlugin
+
+        plugins = self._makePlugins()
+        zcuf = self._makeOne( plugins )
+
+        foo = self._makeMultiUserEnumerator(
+            {'id': 'bart', 'login': 'bart'},
+            {'id': 'joe', 'login': 'joe'})
+        zcuf._setObject( 'foo', foo )
+
+        plugins = zcuf._getOb( 'plugins' )
+        plugins.activatePlugin( IUserEnumerationPlugin, 'foo' )
+
+        users = zcuf.searchUsers(login='joe')
+        self.assertEqual(len(users), 1)
+        self.assertEqual(users[0]['id'], 'joe')
+        self.assertEqual(users[0]['login'], 'joe')
+        users = zcuf.searchUsers(login='bart')
+        self.assertEqual(len(users), 1)
+        self.assertEqual(users[0]['id'], 'bart')
+        self.assertEqual(users[0]['login'], 'bart')
+
+        # Changing the login name will not work when you are not logged in.
+        zcuf.updateOwnLoginName('james')
+        users = zcuf.searchUsers(login='james')
+        self.assertEqual(len(users), 0)
+
+        # Fake a login.
+        newSecurityManager(None, FauxUser('joe', 'joe'))
+        zcuf.updateOwnLoginName('james')
+
+        users = zcuf.searchUsers(login='james')
+        self.assertEqual(len(users), 1)
+        self.assertEqual(users[0]['id'], 'joe')
+        self.assertEqual(users[0]['login'], 'james')
+
+        # The login for bart has not changed.
+        users = zcuf.searchUsers(login='bart')
+        self.assertEqual(len(users), 1)
+        self.assertEqual(users[0]['id'], 'bart')
+        self.assertEqual(users[0]['login'], 'bart')
+
+    def test_updateAllLoginNames( self ):
+
+        from Products.PluggableAuthService.interfaces.plugins \
+             import IUserEnumerationPlugin
+
+        plugins = self._makePlugins()
+        zcuf = self._makeOne( plugins )
+
+        foo = self._makeMultiUserEnumerator(
+            {'id': 'JOE', 'login': 'Joe'},
+            {'id': 'BART', 'login': 'Bart'})
+        zcuf._setObject( 'foo', foo )
+
+        plugins = zcuf._getOb( 'plugins' )
+        plugins.activatePlugin( IUserEnumerationPlugin, 'foo' )
+
+        users = foo.enumerateUsers(login='Joe')
+        self.assertEqual(len(users), 1)
+        self.assertEqual(users[0]['id'], 'JOE')
+        self.assertEqual(users[0]['login'], 'Joe')
+        users = foo.enumerateUsers(login='Bart')
+        self.assertEqual(len(users), 1)
+
+        # Update all login names.  The dummy updater makes every login
+        # name lowercase.
+        zcuf.updateAllLoginNames()
+
+        self.assertEqual(len(foo.enumerateUsers(login='Joe')), 0)
+        self.assertEqual(len(foo.enumerateUsers(login='joe')), 1)
+        self.assertEqual(len(foo.enumerateUsers(login='Bart')), 0)
+        self.assertEqual(len(foo.enumerateUsers(login='bart')), 1)
+
+        # PAS applies the login_transform when searching for users.
+        zcuf.login_transform = 'lower'
+        self.assertEqual(len(zcuf.searchUsers(login='Joe')), 1)
+        self.assertEqual(len(zcuf.searchUsers(login='joe')), 1)
+        self.assertEqual(len(zcuf.searchUsers(login='Bart')), 1)
+        self.assertEqual(len(zcuf.searchUsers(login='bart')), 1)
 
     def test_no_challenger(self):
         # make sure that the response's _unauthorized gets propogated
@@ -2227,6 +2762,54 @@ class PluggableAuthServiceTests( unittest.TestCase
         zcuf.logout(request)
         extracted = creds_store.extractCredentials(request)
         self.failUnless(len(extracted.keys()) == 0)
+
+    def test_applyTransform( self ):
+        zcuf = self._makeOne()
+        self.assertEqual(zcuf.applyTransform(' User '), ' User ')
+        zcuf.login_transform =  'lower'
+        self.assertEqual(zcuf.applyTransform(' User '), 'user')
+        self.assertEqual(zcuf.applyTransform(u' User '), u'user')
+        self.assertEqual(zcuf.applyTransform(''), '')
+        self.assertEqual(zcuf.applyTransform(None), None)
+        self.assertEqual(zcuf.applyTransform([' User ']), ['user'])
+        self.assertEqual(zcuf.applyTransform(('User', ' joe  ', 'Diana')),
+                         ('user', 'joe', 'diana'))
+        self.assertRaises(TypeError, zcuf.applyTransform, 123)
+        zcuf.login_transform =  'upper'
+        self.assertEqual(zcuf.applyTransform(' User '), 'USER')
+        # Let's not fail just because a user has accidentally left a
+        # space at the end of the login_transform name.  That could
+        # lead to hard-to-debug behaviour.
+        zcuf.login_transform =  ' upper  '
+        self.assertEqual(zcuf.applyTransform(' User '), 'USER')
+        # We would want to test what happens when the login_transform
+        # attribute is not there, but the following only removes it
+        # from the instance, not the class.  Oh well.
+        del zcuf.login_transform
+        self.assertEqual(zcuf.applyTransform(' User '), ' User ')
+        zcuf.login_transform =  'nonexisting'
+        self.assertEqual(zcuf.applyTransform(' User '), ' User ')
+
+    def test_get_login_transform_method( self ):
+        zcuf = self._makeOne()
+        self.assertEqual(zcuf._get_login_transform_method(), None)
+        zcuf.login_transform =  'lower'
+        self.assertEqual(zcuf._get_login_transform_method(), zcuf.lower)
+        zcuf.login_transform =  'upper'
+        self.assertEqual(zcuf._get_login_transform_method(), zcuf.upper)
+        # Let's not fail just because a user has accidentally left a
+        # space at the end of the login_transform name.  That could
+        # lead to hard-to-debug behaviour.
+        zcuf.login_transform =  ' upper  '
+        self.assertEqual(zcuf._get_login_transform_method(), zcuf.upper)
+        # We would want to test what happens when the login_transform
+        # attribute is not there, but the following only removes it
+        # from the instance, not the class.  Oh well.
+        del zcuf.login_transform
+        self.assertEqual(zcuf._get_login_transform_method(), None)
+        zcuf.login_transform =  'nonexisting'
+        self.assertEqual(zcuf._get_login_transform_method(), None)
+
 
 if __name__ == "__main__":
     unittest.main()
