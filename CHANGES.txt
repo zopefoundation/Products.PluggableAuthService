@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-1.10.0 (unreleased)
+1.10.0 (2013-02-19)
 -------------------
 
 - Allow specifying a policy for transforming / normalizing login names
