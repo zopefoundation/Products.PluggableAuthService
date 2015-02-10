@@ -12,10 +12,14 @@ def _package_doc(name):
     return f.read()
 
 _boundary = '\n\n'
-README = ( open('README.txt').read()
-         + _boundary
-         + open('CHANGES.txt').read()
-         )
+
+with open('README.rst') as f:
+    README = f.read()
+
+with open('CHANGES.rst') as f:
+    CHANGES = f.read()
+
+README = ( README + _boundary + CHANGES)
 
 setup(name='Products.%s' % NAME,
       version=_package_doc('version.txt').strip(),
