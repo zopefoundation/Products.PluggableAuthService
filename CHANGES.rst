@@ -4,7 +4,8 @@ Change Log
 1.10.1 (unreleased)
 -------------------
 
-- TBD
+- Fix usage of os.path.split(). Could result in Errors during import
+  on Windows.
 
 1.10.0 (2013-02-19)
 -------------------

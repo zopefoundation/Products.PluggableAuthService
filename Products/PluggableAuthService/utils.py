@@ -44,7 +44,7 @@ def classImplements(class_, *interfaces):
 from AccessControl.requestmethod import postonly
 
 product_dir = package_home( globals() )
-product_prefix = os.path.join( os.path.split(product_dir)[:-1] )
+product_prefix = os.path.split(product_dir)[0]
 
 _wwwdir = os.path.join( product_dir, 'www' )
 
@@ -206,11 +206,11 @@ def getCSRFToken(request):
 
 def checkCSRFToken(request, token='csrf_token', raises=True):
     """ Check CSRF token in session against token formdata.
-    
+
     If the values don't match, and 'raises' is True, raise a Forbidden.
-    
+
     If the values don't match, and 'raises' is False, return False.
-    
+
     If the values match, return True.
     """
     if request.form.get(token) != getCSRFToken(request):
@@ -244,7 +244,7 @@ def csrf_only(wrapped):
     if 'REQUEST' not in args:
         raise ValueError("Method doesn't name request")
     r_index = args.index('REQUEST')
- 
+
     arglen = len(args)
     if defaults is not None:
         defaults = zip(args[arglen - len(defaults):], defaults)
