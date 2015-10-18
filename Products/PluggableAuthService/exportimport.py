@@ -20,7 +20,6 @@ from Products.GenericSetup.interfaces import IContentFactory
 from Products.GenericSetup.interfaces import IContentFactoryName
 from Products.GenericSetup.interfaces import IFilesystemExporter
 from Products.GenericSetup.interfaces import IFilesystemImporter
-from Products.GenericSetup.utils import _getDottedName
 
 #
 #   setup_tool handlers
