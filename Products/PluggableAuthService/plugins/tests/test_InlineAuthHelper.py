@@ -11,24 +11,20 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
+from Products.PluggableAuthService.plugins.tests.helpers import FauxContainer
+from Products.PluggableAuthService.plugins.tests.helpers import FauxObject
+from Products.PluggableAuthService.plugins.tests.helpers import FauxRequest
+from Products.PluggableAuthService.plugins.tests.helpers import FauxResponse
+from Products.PluggableAuthService.plugins.tests.helpers import FauxRoot
+from Products.PluggableAuthService.tests import conformance
 import unittest
 
-from Products.PluggableAuthService.tests.conformance \
-     import ILoginPasswordHostExtractionPlugin_conformance
-from Products.PluggableAuthService.tests.conformance \
-     import IChallengePlugin_conformance
-from Products.PluggableAuthService.tests.conformance \
-     import ICredentialsUpdatePlugin_conformance
-from Products.PluggableAuthService.tests.conformance \
-     import ICredentialsResetPlugin_conformance
-
-from Products.PluggableAuthService.tests.test_PluggableAuthService \
-     import FauxRequest, FauxResponse, FauxObject, FauxRoot, FauxContainer
 
 class FauxSettableRequest(FauxRequest):
 
     def set(self, name, value):
         self._dict[name] = value
+
 
 class FauxInlineResponse(FauxResponse):
 
@@ -43,40 +39,42 @@ class FauxInlineResponse(FauxResponse):
     def setBody(self, body, *args, **kw):
         self.body = body
 
-class InlineAuthHelperTests( unittest.TestCase
-                           , ILoginPasswordHostExtractionPlugin_conformance
-                           , IChallengePlugin_conformance
-                           ):
 
-    def _getTargetClass( self ):
+class InlineAuthHelperTests(
+    unittest.TestCase,
+    conformance.ILoginPasswordHostExtractionPlugin_conformance,
+    conformance.IChallengePlugin_conformance
+):
+
+    def _getTargetClass(self):
 
         from Products.PluggableAuthService.plugins.InlineAuthHelper \
             import InlineAuthHelper
 
         return InlineAuthHelper
 
-    def _makeOne( self, id='test', *args, **kw ):
+    def _makeOne(self, id='test', *args, **kw):
 
-        return self._getTargetClass()( id=id, *args, **kw )
+        return self._getTargetClass()(id=id, *args, **kw)
 
-    def _makeTree( self ):
+    def _makeTree(self):
 
-        rc = FauxObject( 'rc' )
-        root = FauxRoot( 'root' ).__of__( rc )
-        folder = FauxContainer( 'folder' ).__of__( root )
-        object = FauxObject( 'object' ).__of__( folder )
+        rc = FauxObject('rc')
+        root = FauxRoot('root').__of__(rc)
+        folder = FauxContainer('folder').__of__(root)
+        object = FauxObject('object').__of__(folder)
 
         return rc, root, folder, object
 
-    def test_extractCredentials_no_creds( self ):
+    def test_extractCredentials_no_creds(self):
 
         helper = self._makeOne()
         response = FauxInlineResponse()
         request = FauxRequest(RESPONSE=response)
 
-        self.assertEqual( helper.extractCredentials( request ), {} )
+        self.assertEqual(helper.extractCredentials(request), {})
 
-    def test_extractCredentials_with_form_creds( self ):
+    def test_extractCredentials_with_form_creds(self):
 
         helper = self._makeOne()
         response = FauxInlineResponse()
@@ -85,13 +83,12 @@ class InlineAuthHelperTests( unittest.TestCase
                                       RESPONSE=response)
 
         self.assertEqual(helper.extractCredentials(request),
-                        {'login': 'foo',
-                         'password': 'bar',
-                         'remote_host': '',
-                         'remote_address': ''})
+                         {'login': 'foo',
+                          'password': 'bar',
+                          'remote_host': '',
+                          'remote_address': ''})
 
-    def test_challenge( self ):
-        from zExceptions import Unauthorized
+    def test_challenge(self):
         rc, root, folder, object = self._makeTree()
         response = FauxInlineResponse()
         request = FauxRequest(RESPONSE=response)
@@ -107,8 +104,8 @@ class InlineAuthHelperTests( unittest.TestCase
 if __name__ == "__main__":
     unittest.main()
 
+
 def test_suite():
     return unittest.TestSuite((
-        unittest.makeSuite( InlineAuthHelperTests ),
-        ))
-
+        unittest.makeSuite(InlineAuthHelperTests),
+    ))

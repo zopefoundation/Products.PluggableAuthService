@@ -16,6 +16,7 @@
 $Id$
 """
 
+
 def _setUpDefaultTraversable():
     from zope.interface import Interface
     from zope.component import provideAdapter

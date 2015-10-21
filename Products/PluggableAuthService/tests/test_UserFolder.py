@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 # Copyright (c) 2006 Zope Foundation and Contributors
@@ -11,24 +12,23 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-
-import os, sys, base64, unittest
-
-from Products.PluggableAuthService.tests import pastc
-
 from AccessControl import Unauthorized
-from AccessControl.Permissions import view as View
 from AccessControl.Permissions import add_folders as AddFolders
-
-from Products.PluggableAuthService.PluggableAuthService import PluggableAuthService
-
-from zope import event
-from zope.component import adapter
-from zope.component import provideHandler
-from Products.PluggableAuthService.interfaces.events import IPrincipalCreatedEvent
+from AccessControl.Permissions import view as View
 from Products.PluggableAuthService.events import CredentialsUpdated
 from Products.PluggableAuthService.events import PASEventNotify
 from Products.PluggableAuthService.events import userCredentialsUpdatedHandler
+from Products.PluggableAuthService.interfaces.events \
+    import IPrincipalCreatedEvent
+from Products.PluggableAuthService.PluggableAuthService \
+    import PluggableAuthService
+from Products.PluggableAuthService.tests import pastc
+from zope import event
+from zope.component import adapter
+from zope.component import provideHandler
+import base64
+import unittest
+
 
 @adapter(IPrincipalCreatedEvent)
 def userCreatedHandler(event):
@@ -182,6 +182,7 @@ class UserFolderTests(pastc.PASTestCase):
         # then put an acl_users object into the folde-ish thing
 
         class Folderish(PluggableAuthService):
+
             def __init__(self, size, count):
                 self.maxlistusers = size
                 self.users = []
@@ -196,7 +197,6 @@ class UserFolderTests(pastc.PASTestCase):
             def user_names(self):
                 return self.getUsers()
 
-
         tinyFolderOver = Folderish(15, 20)
         tinyFolderUnder = Folderish(15, 10)
 
@@ -206,13 +206,13 @@ class UserFolderTests(pastc.PASTestCase):
         assert len(tinyFolderUnder.user_names()) == 10
 
         try:
-            list = tinyFolderOver.get_valid_userids()
+            tinyFolderOver.get_valid_userids()
             assert 0, "Did not raise overflow error"
         except OverflowError:
             pass
 
         try:
-            list = tinyFolderUnder.get_valid_userids()
+            tinyFolderUnder.get_valid_userids()
             pass
         except OverflowError:
             assert 0, "Raised overflow error erroneously"
@@ -229,9 +229,8 @@ class UserFolderTests(pastc.PASTestCase):
         self.uf._doAddUser(USER_ID, PASSWORD, [], [])
 
         uid_and_info = self.uf.users.authenticateCredentials(
-                                { 'login': USER_ID
-                                , 'password': PASSWORD
-                                })
+            {'login': USER_ID, 'password': PASSWORD
+             })
 
         self.assertEqual(uid_and_info, (USER_ID, USER_ID))
 
@@ -247,9 +246,8 @@ class UserFolderTests(pastc.PASTestCase):
         self.uf._doAddUser(USER_ID, ENCRYPTED, [], [])
 
         uid_and_info = self.uf.users.authenticateCredentials(
-                                { 'login': USER_ID
-                                , 'password': PASSWORD
-                                })
+            {'login': USER_ID, 'password': PASSWORD
+             })
 
         self.assertEqual(uid_and_info, (USER_ID, USER_ID))
 
@@ -290,7 +288,6 @@ class UserTests(pastc.PASTestCase):
     def testGetRoles(self):
         f = self.user
         # XXX: PAS returns roles as list
-        #self.assertEqual(f.getRoles(), ('Manager', 'Authenticated'))
         self.assertEqual(f.getRoles(), ['Manager', 'Authenticated'])
 
     def testGetDomains(self):
@@ -324,17 +321,18 @@ class UserEvents(pastc.PASTestCase):
     def testCredentialsEvent(self):
         provideHandler(PASEventNotify)
         provideHandler(userCredentialsUpdatedHandler)
+
         def wrap(self, *args):
             self._data.append(args)
             return self._original(*args)
-        self.uf._data=[]
-        self.uf._original=self.uf.updateCredentials
-        self.uf.updateCredentials=wrap
+        self.uf._data = []
+        self.uf._original = self.uf.updateCredentials
+        self.uf.updateCredentials = wrap
         self.assertEqual(len(self.uf._data), 0)
-        event.notify(CredentialsUpdated(self.uf.getUserById("user1"), "testpassword"))
+        event.notify(CredentialsUpdated(
+            self.uf.getUserById("user1"), "testpassword"))
         self.assertEqual(self.uf._data[0][2], "user1")
         self.assertEqual(self.uf._data[0][3], "testpassword")
-
 
 
 def test_suite():

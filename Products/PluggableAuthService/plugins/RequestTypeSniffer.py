@@ -15,35 +15,28 @@
 
 $Id$
 """
-
-from Acquisition import aq_parent
 from AccessControl import ClassSecurityInfo
 from App.class_init import InitializeClass
-from ZServer.FTPRequest import FTPRequest
-from ZPublisher import xmlrpc
-
-from zope.interface import Interface
-
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-
 from Products.PluggableAuthService.interfaces.plugins \
     import IRequestTypeSniffer
-from Products.PluggableAuthService.interfaces.request \
-    import IBrowserRequest
-from Products.PluggableAuthService.interfaces.request \
-    import IWebDAVRequest
-from Products.PluggableAuthService.interfaces.request \
-    import IFTPRequest
-from Products.PluggableAuthService.interfaces.request \
-    import IXMLRPCRequest
+from Products.PluggableAuthService.interfaces.request import IWebDAVRequest
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PluggableAuthService.utils import classImplements
+from zope.interface import implementer
+from zope.interface import Interface
+from zope.publisher.interfaces.browser import IBrowserRequest
+from zope.publisher.interfaces.ftp import IFTPRequest
+from zope.publisher.interfaces.xmlrpc import IXMLRPCRequest
+from ZPublisher import xmlrpc
+from ZServer.FTPRequest import FTPRequest
+
 
 class IRequestTypeSnifferPlugin(Interface):
     """ Marker interface.
     """
 
 _sniffers = ()
+
 
 def registerSniffer(iface, func):
     global _sniffers
@@ -52,9 +45,10 @@ def registerSniffer(iface, func):
     _sniffers = tuple(registry)
 
 manage_addRequestTypeSnifferForm = PageTemplateFile(
-    'www/rtsAdd', globals(), __name__='manage_addRequestTypeSnifferForm' )
+    'www/rtsAdd', globals(), __name__='manage_addRequestTypeSnifferForm')
 
-def addRequestTypeSnifferPlugin( dispatcher, id, title=None, REQUEST=None ):
+
+def addRequestTypeSnifferPlugin(dispatcher, id, title=None, REQUEST=None):
     """ Add a RequestTypeSnifferPlugin to a Pluggable Auth Service. """
 
     rts = RequestTypeSniffer(id, title)
@@ -62,13 +56,14 @@ def addRequestTypeSnifferPlugin( dispatcher, id, title=None, REQUEST=None ):
 
     if REQUEST is not None:
         REQUEST['RESPONSE'].redirect(
-                                '%s/manage_workspace'
-                                '?manage_tabs_message='
-                                'RequestTypeSniffer+added.'
-                            % dispatcher.absolute_url())
+            '%s/manage_workspace'
+            '?manage_tabs_message='
+            'RequestTypeSniffer+added.'
+            % dispatcher.absolute_url())
 
 
-class RequestTypeSniffer( BasePlugin ):
+@implementer(IRequestTypeSnifferPlugin, IRequestTypeSniffer)
+class RequestTypeSniffer(BasePlugin):
 
     """ PAS plugin for detecting a Request's type
     """
@@ -82,24 +77,22 @@ class RequestTypeSniffer( BasePlugin ):
         self.title = title
 
     security.declarePrivate('sniffRequestType')
+
     def sniffRequestType(self, request):
         found = None
         for iface, func in _sniffers:
-            if func( request ):
+            if func(request):
                 found = iface
 
         if found is not None:
             return found
 
-classImplements(RequestTypeSniffer,
-                IRequestTypeSnifferPlugin,
-                IRequestTypeSniffer,
-               )
-
 InitializeClass(RequestTypeSniffer)
 
 # Most of the sniffing code below has been inspired by
 # similar tests found in BaseRequest, HTTPRequest and ZServer
+
+
 def webdavSniffer(request):
     dav_src = request.get('WEBDAV_SOURCE_PORT', None)
     method = request.get('REQUEST_METHOD', 'GET').upper()
@@ -116,6 +109,7 @@ def webdavSniffer(request):
 
 registerSniffer(IWebDAVRequest, webdavSniffer)
 
+
 def xmlrpcSniffer(request):
     response = request['RESPONSE']
     method = request.get('REQUEST_METHOD', 'GET').upper()
@@ -125,11 +119,13 @@ def xmlrpcSniffer(request):
 
 registerSniffer(IXMLRPCRequest, xmlrpcSniffer)
 
+
 def ftpSniffer(request):
     if isinstance(request, FTPRequest):
         return True
 
 registerSniffer(IFTPRequest, ftpSniffer)
+
 
 def browserSniffer(request):
     # If it's none of the above, it's very likely a browser request.
