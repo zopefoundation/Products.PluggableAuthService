@@ -304,7 +304,7 @@ class DomainAuthHelper(BasePlugin):
             if REQUEST is not None:
                 return self.manage_map(manage_tabs_message=msg)
 
-            raise ValueError, msg
+            raise ValueError(msg)
 
         record = self._domain_map.get(user_id, [])
 

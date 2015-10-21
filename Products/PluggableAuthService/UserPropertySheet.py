@@ -55,7 +55,7 @@ def _guessSchema(kw):
         elif type(v) in _SequenceTypes:
 
             if v and type(v[0]) not in StringTypes:
-                raise ValueError, 'Property %s: sequence items not strings' % k
+                raise ValueError('Property %s: sequence items not strings' % k)
 
             ptype = 'lines'
 
@@ -67,13 +67,13 @@ def _guessSchema(kw):
             if isinstance(v, DateTime):
                 ptype = 'date'
             else:
-                raise ValueError, 'Property %s: unknown class' % k
+                raise ValueError('Property %s: unknown class' % k)
 
         elif isinstance(v, Image):
             ptype = 'image'
 
         elif type(v) not in StringTypes:
-            raise ValueError, 'Property %s: unknown type' % k
+            raise ValueError('Property %s: unknown type' % k)
 
         schema.append((k, ptype))
 

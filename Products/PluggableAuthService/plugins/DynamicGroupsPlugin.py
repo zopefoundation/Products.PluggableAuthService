@@ -101,7 +101,7 @@ class DynamicGroupDefinition(SimpleItem, PropertyManager):
         for k, v in self.propertyItems():
             properties[k] = v
 
-        data = getEngine().getContext({'request':    request, 'nothing':    None, 'principal':  principal, 'group':      properties, 'plugin':     plugin
+        data = getEngine().getContext({'request': request, 'nothing': None, 'principal': principal, 'group': properties, 'plugin': plugin
                                        })
 
         result = predicate(data)
@@ -283,13 +283,13 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
                 original = self._getOb(group_id[len(self.prefix):])
             except AttributeError:
                 if raise_keyerror:
-                    raise KeyError, group_id
+                    raise KeyError(group_id)
                 else:
                     return None
 
         if not isinstance(original, DynamicGroupDefinition):
             if raise_keyerror:
-                raise KeyError, group_id
+                raise KeyError(group_id)
             else:
                 return None
 
@@ -325,7 +325,7 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
           for 'group_id'.
         """
         if group_id in self.listGroupIds():
-            raise KeyError, 'Duplicate group ID: %s' % group_id
+            raise KeyError('Duplicate group ID: %s' % group_id)
 
         info = DynamicGroupDefinition(group_id, predicate, title, description, active
                                       )
@@ -348,7 +348,7 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
         o Don't update 'title', 'description', or 'active' unless supplied.
         """
         if group_id not in self.listGroupIds():
-            raise KeyError, 'Invalid group ID: %s' % group_id
+            raise KeyError('Invalid group ID: %s' % group_id)
 
         group = self._getOb(group_id)
 
@@ -378,7 +378,7 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
           for 'group_id'.
         """
         if group_id not in self.listGroupIds():
-            raise KeyError, 'Invalid group ID: %s' % group_id
+            raise KeyError('Invalid group ID: %s' % group_id)
 
         self._delObject(group_id)
 

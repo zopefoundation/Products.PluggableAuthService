@@ -198,7 +198,7 @@ class DelegatingMultiPlugin(Folder, BasePlugin):
                 user = acl.getUser(login)
             else:
                 msg = 'Exact Match specified but no ID or Login given'
-                raise ValueError, msg
+                raise ValueError(msg)
 
             if user is not None:
                 result.append({'id': user.getId(), 'login': user.getUserName(), 'pluginid': plugin_id, 'editurl': '%s' % edit_url

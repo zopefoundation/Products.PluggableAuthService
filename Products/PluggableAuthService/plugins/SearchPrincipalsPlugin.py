@@ -96,7 +96,8 @@ class SearchPrincipalsPlugin(BasePlugin):
         if acl is None:
             return ()
 
-        return acl.searchUsers(id=id, login=login, exact_match=exact_match, sort_by=sort_by, max_results=max_results, **kw)
+        return acl.searchUsers(id=id, login=login, exact_match=exact_match,
+                               sort_by=sort_by, max_results=max_results, **kw)
 
     security.declarePrivate('enumerateGroups')
 
@@ -108,7 +109,8 @@ class SearchPrincipalsPlugin(BasePlugin):
         if acl is None:
             return ()
 
-        return acl.searchGroups(id=id, exact_match=exact_match, sort_by=sort_by, max_results=max_results, **kw)
+        return acl.searchGroups(
+            id=id, exact_match=exact_match, sort_by=sort_by, max_results=max_results, **kw)
 
 classImplements(SearchPrincipalsPlugin, ISearchPrincipalsPlugin, IUserEnumerationPlugin, IGroupEnumerationPlugin
                 )

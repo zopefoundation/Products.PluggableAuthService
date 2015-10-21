@@ -26,7 +26,8 @@ class FauxPAS(FauxContainer):
     def __init__(self):
         self._id = 'acl_users'
 
-    def _getGroupsForPrincipal(self, principal, request=None, plugins=None, ignore_plugins=None):
+    def _getGroupsForPrincipal(
+            self, principal, request=None, plugins=None, ignore_plugins=None):
         all_groups = []
 
         if ignore_plugins is None:

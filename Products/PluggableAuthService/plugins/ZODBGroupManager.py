@@ -174,7 +174,7 @@ class ZODBGroupManager(BasePlugin):
         o Raise KeyError on duplicate.
         """
         if self._groups.get(group_id) is not None:
-            raise KeyError, 'Duplicate group ID: %s' % group_id
+            raise KeyError('Duplicate group ID: %s' % group_id)
 
         self._groups[group_id] = {'id': group_id, 'title': title, 'description': description
                                   }

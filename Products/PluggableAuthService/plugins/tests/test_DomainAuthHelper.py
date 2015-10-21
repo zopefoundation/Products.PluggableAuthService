@@ -141,7 +141,8 @@ class DomainAuthHelperTests(unittest.TestCase, IExtractionPlugin_conformance, IA
 
         self.assertEqual(helper.authenticateCredentials(creds), ('qux', 'qux'))
 
-    def test_authenticateCredentials_w_mapping_no_login_known_remote_host(self):
+    def test_authenticateCredentials_w_mapping_no_login_known_remote_host(
+            self):
         creds = {'remote_host': 'baz'}
         helper = self._makeOne()
         helper.manage_addMapping(match_type='equals',

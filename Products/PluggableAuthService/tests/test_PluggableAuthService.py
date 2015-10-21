@@ -303,7 +303,7 @@ class FauxResponse:
         pass
 
     def notFoundError(self, message):
-        raise FauxNotFoundError, message
+        raise FauxNotFoundError(message)
 
     def _unauthorized(self):
         self.challenger = self
@@ -760,7 +760,8 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance, Requ
         self.assertEqual(len(user_ids), 1)
         self.assertEqual(user_ids[0][0], 'foo')
 
-    def test__extractUserIds_authenticate_emergency_user_with_broken_extractor(self):
+    def test__extractUserIds_authenticate_emergency_user_with_broken_extractor(
+            self):
 
         from Products.PluggableAuthService.interfaces.plugins \
             import IExtractionPlugin
@@ -800,7 +801,8 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance, Requ
         finally:
             PluggableAuthService.emergency_user = old_eu
 
-    def test__extractUserIds_broken_authenticator_before_good_authenticator(self):
+    def test__extractUserIds_broken_authenticator_before_good_authenticator(
+            self):
 
         from Products.PluggableAuthService.interfaces.plugins \
             import IExtractionPlugin, IAuthenticationPlugin
@@ -835,7 +837,8 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance, Requ
         self.assertEqual(len(user_ids), 1)
         self.assertEqual(user_ids[0][0], 'foo')
 
-    def test__extractUserIds_broken_authenticator_after_good_authenticator(self):
+    def test__extractUserIds_broken_authenticator_after_good_authenticator(
+            self):
 
         from Products.PluggableAuthService.interfaces.plugins \
             import IExtractionPlugin, IAuthenticationPlugin
@@ -870,7 +873,8 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance, Requ
         self.assertEqual(len(user_ids), 1)
         self.assertEqual(user_ids[0][0], 'foo')
 
-    def test__extractUserIds_authenticate_emergency_user_with_broken_authenticator(self):
+    def test__extractUserIds_authenticate_emergency_user_with_broken_authenticator(
+            self):
 
         from Products.PluggableAuthService.interfaces.plugins \
             import IExtractionPlugin, IAuthenticationPlugin

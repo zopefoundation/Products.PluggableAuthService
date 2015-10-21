@@ -284,10 +284,10 @@ class ZODBUserManager(BasePlugin, Cacheable):
     def addUser(self, user_id, login_name, password):
 
         if self._user_passwords.get(user_id) is not None:
-            raise KeyError, 'Duplicate user ID: %s' % user_id
+            raise KeyError('Duplicate user ID: %s' % user_id)
 
         if self._login_to_userid.get(login_name) is not None:
-            raise KeyError, 'Duplicate login name: %s' % login_name
+            raise KeyError('Duplicate login name: %s' % login_name)
 
         self._user_passwords[user_id] = self._pw_encrypt(password)
         self._login_to_userid[login_name] = user_id
@@ -377,7 +377,7 @@ class ZODBUserManager(BasePlugin, Cacheable):
     def removeUser(self, user_id):
 
         if self._user_passwords.get(user_id) is None:
-            raise KeyError, 'Invalid user ID: %s' % user_id
+            raise KeyError('Invalid user ID: %s' % user_id)
 
         login_name = self._userid_to_login[user_id]
 
@@ -396,7 +396,7 @@ class ZODBUserManager(BasePlugin, Cacheable):
     def updateUserPassword(self, user_id, password):
 
         if self._user_passwords.get(user_id) is None:
-            raise KeyError, 'Invalid user ID: %s' % user_id
+            raise KeyError('Invalid user ID: %s' % user_id)
 
         if password:
             self._user_passwords[user_id] = self._pw_encrypt(password)
