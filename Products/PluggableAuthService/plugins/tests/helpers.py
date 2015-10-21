@@ -14,36 +14,39 @@
 from Products.PluggableAuthService.tests.test_PluggableAuthService \
     import FauxContainer
 
-class FauxPAS( FauxContainer ):
 
-    def __init__( self ):
+class FauxPAS(FauxContainer):
+
+    def __init__(self):
         self._id = 'acl_users'
 
-    def searchPrincipals( self, **kw ):
-        id = kw.get( 'id' )
-        return [ { 'id': id } ]
+    def searchPrincipals(self, **kw):
+        id = kw.get('id')
+        return [{'id': id}]
 
-class FauxSmartPAS( FauxContainer ):
 
-    def __init__( self ):
+class FauxSmartPAS(FauxContainer):
+
+    def __init__(self):
         self._id = 'acl_users'
         self.user_ids = {}
 
-    def searchPrincipals( self, **kw ):
-        id = kw.get( 'id' )
+    def searchPrincipals(self, **kw):
+        id = kw.get('id')
         prin = self.user_ids.get(id, None)
-        return (prin and [ { 'id': id } ]) or []
+        return (prin and [{'id': id}]) or []
+
 
 class DummyUser:
 
-    def __init__( self, id, groups=() ):
+    def __init__(self, id, groups=()):
         self._id = id
         self._groups = groups
 
-    def getId( self ):
+    def getId(self):
         return self._id
 
-    def getGroups( self ):
+    def getGroups(self):
         return self._groups
 
 

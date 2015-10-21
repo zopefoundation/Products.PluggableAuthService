@@ -7,6 +7,7 @@ NAME = 'PluggableAuthService'
 here = os.path.abspath(os.path.dirname(__file__))
 package = os.path.join(here, 'Products', NAME)
 
+
 def _package_doc(name):
     f = open(os.path.join(package, name))
     return f.read()
@@ -19,23 +20,23 @@ with open('README.rst') as f:
 with open('CHANGES.rst') as f:
     CHANGES = f.read()
 
-README = ( README + _boundary + CHANGES)
+README = (README + _boundary + CHANGES)
 
 setup(name='Products.%s' % NAME,
       version=_package_doc('version.txt').strip(),
       description='Pluggable Zope2 authentication / authorization framework',
       long_description=README,
       classifiers=[
-        "Development Status :: 5 - Production/Stable",
-        "Framework :: Plone",
-        "Framework :: Zope2",
-        "Intended Audience :: Developers",
-        "License :: OSI Approved :: Zope Public License",
-        "Programming Language :: Python",
-        "Topic :: Software Development",
-        "Topic :: System :: Systems Administration :: "
-                "Authentication/Directory",
-        ],
+          "Development Status :: 5 - Production/Stable",
+          "Framework :: Plone",
+          "Framework :: Zope2",
+          "Intended Audience :: Developers",
+          "License :: OSI Approved :: Zope Public License",
+          "Programming Language :: Python",
+          "Topic :: Software Development",
+          "Topic :: System :: Systems Administration :: "
+          "Authentication/Directory",
+      ],
       keywords='web application server zope zope2',
       author="Zope Foundation and Contributors",
       author_email="zope-cmf@zope.org",
@@ -50,9 +51,9 @@ setup(name='Products.%s' % NAME,
           'Products.PluginRegistry',
           'Products.GenericSetup',
           'Zope2 >= 2.12',
-          ],
+      ],
       extras_require={'ip_range': ['IPy'],
-                     },
+                      },
       entry_points="""
       [zope2.initialize]
       Products.%s = Products.%s:initialize

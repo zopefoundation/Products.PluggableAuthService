@@ -38,6 +38,8 @@ class IRegisterMultiPlugin(Interface):
 
 
 _mt_regs = []
+
+
 def registerMultiPlugin(_context, class_=None, meta_type=None):
     """ Add a new meta_type to the registry.
     """
@@ -51,10 +53,10 @@ def registerMultiPlugin(_context, class_=None, meta_type=None):
     _mt_regs.append(meta_type)
 
     _context.action(
-        discriminator = ('registerMultiPlugin', meta_type),
+        discriminator=('registerMultiPlugin', meta_type),
         callable = rMP,
         args = (meta_type,),
-        )
+    )
 
 
 def cleanUp():

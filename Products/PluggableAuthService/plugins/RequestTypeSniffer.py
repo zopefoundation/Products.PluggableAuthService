@@ -39,11 +39,13 @@ from Products.PluggableAuthService.interfaces.request \
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.utils import classImplements
 
+
 class IRequestTypeSnifferPlugin(Interface):
     """ Marker interface.
     """
 
 _sniffers = ()
+
 
 def registerSniffer(iface, func):
     global _sniffers
@@ -52,9 +54,10 @@ def registerSniffer(iface, func):
     _sniffers = tuple(registry)
 
 manage_addRequestTypeSnifferForm = PageTemplateFile(
-    'www/rtsAdd', globals(), __name__='manage_addRequestTypeSnifferForm' )
+    'www/rtsAdd', globals(), __name__='manage_addRequestTypeSnifferForm')
 
-def addRequestTypeSnifferPlugin( dispatcher, id, title=None, REQUEST=None ):
+
+def addRequestTypeSnifferPlugin(dispatcher, id, title=None, REQUEST=None):
     """ Add a RequestTypeSnifferPlugin to a Pluggable Auth Service. """
 
     rts = RequestTypeSniffer(id, title)
@@ -62,13 +65,13 @@ def addRequestTypeSnifferPlugin( dispatcher, id, title=None, REQUEST=None ):
 
     if REQUEST is not None:
         REQUEST['RESPONSE'].redirect(
-                                '%s/manage_workspace'
-                                '?manage_tabs_message='
-                                'RequestTypeSniffer+added.'
-                            % dispatcher.absolute_url())
+            '%s/manage_workspace'
+            '?manage_tabs_message='
+            'RequestTypeSniffer+added.'
+            % dispatcher.absolute_url())
 
 
-class RequestTypeSniffer( BasePlugin ):
+class RequestTypeSniffer(BasePlugin):
 
     """ PAS plugin for detecting a Request's type
     """
@@ -82,10 +85,11 @@ class RequestTypeSniffer( BasePlugin ):
         self.title = title
 
     security.declarePrivate('sniffRequestType')
+
     def sniffRequestType(self, request):
         found = None
         for iface, func in _sniffers:
-            if func( request ):
+            if func(request):
                 found = iface
 
         if found is not None:
@@ -94,12 +98,14 @@ class RequestTypeSniffer( BasePlugin ):
 classImplements(RequestTypeSniffer,
                 IRequestTypeSnifferPlugin,
                 IRequestTypeSniffer,
-               )
+                )
 
 InitializeClass(RequestTypeSniffer)
 
 # Most of the sniffing code below has been inspired by
 # similar tests found in BaseRequest, HTTPRequest and ZServer
+
+
 def webdavSniffer(request):
     dav_src = request.get('WEBDAV_SOURCE_PORT', None)
     method = request.get('REQUEST_METHOD', 'GET').upper()
@@ -116,6 +122,7 @@ def webdavSniffer(request):
 
 registerSniffer(IWebDAVRequest, webdavSniffer)
 
+
 def xmlrpcSniffer(request):
     response = request['RESPONSE']
     method = request.get('REQUEST_METHOD', 'GET').upper()
@@ -125,11 +132,13 @@ def xmlrpcSniffer(request):
 
 registerSniffer(IXMLRPCRequest, xmlrpcSniffer)
 
+
 def ftpSniffer(request):
     if isinstance(request, FTPRequest):
         return True
 
 registerSniffer(IFTPRequest, ftpSniffer)
+
 
 def browserSniffer(request):
     # If it's none of the above, it's very likely a browser request.

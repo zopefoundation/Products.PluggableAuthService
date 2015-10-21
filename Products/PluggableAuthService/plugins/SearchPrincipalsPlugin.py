@@ -17,7 +17,8 @@
 """
 
 # General Python imports
-import copy, os
+import copy
+import os
 from urllib import quote_plus
 
 # Zope imports
@@ -32,29 +33,25 @@ from zope.interface import Interface
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
 from Products.PluggableAuthService.interfaces.plugins import \
-     IUserEnumerationPlugin
+    IUserEnumerationPlugin
 from Products.PluggableAuthService.interfaces.plugins import \
-     IGroupEnumerationPlugin
+    IGroupEnumerationPlugin
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.utils import classImplements
+
 
 class ISearchPrincipalsPlugin(Interface):
     """ Marker interface.
     """
 
 addSearchPrincipalsPluginForm = PageTemplateFile(
-    'www/sppAdd', globals(), __name__='addSearchPrincipalsPluginForm' )
+    'www/sppAdd', globals(), __name__='addSearchPrincipalsPluginForm')
 
 
-def addSearchPrincipalsPlugin( dispatcher
-                             , id
-                             , title=''
-                             , delegate_path=''
-                             , REQUEST=None
-                             ):
+def addSearchPrincipalsPlugin(dispatcher, id, title='', delegate_path='', REQUEST=None
+                              ):
     """ Factory method to instantiate a SearchPrincipalsPlugin """
-    spp = SearchPrincipalsPlugin( id, title=title
-                                , delegate_path=delegate_path )
+    spp = SearchPrincipalsPlugin(id, title=title, delegate_path=delegate_path)
     dispatcher._setObject(id, spp)
 
     if REQUEST is not None:
@@ -68,13 +65,9 @@ class SearchPrincipalsPlugin(BasePlugin):
     security = ClassSecurityInfo()
     meta_type = 'Search Principals Plugin'
 
-    _properties = ( { 'id' : 'delegate'
-                    , 'label' : ' Delegate Path'
-                    , 'type' : 'string'
-                    , 'mode' : 'w'
-                    }
-                  ,
-                  )
+    _properties = ({'id': 'delegate', 'label': ' Delegate Path', 'type': 'string', 'mode': 'w'
+                    },
+                   )
 
     def __init__(self, id, title='', delegate_path=''):
         """ Initialize a new instance """
@@ -83,6 +76,7 @@ class SearchPrincipalsPlugin(BasePlugin):
         self.delegate = delegate_path
 
     security.declarePrivate('_getDelegate')
+
     def _getDelegate(self):
         """ Safely retrieve a PluggableAuthService to work with """
         uf = getattr(aq_base(self), 'acl_users', None)
@@ -93,51 +87,30 @@ class SearchPrincipalsPlugin(BasePlugin):
         return uf
 
     security.declarePrivate('enumerateUsers')
-    def enumerateUsers( self
-                      , id=None
-                      , login=None
-                      , exact_match=0
-                      , sort_by=None
-                      , max_results=None
-                      , **kw
-                      ):
+
+    def enumerateUsers(self, id=None, login=None, exact_match=0, sort_by=None, max_results=None, **kw
+                       ):
         """ see IUserEnumerationPlugin """
         acl = self._getDelegate()
 
         if acl is None:
             return ()
 
-        return acl.searchUsers( id=id
-                              , login=login
-                              , exact_match=exact_match
-                              , sort_by=sort_by
-                              , max_results=max_results
-                              , **kw )
+        return acl.searchUsers(id=id, login=login, exact_match=exact_match, sort_by=sort_by, max_results=max_results, **kw)
 
     security.declarePrivate('enumerateGroups')
-    def enumerateGroups( self
-                       , id=None
-                       , exact_match=0
-                       , sort_by=None
-                       , max_results=None
-                       , **kw
-                       ):
+
+    def enumerateGroups(self, id=None, exact_match=0, sort_by=None, max_results=None, **kw
+                        ):
         """ see IGroupEnumerationPlugin """
         acl = self._getDelegate()
 
         if acl is None:
             return ()
 
-        return acl.searchGroups( id=id
-                               , exact_match=exact_match
-                               , sort_by=sort_by
-                               , max_results=max_results
-                               , **kw )
+        return acl.searchGroups(id=id, exact_match=exact_match, sort_by=sort_by, max_results=max_results, **kw)
 
-classImplements( SearchPrincipalsPlugin
-               , ISearchPrincipalsPlugin
-               , IUserEnumerationPlugin
-               , IGroupEnumerationPlugin
-               )
+classImplements(SearchPrincipalsPlugin, ISearchPrincipalsPlugin, IUserEnumerationPlugin, IGroupEnumerationPlugin
+                )
 
 InitializeClass(SearchPrincipalsPlugin)

@@ -12,7 +12,10 @@
 #
 ##############################################################################
 
-import os, sys, base64, unittest
+import os
+import sys
+import base64
+import unittest
 
 from Products.PluggableAuthService.tests import pastc
 
@@ -29,6 +32,7 @@ from Products.PluggableAuthService.interfaces.events import IPrincipalCreatedEve
 from Products.PluggableAuthService.events import CredentialsUpdated
 from Products.PluggableAuthService.events import PASEventNotify
 from Products.PluggableAuthService.events import userCredentialsUpdatedHandler
+
 
 @adapter(IPrincipalCreatedEvent)
 def userCreatedHandler(event):
@@ -182,6 +186,7 @@ class UserFolderTests(pastc.PASTestCase):
         # then put an acl_users object into the folde-ish thing
 
         class Folderish(PluggableAuthService):
+
             def __init__(self, size, count):
                 self.maxlistusers = size
                 self.users = []
@@ -195,7 +200,6 @@ class UserFolderTests(pastc.PASTestCase):
 
             def user_names(self):
                 return self.getUsers()
-
 
         tinyFolderOver = Folderish(15, 20)
         tinyFolderUnder = Folderish(15, 10)
@@ -229,9 +233,8 @@ class UserFolderTests(pastc.PASTestCase):
         self.uf._doAddUser(USER_ID, PASSWORD, [], [])
 
         uid_and_info = self.uf.users.authenticateCredentials(
-                                { 'login': USER_ID
-                                , 'password': PASSWORD
-                                })
+            {'login': USER_ID, 'password': PASSWORD
+             })
 
         self.assertEqual(uid_and_info, (USER_ID, USER_ID))
 
@@ -247,9 +250,8 @@ class UserFolderTests(pastc.PASTestCase):
         self.uf._doAddUser(USER_ID, ENCRYPTED, [], [])
 
         uid_and_info = self.uf.users.authenticateCredentials(
-                                { 'login': USER_ID
-                                , 'password': PASSWORD
-                                })
+            {'login': USER_ID, 'password': PASSWORD
+             })
 
         self.assertEqual(uid_and_info, (USER_ID, USER_ID))
 
@@ -324,17 +326,18 @@ class UserEvents(pastc.PASTestCase):
     def testCredentialsEvent(self):
         provideHandler(PASEventNotify)
         provideHandler(userCredentialsUpdatedHandler)
+
         def wrap(self, *args):
             self._data.append(args)
             return self._original(*args)
-        self.uf._data=[]
-        self.uf._original=self.uf.updateCredentials
-        self.uf.updateCredentials=wrap
+        self.uf._data = []
+        self.uf._original = self.uf.updateCredentials
+        self.uf.updateCredentials = wrap
         self.assertEqual(len(self.uf._data), 0)
-        event.notify(CredentialsUpdated(self.uf.getUserById("user1"), "testpassword"))
+        event.notify(CredentialsUpdated(
+            self.uf.getUserById("user1"), "testpassword"))
         self.assertEqual(self.uf._data[0][2], "user1")
         self.assertEqual(self.uf._data[0][3], "testpassword")
-
 
 
 def test_suite():

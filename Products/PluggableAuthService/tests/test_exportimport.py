@@ -28,7 +28,7 @@ except ImportError:  # No GenericSetup, so no tests
 else:
     from Products.GenericSetup.tests.common import BaseRegistryTests
     from Products.PluggableAuthService.tests.utils import \
-            _setUpDefaultTraversable
+        _setUpDefaultTraversable
 
     from zope.component.testing import PlacelessSetup
 
@@ -165,7 +165,7 @@ else:
 
             object_id, type_name = objects[0]
             self.assertEqual(object_id, 'plugins')
-            self.assertEqual(type_name, 'plugins') # adapter-driven
+            self.assertEqual(type_name, 'plugins')  # adapter-driven
 
             object_id, type_name = objects[1]
             self.assertEqual(object_id, 'csv_plugin')
@@ -262,7 +262,7 @@ else:
             context._files['PAS/.objects'] = _EMPTY_PAS_OBJECTS
             context._files['PAS/.properties'] = _EMPTY_PAS_PROPERTIES
             context._files['PAS/pluginregistry.xml'
-                          ] = _EMPTY_PLUGINREGISTRY_EXPORT
+                           ] = _EMPTY_PLUGINREGISTRY_EXPORT
 
             self.failUnless(pas.plugins.listPluginTypeInfo())
             importPAS(context)
@@ -281,9 +281,9 @@ else:
             context._files['PAS/.objects'] = _PAS_WITH_CSV_PLUGIN_OBJECTS
             context._files['PAS/.properties'] = _EMPTY_PAS_PROPERTIES
             context._files['PAS/pluginregistry.xml'
-                          ] = _EMPTY_PLUGINREGISTRY_EXPORT
+                           ] = _EMPTY_PLUGINREGISTRY_EXPORT
             context._files['PAS/csv_plugin.csv'
-                          ] = KNOWN_CSV
+                           ] = KNOWN_CSV
 
             self.assertEqual(len(pas.objectIds()), 1)
             self.failUnless('plugins' in pas.objectIds())
@@ -298,7 +298,6 @@ else:
             self.failUnless(csv_plugin.__class__ is TestCSVAware)
             self.assertEqual(csv_plugin._was_put.getvalue().strip(),
                              KNOWN_CSV.strip())
-
 
     _EMPTY_PAS_OBJECTS = """\
 plugins,plugins
@@ -322,6 +321,6 @@ title =
 
     def test_suite():
         return unittest.TestSuite((
-            unittest.makeSuite( Test_exportPAS ),
-            unittest.makeSuite( Test_importPAS ),
-            ))
+            unittest.makeSuite(Test_exportPAS),
+            unittest.makeSuite(Test_importPAS),
+        ))

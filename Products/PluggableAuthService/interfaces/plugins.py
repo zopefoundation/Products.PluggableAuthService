@@ -19,13 +19,12 @@ $Id$
 from zope.interface import Interface
 
 
-class IExtractionPlugin( Interface ):
+class IExtractionPlugin(Interface):
 
     """ Extracts login name and credentials from a request.
     """
 
-    def extractCredentials( request ):
-
+    def extractCredentials(request):
         """ request -> {...}
 
         o Return a mapping of any derived credentials.
@@ -34,13 +33,13 @@ class IExtractionPlugin( Interface ):
           appropriate credentials.
         """
 
-class ILoginPasswordExtractionPlugin( IExtractionPlugin ):
+
+class ILoginPasswordExtractionPlugin(IExtractionPlugin):
 
     """ Common-case derivative.
     """
 
-    def extractCredentials( request ):
-
+    def extractCredentials(request):
         """ request -> { 'login' : login
                        , 'password' : password
                        , k1 : v1
@@ -55,13 +54,13 @@ class ILoginPasswordExtractionPlugin( IExtractionPlugin ):
           appropriate credentials.
         """
 
-class ILoginPasswordHostExtractionPlugin( ILoginPasswordExtractionPlugin ):
+
+class ILoginPasswordHostExtractionPlugin(ILoginPasswordExtractionPlugin):
 
     """ Common-case derivative.
     """
 
-    def extractCredentials( request ):
-
+    def extractCredentials(request):
         """ request -> { 'login' : login
                        , 'password' : password
                        , 'remote_host' : remote_host
@@ -79,13 +78,13 @@ class ILoginPasswordHostExtractionPlugin( ILoginPasswordExtractionPlugin ):
           appropriate credentials.
         """
 
-class IAuthenticationPlugin( Interface ):
+
+class IAuthenticationPlugin(Interface):
 
     """ Map credentials to a user ID.
     """
 
-    def authenticateCredentials( credentials ):
-
+    def authenticateCredentials(credentials):
         """ credentials -> (userid, login)
 
         o 'credentials' will be a mapping, as returned by IExtractionPlugin.
@@ -96,7 +95,8 @@ class IAuthenticationPlugin( Interface ):
         o If the credentials cannot be authenticated, return None.
         """
 
-class IChallengePlugin( Interface ):
+
+class IChallengePlugin(Interface):
 
     """ Initiate a challenge to the user to provide credentials.
 
@@ -109,8 +109,7 @@ class IChallengePlugin( Interface ):
         challenge.
     """
 
-    def challenge( request, response ):
-
+    def challenge(request, response):
         """ Assert via the response that credentials will be gathered.
 
         Takes a REQUEST object and a RESPONSE object.
@@ -128,7 +127,8 @@ class IChallengePlugin( Interface ):
             login form page, for instance)
         """
 
-class ICredentialsUpdatePlugin( Interface ):
+
+class ICredentialsUpdatePlugin(Interface):
 
     """ Callback:  user has changed her password.
 
@@ -136,28 +136,27 @@ class ICredentialsUpdatePlugin( Interface ):
     it is used after a successful password change event.
     """
 
-    def updateCredentials( request, response, login, new_password ):
-
+    def updateCredentials(request, response, login, new_password):
         """ Scribble as appropriate.
         """
 
-class ICredentialsResetPlugin( Interface ):
+
+class ICredentialsResetPlugin(Interface):
 
     """ Callback:  user has logged out.
     """
 
-    def resetCredentials( request, response ):
-
+    def resetCredentials(request, response):
         """ Scribble as appropriate.
         """
 
-class IUserAdderPlugin( Interface ):
+
+class IUserAdderPlugin(Interface):
 
     """ Create a new user record in a User Manager
     """
 
-    def doAddUser( login, password ):
-
+    def doAddUser(login, password):
         """ Add a user record to a User Manager, with the given login
             and password.  It is up to the implementation to determine
             if the login is used as user id as well.
@@ -165,56 +164,55 @@ class IUserAdderPlugin( Interface ):
         o Return a Boolean indicating whether a user was added or not
         """
 
-class IRoleAssignerPlugin( Interface ):
+
+class IRoleAssignerPlugin(Interface):
 
     """ Assign a role to an identified principal
     """
 
-    def doAssignRoleToPrincipal( principal_id, role ):
-
+    def doAssignRoleToPrincipal(principal_id, role):
         """ Create a principal/role association in a Role Manager
 
         o Return a Boolean indicating whether the role was assigned or not
         """
 
-    def doRemoveRoleFromPrincipal( principal_id, role ):
-
+    def doRemoveRoleFromPrincipal(principal_id, role):
         """ Remove a principal/role association from a Role Manager
 
         o Return a Boolean indicating whether the role was removed or not
         """
 
-class IUserFactoryPlugin( Interface ):
+
+class IUserFactoryPlugin(Interface):
 
     """ Create a new IPropertiedUser.
     """
 
-    def createUser( user_id, name ):
-
+    def createUser(user_id, name):
         """ Return a user, if possible.
 
         o Return None to allow another plugin, or the default, to fire.
         """
 
-class IAnonymousUserFactoryPlugin( Interface ):
+
+class IAnonymousUserFactoryPlugin(Interface):
 
     """ Create a new anonymous IPropertiedUser.
     """
 
     def createAnonymousUser():
-
         """ Return an anonymous user, if possible.
 
         o Return None to allow another plugin, or the default, to fire.
         """
 
-class IPropertiesPlugin( Interface ):
+
+class IPropertiesPlugin(Interface):
 
     """ Return a property set for a user.
     """
 
-    def getPropertiesForUser( user, request=None ):
-
+    def getPropertiesForUser(user, request=None):
         """ user -> {}
 
         o User will implement IPropertiedUser.
@@ -229,13 +227,13 @@ class IPropertiesPlugin( Interface ):
           present
         """
 
-class IGroupsPlugin( Interface ):
+
+class IGroupsPlugin(Interface):
 
     """ Determine the groups to which a user belongs.
     """
 
-    def getGroupsForPrincipal( principal, request=None ):
-
+    def getGroupsForPrincipal(principal, request=None):
         """ principal -> ( group_1, ... group_N )
 
         o Return a sequence of group names to which the principal
@@ -244,13 +242,13 @@ class IGroupsPlugin( Interface ):
         o May assign groups based on values in the REQUEST object, if present
         """
 
-class IRolesPlugin( Interface ):
+
+class IRolesPlugin(Interface):
 
     """ Determine the (global) roles which a user has.
     """
 
-    def getRolesForPrincipal( principal, request=None ):
-
+    def getRolesForPrincipal(principal, request=None):
         """ principal -> ( role_1, ... role_N )
 
         o Return a sequence of role names which the principal has.
@@ -258,17 +256,18 @@ class IRolesPlugin( Interface ):
         o May assign roles based on values in the REQUEST object, if present.
         """
 
-class IUpdatePlugin( Interface ):
+
+class IUpdatePlugin(Interface):
 
     """ Allow the user or the application to update the user's properties.
     """
 
-    def updateUserInfo( user, set_id, set_info ):
-
+    def updateUserInfo(user, set_id, set_info):
         """ Update backing store for 'set_id' using 'set_info'.
         """
 
-class IValidationPlugin( Interface ):
+
+class IValidationPlugin(Interface):
 
     """ Specify allowable values for user properties.
 
@@ -277,8 +276,7 @@ class IValidationPlugin( Interface ):
     o Operate on entire property sets, not individual properties.
     """
 
-    def validateUserInfo( user, set_id, set_info ):
-
+    def validateUserInfo(user, set_id, set_info):
         """ -> ( error_info_1, ... error_info_N )
 
         o Returned values are dictionaries, containing at least keys:
@@ -289,21 +287,16 @@ class IValidationPlugin( Interface ):
           'error' -- the message string, suitable for display to the user.
         """
 
-class IUserEnumerationPlugin( Interface ):
+
+class IUserEnumerationPlugin(Interface):
 
     """ Allow querying users by ID, and searching for users.
 
     o XXX:  can these be done by a single plugin?
     """
 
-    def enumerateUsers( id=None
-                      , login=None
-                      , exact_match=False
-                      , sort_by=None
-                      , max_results=None
-                      , **kw
-                      ):
-
+    def enumerateUsers(id=None, login=None, exact_match=False, sort_by=None, max_results=None, **kw
+                       ):
         """ -> ( user_info_1, ... user_info_N )
 
         o Return mappings for users matching the given criteria.
@@ -345,7 +338,7 @@ class IUserEnumerationPlugin( Interface ):
           scaling issues for some implementations.
         """
 
-    def updateUser( user_id, login_name ):
+    def updateUser(user_id, login_name):
         """ Update the login name of the user with id user_id.
 
         The plugin must return True (or any truth value) to indicate a
@@ -367,20 +360,16 @@ class IUserEnumerationPlugin( Interface ):
         to know how many problems there are, if any.
         """
 
-class IGroupEnumerationPlugin( Interface ):
+
+class IGroupEnumerationPlugin(Interface):
 
     """ Allow querying groups by ID, and searching for groups.
 
     o XXX:  can these be done by a single plugin?
     """
 
-    def enumerateGroups( id=None
-                       , exact_match=False
-                       , sort_by=None
-                       , max_results=None
-                       , **kw
-                       ):
-
+    def enumerateGroups(id=None, exact_match=False, sort_by=None, max_results=None, **kw
+                        ):
         """ -> ( group_info_1, ... group_info_N )
 
         o Return mappings for groups matching the given criteria.
@@ -421,17 +410,13 @@ class IGroupEnumerationPlugin( Interface ):
           scaling issues for some implementations.
         """
 
-class IRoleEnumerationPlugin( Interface ):
+
+class IRoleEnumerationPlugin(Interface):
 
     """ Allow querying roles by ID, and searching for roles.
     """
-    def enumerateRoles( id=None
-                      , exact_match=False
-                      , sort_by=None
-                      , max_results=None
-                      , **kw
-                      ):
-
+    def enumerateRoles(id=None, exact_match=False, sort_by=None, max_results=None, **kw
+                       ):
         """ -> ( role_info_1, ... role_info_N )
 
         o Return mappings for roles matching the given criteria.
@@ -472,20 +457,22 @@ class IRoleEnumerationPlugin( Interface ):
           scaling issues for some implementations.
         """
 
-class IRequestTypeSniffer( Interface ):
+
+class IRequestTypeSniffer(Interface):
 
     """ Given a request, detects the request type for later use by other plugins.
     """
-    def sniffRequestType( request ):
+    def sniffRequestType(request):
         """ Return a interface identifying what kind the request is.
         """
 
-class IChallengeProtocolChooser( Interface ):
+
+class IChallengeProtocolChooser(Interface):
 
     """ Choose a proper set of protocols to be used for challenging
     the client given a request.
     """
-    def chooseProtocols( request ):
+    def chooseProtocols(request):
         """ -> ( protocol_1, ... protocol_N) | None
 
         o If a set of protocols is returned, the first plugin with a
@@ -504,7 +491,7 @@ class IChallengeProtocolChooser( Interface ):
 #
 
 
-class INotCompetentPlugin( Interface ):
+class INotCompetentPlugin(Interface):
 
     """check whether this user folder is not competent to authenticate.
 
@@ -514,6 +501,5 @@ class INotCompetentPlugin( Interface ):
     """
 
     def isNotCompetentToAuthenticate(request):
-
         """return true if this user folder should not authenticate *request*.
         """

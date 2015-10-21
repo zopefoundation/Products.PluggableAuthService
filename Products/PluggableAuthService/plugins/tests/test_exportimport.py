@@ -23,15 +23,16 @@ try:
 except ImportError:  # No GenericSetup, so no tests
 
     print 'XXXX:  No GenericSetup!'
+
     def test_suite():
         return unittest.TestSuite()
 
 else:
 
     from Products.GenericSetup.tests.conformance \
-            import ConformsToIFilesystemExporter
+        import ConformsToIFilesystemExporter
     from Products.GenericSetup.tests.conformance \
-            import ConformsToIFilesystemImporter
+        import ConformsToIFilesystemImporter
 
     from Products.GenericSetup.tests.common import BaseRegistryTests
     from Products.GenericSetup.tests.common import DummyExportContext
@@ -83,11 +84,11 @@ else:
             context = DummyExportContext(plugin)
             adapter.export(context, 'plugins', False)
 
-            self.assertEqual( len( context._wrote ), 1 )
-            filename, text, content_type = context._wrote[ 0 ]
-            self.assertEqual( filename, 'plugins/empty.xml' )
-            self._compareDOM( text, _EMPTY_ZODB_USERS )
-            self.assertEqual( content_type, 'text/xml' )
+            self.assertEqual(len(context._wrote), 1)
+            filename, text, content_type = context._wrote[0]
+            self.assertEqual(filename, 'plugins/empty.xml')
+            self._compareDOM(text, _EMPTY_ZODB_USERS)
+            self.assertEqual(content_type, 'text/xml')
 
         def test__getExportInfo_with_users(self):
 
@@ -129,8 +130,8 @@ else:
             context = DummyExportContext(plugin)
             adapter.export(context, 'plugins', False)
 
-            self.assertEqual( len(context._wrote), 1)
-            filename, text, content_type = context._wrote[ 0 ]
+            self.assertEqual(len(context._wrote), 1)
+            filename, text, content_type = context._wrote[0]
             self.assertEqual(filename, 'plugins/with_users.xml')
             self._compareDOM(text, _FILLED_ZODB_USERS % tuple(hashes))
             self.assertEqual(content_type, 'text/xml')
@@ -152,7 +153,7 @@ else:
             for info, hash in zip(_ZODB_USER_INFO, HASHES):
                 user_id = info['user_id']
                 self.assertEqual(plugin.getLoginForUserId(user_id),
-                                info['login_name'])
+                                 info['login_name'])
                 self.assertEqual(plugin._user_passwords[user_id], hash)
 
         def test_import_without_purge_leaves_existing_users(self):
@@ -227,11 +228,11 @@ else:
             context = DummyExportContext(plugin)
             adapter.export(context, 'plugins', False)
 
-            self.assertEqual( len( context._wrote ), 1 )
-            filename, text, content_type = context._wrote[ 0 ]
-            self.assertEqual( filename, 'plugins/empty.xml' )
-            self._compareDOM( text, _EMPTY_ZODB_GROUPS )
-            self.assertEqual( content_type, 'text/xml' )
+            self.assertEqual(len(context._wrote), 1)
+            filename, text, content_type = context._wrote[0]
+            self.assertEqual(filename, 'plugins/empty.xml')
+            self._compareDOM(text, _EMPTY_ZODB_GROUPS)
+            self.assertEqual(content_type, 'text/xml')
 
         def test__getExportInfo_with_groups(self):
 
@@ -267,8 +268,8 @@ else:
             context = DummyExportContext(plugin)
             adapter.export(context, 'plugins', False)
 
-            self.assertEqual( len(context._wrote), 1)
-            filename, text, content_type = context._wrote[ 0 ]
+            self.assertEqual(len(context._wrote), 1)
+            filename, text, content_type = context._wrote[0]
             self.assertEqual(filename, 'plugins/with_groups.xml')
             self._compareDOM(text, _FILLED_ZODB_GROUPS)
             self.assertEqual(content_type, 'text/xml')
@@ -372,11 +373,11 @@ else:
             context = DummyExportContext(plugin)
             adapter.export(context, 'plugins', False)
 
-            self.assertEqual( len( context._wrote ), 1 )
-            filename, text, content_type = context._wrote[ 0 ]
-            self.assertEqual( filename, 'plugins/empty.xml' )
-            self._compareDOM( text, _EMPTY_ZODB_ROLES )
-            self.assertEqual( content_type, 'text/xml' )
+            self.assertEqual(len(context._wrote), 1)
+            filename, text, content_type = context._wrote[0]
+            self.assertEqual(filename, 'plugins/empty.xml')
+            self._compareDOM(text, _EMPTY_ZODB_ROLES)
+            self.assertEqual(content_type, 'text/xml')
 
         def test__getExportInfo_with_roles(self):
 
@@ -412,8 +413,8 @@ else:
             context = DummyExportContext(plugin)
             adapter.export(context, 'plugins', False)
 
-            self.assertEqual( len(context._wrote), 1)
-            filename, text, content_type = context._wrote[ 0 ]
+            self.assertEqual(len(context._wrote), 1)
+            filename, text, content_type = context._wrote[0]
             self.assertEqual(filename, 'plugins/with_roles.xml')
             self._compareDOM(text, _FILLED_ZODB_ROLES)
             self.assertEqual(content_type, 'text/xml')
@@ -525,12 +526,12 @@ else:
 
             self.assertEqual(len(context._wrote), 1)
             filename, text, content_type = context._wrote[0]
-            self.assertEqual(filename, 'plugins/default.xml' )
+            self.assertEqual(filename, 'plugins/default.xml')
             self._compareDOM(text,
                              _COOKIE_AUTH_TEMPLATE_NO_TITLE % (CAH.cookie_name,
                                                                CAH.login_path,
-                                                              ))
-            self.assertEqual( content_type, 'text/xml' )
+                                                               ))
+            self.assertEqual(content_type, 'text/xml')
 
         def test__getExportInfo_explicitly_set(self):
             TITLE = 'Plugin Title'
@@ -564,13 +565,13 @@ else:
 
             self.assertEqual(len(context._wrote), 1)
             filename, text, content_type = context._wrote[0]
-            self.assertEqual(filename, 'plugins/explicit.xml' )
+            self.assertEqual(filename, 'plugins/explicit.xml')
             self._compareDOM(text,
                              _COOKIE_AUTH_TEMPLATE % (TITLE,
                                                       COOKIE_NAME,
                                                       LOGIN_PATH,
-                                                     ))
-            self.assertEqual( content_type, 'text/xml' )
+                                                      ))
+            self.assertEqual(content_type, 'text/xml')
 
         def test_import_with_title(self):
             TITLE = 'Plugin Title'
@@ -581,15 +582,15 @@ else:
 
             context = DummyImportContext(plugin)
             context._files['plugins/with_title.xml'
-                          ] = _COOKIE_AUTH_TEMPLATE % (TITLE,
-                                                       COOKIE_NAME,
-                                                       LOGIN_PATH,
-                                                      )
+                           ] = _COOKIE_AUTH_TEMPLATE % (TITLE,
+                                                        COOKIE_NAME,
+                                                        LOGIN_PATH,
+                                                        )
             adapter.import_(context, 'plugins', False)
 
-            self.assertEqual( plugin.title, TITLE )
-            self.assertEqual( plugin.cookie_name, COOKIE_NAME )
-            self.assertEqual( plugin.login_path, LOGIN_PATH )
+            self.assertEqual(plugin.title, TITLE)
+            self.assertEqual(plugin.cookie_name, COOKIE_NAME)
+            self.assertEqual(plugin.login_path, LOGIN_PATH)
 
         def test_import_no_title(self):
             TITLE = 'Plugin Title'
@@ -603,14 +604,14 @@ else:
 
             context = DummyImportContext(plugin)
             context._files['plugins/no_title.xml'
-                          ] = _COOKIE_AUTH_TEMPLATE_NO_TITLE % (COOKIE_NAME,
-                                                                LOGIN_PATH,
-                                                               )
+                           ] = _COOKIE_AUTH_TEMPLATE_NO_TITLE % (COOKIE_NAME,
+                                                                 LOGIN_PATH,
+                                                                 )
             adapter.import_(context, 'plugins', False)
 
-            self.assertEqual( plugin.title, None )
-            self.assertEqual( plugin.cookie_name, COOKIE_NAME )
-            self.assertEqual( plugin.login_path, LOGIN_PATH )
+            self.assertEqual(plugin.title, None)
+            self.assertEqual(plugin.cookie_name, COOKIE_NAME)
+            self.assertEqual(plugin.login_path, LOGIN_PATH)
 
     class DomainAuthHelperExportImportTests(_TestBase):
 
@@ -635,7 +636,7 @@ else:
                                      match_type='equals',
                                      match_string='host.example.com',
                                      roles=['foo', 'bar'],
-                                    )
+                                     )
             self.assertEqual(len(adapter.listExportableItems()), 0)
 
         def test__getExportInfo_empty(self):
@@ -655,11 +656,11 @@ else:
             context = DummyExportContext(plugin)
             adapter.export(context, 'plugins', False)
 
-            self.assertEqual( len( context._wrote ), 1 )
-            filename, text, content_type = context._wrote[ 0 ]
-            self.assertEqual( filename, 'plugins/empty.xml' )
-            self._compareDOM( text, _EMPTY_DOMAIN_AUTH )
-            self.assertEqual( content_type, 'text/xml' )
+            self.assertEqual(len(context._wrote), 1)
+            filename, text, content_type = context._wrote[0]
+            self.assertEqual(filename, 'plugins/empty.xml')
+            self._compareDOM(text, _EMPTY_DOMAIN_AUTH)
+            self.assertEqual(content_type, 'text/xml')
 
         def test__getExportInfo_with_map(self):
             TITLE = 'With Map'
@@ -673,7 +674,7 @@ else:
                                      match_type='equals',
                                      match_string=DOMAIN,
                                      roles=ROLES,
-                                    )
+                                     )
 
             info = adapter._getExportInfo()
             self.assertEqual(info['title'], TITLE)
@@ -702,24 +703,24 @@ else:
                                      match_type='equals',
                                      match_string=DOMAIN,
                                      roles=ROLES,
-                                    )
+                                     )
 
             context = DummyExportContext(plugin)
             adapter.export(context, 'plugins', False)
 
             self.assertEqual(len(context._wrote), 1)
             filename, text, content_type = context._wrote[0]
-            self.assertEqual(filename, 'plugins/with_map.xml' )
+            self.assertEqual(filename, 'plugins/with_map.xml')
             self._compareDOM(text,
                              _FILLED_DOMAIN_AUTH %
-                              (TITLE,
-                               USER_ID,
-                               DOMAIN,
-                               'equals',
-                               ','.join(ROLES),
-                               USER_ID,
+                             (TITLE,
+                              USER_ID,
+                              DOMAIN,
+                              'equals',
+                              ','.join(ROLES),
+                              USER_ID,
                               ))
-            self.assertEqual( content_type, 'text/xml' )
+            self.assertEqual(content_type, 'text/xml')
 
         def test_import_empty(self):
             from Products.PluggableAuthService.plugins.DomainAuthHelper \
@@ -733,13 +734,13 @@ else:
 
             context = DummyImportContext(plugin)
             context._files['plugins/empty.xml'
-                          ] = _FILLED_DOMAIN_AUTH % (TITLE,
-                                                     USER_ID,
-                                                     DOMAIN,
-                                                     'equals',
-                                                     ','.join(ROLES),
-                                                     USER_ID,
-                                                    )
+                           ] = _FILLED_DOMAIN_AUTH % (TITLE,
+                                                      USER_ID,
+                                                      DOMAIN,
+                                                      'equals',
+                                                      ','.join(ROLES),
+                                                      USER_ID,
+                                                      )
             self.assertEqual(plugin.title, '')
 
             adapter.import_(context, 'plugins', False)
@@ -773,7 +774,7 @@ else:
                                      match_type='equals',
                                      match_string=DOMAIN,
                                      roles=ROLES,
-                                    )
+                                     )
 
             adapter = self._makeOne(plugin)
 
@@ -798,7 +799,7 @@ else:
                                      match_type='equals',
                                      match_string=DOMAIN,
                                      roles=ROLES,
-                                    )
+                                     )
             adapter = self._makeOne(plugin)
 
             context = DummyImportContext(plugin, purge=True)
@@ -859,11 +860,11 @@ else:
             context = DummyExportContext(plugin)
             adapter.export(context, 'plugins', False)
 
-            self.assertEqual( len( context._wrote ), 1 )
-            filename, text, content_type = context._wrote[ 0 ]
-            self.assertEqual( filename, 'plugins/no_title.xml' )
-            self._compareDOM( text, _TITLE_ONLY_TEMPLATE_NO_TITLE )
-            self.assertEqual( content_type, 'text/xml' )
+            self.assertEqual(len(context._wrote), 1)
+            filename, text, content_type = context._wrote[0]
+            self.assertEqual(filename, 'plugins/no_title.xml')
+            self._compareDOM(text, _TITLE_ONLY_TEMPLATE_NO_TITLE)
+            self.assertEqual(content_type, 'text/xml')
 
         def test_export_with_title(self):
             _setUpDefaultTraversable()
@@ -876,11 +877,11 @@ else:
             context = DummyExportContext(plugin)
             adapter.export(context, 'plugins', False)
 
-            self.assertEqual( len( context._wrote ), 1 )
-            filename, text, content_type = context._wrote[ 0 ]
-            self.assertEqual( filename, 'plugins/with_title.xml' )
-            self._compareDOM( text, _TITLE_ONLY_TEMPLATE % TITLE )
-            self.assertEqual( content_type, 'text/xml' )
+            self.assertEqual(len(context._wrote), 1)
+            filename, text, content_type = context._wrote[0]
+            self.assertEqual(filename, 'plugins/with_title.xml')
+            self._compareDOM(text, _TITLE_ONLY_TEMPLATE % TITLE)
+            self.assertEqual(content_type, 'text/xml')
 
         def test_import_with_title(self):
             TITLE = 'Plugin Title'
@@ -889,10 +890,10 @@ else:
 
             context = DummyImportContext(plugin)
             context._files['plugins/with_title.xml'
-                          ] = _TITLE_ONLY_TEMPLATE % TITLE
+                           ] = _TITLE_ONLY_TEMPLATE % TITLE
             adapter.import_(context, 'plugins', False)
 
-            self.assertEqual( plugin.title, TITLE )
+            self.assertEqual(plugin.title, TITLE)
 
         def test_import_no_title(self):
             TITLE = 'Plugin Title'
@@ -902,11 +903,11 @@ else:
 
             context = DummyImportContext(plugin)
             context._files['plugins/no_title.xml'
-                          ] = _TITLE_ONLY_TEMPLATE_NO_TITLE
+                           ] = _TITLE_ONLY_TEMPLATE_NO_TITLE
 
             adapter.import_(context, 'plugins', False)
 
-            self.assertEqual( plugin.title, None )
+            self.assertEqual(plugin.title, None)
 
     class DelegatePathExportImportTests(_TestBase):
 
@@ -956,9 +957,9 @@ else:
 
             self.assertEqual(len(context._wrote), 1)
             filename, text, content_type = context._wrote[0]
-            self.assertEqual(filename, 'plugins/default.xml' )
+            self.assertEqual(filename, 'plugins/default.xml')
             self._compareDOM(text, _DELEGATE_PATH_TEMPLATE_NO_TITLE % "")
-            self.assertEqual( content_type, 'text/xml' )
+            self.assertEqual(content_type, 'text/xml')
 
         def test__getExportInfo_explicitly_set(self):
             TITLE = 'Plugin Title'
@@ -987,12 +988,12 @@ else:
 
             self.assertEqual(len(context._wrote), 1)
             filename, text, content_type = context._wrote[0]
-            self.assertEqual(filename, 'plugins/explicit.xml' )
+            self.assertEqual(filename, 'plugins/explicit.xml')
             self._compareDOM(text,
                              _DELEGATE_PATH_TEMPLATE % (TITLE,
                                                         DELEGATE_PATH,
-                                                       ))
-            self.assertEqual( content_type, 'text/xml' )
+                                                        ))
+            self.assertEqual(content_type, 'text/xml')
 
         def test_import_with_title(self):
             TITLE = 'Plugin Title'
@@ -1002,13 +1003,13 @@ else:
 
             context = DummyImportContext(plugin)
             context._files['plugins/with_title.xml'
-                          ] = _DELEGATE_PATH_TEMPLATE % (TITLE,
-                                                         DELEGATE_PATH,
-                                                        )
+                           ] = _DELEGATE_PATH_TEMPLATE % (TITLE,
+                                                          DELEGATE_PATH,
+                                                          )
             adapter.import_(context, 'plugins', False)
 
-            self.assertEqual( plugin.title, TITLE )
-            self.assertEqual( plugin.delegate, DELEGATE_PATH )
+            self.assertEqual(plugin.title, TITLE)
+            self.assertEqual(plugin.delegate, DELEGATE_PATH)
 
         def test_import_no_title(self):
             TITLE = 'Plugin Title'
@@ -1020,11 +1021,11 @@ else:
 
             context = DummyImportContext(plugin)
             context._files['plugins/no_title.xml'
-                          ] = _DELEGATE_PATH_TEMPLATE_NO_TITLE % DELEGATE_PATH
+                           ] = _DELEGATE_PATH_TEMPLATE_NO_TITLE % DELEGATE_PATH
             adapter.import_(context, 'plugins', False)
 
-            self.assertEqual( plugin.title, None )
-            self.assertEqual( plugin.delegate, DELEGATE_PATH )
+            self.assertEqual(plugin.title, None)
+            self.assertEqual(plugin.delegate, DELEGATE_PATH)
 
     class DynamicGroupsPluginExportImportTests(_TestBase):
 
@@ -1044,7 +1045,7 @@ else:
             adapter = self._makeOne(plugin)
 
             self.assertEqual(len(adapter.listExportableItems()), 0)
-            plugin.addGroup('group_id', 'python:1', 'Group Title' )
+            plugin.addGroup('group_id', 'python:1', 'Group Title')
             self.assertEqual(len(adapter.listExportableItems()), 0)
 
         def test__getExportInfo_empty(self):
@@ -1064,11 +1065,11 @@ else:
             context = DummyExportContext(plugin)
             adapter.export(context, 'plugins', False)
 
-            self.assertEqual( len( context._wrote ), 1 )
-            filename, text, content_type = context._wrote[ 0 ]
-            self.assertEqual( filename, 'plugins/empty.xml' )
-            self._compareDOM( text, _EMPTY_DYNAMIC_GROUPS )
-            self.assertEqual( content_type, 'text/xml' )
+            self.assertEqual(len(context._wrote), 1)
+            filename, text, content_type = context._wrote[0]
+            self.assertEqual(filename, 'plugins/empty.xml')
+            self._compareDOM(text, _EMPTY_DYNAMIC_GROUPS)
+            self.assertEqual(content_type, 'text/xml')
 
         def test__getExportInfo_with_groups(self):
 
@@ -1081,7 +1082,7 @@ else:
                                 g['title'],
                                 g['description'],
                                 g['active'],
-                               )
+                                )
 
             adapter = self._makeOne(plugin)
 
@@ -1104,14 +1105,14 @@ else:
                                 g['title'],
                                 g['description'],
                                 g['active'],
-                               )
+                                )
 
             adapter = self._makeOne(plugin)
             context = DummyExportContext(plugin)
             adapter.export(context, 'plugins', False)
 
-            self.assertEqual( len(context._wrote), 1)
-            filename, text, content_type = context._wrote[ 0 ]
+            self.assertEqual(len(context._wrote), 1)
+            filename, text, content_type = context._wrote[0]
             self.assertEqual(filename, 'plugins/with_groups.xml')
             self._compareDOM(text, _FILLED_DYNAMIC_GROUPS)
             self.assertEqual(content_type, 'text/xml')
@@ -1148,7 +1149,7 @@ else:
                                 g['title'],
                                 g['description'],
                                 g['active'],
-                               )
+                                )
 
             adapter = self._makeOne(plugin)
 
@@ -1173,7 +1174,7 @@ else:
                                 g['title'],
                                 g['description'],
                                 g['active'],
-                               )
+                                )
 
             adapter = self._makeOne(plugin)
 
@@ -1186,7 +1187,6 @@ else:
             self.assertEqual(len(plugin.listGroupIds()), 0)
             self.assertEqual(plugin.title, None)
 
-
     class ChallengeProtocolChooserExportImportTests(_TestBase):
 
         def _getTargetClass(self):
@@ -1196,7 +1196,7 @@ else:
 
         def _makePlugin(self, id, *args, **kw):
             from \
-              Products.PluggableAuthService.plugins.ChallengeProtocolChooser \
+                Products.PluggableAuthService.plugins.ChallengeProtocolChooser \
                 import ChallengeProtocolChooser
 
             return ChallengeProtocolChooser(id, *args, **kw)
@@ -1210,7 +1210,7 @@ else:
 
         def test__getExportInfo_empty(self):
             from \
-              Products.PluggableAuthService.plugins.ChallengeProtocolChooser \
+                Products.PluggableAuthService.plugins.ChallengeProtocolChooser \
                 import listRequestTypesLabels
             labels = sorted(listRequestTypesLabels())
             plugin = self._makePlugin('empty', None).__of__(self.root)
@@ -1232,15 +1232,15 @@ else:
             context = DummyExportContext(plugin)
             adapter.export(context, 'plugins', False)
 
-            self.assertEqual( len( context._wrote ), 1 )
-            filename, text, content_type = context._wrote[ 0 ]
-            self.assertEqual( filename, 'plugins/empty.xml' )
-            self._compareDOM( text, _EMPTY_CHOOSER )
-            self.assertEqual( content_type, 'text/xml' )
+            self.assertEqual(len(context._wrote), 1)
+            filename, text, content_type = context._wrote[0]
+            self.assertEqual(filename, 'plugins/empty.xml')
+            self._compareDOM(text, _EMPTY_CHOOSER)
+            self.assertEqual(content_type, 'text/xml')
 
         def test__getExportInfo_non_empty(self):
             from \
-              Products.PluggableAuthService.plugins.ChallengeProtocolChooser \
+                Products.PluggableAuthService.plugins.ChallengeProtocolChooser \
                 import listRequestTypesLabels
             labels = sorted(listRequestTypesLabels())
             plugin = self._makePlugin('non_empty', None).__of__(self.root)
@@ -1248,7 +1248,7 @@ else:
             plugin.manage_updateProtocolMapping({'WebDAV': ('http',),
                                                  'FTP': ('http',),
                                                  'XML-RPC': ('http',),
-                                                })
+                                                 })
             adapter = self._makeOne(plugin)
 
             info = adapter._getExportInfo()
@@ -1269,22 +1269,21 @@ else:
             plugin.manage_updateProtocolMapping({'WebDAV': ('http', 'digest'),
                                                  'FTP': ('http',),
                                                  'XML-RPC': ('http', 'digest'),
-                                                })
-
+                                                 })
 
             adapter = self._makeOne(plugin)
             context = DummyExportContext(plugin)
             adapter.export(context, 'plugins', False)
 
-            self.assertEqual( len(context._wrote), 1)
-            filename, text, content_type = context._wrote[ 0 ]
+            self.assertEqual(len(context._wrote), 1)
+            filename, text, content_type = context._wrote[0]
             self.assertEqual(filename, 'plugins/with_map.xml')
             self._compareDOM(text, _FILLED_CHOOSER)
             self.assertEqual(content_type, 'text/xml')
 
         def test_import_empty(self):
             from \
-              Products.PluggableAuthService.plugins.ChallengeProtocolChooser \
+                Products.PluggableAuthService.plugins.ChallengeProtocolChooser \
                 import listRequestTypesLabels
             plugin = self._makePlugin('empty', None).__of__(self.root)
             adapter = self._makeOne(plugin)
@@ -1295,13 +1294,13 @@ else:
 
             adapter.import_(context, 'plugins', False)
 
-            for label in  listRequestTypesLabels():
+            for label in listRequestTypesLabels():
                 protocols = sorted(plugin._map.get(label, ()))
                 self.assertEqual(protocols, [])
 
         def test_import_non_empty(self):
             from \
-              Products.PluggableAuthService.plugins.ChallengeProtocolChooser \
+                Products.PluggableAuthService.plugins.ChallengeProtocolChooser \
                 import listRequestTypesLabels
             plugin = self._makePlugin('non_empty', None).__of__(self.root)
             adapter = self._makeOne(plugin)
@@ -1312,7 +1311,7 @@ else:
 
             adapter.import_(context, 'plugins', False)
 
-            for label in  listRequestTypesLabels():
+            for label in listRequestTypesLabels():
                 protocols = sorted(plugin._map.get(label, ()))
                 if label == 'Browser':
                     self.assertEqual(protocols, [])
@@ -1320,7 +1319,6 @@ else:
                     self.assertEqual(protocols, ['http'])
                 else:
                     self.assertEqual(protocols, ['digest', 'http'])
-
 
     class NotCompetent_byRolesExportImportTests(_TestBase):
 
@@ -1331,7 +1329,7 @@ else:
 
         def _makePlugin(self, id, *args, **kw):
             from \
-              Products.PluggableAuthService.plugins.NotCompetentHelper \
+                Products.PluggableAuthService.plugins.NotCompetentHelper \
                 import NotCompetent_byRoles
 
             return NotCompetent_byRoles(id, *args, **kw)
@@ -1355,17 +1353,17 @@ else:
             _setUpDefaultTraversable()
 
             plugin = self._makePlugin('empty', 'Plugin Title'
-                                     ).__of__(self.root)
+                                      ).__of__(self.root)
             adapter = self._makeOne(plugin)
 
             context = DummyExportContext(plugin)
             adapter.export(context, 'plugins', False)
 
-            self.assertEqual( len( context._wrote ), 1 )
-            filename, text, content_type = context._wrote[ 0 ]
-            self.assertEqual( filename, 'plugins/empty.xml' )
-            self._compareDOM( text, _EMPTY_NONCOMPETENT )
-            self.assertEqual( content_type, 'text/xml' )
+            self.assertEqual(len(context._wrote), 1)
+            filename, text, content_type = context._wrote[0]
+            self.assertEqual(filename, 'plugins/empty.xml')
+            self._compareDOM(text, _EMPTY_NONCOMPETENT)
+            self.assertEqual(content_type, 'text/xml')
 
         def test__getExportInfo_non_empty(self):
             plugin = self._makePlugin('non_empty', 'TITLE').__of__(self.root)
@@ -1381,15 +1379,15 @@ else:
             _setUpDefaultTraversable()
 
             plugin = self._makePlugin('non_empty', 'Plugin Title'
-                                     ).__of__(self.root)
+                                      ).__of__(self.root)
             plugin.roles = ('Manager',)
             adapter = self._makeOne(plugin)
             context = DummyExportContext(plugin)
 
             adapter.export(context, 'plugins', False)
 
-            self.assertEqual( len(context._wrote), 1)
-            filename, text, content_type = context._wrote[ 0 ]
+            self.assertEqual(len(context._wrote), 1)
+            filename, text, content_type = context._wrote[0]
             self.assertEqual(filename, 'plugins/non_empty.xml')
             self._compareDOM(text, _FILLED_NONCOMPETENT)
             self.assertEqual(content_type, 'text/xml')
@@ -1419,7 +1417,6 @@ else:
             self.assertEqual(plugin.title, 'Plugin Title')
             self.assertEqual(plugin.roles, ('Manager',))
 
-
     def test_suite():
         return unittest.TestSuite((
             unittest.makeSuite(ZODBUserManagerExportImportTests),
@@ -1443,12 +1440,12 @@ _EMPTY_ZODB_USERS = """\
 _ZODB_USER_INFO = ({'user_id': 'user_1',
                     'login_name': 'user1@example.com',
                     'password': 'password1',
-                   },
+                    },
                    {'user_id': 'user_2',
                     'login_name': 'user2@example.com',
                     'password': 'password2',
-                   },
-                  )
+                    },
+                   )
 
 _FILLED_ZODB_USERS = """\
 <?xml version="1.0" ?>
@@ -1472,13 +1469,13 @@ _ZODB_GROUP_INFO = ({'group_id': 'group_1',
                      'title': 'Group 1',
                      'description': 'First Group',
                      'principals': ('principal1', 'principal2'),
-                    },
+                     },
                     {'group_id': 'group_2',
                      'title': 'Group 2',
                      'description': 'Second Group',
                      'principals': ('principal1', 'principal3'),
-                    },
-                   )
+                     },
+                    )
 
 _FILLED_ZODB_GROUPS = """\
 <?xml version="1.0" ?>
@@ -1504,13 +1501,13 @@ _ZODB_ROLE_INFO = ({'role_id': 'role_1',
                     'title': 'Role 1',
                     'description': 'First Role',
                     'principals': ('principal1', 'principal2'),
-                   },
+                    },
                    {'role_id': 'role_2',
                     'title': 'Role 2',
                     'description': 'Second Role',
                     'principals': ('principal1', 'principal3'),
-                   },
-                  )
+                    },
+                   )
 
 _FILLED_ZODB_ROLES = """\
 <?xml version="1.0" ?>
@@ -1576,14 +1573,14 @@ _DYNAMIC_GROUP_INFO = ({'group_id': 'group_1',
                         'predicate': 'python:1',
                         'description': 'First Group',
                         'active': True,
-                       },
+                        },
                        {'group_id': 'group_2',
                         'title': 'Group 2',
                         'predicate': 'python:0',
                         'description': 'Second Group',
                         'active': False,
-                       },
-                      )
+                        },
+                       )
 
 _EMPTY_DYNAMIC_GROUPS = """\
 <?xml version="1.0" ?>

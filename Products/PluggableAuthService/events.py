@@ -64,11 +64,11 @@ class PropertiesUpdated(PASEvent):
 def userCredentialsUpdatedHandler(principal, event):
     pas = aq_parent(principal)
     pas.updateCredentials(
-            pas,
-            pas.REQUEST,
-            pas.REQUEST.RESPONSE,
-            principal.getId(),
-            event.password)
+        pas,
+        pas.REQUEST,
+        pas.REQUEST.RESPONSE,
+        principal.getId(),
+        event.password)
 
 
 @adapter(IPASEvent)
@@ -76,5 +76,4 @@ def PASEventNotify(event):
     """Event subscriber to dispatch PASEvent to interested adapters."""
     adapters = subscribers((event.principal, event), None)
     for adapter in adapters:
-        pass # getting them does the work
-
+        pass  # getting them does the work

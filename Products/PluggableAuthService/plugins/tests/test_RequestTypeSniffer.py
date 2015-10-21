@@ -20,28 +20,27 @@ import unittest
 from Products.PluggableAuthService.tests.conformance \
     import IRequestTypeSniffer_conformance
 
-class RequestTypeSniffer( unittest.TestCase
-                          , IRequestTypeSniffer_conformance
-                        ):
 
+class RequestTypeSniffer(unittest.TestCase, IRequestTypeSniffer_conformance
+                         ):
 
-    def _getTargetClass( self ):
+    def _getTargetClass(self):
 
         from Products.PluggableAuthService.plugins.RequestTypeSniffer \
             import RequestTypeSniffer
 
         return RequestTypeSniffer
 
-    def _makeOne( self, id='test', *args, **kw ):
+    def _makeOne(self, id='test', *args, **kw):
 
-        return self._getTargetClass()( id, *args, **kw )
+        return self._getTargetClass()(id, *args, **kw)
 
 
 if __name__ == "__main__":
     unittest.main()
 
+
 def test_suite():
     return unittest.TestSuite((
-        unittest.makeSuite( RequestTypeSniffer ),
-        ))
-
+        unittest.makeSuite(RequestTypeSniffer),
+    ))

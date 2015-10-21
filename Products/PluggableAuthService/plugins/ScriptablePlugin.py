@@ -32,6 +32,7 @@ from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.utils import directlyProvides
 from Products.PluggableAuthService.utils import classImplements
 
+
 class IScriptablePlugin(Interface):
     """ Marker interface.
     """
@@ -39,9 +40,10 @@ class IScriptablePlugin(Interface):
 import Products
 
 manage_addScriptablePluginForm = PageTemplateFile(
-    'www/spAdd', globals(), __name__='manage_addScriptablePluginForm' )
+    'www/spAdd', globals(), __name__='manage_addScriptablePluginForm')
 
-def addScriptablePlugin( dispatcher, id, title=None, REQUEST=None ):
+
+def addScriptablePlugin(dispatcher, id, title=None, REQUEST=None):
     """ Add a Scriptable Plugin to a Pluggable Auth Service. """
 
     sp = ScriptablePlugin(id, title)
@@ -49,10 +51,11 @@ def addScriptablePlugin( dispatcher, id, title=None, REQUEST=None ):
 
     if REQUEST is not None:
         REQUEST['RESPONSE'].redirect(
-                                '%s/manage_workspace'
-                                '?manage_tabs_message='
-                                'ScriptablePlugin+added.'
-                            % dispatcher.absolute_url())
+            '%s/manage_workspace'
+            '?manage_tabs_message='
+            'ScriptablePlugin+added.'
+            % dispatcher.absolute_url())
+
 
 class ScriptablePlugin(Folder, BasePlugin):
 
@@ -68,90 +71,87 @@ class ScriptablePlugin(Folder, BasePlugin):
 
     meta_type = 'Scriptable Plugin'
 
-    manage_options = ( ( Folder.manage_options[0], )
-                     + ( { 'label': 'Interfaces',
-                           'action': 'manage_editInterfacesForm', }
-                         ,
-                       )
-                     + BasePlugin.manage_options
-                     )
+    manage_options = ((Folder.manage_options[0], )
+                      + ({'label': 'Interfaces',
+                          'action': 'manage_editInterfacesForm', },
+                         )
+                      + BasePlugin.manage_options
+                      )
 
-    security.declareProtected( ManageUsers, 'manage_editInterfacesForm' )
+    security.declareProtected(ManageUsers, 'manage_editInterfacesForm')
     manage_editInterfacesForm = PageTemplateFile(
         'www/spEditInterfaces', globals(),
         __name__='manage_editInterfacesForm')
 
-    def __creatable_by_emergency_user__( self ):
+    def __creatable_by_emergency_user__(self):
         return 1
 
     def __init__(self, id, title=None):
         self._id = self.id = id
         self.title = title
 
-    security.declareProtected( ManageUsers, 'hasMethod')
+    security.declareProtected(ManageUsers, 'hasMethod')
+
     def hasMethod(self, method_name):
         """ Do we implement this method directly?
         """
         return method_name in self.objectIds()
 
     security.declarePublic('all_meta_types')
+
     def all_meta_types(self):
         """ What objects can be contained here? """
-        allowed_types = ( 'Script (Python)'
-                        , 'External Method'
-                        , 'Z SQL Method'
-                        , 'DTML Method'
-                        , 'Page Template'
-                        )
+        allowed_types = ('Script (Python)', 'External Method', 'Z SQL Method', 'DTML Method', 'Page Template'
+                         )
 
         return [x for x in Products.meta_types if x['name'] in allowed_types]
 
-    security.declareProtected( ManageUsers, '_delOb' )
-    def _delOb( self, id ):
+    security.declareProtected(ManageUsers, '_delOb')
+
+    def _delOb(self, id):
         """
             Override ObjectManager's _delOb to account for removing any
             interface assertions the object might implement.
         """
         myId = self.getId()
         pas_instance = self._getPAS()
-        plugins = pas_instance._getOb( 'plugins' )
+        plugins = pas_instance._getOb('plugins')
         curr_interfaces = Set(providedBy(self))
 
         del_interfaces = Set([x for x in providedBy(self) if id in x.names()])
 
         for interface in del_interfaces:
-            if myId in plugins.listPluginIds( interface ):
-                plugins.deactivatePlugin( interface, myId )
+            if myId in plugins.listPluginIds(interface):
+                plugins.deactivatePlugin(interface, myId)
 
-        delattr( self, id )
+        delattr(self, id)
 
-        directlyProvides( self, *(list(curr_interfaces - del_interfaces)) )
+        directlyProvides(self, *(list(curr_interfaces - del_interfaces)))
 
-    security.declareProtected( ManageUsers, 'manage_updateInterfaces' )
-    def manage_updateInterfaces( self, interfaces, RESPONSE=None ):
+    security.declareProtected(ManageUsers, 'manage_updateInterfaces')
+
+    def manage_updateInterfaces(self, interfaces, RESPONSE=None):
         """ For ZMI update of interfaces. """
 
         pas_instance = self._getPAS()
-        plugins = pas_instance._getOb( 'plugins' )
+        plugins = pas_instance._getOb('plugins')
 
         new_interfaces = []
 
         for interface in interfaces:
-            new_interfaces.append( plugins._getInterfaceFromName( interface ) )
+            new_interfaces.append(plugins._getInterfaceFromName(interface))
 
         klass_interfaces = [x for x in implementedBy(ScriptablePlugin)]
-        directlyProvides( self, *(klass_interfaces + new_interfaces) )
+        directlyProvides(self, *(klass_interfaces + new_interfaces))
 
         if RESPONSE is not None:
             RESPONSE.redirect('%s/manage_workspace'
                               '?manage_tabs_message='
                               'Interfaces+updated.'
-                            % self.absolute_url())
+                              % self.absolute_url())
 
 
-classImplements( ScriptablePlugin
-               , IScriptablePlugin
-               , *(implementedBy(Folder) + implementedBy(BasePlugin))
-               )
+classImplements(ScriptablePlugin, IScriptablePlugin, *(implementedBy(Folder) + implementedBy(BasePlugin))
+                )
 
 InitializeClass(ScriptablePlugin)

@@ -85,19 +85,20 @@ class Test_createKeywords(unittest.TestCase):
         _ITEMS = (('foo', 'bar'), ('baz', u'M\344dchen'.encode('utf-16')))
         hashed = _createHashedValue(_ITEMS)
         self.assertEqual(self._callFUT(foo='bar',
-                                        baz=u'M\344dchen'.encode('utf-16')),
+                                       baz=u'M\344dchen'.encode('utf-16')),
                          {'keywords': hashed})
 
     def test_createKeywords_unicode_chinese(self):
         _ITEMS = (('foo', 'bar'), ('baz', u'\u03a4\u03b6'))
         hashed = _createHashedValue(_ITEMS)
         self.assertEqual(self._callFUT(foo='bar', baz=u'\u03a4\u03b6'),
-                {'keywords': hashed})
+                         {'keywords': hashed})
 
 
 def _makeRequestWSession(**session):
     from zope.interface import implementer
     from zope.publisher.interfaces.browser import IBrowserRequest
+
     @implementer(IBrowserRequest)
     class _Request(dict):
         pass
@@ -225,6 +226,7 @@ class Test_csrf_only(unittest.TestCase):
 
     def test_w_function_w_positional_REQUEST(self):
         from ZPublisher import Forbidden
+
         def w_positional_request(foo, bar, REQUEST):
             "I haz REQUEST as positional arg"
             return 42
@@ -240,6 +242,7 @@ class Test_csrf_only(unittest.TestCase):
 
     def test_w_function_w_optional_REQUEST(self):
         from ZPublisher import Forbidden
+
         def w_optional_request(foo, bar, REQUEST=None):
             "I haz REQUEST as kw arg"
             return 42
@@ -248,11 +251,12 @@ class Test_csrf_only(unittest.TestCase):
         self.assertEqual(wrapped.__module__, w_optional_request.__module__)
         self.assertEqual(wrapped.__doc__, w_optional_request.__doc__)
         self.assertRaises(Forbidden,
-                         wrapped, foo=None, bar=None,
-                                  REQUEST=_makeRequestWSession())
+                          wrapped, foo=None, bar=None,
+                          REQUEST=_makeRequestWSession())
         req = _makeRequestWSession(_csrft_='deadbeef')
         req.form['csrf_token'] = 'deadbeef'
         self.assertEqual(wrapped(foo=None, bar=None, REQUEST=req), 42)
+
 
 def _createHashedValue(items):
     try:
@@ -271,6 +275,7 @@ def _createHashedValue(items):
             v = v.encode('utf-8')
         hasher.update(v)
     return hasher.hexdigest()
+
 
 def test_suite():
     return unittest.TestSuite((

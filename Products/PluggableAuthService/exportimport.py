@@ -24,8 +24,11 @@ from Products.GenericSetup.interfaces import IFilesystemImporter
 #
 #   setup_tool handlers
 #
+
+
 def exportPAS(context):
     IFilesystemExporter(context.getSite()).export(context, 'PAS', True)
+
 
 def importPAS(context):
     IFilesystemImporter(context.getSite()).import_(context, 'PAS', True)
@@ -44,6 +47,7 @@ class PAS_PR_ContentFactory(object):
         registry._setId(object_id)
         self.context._setObject(object_id, registry)
         return registry
+
 
 class PAS_CF_Namer(object):
 

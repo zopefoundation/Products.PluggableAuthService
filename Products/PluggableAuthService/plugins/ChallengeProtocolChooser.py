@@ -30,7 +30,7 @@ from Products.PluggableAuthService.interfaces.plugins \
 from Products.PluggableAuthService.interfaces.plugins \
     import IChallengeProtocolChooser
 from Products.PluggableAuthService.interfaces.plugins \
-     import IChallengePlugin
+    import IChallengePlugin
 from Products.PluggableAuthService.interfaces.request \
     import IBrowserRequest
 from Products.PluggableAuthService.interfaces.request \
@@ -43,12 +43,14 @@ from Products.PluggableAuthService.interfaces.request \
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.utils import classImplements
 
+
 class IChallengeProtocolChooserPlugin(Interface):
     """ Marker interface.
     """
 
 _request_types = ()
 _request_type_bmap = {}
+
 
 def registerRequestType(label, iface):
     global _request_types
@@ -57,14 +59,16 @@ def registerRequestType(label, iface):
     _request_types = tuple(registry)
     _request_type_bmap[iface] = label
 
+
 def listRequestTypesLabels():
     return _request_type_bmap.values()
 
 manage_addChallengeProtocolChooserForm = PageTemplateFile(
-    'www/cpcAdd', globals(), __name__='manage_addChallengeProtocolChooserForm' )
+    'www/cpcAdd', globals(), __name__='manage_addChallengeProtocolChooserForm')
 
-def addChallengeProtocolChooserPlugin( dispatcher, id, title=None,
-                                       mapping=None, REQUEST=None ):
+
+def addChallengeProtocolChooserPlugin(dispatcher, id, title=None,
+                                      mapping=None, REQUEST=None):
     """ Add a ChallengeProtocolChooserPlugin to a Pluggable Auth Service. """
 
     cpc = ChallengeProtocolChooser(id, title=title, mapping=mapping)
@@ -72,13 +76,13 @@ def addChallengeProtocolChooserPlugin( dispatcher, id, title=None,
 
     if REQUEST is not None:
         REQUEST['RESPONSE'].redirect(
-                                '%s/manage_workspace'
-                                '?manage_tabs_message='
-                                'ChallengeProtocolChooser+added.'
-                            % dispatcher.absolute_url())
+            '%s/manage_workspace'
+            '?manage_tabs_message='
+            'ChallengeProtocolChooser+added.'
+            % dispatcher.absolute_url())
 
 
-class ChallengeProtocolChooser( BasePlugin ):
+class ChallengeProtocolChooser(BasePlugin):
 
     """ PAS plugin for choosing challenger protocol based on request
     """
@@ -101,11 +105,12 @@ class ChallengeProtocolChooser( BasePlugin ):
             self.manage_updateProtocolMapping(mapping=mapping)
 
     security.declarePrivate('chooseProtocols')
+
     def chooseProtocols(self, request):
         pas_instance = self._getPAS()
         plugins = pas_instance._getOb('plugins')
 
-        sniffers = plugins.listPlugins( IRequestTypeSniffer )
+        sniffers = plugins.listPlugins(IRequestTypeSniffer)
 
         for sniffer_id, sniffer in sniffers:
             request_type = sniffer.sniffRequestType(request)
@@ -118,12 +123,11 @@ class ChallengeProtocolChooser( BasePlugin ):
             return
         return self._map.get(label, None)
 
-
     def _listProtocols(self):
         pas_instance = self._getPAS()
         plugins = pas_instance._getOb('plugins')
 
-        challengers = plugins.listPlugins( IChallengePlugin )
+        challengers = plugins.listPlugins(IChallengePlugin)
         found = []
 
         for challenger_id, challenger in challengers:
@@ -192,7 +196,7 @@ class ChallengeProtocolChooser( BasePlugin ):
 classImplements(ChallengeProtocolChooser,
                 IChallengeProtocolChooserPlugin,
                 IChallengeProtocolChooser,
-               )
+                )
 
 InitializeClass(ChallengeProtocolChooser)
 

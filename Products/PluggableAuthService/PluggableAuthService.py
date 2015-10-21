@@ -437,13 +437,14 @@ class PluggableAuthService(Folder, Cacheable):
         Folder._setObject(self, id, object, roles, user, set_owner)
 
     security.declarePrivate('_delOb')
+
     def _delOb(self, id):
         #
         # Override ObjectManager's version to clean up any plugin
         # registrations for the deleted object
         #
         # For ZopeVersionControl, we need to check 'plugins' for more than
-        # existence, since it replaces objects (like 'plugins') with 
+        # existence, since it replaces objects (like 'plugins') with
         # SimpleItems and calls _delOb, which tries to use special methods
         # of 'plugins'
 

@@ -20,7 +20,11 @@ use the -c option to specify an alternate configuration file.
 $Id$
 """
 
-import os, shutil, sys, tempfile, urllib2
+import os
+import shutil
+import sys
+import tempfile
+import urllib2
 
 tmpeggs = tempfile.mkdtemp()
 
@@ -37,23 +41,23 @@ except ImportError:
 if sys.platform == 'win32':
     def quote(c):
         if ' ' in c:
-            return '"%s"' % c # work around spawn lamosity on windows
+            return '"%s"' % c  # work around spawn lamosity on windows
         else:
             return c
 else:
-    def quote (c):
+    def quote(c):
         return c
 
 cmd = 'from setuptools.command.easy_install import main; main()'
-ws  = pkg_resources.working_set
+ws = pkg_resources.working_set
 assert os.spawnle(
-    os.P_WAIT, sys.executable, quote (sys.executable),
-    '-c', quote (cmd), '-mqNxd', quote (tmpeggs), 'zc.buildout',
+    os.P_WAIT, sys.executable, quote(sys.executable),
+    '-c', quote(cmd), '-mqNxd', quote(tmpeggs), 'zc.buildout',
     dict(os.environ,
-         PYTHONPATH=
-         ws.find(pkg_resources.Requirement.parse('setuptools')).location
+         PYTHONPATH=ws.find(
+             pkg_resources.Requirement.parse('setuptools')).location
          ),
-    ) == 0
+) == 0
 
 ws.add_entry(tmpeggs)
 ws.require('zc.buildout')

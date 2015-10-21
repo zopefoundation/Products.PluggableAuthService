@@ -60,4 +60,3 @@ class PASTestCase(ZopeTestCase.ZopeTestCase):
         # OMFG, why doesn't PAS support userFolderAddUser?
         uf = self.folder.acl_users
         uf._doAddUser(user_name, user_password, [user_role], [])
-
