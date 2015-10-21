@@ -15,20 +15,17 @@
 
 $Id$
 """
-from OFS.SimpleItem import SimpleItem
-from OFS.PropertyManager import PropertyManager
-from Acquisition import aq_base, aq_parent, aq_inner
 from AccessControl import ClassSecurityInfo
+from Acquisition import aq_base, aq_parent, aq_inner
 from App.class_init import default__class_init__ as InitializeClass
-
+from OFS.PropertyManager import PropertyManager
+from OFS.SimpleItem import SimpleItem
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from Products.PluggableAuthService.permissions import ManageUsers
+from Products.PluggableAuthService.utils import classImplements
+from Products.PluggableAuthService.utils import createViewName
 from zope.interface import implementedBy
 from zope.interface import providedBy
-
-from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-
-from Products.PluggableAuthService.utils import classImplements
-from Products.PluggableAuthService.permissions import ManageUsers
-from Products.PluggableAuthService.utils import createViewName
 
 
 def flattenInterfaces(implemented):

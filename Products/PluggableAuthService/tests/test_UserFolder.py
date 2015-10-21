@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 # Copyright (c) 2006 Zope Foundation and Contributors
@@ -11,27 +12,22 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-
-import os
-import sys
-import base64
-import unittest
-
-from Products.PluggableAuthService.tests import pastc
-
 from AccessControl import Unauthorized
-from AccessControl.Permissions import view as View
 from AccessControl.Permissions import add_folders as AddFolders
-
-from Products.PluggableAuthService.PluggableAuthService import PluggableAuthService
-
-from zope import event
-from zope.component import adapter
-from zope.component import provideHandler
-from Products.PluggableAuthService.interfaces.events import IPrincipalCreatedEvent
+from AccessControl.Permissions import view as View
 from Products.PluggableAuthService.events import CredentialsUpdated
 from Products.PluggableAuthService.events import PASEventNotify
 from Products.PluggableAuthService.events import userCredentialsUpdatedHandler
+from Products.PluggableAuthService.interfaces.events \
+    import IPrincipalCreatedEvent
+from Products.PluggableAuthService.PluggableAuthService \
+    import PluggableAuthService
+from Products.PluggableAuthService.tests import pastc
+from zope import event
+from zope.component import adapter
+from zope.component import provideHandler
+import base64
+import unittest
 
 
 @adapter(IPrincipalCreatedEvent)
@@ -210,13 +206,13 @@ class UserFolderTests(pastc.PASTestCase):
         assert len(tinyFolderUnder.user_names()) == 10
 
         try:
-            list = tinyFolderOver.get_valid_userids()
+            tinyFolderOver.get_valid_userids()
             assert 0, "Did not raise overflow error"
         except OverflowError:
             pass
 
         try:
-            list = tinyFolderUnder.get_valid_userids()
+            tinyFolderUnder.get_valid_userids()
             pass
         except OverflowError:
             assert 0, "Raised overflow error erroneously"
@@ -292,7 +288,6 @@ class UserTests(pastc.PASTestCase):
     def testGetRoles(self):
         f = self.user
         # XXX: PAS returns roles as list
-        #self.assertEqual(f.getRoles(), ('Manager', 'Authenticated'))
         self.assertEqual(f.getRoles(), ['Manager', 'Authenticated'])
 
     def testGetDomains(self):

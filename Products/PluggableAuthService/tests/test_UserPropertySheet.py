@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 # Copyright (c) 2001 Zope Foundation and Contributors
@@ -11,15 +12,12 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-import unittest
+from .conformance import IPropertySheet_conformance
+from DateTime.DateTime import DateTime
+from OFS.Image import Image
 import os.path
 import sys
-
-from DateTime.DateTime import DateTime
-
-from OFS.Image import Image
-
-from conformance import IPropertySheet_conformance
+import unittest
 
 path = os.path.dirname(__file__)
 path = os.path.join(path, 'image.gif')
@@ -29,13 +27,22 @@ img_file = open(path, 'r')
 class UserPropertySheetTests(unittest.TestCase, IPropertySheet_conformance
                              ):
 
-    _SCHEMA = (('s', 'string'), ('i', 'int'), ('f', 'float'), ('n', 'long'), ('d', 'date'), ('l', 'lines'), ('t', 'lines'), ('b', 'boolean'), ('img', 'image')
-               )
+    _SCHEMA = (
+        ('s', 'string'),
+        ('i', 'int'),
+        ('f', 'float'),
+        ('n', 'long'),
+        ('d', 'date'),
+        ('l', 'lines'),
+        ('t', 'lines'),
+        ('b', 'boolean'),
+        ('img', 'image')
+    )
 
     _STRING_VALUE = 'string'
     _INT_VALUE = 42
     _FLOAT_VALUE = 9.8
-    _LONG_VALUE = sys.maxsize + 1
+    _LONG_VALUE = sys.maxint + 1
     _DATE_VALUE = DateTime()
     _LIST_VALUE = ['a', 'b', 'c']
     _TUPLE_VALUE = ('d', 'e', 'f')
@@ -175,24 +182,38 @@ class UserPropertySheetTests(unittest.TestCase, IPropertySheet_conformance
             self.assertEqual(info['mode'], '')  # readonly, no delete
 
     def test_ctor__guessSchema(self):
-
-        ups = self._makeOne('guessed', s=self._STRING_VALUE, i=self._INT_VALUE, f=self._FLOAT_VALUE, n=self._LONG_VALUE, d=self._DATE_VALUE, l=self._LIST_VALUE, t=self._TUPLE_VALUE, b=self._BOOL_VALUE, img=self._IMG_VALUE
-                            )
-
+        ups = self._makeOne(
+            'guessed',
+            s=self._STRING_VALUE,
+            i=self._INT_VALUE,
+            f=self._FLOAT_VALUE,
+            n=self._LONG_VALUE,
+            d=self._DATE_VALUE,
+            l=self._LIST_VALUE,
+            t=self._TUPLE_VALUE,
+            b=self._BOOL_VALUE,
+            img=self._IMG_VALUE
+        )
         self._checkStockSchema(ups)
 
     def test_ctor_w_schema(self):
-
-        ups = self._makeOne('w_schema', self._SCHEMA, s=self._STRING_VALUE, i=self._INT_VALUE, f=self._FLOAT_VALUE, n=self._LONG_VALUE, d=self._DATE_VALUE, l=self._LIST_VALUE, t=self._TUPLE_VALUE, b=self._BOOL_VALUE, img=self._IMG_VALUE
-                            )
-
+        ups = self._makeOne(
+            'w_schema',
+            self._SCHEMA,
+            s=self._STRING_VALUE,
+            i=self._INT_VALUE,
+            f=self._FLOAT_VALUE,
+            n=self._LONG_VALUE,
+            d=self._DATE_VALUE,
+            l=self._LIST_VALUE,
+            t=self._TUPLE_VALUE,
+            b=self._BOOL_VALUE,
+            img=self._IMG_VALUE
+        )
         self._checkStockSchema(ups)
 
     def test_ctor_w_schema_no_values(self):
-
-        ups = self._makeOne('w_schema', self._SCHEMA
-                            )
-
+        ups = self._makeOne('w_schema', self._SCHEMA)
         self._checkStockSchema(ups, values_are_none=True)
 
 if __name__ == "__main__":

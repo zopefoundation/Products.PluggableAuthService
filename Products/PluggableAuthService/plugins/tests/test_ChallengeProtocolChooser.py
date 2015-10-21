@@ -16,13 +16,14 @@
 $Id$
 """
 import unittest
-
 from Products.PluggableAuthService.tests.conformance \
     import IChallengeProtocolChooser_conformance
 
 
-class ChallengeProtocolChooser(unittest.TestCase, IChallengeProtocolChooser_conformance
-                               ):
+class ChallengeProtocolChooser(
+    unittest.TestCase,
+    IChallengeProtocolChooser_conformance
+):
 
     def _getTargetClass(self):
 
@@ -32,7 +33,6 @@ class ChallengeProtocolChooser(unittest.TestCase, IChallengeProtocolChooser_conf
         return ChallengeProtocolChooser
 
     def _makeOne(self, id='test', *args, **kw):
-
         return self._getTargetClass()(id, *args, **kw)
 
 

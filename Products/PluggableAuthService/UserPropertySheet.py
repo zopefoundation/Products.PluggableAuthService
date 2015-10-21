@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 # Copyright (c) 2001 Zope Foundation and Contributors
@@ -15,22 +16,18 @@
 
 $Id$
 """
-from types import IntType
-from types import FloatType
-from types import LongType
-from types import InstanceType
+from DateTime.DateTime import DateTime
+from OFS.Image import Image
+from Products.PluggableAuthService.interfaces.propertysheets import IPropertySheet  # noqa
 from types import BooleanType
+from types import FloatType
+from types import InstanceType
+from types import IntType
+from types import LongType
+from zope.interface import implementer
 
 StringTypes = (str, unicode, )
 _SequenceTypes = (tuple, list, )
-
-from DateTime.DateTime import DateTime
-
-from OFS.Image import Image
-
-from Products.PluggableAuthService.utils import classImplements
-from Products.PluggableAuthService.interfaces.propertysheets \
-    import IPropertySheet
 
 
 def _guessSchema(kw):
@@ -40,16 +37,16 @@ def _guessSchema(kw):
 
         ptype = 'string'
 
-        if isinstance(v, IntType):
+        if type(v) is IntType:
             ptype = 'int'
 
-        elif isinstance(v, FloatType):
+        elif type(v) is FloatType:
             ptype = 'float'
 
-        elif isinstance(v, LongType):
+        elif type(v) is LongType:
             ptype = 'long'
 
-        elif isinstance(v, BooleanType):
+        elif type(v) is BooleanType:
             ptype = 'boolean'
 
         elif type(v) in _SequenceTypes:
@@ -59,10 +56,10 @@ def _guessSchema(kw):
 
             ptype = 'lines'
 
-        elif isinstance(v, DateTime):
+        elif type(v) is DateTime:
             ptype = 'date'
 
-        elif isinstance(v, InstanceType):
+        elif type(v) is InstanceType:
 
             if isinstance(v, DateTime):
                 ptype = 'date'
@@ -80,6 +77,7 @@ def _guessSchema(kw):
     return schema
 
 
+@implementer(IPropertySheet)
 class UserPropertySheet:
 
     """ Model a single, read-only set of properties about a user.
@@ -170,6 +168,3 @@ class UserPropertySheet:
         """ See IPropertySheet.
         """
         return [(x, self._properties.get(x)) for x in self.propertyIds()]
-
-classImplements(UserPropertySheet, IPropertySheet
-                )

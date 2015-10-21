@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 # Copyright (c) 2007 Zope Foundation and Contributors.
@@ -14,11 +15,11 @@
 
 $Id$
 """
-from zope.configuration.fields import PythonIdentifier
-from zope.interface import Interface
-
 from PluggableAuthService import MultiPlugins
 from PluggableAuthService import registerMultiPlugin as rMP
+from zope.configuration.exceptions import ConfigurationError
+from zope.configuration.fields import PythonIdentifier
+from zope.interface import Interface
 
 
 class IRegisterMultiPlugin(Interface):
@@ -45,7 +46,8 @@ def registerMultiPlugin(_context, class_=None, meta_type=None):
     """
     if not class_ and not meta_type:
         raise ConfigurationError(
-            "At least one of 'class' or 'meta_type' is required.")
+            "At least one of 'class' or 'meta_type' is required."
+        )
 
     if not meta_type:
         meta_type = class_.meta_type
@@ -54,8 +56,8 @@ def registerMultiPlugin(_context, class_=None, meta_type=None):
 
     _context.action(
         discriminator=('registerMultiPlugin', meta_type),
-        callable = rMP,
-        args = (meta_type,),
+        callable=rMP,
+        args=(meta_type,),
     )
 
 

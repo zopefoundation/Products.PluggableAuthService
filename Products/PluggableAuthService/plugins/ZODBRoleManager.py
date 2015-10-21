@@ -15,29 +15,20 @@
 
 $Id$
 """
-import logging
-
-from Acquisition import aq_parent, aq_inner
 from AccessControl import ClassSecurityInfo
 from AccessControl.requestmethod import postonly
-from BTrees.OOBTree import OOBTree
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from App.class_init import InitializeClass
-
-from zope.interface import Interface
-
+from BTrees.OOBTree import OOBTree
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-
-from Products.PluggableAuthService.interfaces.plugins \
-    import IRolesPlugin
-from Products.PluggableAuthService.interfaces.plugins \
-    import IRoleEnumerationPlugin
-from Products.PluggableAuthService.interfaces.plugins \
-    import IRoleAssignerPlugin
+from Products.PluggableAuthService.interfaces import plugins as iplugins
 from Products.PluggableAuthService.permissions import ManageUsers
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PluggableAuthService.utils import classImplements
 from Products.PluggableAuthService.utils import csrf_only
-
+from zope.interface import implementer
+from zope.interface import Interface
+import logging
 
 LOG = logging.getLogger('PluggableAuthService')
 
@@ -68,6 +59,12 @@ def addZODBRoleManager(dispatcher, id, title=None, REQUEST=None):
             % dispatcher.absolute_url())
 
 
+@implementer(
+    IZODBRoleManager,
+    iplugins.IRolesPlugin,
+    iplugins.IRoleEnumerationPlugin,
+    iplugins.IRoleAssignerPlugin
+)
 class ZODBRoleManager(BasePlugin):
 
     """ PAS plugin for managing roles in the ZODB.
@@ -117,8 +114,8 @@ class ZODBRoleManager(BasePlugin):
     #
     #   IRoleEnumerationPlugin implementation
     #
-    def enumerateRoles(self, id=None, exact_match=False, sort_by=None, max_results=None, **kw
-                       ):
+    def enumerateRoles(self, id=None, exact_match=False, sort_by=None,
+                       max_results=None, **kw):
         """ See IRoleEnumerationPlugin.
         """
         role_info = []
@@ -204,8 +201,11 @@ class ZODBRoleManager(BasePlugin):
         if self._roles.get(role_id) is not None:
             raise KeyError('Duplicate role: %s' % role_id)
 
-        self._roles[role_id] = {'id': role_id, 'title': title, 'description': description
-                                }
+        self._roles[role_id] = {
+            'id': role_id,
+            'title': title,
+            'description': description
+        }
 
     security.declarePrivate('updateRole')
 
@@ -252,8 +252,12 @@ class ZODBRoleManager(BasePlugin):
 
             parent = aq_parent(self)
 
-            for info in parent.searchPrincipals(max_results=20, sort_by='id', id=search_id, exact_match=False
-                                                ):
+            for info in parent.searchPrincipals(
+                max_results=20,
+                sort_by='id',
+                id=search_id,
+                exact_match=False
+            ):
                 id = info['id']
                 title = info.get('title', id)
                 if (role_id not in self._principal_roles.get(id, ())
@@ -300,7 +304,7 @@ class ZODBRoleManager(BasePlugin):
 
         o Raise KeyError if 'role_id' is unknown.
         """
-        role_info = self._roles[role_id]  # raise KeyError if unknown!
+        self._roles[role_id]  # raise KeyError if unknown!
 
         current = self._principal_roles.get(principal_id, ())
         already = role_id in current
@@ -324,7 +328,7 @@ class ZODBRoleManager(BasePlugin):
         o Ignore requests to remove a role not already assigned to the
           principal.
         """
-        role_info = self._roles[role_id]  # raise KeyError if unknown!
+        self._roles[role_id]  # raise KeyError if unknown!
 
         current = self._principal_roles.get(principal_id, ())
         new = tuple([x for x in current if x != role_id])
@@ -346,19 +350,25 @@ class ZODBRoleManager(BasePlugin):
                       )
 
     security.declareProtected(ManageUsers, 'manage_roles')
-    manage_roles = PageTemplateFile('www/zrRoles', globals(), __name__='manage_roles'
-                                    )
+    manage_roles = PageTemplateFile(
+        'www/zrRoles',
+        globals(),
+        __name__='manage_roles'
+    )
 
     security.declareProtected(ManageUsers, 'manage_twoLists')
-    manage_twoLists = PageTemplateFile('../www/two_lists', globals(), __name__='manage_twoLists'
-                                       )
+    manage_twoLists = PageTemplateFile(
+        '../www/two_lists',
+        globals(),
+        __name__='manage_twoLists'
+    )
 
     security.declareProtected(ManageUsers, 'manage_addRole')
 
     @csrf_only
     @postonly
-    def manage_addRole(self, role_id, title, description, RESPONSE=None, REQUEST=None
-                       ):
+    def manage_addRole(self, role_id, title, description,
+                       RESPONSE=None, REQUEST=None):
         """ Add a role via the ZMI.
         """
         self.addRole(role_id, title, description)
@@ -374,8 +384,8 @@ class ZODBRoleManager(BasePlugin):
 
     @csrf_only
     @postonly
-    def manage_updateRole(self, role_id, title, description, RESPONSE=None, REQUEST=None
-                          ):
+    def manage_updateRole(self, role_id, title, description,
+                          RESPONSE=None, REQUEST=None):
         """ Update a role via the ZMI.
         """
         self.updateRole(role_id, title, description)
@@ -421,8 +431,8 @@ class ZODBRoleManager(BasePlugin):
 
     @csrf_only
     @postonly
-    def manage_assignRoleToPrincipals(self, role_id, principal_ids, RESPONSE, REQUEST=None
-                                      ):
+    def manage_assignRoleToPrincipals(self, role_id, principal_ids,
+                                      RESPONSE, REQUEST=None):
         """ Assign a role to one or more principals via the ZMI.
         """
         assigned = []
@@ -447,8 +457,8 @@ class ZODBRoleManager(BasePlugin):
 
     @csrf_only
     @postonly
-    def manage_removeRoleFromPrincipals(self, role_id, principal_ids, RESPONSE=None, REQUEST=None
-                                        ):
+    def manage_removeRoleFromPrincipals(self, role_id, principal_ids,
+                                        RESPONSE=None, REQUEST=None):
         """ Remove a role from one or more principals via the ZMI.
         """
         removed = []
@@ -468,10 +478,6 @@ class ZODBRoleManager(BasePlugin):
                                + '&manage_tabs_message=%s'
                                ) % (self.absolute_url(), role_id, message)
                               )
-
-classImplements(ZODBRoleManager, IZODBRoleManager, IRolesPlugin, IRoleEnumerationPlugin, IRoleAssignerPlugin
-                )
-
 
 InitializeClass(ZODBRoleManager)
 

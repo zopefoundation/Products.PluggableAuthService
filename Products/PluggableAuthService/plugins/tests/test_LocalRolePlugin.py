@@ -11,13 +11,11 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-import unittest
-
-from Acquisition import Implicit, aq_base, aq_parent
+from Acquisition import Implicit
 from OFS.ObjectManager import ObjectManager
-
 from Products.PluggableAuthService.tests.conformance \
     import IRolesPlugin_conformance
+import unittest
 
 
 class FauxObject(Implicit):

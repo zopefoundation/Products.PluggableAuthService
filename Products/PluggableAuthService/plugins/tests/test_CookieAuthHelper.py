@@ -11,18 +11,19 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
+from Products.PluggableAuthService.tests import conformance
+from Products.PluggableAuthService.tests.test_PluggableAuthService \
+    import FauxRequest
+from Products.PluggableAuthService.tests.test_PluggableAuthService \
+    import FauxResponse
+from Products.PluggableAuthService.tests.test_PluggableAuthService \
+    import FauxObject
+from Products.PluggableAuthService.tests.test_PluggableAuthService \
+    import FauxRoot
+from Products.PluggableAuthService.tests.test_PluggableAuthService \
+    import FauxContainer
 import unittest
 import urllib
-
-from Products.PluggableAuthService.tests.conformance \
-    import ILoginPasswordHostExtractionPlugin_conformance
-from Products.PluggableAuthService.tests.conformance \
-    import IChallengePlugin_conformance
-from Products.PluggableAuthService.tests.conformance \
-    import ICredentialsResetPlugin_conformance
-
-from Products.PluggableAuthService.tests.test_PluggableAuthService \
-    import FauxRequest, FauxResponse, FauxObject, FauxRoot, FauxContainer
 
 
 class FauxSettableRequest(FauxRequest):
@@ -54,8 +55,12 @@ class FauxCookieResponse(FauxResponse):
         self.headers[name] = value
 
 
-class CookieAuthHelperTests(unittest.TestCase, ILoginPasswordHostExtractionPlugin_conformance, IChallengePlugin_conformance, ICredentialsResetPlugin_conformance
-                            ):
+class CookieAuthHelperTests(
+    unittest.TestCase,
+    conformance.ILoginPasswordHostExtractionPlugin_conformance,
+    conformance.IChallengePlugin_conformance,
+    conformance.ICredentialsResetPlugin_conformance
+):
 
     def _getTargetClass(self):
 
@@ -121,7 +126,9 @@ class CookieAuthHelperTests(unittest.TestCase, ILoginPasswordHostExtractionPlugi
         response = FauxCookieResponse()
         testURL = 'http://test'
         request = FauxRequest(
-            RESPONSE=response, URL=testURL, ACTUAL_URL=testURL)
+            RESPONSE=response,
+            URL=testURL,
+            ACTUAL_URL=testURL)
         root.REQUEST = request
 
         helper = self._makeOne().__of__(root)
@@ -129,20 +136,26 @@ class CookieAuthHelperTests(unittest.TestCase, ILoginPasswordHostExtractionPlugi
         helper.challenge(request, response)
         self.assertEqual(response.status, 302)
         self.assertEqual(len(response.headers), 3)
-        self.failUnless(response.headers[
-                        'Location'].endswith(urllib.quote(testURL)))
+        self.failUnless(
+            response.headers['Location'].endswith(
+                urllib.quote(testURL)))
         self.assertEqual(response.headers['Cache-Control'], 'no-cache')
-        self.assertEqual(response.headers[
-                         'Expires'], 'Sat, 01 Jan 2000 00:00:00 GMT')
+        self.assertEqual(
+            response.headers['Expires'],
+            'Sat, 01 Jan 2000 00:00:00 GMT')
 
     def test_challenge_with_vhm(self):
         rc, root, folder, object = self._makeTree()
         response = FauxCookieResponse()
-        vhmURL = 'http://localhost/VirtualHostBase/http/test/VirtualHostRoot/xxx'
+        vhmURL = (
+            'http://localhost/VirtualHostBase/http/test/VirtualHostRoot/xxx'
+        )
         actualURL = 'http://test/xxx'
 
         request = FauxRequest(
-            RESPONSE=response, URL=vhmURL, ACTUAL_URL=actualURL)
+            RESPONSE=response,
+            URL=vhmURL,
+            ACTUAL_URL=actualURL)
         root.REQUEST = request
 
         helper = self._makeOne().__of__(root)
@@ -150,13 +163,16 @@ class CookieAuthHelperTests(unittest.TestCase, ILoginPasswordHostExtractionPlugi
         helper.challenge(request, response)
         self.assertEqual(response.status, 302)
         self.assertEqual(len(response.headers), 3)
-        self.failUnless(response.headers['Location'].endswith(
-            urllib.quote(actualURL)))
-        self.failIf(response.headers['Location'].endswith(
-            urllib.quote(vhmURL)))
+        self.failUnless(
+            response.headers['Location'].endswith(
+                urllib.quote(actualURL)))
+        self.failIf(
+            response.headers['Location'].endswith(
+                urllib.quote(vhmURL)))
         self.assertEqual(response.headers['Cache-Control'], 'no-cache')
-        self.assertEqual(response.headers[
-                         'Expires'], 'Sat, 01 Jan 2000 00:00:00 GMT')
+        self.assertEqual(
+            response.headers['Expires'],
+            'Sat, 01 Jan 2000 00:00:00 GMT')
 
     def test_resetCredentials(self):
         helper = self._makeOne()
@@ -169,8 +185,11 @@ class CookieAuthHelperTests(unittest.TestCase, ILoginPasswordHostExtractionPlugi
     def test_loginWithoutCredentialsUpdate(self):
         helper = self._makeOne()
         response = FauxCookieResponse()
-        request = FauxSettableRequest(__ac_name='foo', __ac_password='bar', RESPONSE=response
-                                      )
+        request = FauxSettableRequest(
+            __ac_name='foo',
+            __ac_password='bar',
+            RESPONSE=response
+        )
         request.form['came_from'] = ''
         helper.REQUEST = request
 
@@ -215,8 +234,6 @@ class CookieAuthHelperTests(unittest.TestCase, ILoginPasswordHostExtractionPlugi
 
     def test_extractCredentials_from_cookie_with_bad_binascii(self):
         # this might happen between browser implementations
-        from base64 import encodestring
-
         helper = self._makeOne()
         response = FauxCookieResponse()
         request = FauxSettableRequest(RESPONSE=response)

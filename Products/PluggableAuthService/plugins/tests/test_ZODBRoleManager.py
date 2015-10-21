@@ -11,23 +11,22 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
+from Products.PluggableAuthService.plugins.tests.helpers import DummyUser
+from Products.PluggableAuthService.plugins.tests.helpers import FauxPAS
+from Products.PluggableAuthService.plugins.tests.helpers import FauxSmartPAS
+from Products.PluggableAuthService.plugins.tests.helpers \
+    import makeRequestAndResponse
+from Products.PluggableAuthService.tests import conformance
+from zExceptions import Forbidden
 import unittest
 
-from zExceptions import Forbidden
 
-from Products.PluggableAuthService.tests.conformance \
-    import IRolesPlugin_conformance
-from Products.PluggableAuthService.tests.conformance \
-    import IRoleEnumerationPlugin_conformance
-from Products.PluggableAuthService.tests.conformance \
-    import IRoleAssignerPlugin_conformance
-
-from Products.PluggableAuthService.plugins.tests.helpers \
-    import FauxPAS, FauxSmartPAS, DummyUser, makeRequestAndResponse
-
-
-class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance, IRoleEnumerationPlugin_conformance, IRoleAssignerPlugin_conformance
-                           ):
+class ZODBRoleManagerTests(
+    unittest.TestCase,
+    conformance.IRolesPlugin_conformance,
+    conformance.IRoleEnumerationPlugin_conformance,
+    conformance.IRoleAssignerPlugin_conformance
+):
 
     def _getTargetClass(self):
 
@@ -76,8 +75,12 @@ class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance, IRoleEnu
 
         zrm.addRole('roleid', 'Role', 'This is a role')
 
-        self.assertRaises(KeyError, zrm.addRole,
-                          'roleid', 'Alias', 'duplicate')
+        self.assertRaises(
+            KeyError,
+            zrm.addRole,
+            'roleid',
+            'Alias',
+            'duplicate')
 
     def test_removeRole_nonesuch(self):
 
@@ -121,16 +124,21 @@ class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance, IRoleEnu
 
         self.assertEqual(len(info_list), len(ID_LIST))
 
-        sorted = sorted(ID_LIST)
+        sorted = list(ID_LIST)
+        sorted.sort()
 
         for i in range(len(sorted)):
 
             self.assertEqual(info_list[i]['id'], sorted[i])
             self.assertEqual(info_list[i]['pluginid'], 'no_crit')
             self.assertEqual(
-                info_list[i]['properties_url'], 'no_crit/manage_roles?role_id=%s' % sorted[i])
-            self.assertEqual(info_list[i]['members_url'], 'no_crit/manage_roles?role_id=%s&assign=1'
-                             % sorted[i])
+                info_list[i]['properties_url'],
+                'no_crit/manage_roles?role_id=%s' %
+                sorted[i])
+            self.assertEqual(
+                info_list[i]['members_url'],
+                'no_crit/manage_roles?role_id=%s&assign=1' % sorted[i]
+            )
 
     def test_enumerateRoles_exact(self):
 
@@ -153,8 +161,9 @@ class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance, IRoleEnu
 
         self.assertEqual(info['id'], 'bar')
         self.assertEqual(info['pluginid'], 'exact')
-        self.assertEqual(info['properties_url'],
-                         'exact/manage_roles?role_id=bar')
+        self.assertEqual(
+            info['properties_url'],
+            'exact/manage_roles?role_id=bar')
         self.assertEqual(info['members_url'],
                          'exact/manage_roles?role_id=bar&assign=1')
         self.assertEqual(info['title'], 'Role bar')
@@ -178,19 +187,26 @@ class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance, IRoleEnu
 
         self.assertEqual(len(info_list), len(ID_LIST) - 1)  # no 'foo'
 
-        sorted = sorted(ID_LIST)
+        sorted = list(ID_LIST)
+        sorted.sort()
 
         for i in range(len(sorted) - 1):
 
             self.assertEqual(info_list[i]['id'], sorted[i])
             self.assertEqual(info_list[i]['pluginid'], 'partial')
             self.assertEqual(
-                info_list[i]['properties_url'], 'partial/manage_roles?role_id=%s' % sorted[i])
-            self.assertEqual(info_list[i]['members_url'], 'partial/manage_roles?role_id=%s&assign=1'
-                             % sorted[i])
+                info_list[i]['properties_url'],
+                'partial/manage_roles?role_id=%s' %
+                sorted[i])
+            self.assertEqual(
+                info_list[i]['members_url'],
+                'partial/manage_roles?role_id=%s&assign=1' % sorted[i]
+            )
             self.assertEqual(info_list[i]['title'], 'Role %s' % sorted[i])
-            self.assertEqual(info_list[i]['description'],
-                             'This is role, %s' % sorted[i])
+            self.assertEqual(
+                info_list[i]['description'],
+                'This is role, %s' %
+                sorted[i])
 
     def test_enumerateRoles_multiple(self):
 
@@ -439,8 +455,12 @@ class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance, IRoleEnu
         root = FauxRoot()
         zrm = self._makeOne(id='update_nonesuch').__of__(root)
 
-        self.assertRaises(KeyError, zrm.updateRole,
-                          'nonesuch', 'title', 'description')
+        self.assertRaises(
+            KeyError,
+            zrm.updateRole,
+            'nonesuch',
+            'title',
+            'description')
 
     def test_updateRole_normal(self):
 

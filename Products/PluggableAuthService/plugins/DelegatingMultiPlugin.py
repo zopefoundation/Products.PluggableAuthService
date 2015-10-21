@@ -14,41 +14,21 @@
 """ DelegatingMultiPlugin   Shim to use any User Folder with the
                             PluggableAuthenticationService
 """
-
-__doc__     = """ Delegating User Folder shim module """
-__version__ = '$Revision$'[11:-2]
-
-# General Python imports
-import copy
-import os
-from urllib import quote_plus
-
-# Zope imports
-from Acquisition import aq_base
-from OFS.Folder import Folder
-from App.class_init import InitializeClass
+from AccessControl import AuthEncoding
 from AccessControl import ClassSecurityInfo
 from AccessControl.SpecialUsers import emergency_user
-
-from zope.interface import Interface
-from AccessControl import AuthEncoding
-
+from Acquisition import aq_base
+from App.class_init import InitializeClass
+from OFS.Folder import Folder
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-
-from Products.PluggableAuthService.interfaces.plugins import \
-    IAuthenticationPlugin
-from Products.PluggableAuthService.interfaces.plugins import \
-    IUserEnumerationPlugin
-from Products.PluggableAuthService.interfaces.plugins import \
-    IRolesPlugin
-from Products.PluggableAuthService.interfaces.plugins import \
-    ICredentialsUpdatePlugin
-from Products.PluggableAuthService.interfaces.plugins import \
-    ICredentialsResetPlugin
-from Products.PluggableAuthService.interfaces.plugins import \
-    IPropertiesPlugin
+from Products.PluggableAuthService.interfaces import plugins as iplugins
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PluggableAuthService.utils import classImplements
+from zope.interface import implementer
+from zope.interface import Interface
+import copy
+
+__doc__ = """ Delegating User Folder shim module """
+__version__ = '$Revision$'[11:-2]
 
 
 class IDelegatingMultiPlugin(Interface):
@@ -59,8 +39,8 @@ manage_addDelegatingMultiPluginForm = PageTemplateFile(
     'www/dmpAdd', globals(), __name__='manage_addDelegatingMultiPluginForm')
 
 
-def manage_addDelegatingMultiPlugin(self, id, title='', delegate_path='', REQUEST=None
-                                    ):
+def manage_addDelegatingMultiPlugin(self, id, title='', delegate_path='',
+                                    REQUEST=None):
     """ Factory method to instantiate a DelegatingMultiPlugin """
     # Make sure we really are working in our container (the
     # PluggableAuthService object)
@@ -74,6 +54,15 @@ def manage_addDelegatingMultiPlugin(self, id, title='', delegate_path='', REQUES
         REQUEST.RESPONSE.redirect('%s/manage_main' % self.absolute_url())
 
 
+@implementer(
+    IDelegatingMultiPlugin,
+    iplugins.IAuthenticationPlugin,
+    iplugins.IUserEnumerationPlugin,
+    iplugins.IRolesPlugin,
+    iplugins.ICredentialsUpdatePlugin,
+    iplugins.ICredentialsResetPlugin,
+    iplugins.IPropertiesPlugin
+)
 class DelegatingMultiPlugin(Folder, BasePlugin):
     """ The adapter that mediates between the PAS and the DelegatingUserFolder
     """
@@ -84,9 +73,14 @@ class DelegatingMultiPlugin(Folder, BasePlugin):
                       + Folder.manage_options
                       )
 
-    _properties = ({'id': 'delegate', 'label': ' Delegate Path', 'type': 'string', 'mode': 'w'
-                    },
-                   )
+    _properties = (
+        {
+            'id': 'delegate',
+            'label': ' Delegate Path',
+            'type': 'string',
+            'mode': 'w'
+        },
+    )
 
     def __init__(self, id, title='', delegate_path=''):
         """ Initialize a new instance """
@@ -116,8 +110,13 @@ class DelegatingMultiPlugin(Folder, BasePlugin):
         if not acl or not login or not password:
             return (None, None)
 
-        if login == emergency_user.getUserName() and \
-                AuthEncoding.pw_validate(emergency_user._getPassword(), password):
+        if (
+            login == emergency_user.getUserName() and
+            AuthEncoding.pw_validate(
+                emergency_user._getPassword(),
+                password
+            )
+        ):
             return (login, login)
 
         user = acl.getUser(login)
@@ -180,8 +179,8 @@ class DelegatingMultiPlugin(Folder, BasePlugin):
 
     security.declarePrivate('enumerateUsers')
 
-    def enumerateUsers(self, id=None, login=None, exact_match=0, sort_by=None, max_results=None, **kw
-                       ):
+    def enumerateUsers(self, id=None, login=None, exact_match=0, sort_by=None,
+                       max_results=None, **kw):
         """ Fulfill the EnumerationPlugin requirements """
         result = []
         acl = self._getUserFolder()
@@ -201,27 +200,39 @@ class DelegatingMultiPlugin(Folder, BasePlugin):
                 raise ValueError(msg)
 
             if user is not None:
-                result.append({'id': user.getId(), 'login': user.getUserName(), 'pluginid': plugin_id, 'editurl': '%s' % edit_url
-                               })
+                result.append({
+                    'id': user.getId(),
+                    'login': user.getUserName(),
+                    'pluginid': plugin_id,
+                    'editurl': '%s' % edit_url
+                })
         else:
-            l_results = []
-            seen = []
             # XXX WAAAAA!!!!
             all_users = acl.getUsers()
 
             for user in all_users:
                 if id:
                     if user.getId().find(id) != -1:
-                        result.append({'login': user.getUserName(), 'id': user.getId(), 'pluginid': plugin_id
-                                       })
+                        result.append({
+                            'login': user.getUserName(),
+                            'id': user.getId(),
+                            'pluginid': plugin_id
+                        })
                 elif login:
                     if user.getUserName().find(login) != -1:
-                        result.append({'login': user.getUserName(), 'id': user.getId(), 'pluginid': plugin_id
-                                       })
+                        result.append({
+                            'login': user.getUserName(),
+                            'id': user.getId(),
+                            'pluginid': plugin_id
+                        })
 
             if sort_by is not None:
-                result.sort(lambda a, b: cmp(a.get(sort_by, '').lower(), b.get(sort_by, '').lower()
-                                             ))
+                result.sort(
+                    lambda a, b: cmp(
+                        a.get(sort_by, '').lower(),
+                        b.get(sort_by, '').lower()
+                    )
+                )
 
             if max_results is not None:
                 try:
@@ -231,9 +242,6 @@ class DelegatingMultiPlugin(Folder, BasePlugin):
                     pass
 
         return tuple(result)
-
-classImplements(DelegatingMultiPlugin, IDelegatingMultiPlugin, IAuthenticationPlugin, IUserEnumerationPlugin, IRolesPlugin, ICredentialsUpdatePlugin, ICredentialsResetPlugin, IPropertiesPlugin
-                )
 
 
 InitializeClass(DelegatingMultiPlugin)

@@ -47,21 +47,19 @@ def _replaceUserFolder(self, RESPONSE=None):
     """
     from Acquisition import aq_base
     from Products.PluggableAuthService.PluggableAuthService \
-        import PluggableAuthService, _PLUGIN_TYPE_INFO
-    from Products.PluginRegistry.PluginRegistry import PluginRegistry
+        import PluggableAuthService
     from Products.PluggableAuthService.plugins.ZODBUserManager \
         import ZODBUserManager
     from Products.PluggableAuthService.plugins.ZODBRoleManager \
         import ZODBRoleManager
-    from Products.PluggableAuthService.interfaces.plugins \
-        import IAuthenticationPlugin, IUserEnumerationPlugin
-    from Products.PluggableAuthService.interfaces.plugins \
-        import IRolesPlugin, IRoleEnumerationPlugin, IRoleAssignerPlugin
+    from Products.PluggableAuthService.interfaces import plugins as iplugins
 
     if getattr(aq_base(self), '__allow_groups__', None):
         if self.__allow_groups__.__class__ is PluggableAuthService:
-            _write(RESPONSE, 'replaceUserFolder',
-                   'Already replaced this user folder\n')
+            _write(
+                RESPONSE,
+                'replaceUserFolder',
+                'Already replaced this user folder\n')
             return
 
         # Capture all the user info from the previous user folder,
@@ -70,8 +68,11 @@ def _replaceUserFolder(self, RESPONSE=None):
         user_map = []
         for user_name in old_acl.getUserNames():
             old_user = old_acl.getUser(user_name)
-            _write(RESPONSE, 'replaceRootUserFolder',
-                   'Capturing user info for %s\n' % user_name)
+            _write(
+                RESPONSE,
+                'replaceRootUserFolder',
+                'Capturing user info for %s\n' %
+                user_name)
             user_map.append(
                 {'login': user_name,
                  'password': old_user._getPassword(),
@@ -82,7 +83,7 @@ def _replaceUserFolder(self, RESPONSE=None):
         # Create the new PluggableAuthService, and re-populate from
         # the captured data
         _pas = self.manage_addProduct['PluggableAuthService']
-        new_pas = _pas.addPluggableAuthService()
+        _pas.addPluggableAuthService()
         new_acl = self.acl_users
 
         user_folder = ZODBUserManager('users')
@@ -91,21 +92,26 @@ def _replaceUserFolder(self, RESPONSE=None):
         new_acl._setObject('roles', role_manager)
 
         plugins = getattr(new_acl, 'plugins')
-        plugins.activatePlugin(IAuthenticationPlugin, 'users')
-        plugins.activatePlugin(IUserEnumerationPlugin, 'users')
-        plugins.activatePlugin(IRolesPlugin, 'roles')
-        plugins.activatePlugin(IRoleEnumerationPlugin, 'roles')
-        plugins.activatePlugin(IRoleAssignerPlugin, 'roles')
+        plugins.activatePlugin(iplugins.IAuthenticationPlugin, 'users')
+        plugins.activatePlugin(iplugins.IUserEnumerationPlugin, 'users')
+        plugins.activatePlugin(iplugins.IRolesPlugin, 'roles')
+        plugins.activatePlugin(iplugins.IRoleEnumerationPlugin, 'roles')
+        plugins.activatePlugin(iplugins.IRoleAssignerPlugin, 'roles')
         for user_dict in user_map:
-            _write(RESPONSE, 'replaceRootUserFolder',
-                   'Translating user %s\n' % user_name)
+            _write(
+                RESPONSE,
+                'replaceRootUserFolder',
+                'Translating user %s\n' %
+                user_name)
             login = user_dict['login']
             password = user_dict['password']
             roles = user_dict['roles']
 
             _migrate_user(new_acl, login, password, roles)
-        _write(RESPONSE, 'replaceRootUserFolder',
-               'Replaced root acl_users with PluggableAuthService\n')
+        _write(
+            RESPONSE,
+            'replaceRootUserFolder',
+            'Replaced root acl_users with PluggableAuthService\n')
 
     transaction.savepoint(True)
 
@@ -150,23 +156,39 @@ def _upgradeLocalRoleAssignments(self, RESPONSE=None):
                         new_principals = user_folder.searchPrincipals(id=key)
                         if not new_principals:
                             _write(
-                                RESPONSE, 'upgradeLocalRoleAssignmentsFromRoot', '  Ignoring map for unknown principal %s\n'
-                                % key)
+                                RESPONSE,
+                                'upgradeLocalRoleAssignmentsFromRoot',
+                                'Ignoring map for unknown principal %s\n' % key
+                            )
                             new_map[key] = map[key]
                             continue
                         npid = new_principals[0]['id']
                         new_map[npid] = map[key]
-                        _write(RESPONSE, 'upgradeLocalRoleAssignmentsFromRoot',
-                               '  Translated %s to %s\n' % (key, npid))
-                        _write(RESPONSE, 'upgradeLocalRoleAssignmentsFromRoot',
-                               '  Assigned roles %s to %s\n' % (map[key], npid))
+                        _write(
+                            RESPONSE,
+                            'upgradeLocalRoleAssignmentsFromRoot',
+                            '  Translated %s to %s\n' %
+                            (key,
+                             npid))
+                        _write(
+                            RESPONSE,
+                            'upgradeLocalRoleAssignmentsFromRoot',
+                            '  Assigned roles %s to %s\n' %
+                            (map[key],
+                             npid))
                     obj.__ac_local_roles__ = new_map
-                    _write(RESPONSE, 'upgradeLocalRoleAssignmentsFromRoot', ('Local Roles map changed for (%s)\n'
-                                                                             % '/'.join(path)))
+                    _write(
+                        RESPONSE,
+                        'upgradeLocalRoleAssignmentsFromRoot',
+                        ('Local Roles map changed for (%s)\n' % '/'.join(path))
+                    )
             if (len(seen) % 100) == 0:
                 transaction.savepoint(True)
-                _write(RESPONSE, 'upgradeLocalRoleAssignmentsFromRoot',
-                       "  -- Set savepoint at object # %d\n" % len(seen))
+                _write(
+                    RESPONSE,
+                    'upgradeLocalRoleAssignmentsFromRoot',
+                    "  -- Set savepoint at object # %d\n" %
+                    len(seen))
             if getattr(aq_base(obj), 'isPrincipiaFolderish', 0):
                 for o in obj.objectValues():
                     descend(user_folder, o)

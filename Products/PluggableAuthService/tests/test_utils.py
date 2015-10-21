@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 # Copyright (c) 2006 Zope Foundation and Contributors
@@ -12,6 +13,21 @@
 #
 ##############################################################################
 import unittest
+from zope.interface import implementer
+from zope.publisher.interfaces.browser import IBrowserRequest
+
+
+@implementer(IBrowserRequest)
+class MockRequest(dict):
+    """XXX mock request, should be replaced with a test request
+    """
+
+
+def _makeRequestWSession(**session):
+    request = MockRequest()
+    request.SESSION = session.copy()
+    request.form = {}
+    return request
 
 
 class Test_createViewName(unittest.TestCase):
@@ -93,19 +109,6 @@ class Test_createKeywords(unittest.TestCase):
         hashed = _createHashedValue(_ITEMS)
         self.assertEqual(self._callFUT(foo='bar', baz=u'\u03a4\u03b6'),
                          {'keywords': hashed})
-
-
-def _makeRequestWSession(**session):
-    from zope.interface import implementer
-    from zope.publisher.interfaces.browser import IBrowserRequest
-
-    @implementer(IBrowserRequest)
-    class _Request(dict):
-        pass
-    request = _Request()
-    request.SESSION = session.copy()
-    request.form = {}
-    return request
 
 
 class Test_getCSRFToken(unittest.TestCase):
@@ -215,9 +218,9 @@ class CSRFTokenTests(unittest.TestCase):
 
 class Test_csrf_only(unittest.TestCase):
 
-    def _callFUT(self, *args, **kw):
+    def _callFUT(self, *arguments, **kw):
         from Products.PluggableAuthService.utils import csrf_only
-        return csrf_only(*args, **kw)
+        return csrf_only(*arguments, **kw)
 
     def test_w_function_no_REQUEST(self):
         def no_request(foo, bar, **kw):
@@ -228,14 +231,19 @@ class Test_csrf_only(unittest.TestCase):
         from ZPublisher import Forbidden
 
         def w_positional_request(foo, bar, REQUEST):
-            "I haz REQUEST as positional arg"
+            """I haz REQUEST as positional arg"""
             return 42
         wrapped = self._callFUT(w_positional_request)
         self.assertEqual(wrapped.__name__, w_positional_request.__name__)
         self.assertEqual(wrapped.__module__, w_positional_request.__module__)
         self.assertEqual(wrapped.__doc__, w_positional_request.__doc__)
-        self.assertRaises(Forbidden, wrapped, foo=None, bar=None,
-                          REQUEST=_makeRequestWSession())
+        self.assertRaises(
+            Forbidden,
+            wrapped,
+            foo=None,
+            bar=None,
+            REQUEST=_makeRequestWSession()
+        )
         req = _makeRequestWSession(_csrft_='deadbeef')
         req.form['csrf_token'] = 'deadbeef'
         self.assertEqual(wrapped(foo=None, bar=None, REQUEST=req), 42)
@@ -265,7 +273,8 @@ def _createHashedValue(items):
         from sha import new as sha
 
     hasher = sha()
-    items = sorted(items)
+    items = list(items)
+    items.sort()
     for k, v in items:
         if isinstance(k, unicode):
             k = k.encode('utf-8')

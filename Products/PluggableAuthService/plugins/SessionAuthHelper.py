@@ -15,22 +15,13 @@
 
 $Id$
 """
-
 from AccessControl.SecurityInfo import ClassSecurityInfo
 from App.class_init import default__class_init__ as InitializeClass
-
-from zope.interface import Interface
-
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-
-from Products.PluggableAuthService.interfaces.plugins import \
-    ILoginPasswordHostExtractionPlugin
-from Products.PluggableAuthService.interfaces.plugins import \
-    ICredentialsUpdatePlugin
-from Products.PluggableAuthService.interfaces.plugins import \
-    ICredentialsResetPlugin
+from Products.PluggableAuthService.interfaces import plugins as iplugins
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PluggableAuthService.utils import classImplements
+from zope.interface import implementer
+from zope.interface import Interface
 
 
 class ISessionAuthHelper(Interface):
@@ -39,7 +30,10 @@ class ISessionAuthHelper(Interface):
 
 
 manage_addSessionAuthHelperForm = PageTemplateFile(
-    'www/saAdd', globals(), __name__='manage_addSessionAuthHelperForm')
+    'www/saAdd',
+    globals(),
+    __name__='manage_addSessionAuthHelperForm'
+)
 
 
 def manage_addSessionAuthHelper(dispatcher, id, title=None, REQUEST=None):
@@ -54,6 +48,12 @@ def manage_addSessionAuthHelper(dispatcher, id, title=None, REQUEST=None):
                                      % dispatcher.absolute_url())
 
 
+@implementer(
+    ISessionAuthHelper,
+    iplugins.ILoginPasswordHostExtractionPlugin,
+    iplugins.ICredentialsUpdatePlugin,
+    iplugins.ICredentialsResetPlugin
+)
 class SessionAuthHelper(BasePlugin):
     """ Multi-plugin for managing details of Session Authentication. """
     meta_type = 'Session Auth Helper'
@@ -110,8 +110,5 @@ class SessionAuthHelper(BasePlugin):
         """ Empty out the currently-stored session values """
         request.SESSION.set('__ac_name', '')
         request.SESSION.set('__ac_password', '')
-
-classImplements(SessionAuthHelper, ISessionAuthHelper, ILoginPasswordHostExtractionPlugin, ICredentialsUpdatePlugin, ICredentialsResetPlugin
-                )
 
 InitializeClass(SessionAuthHelper)

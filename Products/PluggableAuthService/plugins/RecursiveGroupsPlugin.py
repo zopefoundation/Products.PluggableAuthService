@@ -15,21 +15,15 @@
 
 $Id$
 """
-from Acquisition import aq_parent
 from AccessControl import ClassSecurityInfo
+from Acquisition import aq_parent
 from App.class_init import InitializeClass
-from BTrees.OOBTree import OOBTree
-
-from zope.interface import Interface
-
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-
-from Products.PluggableAuthService.interfaces.plugins \
-    import IGroupsPlugin
-from Products.PluggableAuthService.PropertiedUser import PropertiedUser
-from Products.PluggableAuthService.permissions import ManageGroups
+from Products.PluggableAuthService.interfaces.plugins import IGroupsPlugin
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PluggableAuthService.utils import classImplements
+from Products.PluggableAuthService.PropertiedUser import PropertiedUser
+from zope.interface import implementer
+from zope.interface import Interface
 
 
 class IRecursiveGroupsPlugin(Interface):
@@ -69,6 +63,7 @@ class SimpleGroup:
         pass
 
 
+@implementer(IRecursiveGroupsPlugin, IGroupsPlugin)
 class RecursiveGroupsPlugin(BasePlugin):
 
     """ PAS plugin for recursively flattening a collection of groups
@@ -85,8 +80,7 @@ class RecursiveGroupsPlugin(BasePlugin):
     #
     #   IGroupsPlugin implementation
     #
-    security.declarePrivate('getGroupsForPrincipal')
-
+    @security.private
     def getGroupsForPrincipal(self, user, request=None):
 
         set = list(user.getGroups())
@@ -106,7 +100,5 @@ class RecursiveGroupsPlugin(BasePlugin):
 
         return tuple(seen)
 
-classImplements(RecursiveGroupsPlugin, IRecursiveGroupsPlugin, IGroupsPlugin
-                )
 
 InitializeClass(RecursiveGroupsPlugin)

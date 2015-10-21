@@ -295,8 +295,8 @@ class IUserEnumerationPlugin(Interface):
     o XXX:  can these be done by a single plugin?
     """
 
-    def enumerateUsers(id=None, login=None, exact_match=False, sort_by=None, max_results=None, **kw
-                       ):
+    def enumerateUsers(id=None, login=None, exact_match=False, sort_by=None,
+                       max_results=None, **kw):
         """ -> ( user_info_1, ... user_info_N )
 
         o Return mappings for users matching the given criteria.
@@ -368,8 +368,8 @@ class IGroupEnumerationPlugin(Interface):
     o XXX:  can these be done by a single plugin?
     """
 
-    def enumerateGroups(id=None, exact_match=False, sort_by=None, max_results=None, **kw
-                        ):
+    def enumerateGroups(id=None, exact_match=False, sort_by=None,
+                        max_results=None, **kw):
         """ -> ( group_info_1, ... group_info_N )
 
         o Return mappings for groups matching the given criteria.
@@ -415,8 +415,8 @@ class IRoleEnumerationPlugin(Interface):
 
     """ Allow querying roles by ID, and searching for roles.
     """
-    def enumerateRoles(id=None, exact_match=False, sort_by=None, max_results=None, **kw
-                       ):
+    def enumerateRoles(id=None, exact_match=False, sort_by=None,
+                       max_results=None, **kw):
         """ -> ( role_info_1, ... role_info_N )
 
         o Return mappings for roles matching the given criteria.

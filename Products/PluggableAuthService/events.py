@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 # Copyright (c) 2007 Zope Foundation and Contributors
@@ -12,55 +13,48 @@
 #
 ##############################################################################
 from Acquisition import aq_parent
+from Products.PluggableAuthService.interfaces import events
+from Products.PluggableAuthService.interfaces.authservice import IBasicUser
 from zope.component import adapter
 from zope.component import subscribers
-from zope.interface import implements
-
-from Products.PluggableAuthService.interfaces.authservice import IBasicUser
-from Products.PluggableAuthService.interfaces.events \
-    import ICredentialsUpdatedEvent
-from Products.PluggableAuthService.interfaces.events import IPASEvent
-from Products.PluggableAuthService.interfaces.events \
-    import IPrincipalCreatedEvent
-from Products.PluggableAuthService.interfaces.events \
-    import IPrincipalDeletedEvent
-from Products.PluggableAuthService.interfaces.events \
-    import IPropertiesUpdatedEvent
+from zope.interface import implementer
 
 
+@implementer(events.IPASEvent)
 class PASEvent(object):
-    implements(IPASEvent)
 
     def __init__(self, principal):
         self.principal = principal
         self.object = principal
 
 
+@implementer(events.IPrincipalCreatedEvent)
 class PrincipalCreated(PASEvent):
-    implements(IPrincipalCreatedEvent)
+    pass
 
 
+@implementer(events.IPrincipalDeletedEvent)
 class PrincipalDeleted(PASEvent):
-    implements(IPrincipalDeletedEvent)
+    pass
 
 
+@implementer(events.ICredentialsUpdatedEvent)
 class CredentialsUpdated(PASEvent):
-    implements(ICredentialsUpdatedEvent)
 
     def __init__(self, principal, password):
         super(CredentialsUpdated, self).__init__(principal)
         self.password = password
 
 
+@implementer(events.IPropertiesUpdatedEvent)
 class PropertiesUpdated(PASEvent):
-    implements(IPropertiesUpdatedEvent)
 
     def __init__(self, principal, properties):
         super(PropertiesUpdated, self).__init__(principal)
         self.properties = properties
 
 
-@adapter(IBasicUser, ICredentialsUpdatedEvent)
+@adapter(IBasicUser, events.ICredentialsUpdatedEvent)
 def userCredentialsUpdatedHandler(principal, event):
     pas = aq_parent(principal)
     pas.updateCredentials(
@@ -71,9 +65,9 @@ def userCredentialsUpdatedHandler(principal, event):
         event.password)
 
 
-@adapter(IPASEvent)
+@adapter(events.IPASEvent)
 def PASEventNotify(event):
     """Event subscriber to dispatch PASEvent to interested adapters."""
     adapters = subscribers((event.principal, event), None)
-    for adapter in adapters:
+    for ad in adapters:
         pass  # getting them does the work

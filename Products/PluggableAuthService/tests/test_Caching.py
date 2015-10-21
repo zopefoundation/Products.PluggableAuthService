@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 # Copyright (c) 2001 Zope Foundation and Contributors
@@ -11,12 +12,10 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-import unittest
-
 from Acquisition import aq_base
 from OFS.Cache import isCacheable
-
 from Products.StandardCacheManagers.RAMCacheManager import RAMCacheManager
+import unittest
 
 
 class FauxRequest:
@@ -131,16 +130,26 @@ class PluggableAuthServiceCachingTests(unittest.TestCase):
         # for roles. Basic scaffolding to be able to store and retrieve users.
         from Products.PluggableAuthService.interfaces import plugins
 
-        plugin_registry.activatePlugin(plugins.IUserEnumerationPlugin, user_source.getId()
-                                       )
-        plugin_registry.activatePlugin(plugins.IUserAdderPlugin, user_source.getId()
-                                       )
-        plugin_registry.activatePlugin(plugins.IRolesPlugin, roles_source.getId()
-                                       )
-        plugin_registry.activatePlugin(plugins.IRoleEnumerationPlugin, roles_source.getId()
-                                       )
-        plugin_registry.activatePlugin(plugins.IRoleAssignerPlugin, roles_source.getId()
-                                       )
+        plugin_registry.activatePlugin(
+            plugins.IUserEnumerationPlugin,
+            user_source.getId()
+        )
+        plugin_registry.activatePlugin(
+            plugins.IUserAdderPlugin,
+            user_source.getId()
+        )
+        plugin_registry.activatePlugin(
+            plugins.IRolesPlugin,
+            roles_source.getId()
+        )
+        plugin_registry.activatePlugin(
+            plugins.IRoleEnumerationPlugin,
+            roles_source.getId()
+        )
+        plugin_registry.activatePlugin(
+            plugins.IRoleAssignerPlugin,
+            roles_source.getId()
+        )
 
         # Now add a user and make sure it's there
         zcuf._doAddUser('testlogin', 'secret', ['Member', 'Anonymous'], [])

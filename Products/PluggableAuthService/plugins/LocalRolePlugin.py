@@ -17,14 +17,11 @@ $Id$
 """
 from AccessControl import ClassSecurityInfo
 from App.class_init import InitializeClass
-
-from zope.interface import Interface
-
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-
 from Products.PluggableAuthService.interfaces.plugins import IRolesPlugin
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PluggableAuthService.utils import classImplements
+from zope.interface import implementer
+from zope.interface import Interface
 
 
 class ILocalRolePlugin(Interface):
@@ -43,10 +40,13 @@ def addLocalRolePlugin(dispatcher, id, title='', RESPONSE=None):
     dispatcher._setObject(id, lrp)
 
     if RESPONSE is not None:
-        RESPONSE.redirect('%s/manage_main?manage_tabs_message=%s' %
-                          (dispatcher.absolute_url(), 'LocalRolePlugin+added.'))
+        RESPONSE.redirect(
+            '%s/manage_main?manage_tabs_message=%s' %
+            (dispatcher.absolute_url(), 'LocalRolePlugin+added.')
+        )
 
 
+@implementer(ILocalRolePlugin, IRolesPlugin)
 class LocalRolePlugin(BasePlugin):
     """ Provide roles during Authentication from local roles
         assignments made on the root object.
@@ -72,8 +72,5 @@ class LocalRolePlugin(BasePlugin):
         if local_roles is None:
             return None
         return local_roles.get(principal.getId())
-
-classImplements(LocalRolePlugin, ILocalRolePlugin, IRolesPlugin
-                )
 
 InitializeClass(LocalRolePlugin)

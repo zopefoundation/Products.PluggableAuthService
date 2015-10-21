@@ -12,18 +12,12 @@
 #
 ##############################################################################
 import unittest
+from Products.PluggableAuthService.tests import conformance
 
 try:
     from IPy import IP
 except ImportError:
     IP = None
-
-from Products.PluggableAuthService.tests.conformance \
-    import IExtractionPlugin_conformance
-from Products.PluggableAuthService.tests.conformance \
-    import IAuthenticationPlugin_conformance
-from Products.PluggableAuthService.tests.conformance \
-    import IRolesPlugin_conformance
 
 
 class FauxRequest:
@@ -41,8 +35,12 @@ class FauxRequestWithClientAddr(FauxRequest):
         return self._data.get('CLIENT_ADDR')
 
 
-class DomainAuthHelperTests(unittest.TestCase, IExtractionPlugin_conformance, IAuthenticationPlugin_conformance, IRolesPlugin_conformance
-                            ):
+class DomainAuthHelperTests(
+    unittest.TestCase,
+    conformance.IExtractionPlugin_conformance,
+    conformance.IAuthenticationPlugin_conformance,
+    conformance.IRolesPlugin_conformance
+):
 
     def _getTargetClass(self):
 

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 # Copyright (c) 2001 Zope Foundation and Contributors
@@ -33,8 +34,8 @@ class FauxProtected(Implicit):
         self.__ac_local_roles__ = local_roles
 
 
-class PropertiedUserTests(unittest.TestCase, IBasicUser_conformance, IPropertiedUser_conformance
-                          ):
+class PropertiedUserTests(unittest.TestCase, IBasicUser_conformance,
+                          IPropertiedUser_conformance):
 
     def _getTargetClass(self):
 
@@ -141,8 +142,10 @@ class PropertiedUserTests(unittest.TestCase, IBasicUser_conformance, IPropertied
         user = self._makeOne()
         user._addGroups(groups)
 
-        faux = FauxProtected({'Group A': ('Manager', ), 'Group B': ('Manager', 'Owner')
-                              })
+        faux = FauxProtected({
+            'Group A': ('Manager', ),
+            'Group B': ('Manager', 'Owner')
+        })
 
         local_roles = user.getRolesInContext(faux)
         self.assertEqual(len(local_roles), 2)

@@ -15,25 +15,18 @@
 
 $Id$
 """
-from Acquisition import aq_parent
 from AccessControl import ClassSecurityInfo
 from AccessControl.requestmethod import postonly
+from Acquisition import aq_parent
 from App.class_init import InitializeClass
 from BTrees.OOBTree import OOBTree
-
-from zope.interface import Interface
-
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-
-from Products.PluggableAuthService.interfaces.plugins \
-    import IGroupEnumerationPlugin
-from Products.PluggableAuthService.interfaces.plugins \
-    import IGroupsPlugin
-
+from Products.PluggableAuthService.interfaces import plugins as iplugins
 from Products.PluggableAuthService.permissions import ManageGroups
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PluggableAuthService.utils import classImplements
 from Products.PluggableAuthService.utils import csrf_only
+from zope.interface import implementer
+from zope.interface import Interface
 
 
 class IZODBGroupManager(Interface):
@@ -58,6 +51,11 @@ def addZODBGroupManager(dispatcher, id, title=None, REQUEST=None):
             % dispatcher.absolute_url())
 
 
+@implementer(
+    IZODBGroupManager,
+    iplugins.IGroupEnumerationPlugin,
+    iplugins.IGroupsPlugin
+)
 class ZODBGroupManager(BasePlugin):
 
     """ PAS plugin for managing groups, and groups of groups in the ZODB
@@ -78,8 +76,8 @@ class ZODBGroupManager(BasePlugin):
     #
     security.declarePrivate('enumerateGroups')
 
-    def enumerateGroups(self, id=None, title=None, exact_match=False, sort_by=None, max_results=None, **kw
-                        ):
+    def enumerateGroups(self, id=None, title=None, exact_match=False,
+                        sort_by=None, max_results=None, **kw):
         """ See IGroupEnumerationPlugin.
         """
         group_info = []
@@ -176,8 +174,11 @@ class ZODBGroupManager(BasePlugin):
         if self._groups.get(group_id) is not None:
             raise KeyError('Duplicate group ID: %s' % group_id)
 
-        self._groups[group_id] = {'id': group_id, 'title': title, 'description': description
-                                  }
+        self._groups[group_id] = {
+            'id': group_id,
+            'title': title,
+            'description': description
+        }
 
     security.declarePrivate('updateGroup')
 
@@ -223,8 +224,12 @@ class ZODBGroupManager(BasePlugin):
 
             parent = aq_parent(self)
 
-            for info in parent.searchPrincipals(max_results=20, sort_by='id', id=search_id, exact_match=False
-                                                ):
+            for info in parent.searchPrincipals(
+                max_results=20,
+                sort_by='id',
+                id=search_id,
+                exact_match=False
+            ):
                 id = info['id']
                 title = info.get('title', id)
                 if (group_id not in self._principal_groups.get(id, ())
@@ -262,7 +267,7 @@ class ZODBGroupManager(BasePlugin):
 
         o Raise KeyError if 'group_id' is unknown.
         """
-        group_info = self._groups[group_id]  # raise KeyError if unknown!
+        self._groups[group_id]  # raise KeyError if unknown!
 
         current = self._principal_groups.get(principal_id, ())
         already = group_id in current
@@ -287,7 +292,7 @@ class ZODBGroupManager(BasePlugin):
         o Ignore requests to remove a principal if not already a member
           of the group.
         """
-        group_info = self._groups[group_id]  # raise KeyError if unknown!
+        self._groups[group_id]  # raise KeyError if unknown!
 
         current = self._principal_groups.get(principal_id, ())
         new = tuple([x for x in current if x != group_id])
@@ -309,21 +314,30 @@ class ZODBGroupManager(BasePlugin):
                       )
 
     security.declarePublic('manage_widgets')
-    manage_widgets = PageTemplateFile('www/zuWidgets', globals(), __name__='manage_widgets'
-                                      )
+    manage_widgets = PageTemplateFile(
+        'www/zuWidgets',
+        globals(),
+        __name__='manage_widgets'
+    )
 
     security.declareProtected(ManageGroups, 'manage_groups')
-    manage_groups = PageTemplateFile('www/zgGroups', globals(), __name__='manage_groups'
-                                     )
+    manage_groups = PageTemplateFile(
+        'www/zgGroups',
+        globals(),
+        __name__='manage_groups'
+    )
 
     security.declareProtected(ManageGroups, 'manage_twoLists')
-    manage_twoLists = PageTemplateFile('../www/two_lists', globals(), __name__='manage_twoLists'
-                                       )
+    manage_twoLists = PageTemplateFile(
+        '../www/two_lists',
+        globals(),
+        __name__='manage_twoLists'
+    )
 
     security.declareProtected(ManageGroups, 'manage_addGroup')
 
-    def manage_addGroup(self, group_id, title=None, description=None, RESPONSE=None
-                        ):
+    def manage_addGroup(self, group_id, title=None, description=None,
+                        RESPONSE=None):
         """ Add a group via the ZMI.
         """
         self.addGroup(group_id, title, description)
@@ -379,8 +393,8 @@ class ZODBGroupManager(BasePlugin):
 
     @csrf_only
     @postonly
-    def manage_addPrincipalsToGroup(self, group_id, principal_ids, RESPONSE=None, REQUEST=None
-                                    ):
+    def manage_addPrincipalsToGroup(self, group_id, principal_ids,
+                                    RESPONSE=None, REQUEST=None):
         """ Add one or more principals to a group via the ZMI.
         """
         assigned = []
@@ -406,8 +420,8 @@ class ZODBGroupManager(BasePlugin):
 
     @csrf_only
     @postonly
-    def manage_removePrincipalsFromGroup(self, group_id, principal_ids, RESPONSE=None, REQUEST=None
-                                         ):
+    def manage_removePrincipalsFromGroup(self, group_id, principal_ids,
+                                         RESPONSE=None, REQUEST=None):
         """ Remove one or more principals from a group via the ZMI.
         """
         removed = []
@@ -419,17 +433,15 @@ class ZODBGroupManager(BasePlugin):
         if not removed:
             message = 'Principals+not+in+group+%s' % group_id
         else:
-            message = 'Principals+%s+removed+from+%s' % ('+'.join(removed), group_id
-                                                         )
+            message = 'Principals+%s+removed+from+%s' % (
+                '+'.join(removed), group_id
+            )
 
         if RESPONSE is not None:
             RESPONSE.redirect(('%s/manage_groups?group_id=%s&assign=1'
                                + '&manage_tabs_message=%s'
                                ) % (self.absolute_url(), group_id, message)
                               )
-
-classImplements(ZODBGroupManager, IZODBGroupManager, IGroupEnumerationPlugin, IGroupsPlugin
-                )
 
 InitializeClass(ZODBGroupManager)
 
@@ -445,12 +457,10 @@ class _ZODBGroupFilter:
     def __call__(self, group_info):
 
         if self._filter_ids:
-
             key = 'id'
             to_test = self._filter_ids
 
         elif self._filter_titles:
-
             key = 'title'
             to_test = self._filter_titles
 

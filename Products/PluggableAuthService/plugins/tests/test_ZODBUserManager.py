@@ -11,20 +11,12 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-import unittest
-
 from AccessControl.AuthEncoding import pw_encrypt
-from zExceptions import Forbidden
-
-from Products.PluggableAuthService.tests.conformance \
-    import IAuthenticationPlugin_conformance
-from Products.PluggableAuthService.tests.conformance \
-    import IUserEnumerationPlugin_conformance
-from Products.PluggableAuthService.tests.conformance \
-    import IUserAdderPlugin_conformance
-
 from Products.PluggableAuthService.plugins.tests.helpers \
     import makeRequestAndResponse
+from Products.PluggableAuthService.tests import conformance
+from zExceptions import Forbidden
+import unittest
 
 
 class DummyUser:
@@ -57,8 +49,12 @@ class FakeLowerCasePAS(object):
         return value.lower()
 
 
-class ZODBUserManagerTests(unittest.TestCase, IAuthenticationPlugin_conformance, IUserEnumerationPlugin_conformance, IUserAdderPlugin_conformance
-                           ):
+class ZODBUserManagerTests(
+    unittest.TestCase,
+    conformance.IAuthenticationPlugin_conformance,
+    conformance.IUserEnumerationPlugin_conformance,
+    conformance.IUserAdderPlugin_conformance
+):
 
     def _getTargetClass(self):
 
@@ -77,8 +73,10 @@ class ZODBUserManagerTests(unittest.TestCase, IAuthenticationPlugin_conformance,
 
         self.assertEqual(len(zum.listUserIds()), 0)
         self.assertEqual(len(zum.enumerateUsers()), 0)
-        self.assertRaises(KeyError, zum.getUserIdForLogin,
-                          'userid@example.com')
+        self.assertRaises(
+            KeyError,
+            zum.getUserIdForLogin,
+            'userid@example.com')
         self.assertRaises(KeyError, zum.getLoginForUserId, 'userid')
 
     def test_addUser(self):
@@ -105,11 +103,19 @@ class ZODBUserManagerTests(unittest.TestCase, IAuthenticationPlugin_conformance,
 
         zum.addUser('userid', 'userid@example.com', 'password')
 
-        self.assertRaises(KeyError, zum.addUser, 'userid',
-                          'luser@other.com', 'wordpass')
+        self.assertRaises(
+            KeyError,
+            zum.addUser,
+            'userid',
+            'luser@other.com',
+            'wordpass')
 
-        self.assertRaises(KeyError, zum.addUser, 'new_user',
-                          'userid@example.com', '3733t')
+        self.assertRaises(
+            KeyError,
+            zum.addUser,
+            'new_user',
+            'userid@example.com',
+            '3733t')
 
     def test_removeUser_nonesuch(self):
 
@@ -134,8 +140,10 @@ class ZODBUserManagerTests(unittest.TestCase, IAuthenticationPlugin_conformance,
         self.assertEqual(zum.getUserIdForLogin('userid@example.com'), 'userid')
         self.assertEqual(zum.getLoginForUserId('userid'), 'userid@example.com')
 
-        self.assertRaises(KeyError, zum.getUserIdForLogin,
-                          'doomed@example.com')
+        self.assertRaises(
+            KeyError,
+            zum.getUserIdForLogin,
+            'doomed@example.com')
         self.assertRaises(KeyError, zum.getLoginForUserId, 'doomed')
 
     def test_authenticateCredentials_bad_creds(self):
@@ -191,16 +199,21 @@ class ZODBUserManagerTests(unittest.TestCase, IAuthenticationPlugin_conformance,
 
         self.assertEqual(len(info_list), len(ID_LIST))
 
-        sorted = sorted(ID_LIST)
+        sorted = list(ID_LIST)
+        sorted.sort()
 
         for i in range(len(sorted)):
 
             self.assertEqual(info_list[i]['id'], sorted[i])
-            self.assertEqual(info_list[i]['login'],
-                             '%s@example.com' % sorted[i])
+            self.assertEqual(
+                info_list[i]['login'],
+                '%s@example.com' %
+                sorted[i])
             self.assertEqual(info_list[i]['pluginid'], 'no_crit')
             self.assertEqual(
-                info_list[i]['editurl'], 'no_crit/manage_users?user_id=%s' % sorted[i])
+                info_list[i]['editurl'],
+                'no_crit/manage_users?user_id=%s' %
+                sorted[i])
 
     def test_enumerateUsers_exact(self):
 
@@ -244,16 +257,21 @@ class ZODBUserManagerTests(unittest.TestCase, IAuthenticationPlugin_conformance,
 
         self.assertEqual(len(info_list), len(ID_LIST))  # all match
 
-        sorted = sorted(ID_LIST)
+        sorted = list(ID_LIST)
+        sorted.sort()
 
         for i in range(len(sorted)):
 
             self.assertEqual(info_list[i]['id'], sorted[i])
-            self.assertEqual(info_list[i]['login'],
-                             '%s@example.com' % sorted[i])
+            self.assertEqual(
+                info_list[i]['login'],
+                '%s@example.com' %
+                sorted[i])
             self.assertEqual(info_list[i]['pluginid'], 'partial')
             self.assertEqual(
-                info_list[i]['editurl'], 'partial/manage_users?user_id=%s' % sorted[i])
+                info_list[i]['editurl'],
+                'partial/manage_users?user_id=%s' %
+                sorted[i])
 
         info_list = zum.enumerateUsers(id='ba', exact_match=False)
 
@@ -265,11 +283,15 @@ class ZODBUserManagerTests(unittest.TestCase, IAuthenticationPlugin_conformance,
         for i in range(len(sorted) - 1):
 
             self.assertEqual(info_list[i]['id'], sorted[i])
-            self.assertEqual(info_list[i]['login'],
-                             '%s@example.com' % sorted[i])
+            self.assertEqual(
+                info_list[i]['login'],
+                '%s@example.com' %
+                sorted[i])
             self.assertEqual(info_list[i]['pluginid'], 'partial')
             self.assertEqual(
-                info_list[i]['editurl'], 'partial/manage_users?user_id=%s' % sorted[i])
+                info_list[i]['editurl'],
+                'partial/manage_users?user_id=%s' %
+                sorted[i])
 
     def test_enumerateUsers_other_criteria(self):
 
@@ -567,11 +589,8 @@ class ZODBUserManagerTests(unittest.TestCase, IAuthenticationPlugin_conformance,
 
     def test_addUser_with_preencrypted_password(self):
         # See collector #1869 && #1926
-        from AccessControl.AuthEncoding import pw_encrypt
-
         USER_ID = 'already_encrypted'
         PASSWORD = 'password'
-
         ENCRYPTED = pw_encrypt(PASSWORD)
 
         zum = self._makeOne()
@@ -666,7 +685,6 @@ class ZODBUserManagerTests(unittest.TestCase, IAuthenticationPlugin_conformance,
     def test_manage_updateUserPassword_POST_permissions(self):
         USER_ID = 'testuser'
         PASSWORD = 'password'
-        ENCRYPTED = pw_encrypt(PASSWORD)
 
         zum = self._makeOne()
         zum.addUser(USER_ID, USER_ID, '')
@@ -705,7 +723,6 @@ class ZODBUserManagerTests(unittest.TestCase, IAuthenticationPlugin_conformance,
                 return self._id
         USER_ID = 'testuser'
         PASSWORD = 'password'
-        ENCRYPTED = pw_encrypt(PASSWORD)
 
         zum = self._makeOne()
         zum.addUser(USER_ID, USER_ID, '')
@@ -733,8 +750,6 @@ class ZODBUserManagerTests(unittest.TestCase, IAuthenticationPlugin_conformance,
 
     def test_manage_removeUsers_POST_permissions(self):
         USER_ID = 'testuser'
-        PASSWORD = 'password'
-        ENCRYPTED = pw_encrypt(PASSWORD)
 
         zum = self._makeOne()
         zum.addUser(USER_ID, USER_ID, '')

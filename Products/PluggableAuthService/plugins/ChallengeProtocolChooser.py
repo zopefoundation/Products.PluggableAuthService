@@ -15,33 +15,20 @@
 
 $Id$
 """
-
-from Acquisition import aq_parent
 from AccessControl import ClassSecurityInfo
-from BTrees.OOBTree import OOBTree
 from App.class_init import InitializeClass
-
-from zope.interface import Interface
-
+from BTrees.OOBTree import OOBTree
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-
-from Products.PluggableAuthService.interfaces.plugins \
+from Products.PluggableAuthService.interfaces import plugins as iplugins
+from Products.PluggableAuthService.interfaces import request as irequest
+from Products.PluggableAuthService.plugins.RequestTypeSniffer \
     import IRequestTypeSniffer
-from Products.PluggableAuthService.interfaces.plugins \
-    import IChallengeProtocolChooser
-from Products.PluggableAuthService.interfaces.plugins \
-    import IChallengePlugin
-from Products.PluggableAuthService.interfaces.request \
-    import IBrowserRequest
-from Products.PluggableAuthService.interfaces.request \
-    import IWebDAVRequest
-from Products.PluggableAuthService.interfaces.request \
-    import IFTPRequest
-from Products.PluggableAuthService.interfaces.request \
-    import IXMLRPCRequest
-
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PluggableAuthService.utils import classImplements
+from zope.interface import implementer
+from zope.interface import Interface
+from zope.publisher.interfaces.browser import IBrowserRequest
+from zope.publisher.interfaces.ftp import IFTPRequest
+from zope.publisher.interfaces.xmlrpc import IXMLRPCRequest
 
 
 class IChallengeProtocolChooserPlugin(Interface):
@@ -82,6 +69,10 @@ def addChallengeProtocolChooserPlugin(dispatcher, id, title=None,
             % dispatcher.absolute_url())
 
 
+@implementer(
+    IChallengeProtocolChooserPlugin,
+    iplugins.IChallengeProtocolChooser
+)
 class ChallengeProtocolChooser(BasePlugin):
 
     """ PAS plugin for choosing challenger protocol based on request
@@ -127,7 +118,7 @@ class ChallengeProtocolChooser(BasePlugin):
         pas_instance = self._getPAS()
         plugins = pas_instance._getOb('plugins')
 
-        challengers = plugins.listPlugins(IChallengePlugin)
+        challengers = plugins.listPlugins(iplugins.IChallengePlugin)
         found = []
 
         for challenger_id, challenger in challengers:
@@ -147,7 +138,8 @@ class ChallengeProtocolChooser(BasePlugin):
         info = []
         available_protocols = self._listProtocols()
 
-        request_types = sorted(listRequestTypesLabels())
+        request_types = listRequestTypesLabels()
+        request_types.sort()
 
         for label in request_types:
             settings = []
@@ -192,15 +184,13 @@ class ChallengeProtocolChooser(BasePlugin):
                 'Protocol+Mappings+Changed.'
                 % self.absolute_url())
 
-classImplements(ChallengeProtocolChooser,
-                IChallengeProtocolChooserPlugin,
-                IChallengeProtocolChooser,
-                )
 
 InitializeClass(ChallengeProtocolChooser)
 
-for label, iface in (('Browser', IBrowserRequest),
-                     ('WebDAV', IWebDAVRequest),
-                     ('FTP', IFTPRequest),
-                     ('XML-RPC', IXMLRPCRequest)):
+for label, iface in (
+    ('Browser', IBrowserRequest),
+    ('WebDAV', irequest.IWebDAVRequest),
+    ('FTP', IFTPRequest),
+    ('XML-RPC', IXMLRPCRequest)
+):
     registerRequestType(label, iface)

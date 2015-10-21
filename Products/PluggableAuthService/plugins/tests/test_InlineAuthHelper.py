@@ -11,19 +11,13 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
+from Products.PluggableAuthService.plugins.tests.helpers import FauxContainer
+from Products.PluggableAuthService.plugins.tests.helpers import FauxObject
+from Products.PluggableAuthService.plugins.tests.helpers import FauxRequest
+from Products.PluggableAuthService.plugins.tests.helpers import FauxResponse
+from Products.PluggableAuthService.plugins.tests.helpers import FauxRoot
+from Products.PluggableAuthService.tests import conformance
 import unittest
-
-from Products.PluggableAuthService.tests.conformance \
-    import ILoginPasswordHostExtractionPlugin_conformance
-from Products.PluggableAuthService.tests.conformance \
-    import IChallengePlugin_conformance
-from Products.PluggableAuthService.tests.conformance \
-    import ICredentialsUpdatePlugin_conformance
-from Products.PluggableAuthService.tests.conformance \
-    import ICredentialsResetPlugin_conformance
-
-from Products.PluggableAuthService.tests.test_PluggableAuthService \
-    import FauxRequest, FauxResponse, FauxObject, FauxRoot, FauxContainer
 
 
 class FauxSettableRequest(FauxRequest):
@@ -46,8 +40,11 @@ class FauxInlineResponse(FauxResponse):
         self.body = body
 
 
-class InlineAuthHelperTests(unittest.TestCase, ILoginPasswordHostExtractionPlugin_conformance, IChallengePlugin_conformance
-                            ):
+class InlineAuthHelperTests(
+    unittest.TestCase,
+    conformance.ILoginPasswordHostExtractionPlugin_conformance,
+    conformance.IChallengePlugin_conformance
+):
 
     def _getTargetClass(self):
 
@@ -92,7 +89,6 @@ class InlineAuthHelperTests(unittest.TestCase, ILoginPasswordHostExtractionPlugi
                           'remote_address': ''})
 
     def test_challenge(self):
-        from zExceptions import Unauthorized
         rc, root, folder, object = self._makeTree()
         response = FauxInlineResponse()
         request = FauxRequest(RESPONSE=response)

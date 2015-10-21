@@ -11,25 +11,19 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-
+from base64 import encodestring
+from Testing.ZopeTestCase import user_name
+from Testing.ZopeTestCase import user_password
+from Testing.ZopeTestCase import user_role
 from Testing import ZopeTestCase
+from Products.PluggableAuthService.interfaces import plugins as iplugins
 
 ZopeTestCase.installProduct('PluginRegistry')
 ZopeTestCase.installProduct('PluggableAuthService')
 ZopeTestCase.installProduct('StandardCacheManagers')
 ZopeTestCase.installProduct('GenericSetup')
 
-from Testing.ZopeTestCase import user_name
-from Testing.ZopeTestCase import user_password
-from Testing.ZopeTestCase import user_role
-
-from base64 import encodestring
 user_auth = encodestring('%s:%s' % (user_name, user_password)).rstrip()
-
-from Products.PluggableAuthService.interfaces.plugins import \
-    IAuthenticationPlugin, IUserEnumerationPlugin, IRolesPlugin, \
-    IRoleEnumerationPlugin, IRoleAssignerPlugin, \
-    IChallengePlugin, IExtractionPlugin, IUserAdderPlugin
 
 
 class PASTestCase(ZopeTestCase.ZopeTestCase):
@@ -46,14 +40,14 @@ class PASTestCase(ZopeTestCase.ZopeTestCase):
         factory.addZODBUserManager('users')
         factory.addZODBRoleManager('roles')
         plugins = pas.plugins
-        plugins.activatePlugin(IChallengePlugin, 'http_auth')
-        plugins.activatePlugin(IExtractionPlugin, 'http_auth')
-        plugins.activatePlugin(IUserAdderPlugin, 'users')
-        plugins.activatePlugin(IAuthenticationPlugin, 'users')
-        plugins.activatePlugin(IUserEnumerationPlugin, 'users')
-        plugins.activatePlugin(IRolesPlugin, 'roles')
-        plugins.activatePlugin(IRoleAssignerPlugin, 'roles')
-        plugins.activatePlugin(IRoleEnumerationPlugin, 'roles')
+        plugins.activatePlugin(iplugins.IChallengePlugin, 'http_auth')
+        plugins.activatePlugin(iplugins.IExtractionPlugin, 'http_auth')
+        plugins.activatePlugin(iplugins.IUserAdderPlugin, 'users')
+        plugins.activatePlugin(iplugins.IAuthenticationPlugin, 'users')
+        plugins.activatePlugin(iplugins.IUserEnumerationPlugin, 'users')
+        plugins.activatePlugin(iplugins.IRolesPlugin, 'roles')
+        plugins.activatePlugin(iplugins.IRoleAssignerPlugin, 'roles')
+        plugins.activatePlugin(iplugins.IRoleEnumerationPlugin, 'roles')
 
     def _setupUser(self):
         """Creates the default user."""

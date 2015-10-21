@@ -15,31 +15,25 @@
 
 $Id$
 """
-import copy
-
-from Acquisition import aq_inner, aq_parent
 from AccessControl import ClassSecurityInfo
 from AccessControl.requestmethod import postonly
-from OFS.SimpleItem import SimpleItem
-from OFS.PropertyManager import PropertyManager
-from OFS.Folder import Folder
-from OFS.Cache import Cacheable
+from Acquisition import aq_inner, aq_parent
 from App.class_init import InitializeClass
-
-from zope.interface import Interface
-
-from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from OFS.Cache import Cacheable
+from OFS.Folder import Folder
+from OFS.PropertyManager import PropertyManager
+from OFS.SimpleItem import SimpleItem
 from Products.PageTemplates.Expressions import getEngine
-
-from Products.PluggableAuthService.interfaces.plugins \
-    import IGroupsPlugin
-from Products.PluggableAuthService.interfaces.plugins \
-    import IGroupEnumerationPlugin
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from Products.PluggableAuthService.interfaces.plugins import IGroupEnumerationPlugin  # noqa
+from Products.PluggableAuthService.interfaces.plugins import IGroupsPlugin
 from Products.PluggableAuthService.permissions import ManageGroups
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.utils import createViewName
-from Products.PluggableAuthService.utils import classImplements
 from Products.PluggableAuthService.utils import csrf_only
+from zope.interface import implementer
+from zope.interface import Interface
+import copy
 
 
 class IDynamicGroupsPlugin(Interface):
@@ -74,13 +68,13 @@ class DynamicGroupDefinition(SimpleItem, PropertyManager):
 
     _v_compiled = None
 
-    _properties = ({'id': 'id', 'type': 'string', 'mode': ''
-                    }, {'id': 'predicate', 'type': 'string', 'mode': 'w'
-                        }, {'id': 'title', 'type': 'string', 'mode': 'w'
-                            }, {'id': 'description', 'type': 'text', 'mode': 'w'
-                                }, {'id': 'active', 'type': 'boolean', 'mode': 'w'
-                                    }
-                   )
+    _properties = (
+        {'id': 'id', 'type': 'string', 'mode': ''},
+        {'id': 'predicate', 'type': 'string', 'mode': 'w'},
+        {'id': 'title', 'type': 'string', 'mode': 'w'},
+        {'id': 'description', 'type': 'text', 'mode': 'w'},
+        {'id': 'active', 'type': 'boolean', 'mode': 'w'}
+    )
 
     def __init__(self, id, predicate, title, description, active):
 
@@ -101,8 +95,13 @@ class DynamicGroupDefinition(SimpleItem, PropertyManager):
         for k, v in self.propertyItems():
             properties[k] = v
 
-        data = getEngine().getContext({'request': request, 'nothing': None, 'principal': principal, 'group': properties, 'plugin': plugin
-                                       })
+        data = getEngine().getContext({
+            'request': request,
+            'nothing': None,
+            'principal': principal,
+            'group': properties,
+            'plugin': plugin
+        })
 
         result = predicate(data)
 
@@ -149,6 +148,11 @@ class DynamicGroupDefinition(SimpleItem, PropertyManager):
 InitializeClass(DynamicGroupDefinition)
 
 
+@implementer(
+    IDynamicGroupsPlugin,
+    IGroupsPlugin,
+    IGroupEnumerationPlugin
+)
 class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
 
     """ Define groups via business rules.
@@ -191,8 +195,8 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
 
     security.declareProtected(ManageGroups, 'enumerateGroups')
 
-    def enumerateGroups(self, id=None, exact_match=False, sort_by=None, max_results=None, **kw
-                        ):
+    def enumerateGroups(self, id=None, exact_match=False, sort_by=None,
+                        max_results=None, **kw):
         """ See IGroupEnumerationPlugin.
         """
         group_info = []
@@ -202,11 +206,17 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
 
         # Look in the cache first...
         keywords = copy.deepcopy(kw)
-        keywords.update({'id': id, 'exact_match': exact_match, 'sort_by': sort_by, 'max_results': max_results
-                         }
-                        )
-        cached_info = self.ZCacheable_get(view_name=view_name, keywords=keywords, default=None
-                                          )
+        keywords.update({
+            'id': id,
+            'exact_match': exact_match,
+            'sort_by': sort_by,
+            'max_results': max_results
+        })
+        cached_info = self.ZCacheable_get(
+            view_name=view_name,
+            keywords=keywords,
+            default=None
+        )
 
         if cached_info is not None:
             return tuple(cached_info)
@@ -224,7 +234,6 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
             group_ids = self.listGroupIds()
             group_filter = _DynamicGroupFilter(id, **kw)
 
-        known = self.listGroupIds()
         for group_id in group_ids:
             g_info = self.getGroupInfo(group_id, raise_keyerror=False)
             if g_info is not None:
@@ -317,8 +326,8 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
 
     security.declarePrivate('addGroup')
 
-    def addGroup(self, group_id, predicate, title='', description='', active=True
-                 ):
+    def addGroup(self, group_id, predicate, title='', description='',
+                 active=True):
         """ Add a group definition.
 
         o Raise KeyError if we have an existing group definition
@@ -327,8 +336,13 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
         if group_id in self.listGroupIds():
             raise KeyError('Duplicate group ID: %s' % group_id)
 
-        info = DynamicGroupDefinition(group_id, predicate, title, description, active
-                                      )
+        info = DynamicGroupDefinition(
+            group_id,
+            predicate,
+            title,
+            description,
+            active
+        )
 
         self._setObject(group_id, info)
 
@@ -338,8 +352,8 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
 
     security.declarePrivate('updateGroup')
 
-    def updateGroup(self, group_id, predicate, title=None, description=None, active=None
-                    ):
+    def updateGroup(self, group_id, predicate, title=None, description=None,
+                    active=None):
         """ Update a group definition.
 
         o Raise KeyError if we don't have an existing group definition
@@ -400,15 +414,18 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
                       + Cacheable.manage_options
                       )
 
-    manage_groups = PageTemplateFile('www/dgpGroups', globals(), __name__='manage_groups'
-                                     )
+    manage_groups = PageTemplateFile(
+        'www/dgpGroups',
+        globals(),
+        __name__='manage_groups'
+    )
 
     security.declareProtected(ManageGroups, 'manage_addGroup')
 
     @csrf_only
     @postonly
-    def manage_addGroup(self, group_id, title, description, predicate, active=True, RESPONSE=None, REQUEST=None
-                        ):
+    def manage_addGroup(self, group_id, title, description, predicate,
+                        active=True, RESPONSE=None, REQUEST=None):
         """ Add a group via the ZMI.
         """
         self.addGroup(group_id, predicate, title, description, active
@@ -425,8 +442,9 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
 
     @csrf_only
     @postonly
-    def manage_updateGroup(self, group_id, predicate, title=None, description=None, active=True, RESPONSE=None, REQUEST=None
-                           ):
+    def manage_updateGroup(self, group_id, predicate, title=None,
+                           description=None, active=True, RESPONSE=None,
+                           REQUEST=None):
         """ Update a group via the ZMI.
         """
         self.updateGroup(group_id, predicate, title, description, active
@@ -465,25 +483,18 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
                               % (self.absolute_url(), message)
                               )
 
-classImplements(DynamicGroupsPlugin, IDynamicGroupsPlugin, IGroupsPlugin, IGroupEnumerationPlugin
-                )
-
 InitializeClass(DynamicGroupsPlugin)
 
 
 class _DynamicGroupFilter:
 
-    def __init__(self, id=None, **kw
-                 ):
-
+    def __init__(self, id=None, **kw):
         self._filter_ids = id
 
     def __call__(self, group_info):
 
         if self._filter_ids:
-
             key = 'id'
-
         else:
             return 1  # TODO:  try using 'kw'
 
@@ -495,5 +506,4 @@ class _DynamicGroupFilter:
         for id in self._filter_ids:
             if value.find(id) >= 0:
                 return 1
-
         return 0

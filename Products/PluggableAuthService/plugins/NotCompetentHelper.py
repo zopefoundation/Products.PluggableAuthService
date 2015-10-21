@@ -20,22 +20,17 @@ by higher level user folders and the class `NotCompetent_byRoles`
 to prevent shaddowing of higher level authentications with
 specified roles.
 """
-# General Zope imports
-from Acquisition import aq_inner, aq_parent, aq_base
 from AccessControl import ClassSecurityInfo
 from AccessControl.Permissions import manage_users
 from AccessControl.User import nobody
+from Acquisition import aq_inner, aq_parent, aq_base
+from OFS.PropertyManager import PropertyManager
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from Products.PluggableAuthService.interfaces.plugins import INotCompetentPlugin  # noqa
+from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
+from zope.interface import implementer
 from ZPublisher.BaseRequest import UNSPECIFIED_ROLES
 from ZPublisher.Response import Response
-from OFS.PropertyManager import PropertyManager
-
-from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-
-# PluggableAuthService imports
-from Products.PluggableAuthService.interfaces.plugins import \
-    INotCompetentPlugin
-from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PluggableAuthService.utils import classImplements
 
 
 class HigherLevelUserFolderAccessMixin(object):
@@ -85,6 +80,7 @@ class HigherLevelUserFolderAccessMixin(object):
             request.response = saved_response
 
 
+@implementer(INotCompetentPlugin)
 class NotCompetentBase(BasePlugin, HigherLevelUserFolderAccessMixin):
     """abstract `INotCompententPlugin` base class.
 
@@ -102,8 +98,6 @@ class NotCompetentBase(BasePlugin, HigherLevelUserFolderAccessMixin):
 
     def isNotCompetentToAuthenticate(self, request):
         raise NotImplementedError()
-
-classImplements(NotCompetentBase, INotCompetentPlugin)
 
 
 class NotCompetent_byRoles(NotCompetentBase):

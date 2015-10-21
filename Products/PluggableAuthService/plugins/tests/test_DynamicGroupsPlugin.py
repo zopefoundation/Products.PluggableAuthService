@@ -15,19 +15,12 @@
 
 $Id$
 """
+from Products.PluggableAuthService.tests import conformance
+from Products.PluggableAuthService.tests.utils import _setUpDefaultTraversable
 import unittest
 
-from Products.PluggableAuthService.tests.conformance \
-    import IGroupsPlugin_conformance
-from Products.PluggableAuthService.tests.conformance \
-    import IGroupEnumerationPlugin_conformance
-from Products.PluggableAuthService.tests.utils import _setUpDefaultTraversable
 
-from Products.PluggableAuthService.plugins.tests.helpers \
-    import makeRequestAndResponse
-
-
-class FauxScript:
+class FauxScript(object):
 
     def __init__(self, id, return_value=0):
 
@@ -39,7 +32,7 @@ class FauxScript:
         return self.return_value
 
 
-class FauxPrincipal:
+class FauxPrincipal(object):
 
     __allow_access_to_unprotected_subobjects__ = 1
 
@@ -50,8 +43,11 @@ class FauxPrincipal:
         return self._id
 
 
-class DynamicGroupsPlugin(unittest.TestCase, IGroupsPlugin_conformance, IGroupEnumerationPlugin_conformance
-                          ):
+class DynamicGroupsPlugin(
+    unittest.TestCase,
+    conformance.IGroupsPlugin_conformance,
+    conformance.IGroupEnumerationPlugin_conformance
+):
 
     def _getTargetClass(self):
 
@@ -96,8 +92,14 @@ class DynamicGroupsPlugin(unittest.TestCase, IGroupsPlugin_conformance, IGroupEn
 
         dpg.addGroup('everyone', 'python:True', 'title', 'description', True)
 
-        self.assertRaises(KeyError, dpg.addGroup, 'everyone',
-                          'python:False', 'other title', 'other descripton', False)
+        self.assertRaises(
+            KeyError,
+            dpg.addGroup,
+            'everyone',
+            'python:False',
+            'other title',
+            'other descripton',
+            False)
 
         self.assertEqual(len(dpg.listGroupInfo()), 1)
         info = dpg.listGroupInfo()[0]
@@ -289,7 +291,8 @@ class DynamicGroupsPlugin(unittest.TestCase, IGroupsPlugin_conformance, IGroupEn
         self.assertEqual(info['predicate'], 'python:False')
         self.assertEqual(info['pluginid'], 'enumerating')
 
-        # Because teher is no proper REQUEST, the properties_url will be incorrect
+        # Because teher is no proper REQUEST, the properties_url will be
+        # incorrect
         # It should normally be  '/enumerating/noone/manage_propertiesForm'
         # But it will be '//noone/manage_propertiesForm'
         URL = '//noone/manage_propertiesForm'

@@ -11,14 +11,12 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-import unittest
-
-from ZPublisher.BaseRequest import UNSPECIFIED_ROLES
-
 from Products.PluggableAuthService.tests.conformance \
     import INotCompetentPlugin_conformance
 from Products.PluggableAuthService.tests.test_PluggableAuthService \
     import PluggableAuthServiceTests
+from ZPublisher.BaseRequest import UNSPECIFIED_ROLES
+import unittest
 
 
 class _WrapPluggableAuthServiceTests(PluggableAuthServiceTests):
@@ -28,8 +26,10 @@ class _WrapPluggableAuthServiceTests(PluggableAuthServiceTests):
         pass
 
 
-class NotCompetentHelperTests(unittest.TestCase, INotCompetentPlugin_conformance
-                              ):
+class NotCompetentHelperTests(
+    unittest.TestCase,
+    INotCompetentPlugin_conformance
+):
 
     def _getTargetClass(self):
 

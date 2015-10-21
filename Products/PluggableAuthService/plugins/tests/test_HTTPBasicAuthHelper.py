@@ -12,14 +12,7 @@
 #
 ##############################################################################
 import unittest
-from Products.PluggableAuthService.tests.conformance \
-    import ILoginPasswordHostExtractionPlugin_conformance
-from Products.PluggableAuthService.tests.conformance \
-    import IChallengePlugin_conformance
-from Products.PluggableAuthService.tests.conformance \
-    import ICredentialsUpdatePlugin_conformance
-from Products.PluggableAuthService.tests.conformance \
-    import ICredentialsResetPlugin_conformance
+from Products.PluggableAuthService.tests import conformance
 
 
 class FauxHTTPRequest:
@@ -69,8 +62,12 @@ class FauxHTTPResponse:
         self.body = body
 
 
-class HTTPBasicAuthHelperTests(unittest.TestCase, ILoginPasswordHostExtractionPlugin_conformance, IChallengePlugin_conformance, ICredentialsResetPlugin_conformance
-                               ):
+class HTTPBasicAuthHelperTests(
+    unittest.TestCase,
+    conformance.ILoginPasswordHostExtractionPlugin_conformance,
+    conformance.IChallengePlugin_conformance,
+    conformance.ICredentialsResetPlugin_conformance
+):
 
     def _getTargetClass(self):
 
@@ -95,8 +92,15 @@ class HTTPBasicAuthHelperTests(unittest.TestCase, ILoginPasswordHostExtractionPl
         helper = self._makeOne()
         request = FauxHTTPRequest('foo', 'bar')
 
-        self.assertEqual(helper.extractCredentials(request), {'login': 'foo', 'password': 'bar',
-                                                              'remote_host': '', 'remote_address': ''})
+        self.assertEqual(
+            helper.extractCredentials(request),
+            {
+                'login': 'foo',
+                'password': 'bar',
+                'remote_host': '',
+                'remote_address': ''
+            }
+        )
 
     def test_challenge(self):
         helper = self._makeOne()
@@ -122,8 +126,10 @@ class HTTPBasicAuthHelperTests(unittest.TestCase, ILoginPasswordHostExtractionPl
         helper.challenge(request, response)
 
         self.failUnless(response.status, 401)
-        self.failUnless(response.headers['WWW-Authenticate'],
-                        ['basic realm="unit test"', 'basic realm="second realm"'])
+        self.failUnless(
+            response.headers['WWW-Authenticate'],
+            ['basic realm="unit test"', 'basic realm="second realm"']
+        )
 
     def test_resetCredentials(self):
 

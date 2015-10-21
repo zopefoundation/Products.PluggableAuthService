@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 # Copyright (c) 2001 Zope Foundation and Contributors
@@ -11,25 +12,31 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
+from AccessControl import ClassSecurityInfo
+from App.Common import package_home
+from hashlib import sha1 as sha
+from zope import interface
+from zope.deprecation import deprecation
+from ZPublisher import Forbidden
 import binascii
 import functools
 import inspect
 import os
-try:
-    from hashlib import sha1 as sha
-except:
-    from sha import new as sha
+
+# special import for inline code wrapper, its used!
+from zope.publisher.interfaces.browser import IBrowserRequest  # noqa
+
+# BBB import
+from AccessControl.requestmethod import postonly
+postonly = deprecation.DeprecatedMethod(
+    postonly,
+    "import postonly from AccessControl.requestmethod"
+)
 
 
-from AccessControl import ClassSecurityInfo
-from App.Common import package_home
-from ZPublisher import Forbidden
-from zope.publisher.interfaces.browser import IBrowserRequest
-
-
-from zope import interface
-
-
+@deprecation.deprecate(
+    "Use directlyProvides from zope.interface directly"
+)
 def directlyProvides(obj, *interfaces):
     normalized_interfaces = []
     for i in interfaces:
@@ -37,14 +44,15 @@ def directlyProvides(obj, *interfaces):
     return interface.directlyProvides(obj, *normalized_interfaces)
 
 
+@deprecation.deprecate(
+    "Use implementer decorator from zope.interface directly"
+)
 def classImplements(class_, *interfaces):
     normalized_interfaces = []
     for i in interfaces:
         normalized_interfaces.append(i)
     return interface.classImplements(class_, *normalized_interfaces)
 
-# BBB import
-from AccessControl.requestmethod import postonly
 
 product_dir = package_home(globals())
 product_prefix = os.path.split(product_dir)[0]
@@ -61,20 +69,13 @@ def remove_stale_bytecode(arg, dirname, names):
         Troll product, removing compiled turds whose source is now gone.
     """
     names = map(os.path.normcase, names)
-
     for name in names:
-
         if name.endswith(".pyc") or name.endswith(".pyo"):
-
             srcname = name[:-1]
-
             if srcname not in names:
-
                 fullname = os.path.join(dirname, name)
-
                 if __debug__:
                     print "Removing stale bytecode file", fullname
-
                 os.unlink(fullname)
 
 
@@ -91,14 +92,11 @@ class TestFileFinder:
         #    return
 
         # ignore tests that aren't in packages
-        if not "__init__.py" in files:
-
+        if "__init__.py" not in files:
             if not files or files == ['CVS']:
                 return
-
             if 0 and __debug__:  # XXX: don't care!
                 print "not a package", dir
-
             return
 
         for file in files:
@@ -144,7 +142,7 @@ def get_suite(file):
 
         try:
             suite = loader.loadTestsFromName(module_name)
-        except ImportError as err:
+        except ImportError, err:
             print "Error importing %s\n%s" % (module_name, err)
             raise
     return suite
@@ -156,7 +154,8 @@ def allTests(from_dir=product_dir, test_prefix='test'):
     """
     import unittest
     os.path.walk(from_dir, remove_stale_bytecode, None)
-    test_files = sorted(find_unit_test_files(from_dir, test_prefix))
+    test_files = find_unit_test_files(from_dir, test_prefix)
+    test_files.sort()
 
     suite = unittest.TestSuite()
 
@@ -197,7 +196,8 @@ def createKeywords(**kw):
     """
     keywords = sha()
 
-    items = sorted(kw.items())
+    items = kw.items()
+    items.sort()
     for k, v in items:
         keywords.update(makestr(k))
         keywords.update(makestr(v))

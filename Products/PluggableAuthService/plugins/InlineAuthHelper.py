@@ -15,29 +15,18 @@
 
 $Id$
 """
-
-from base64 import encodestring, decodestring
-from urllib import quote
-
 from AccessControl.SecurityInfo import ClassSecurityInfo
-from OFS.Folder import Folder
 from App.class_init import default__class_init__ as InitializeClass
-
-from zope.interface import Interface
-
+from OFS.Folder import Folder
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-from Products.PageTemplates.ZopePageTemplate import manage_addPageTemplate
+from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
+from zope.interface import implementer
+from zope.interface import Interface
 
 from Products.PluggableAuthService.interfaces.plugins import \
     ILoginPasswordHostExtractionPlugin
 from Products.PluggableAuthService.interfaces.plugins import \
     IChallengePlugin
-from Products.PluggableAuthService.interfaces.plugins import \
-    ICredentialsUpdatePlugin
-from Products.PluggableAuthService.interfaces.plugins import \
-    ICredentialsResetPlugin
-from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PluggableAuthService.utils import classImplements
 
 
 class IInlineAuthHelper(Interface):
@@ -62,14 +51,22 @@ def addInlineAuthHelper(dispatcher, id, title=None, REQUEST=None
                                      % dispatcher.absolute_url())
 
 
+@implementer(
+    IInlineAuthHelper,
+    ILoginPasswordHostExtractionPlugin,
+    IChallengePlugin
+)
 class InlineAuthHelper(Folder, BasePlugin):
     """ Multi-plugin for managing details of Inline Authentication. """
     meta_type = 'Inline Auth Helper'
     security = ClassSecurityInfo()
 
-    _properties = ({'id': 'title', 'label': 'Title', 'type': 'string', 'mode': 'w'
-                    },
-                   )
+    _properties = ({
+        'id': 'title',
+        'label': 'Title',
+        'type': 'string',
+        'mode': 'w'
+    })
 
     manage_options = (BasePlugin.manage_options[:1]
                       + Folder.manage_options[:1]
@@ -122,9 +119,6 @@ class InlineAuthHelper(Folder, BasePlugin):
 
     def _setBody(self, body, *args, **kw):
         pass
-
-classImplements(InlineAuthHelper, IInlineAuthHelper, ILoginPasswordHostExtractionPlugin, IChallengePlugin
-                )
 
 InitializeClass(InlineAuthHelper)
 

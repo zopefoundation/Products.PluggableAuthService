@@ -11,17 +11,14 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-import unittest
-
-from zExceptions import Forbidden
-
-from Products.PluggableAuthService.tests.conformance \
-    import IGroupEnumerationPlugin_conformance
-from Products.PluggableAuthService.tests.conformance \
-    import IGroupsPlugin_conformance
-
+from Products.PluggableAuthService.plugins.tests.helpers import DummyUser
+from Products.PluggableAuthService.plugins.tests.helpers import FauxPAS
+from Products.PluggableAuthService.plugins.tests.helpers import FauxSmartPAS
 from Products.PluggableAuthService.plugins.tests.helpers \
-    import FauxPAS, FauxSmartPAS, DummyUser, makeRequestAndResponse
+    import makeRequestAndResponse
+from Products.PluggableAuthService.tests import conformance
+from zExceptions import Forbidden
+import unittest
 
 
 class DummyGroup:
@@ -33,8 +30,11 @@ class DummyGroup:
         return self._id
 
 
-class ZODBGroupManagerTests(unittest.TestCase, IGroupEnumerationPlugin_conformance, IGroupsPlugin_conformance
-                            ):
+class ZODBGroupManagerTests(
+    unittest.TestCase,
+    conformance.IGroupEnumerationPlugin_conformance,
+    conformance.IGroupsPlugin_conformance
+):
 
     def _getTargetClass(self):
 

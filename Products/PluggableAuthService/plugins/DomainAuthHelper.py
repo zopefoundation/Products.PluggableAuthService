@@ -13,31 +13,17 @@
 ##############################################################################
 """ DomainAuthHelper   Authentication Plugin for Domain authentication
 """
-
-__doc__     = """ Authentication Plugin for Domain authentication """
-__version__ = '$Revision$'[11:-2]
-
-# General Python imports
-import socket
-import os
-import time
-import copy
-import re
-
-try:
-    from IPy import IP
-except ImportError:
-    IP = None
-
-# General Zope imports
-from BTrees.OOBTree import OOBTree
-from App.class_init import InitializeClass
 from AccessControl import ClassSecurityInfo
 from AccessControl.Permissions import manage_users
-
-from zope.interface import Interface
-
+from App.class_init import InitializeClass
+from BTrees.OOBTree import OOBTree
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
+from zope.interface import Interface
+from zope.interface import implementer
+import re
+import socket
+import time
 
 # PluggableAuthService imports
 from Products.PluggableAuthService.interfaces.plugins import \
@@ -46,8 +32,14 @@ from Products.PluggableAuthService.interfaces.plugins import \
     IExtractionPlugin
 from Products.PluggableAuthService.interfaces.plugins import \
     IRolesPlugin
-from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PluggableAuthService.utils import classImplements
+
+try:
+    from IPy import IP
+except ImportError:
+    IP = None
+
+__doc__ = """ Authentication Plugin for Domain authentication """
+__version__ = '$Revision$'[11:-2]
 
 
 class IDomainAuthHelper(Interface):
@@ -127,6 +119,12 @@ def manage_addDomainAuthHelper(self, id, title='', REQUEST=None):
         REQUEST['RESPONSE'].redirect('%s/manage_workspace?%s' % (my_url, qs))
 
 
+@implementer(
+    IDomainAuthHelper,
+    IExtractionPlugin,
+    IAuthenticationPlugin,
+    IRolesPlugin
+)
 class DomainAuthHelper(BasePlugin):
     """ Domain Authentication plugin for the PluggableAuthService """
     security = ClassSecurityInfo()
@@ -138,15 +136,18 @@ class DomainAuthHelper(BasePlugin):
     security.declareProtected(manage_users, 'manage_genericmap')
     manage_genericmap = PageTemplateFile('www/daGeneric', globals())
 
-    manage_options = (BasePlugin.manage_options[:1]
-                      + ({'label': 'User Map', 'action': 'manage_map'
-                          # , 'help'   : ( 'PluggableAuthService'
-                          #              ,'matches.stx')
-                          }, {'label': 'Generic Map', 'action': 'manage_genericmap'
-                              }
-                         )
-                      + BasePlugin.manage_options[1:]
-                      )
+    manage_options = (
+        BasePlugin.manage_options[:1] + (
+            {
+                'label': 'User Map',
+                'action': 'manage_map'
+            },
+            {
+                'label': 'Generic Map',
+                'action': 'manage_genericmap'
+            }
+        ) + BasePlugin.manage_options[1:]
+    )
 
     def __init__(self, id, title=''):
         """ Initialize a new instance """
@@ -211,8 +212,11 @@ class DomainAuthHelper(BasePlugin):
         if uname.find('Remote User') != -1:
             uname = ''
 
-        matches = self._findMatches(uname, request.get('REMOTE_HOST', ''), request.getClientAddr()
-                                    )
+        matches = self._findMatches(
+            uname,
+            request.get('REMOTE_HOST', ''),
+            request.getClientAddr()
+        )
 
         # We want to grab the first match because it is the most specific
         if len(matches) > 0:
@@ -250,7 +254,6 @@ class DomainAuthHelper(BasePlugin):
         candidates = [r_host, r_address]
 
         for match_info in all_info:
-            m = []
             m_type = match_info['match_type']
             m_string = match_info['match_string']
             filter = match_info.get('match_filter')
@@ -276,15 +279,20 @@ class DomainAuthHelper(BasePlugin):
         record = self._domain_map.get(user_id, [])
 
         for match_info in record:
-            result.append({'match_type': match_info['match_type'], 'match_string': match_info['match_string'], 'match_id': match_info['match_id'], 'roles': match_info['roles'], 'username': match_info['username']
-                           })
+            result.append({
+                'match_type': match_info['match_type'],
+                'match_string': match_info['match_string'],
+                'match_id': match_info['match_id'],
+                'roles': match_info['roles'],
+                'username': match_info['username']
+            })
 
         return result
 
     security.declareProtected(manage_users, 'manage_addMapping')
 
-    def manage_addMapping(self, user_id='', match_type='', match_string='', username='', roles=[], REQUEST=None
-                          ):
+    def manage_addMapping(self, user_id='', match_type='', match_string='',
+                          username='', roles=[], REQUEST=None):
         """ Add a mapping for a user """
         msg = ''
 
@@ -294,7 +302,7 @@ class DomainAuthHelper(BasePlugin):
             msg = 'Unknown match type %s' % match_type
         except re.error:
             msg = 'Invalid regular expression %s' % match_string
-        except ValueError as e:
+        except ValueError, e:
             msg = 'Invalid match string %s (%s)' % (match_string, e)
 
         if not match_string:
@@ -308,8 +316,14 @@ class DomainAuthHelper(BasePlugin):
 
         record = self._domain_map.get(user_id, [])
 
-        match = {'match_type': match_type, 'match_string': match_string, 'match_filter': filter, 'match_id': '%s_%s' % (user_id, str(time.time())), 'username': user_id or username or 'Remote User', 'roles': roles
-                 }
+        match = {
+            'match_type': match_type,
+            'match_string': match_string,
+            'match_filter': filter,
+            'match_id': '%s_%s' % (user_id, str(time.time())),
+            'username': user_id or username or 'Remote User',
+            'roles': roles
+        }
 
         if match not in record:
             record.append(match)
@@ -358,8 +372,5 @@ class DomainAuthHelper(BasePlugin):
                 return self.manage_map(manage_tabs_message=msg)
             else:
                 return self.manage_genericmap(manage_tabs_message=msg)
-
-classImplements(DomainAuthHelper, IDomainAuthHelper, IExtractionPlugin, IAuthenticationPlugin, IRolesPlugin
-                )
 
 InitializeClass(DomainAuthHelper)

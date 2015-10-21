@@ -15,29 +15,18 @@
                              and enumerateGroups requests to another
                              PluggableAuthService
 """
-
-# General Python imports
-import copy
-import os
-from urllib import quote_plus
-
-# Zope imports
-from Acquisition import aq_base
-from OFS.Folder import Folder
-from App.class_init import InitializeClass
 from AccessControl import ClassSecurityInfo
-from AccessControl.SpecialUsers import emergency_user
-
-from zope.interface import Interface
-
+from Acquisition import aq_base
+from App.class_init import InitializeClass
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
+from zope.interface import implementer
+from zope.interface import Interface
 
 from Products.PluggableAuthService.interfaces.plugins import \
     IUserEnumerationPlugin
 from Products.PluggableAuthService.interfaces.plugins import \
     IGroupEnumerationPlugin
-from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PluggableAuthService.utils import classImplements
 
 
 class ISearchPrincipalsPlugin(Interface):
@@ -48,8 +37,8 @@ addSearchPrincipalsPluginForm = PageTemplateFile(
     'www/sppAdd', globals(), __name__='addSearchPrincipalsPluginForm')
 
 
-def addSearchPrincipalsPlugin(dispatcher, id, title='', delegate_path='', REQUEST=None
-                              ):
+def addSearchPrincipalsPlugin(dispatcher, id, title='', delegate_path='',
+                              REQUEST=None):
     """ Factory method to instantiate a SearchPrincipalsPlugin """
     spp = SearchPrincipalsPlugin(id, title=title, delegate_path=delegate_path)
     dispatcher._setObject(id, spp)
@@ -58,6 +47,11 @@ def addSearchPrincipalsPlugin(dispatcher, id, title='', delegate_path='', REQUES
         REQUEST.RESPONSE.redirect('%s/manage_main' % dispatcher.absolute_url())
 
 
+@implementer(
+    ISearchPrincipalsPlugin,
+    IUserEnumerationPlugin,
+    IGroupEnumerationPlugin
+)
 class SearchPrincipalsPlugin(BasePlugin):
     """ SearchPrincipalsPlugin delegates its enumerateUsers
     and enumerateGroups methods to a delegate object
@@ -65,9 +59,12 @@ class SearchPrincipalsPlugin(BasePlugin):
     security = ClassSecurityInfo()
     meta_type = 'Search Principals Plugin'
 
-    _properties = ({'id': 'delegate', 'label': ' Delegate Path', 'type': 'string', 'mode': 'w'
-                    },
-                   )
+    _properties = ({
+        'id': 'delegate',
+        'label': ' Delegate Path',
+        'type': 'string',
+        'mode': 'w'
+    },)
 
     def __init__(self, id, title='', delegate_path=''):
         """ Initialize a new instance """
@@ -88,8 +85,8 @@ class SearchPrincipalsPlugin(BasePlugin):
 
     security.declarePrivate('enumerateUsers')
 
-    def enumerateUsers(self, id=None, login=None, exact_match=0, sort_by=None, max_results=None, **kw
-                       ):
+    def enumerateUsers(self, id=None, login=None, exact_match=0, sort_by=None,
+                       max_results=None, **kw):
         """ see IUserEnumerationPlugin """
         acl = self._getDelegate()
 
@@ -101,8 +98,8 @@ class SearchPrincipalsPlugin(BasePlugin):
 
     security.declarePrivate('enumerateGroups')
 
-    def enumerateGroups(self, id=None, exact_match=0, sort_by=None, max_results=None, **kw
-                        ):
+    def enumerateGroups(self, id=None, exact_match=0, sort_by=None,
+                        max_results=None, **kw):
         """ see IGroupEnumerationPlugin """
         acl = self._getDelegate()
 
@@ -110,9 +107,11 @@ class SearchPrincipalsPlugin(BasePlugin):
             return ()
 
         return acl.searchGroups(
-            id=id, exact_match=exact_match, sort_by=sort_by, max_results=max_results, **kw)
-
-classImplements(SearchPrincipalsPlugin, ISearchPrincipalsPlugin, IUserEnumerationPlugin, IGroupEnumerationPlugin
-                )
+            id=id,
+            exact_match=exact_match,
+            sort_by=sort_by,
+            max_results=max_results,
+            **kw
+        )
 
 InitializeClass(SearchPrincipalsPlugin)

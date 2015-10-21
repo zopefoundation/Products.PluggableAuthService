@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 # Copyright (c) 2006 Zope Foundation and Contributors
@@ -11,11 +12,10 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-
+import unittest
 from AccessControl.Permissions import view as View
-
-from Products.PluggableAuthService.tests import pastc
 from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin
+from Products.PluggableAuthService.tests import pastc
 
 
 class CachingTests(pastc.PASTestCase):
@@ -167,9 +167,11 @@ class CachingTests(pastc.PASTestCase):
         request.steps = list(self.doc.getPhysicalPath())
 
         # Rig the extractor so it returns UTF-8 credentials
-        self.pas.http_auth.extractCredentials = \
-            lambda req: {'login': pastc.user_name, 'password': pastc.user_password, 'extra': 'M\303\244dchen'
-                         }
+        self.pas.http_auth.extractCredentials = lambda req: {
+            'login': pastc.user_name,
+            'password': pastc.user_password,
+            'extra': 'M\303\244dchen'
+        }
 
         user = self.pas.validate(request)
         self.failIf(user is None)
@@ -192,9 +194,11 @@ class CachingTests(pastc.PASTestCase):
         request.steps = list(self.doc.getPhysicalPath())
 
         # Rig the extractor so it returns Unicode credentials
-        self.pas.http_auth.extractCredentials = \
-            lambda req: {'login': pastc.user_name, 'password': pastc.user_password, 'extra': u'M\344dchen'
-                         }
+        self.pas.http_auth.extractCredentials = lambda req: {
+            'login': pastc.user_name,
+            'password': pastc.user_password,
+            'extra': u'M\344dchen'
+        }
 
         user = self.pas.validate(request)
         self.failIf(user is None)
@@ -217,9 +221,11 @@ class CachingTests(pastc.PASTestCase):
         request.steps = list(self.doc.getPhysicalPath())
 
         # Rig the extractor so it returns UTF-16 credentials
-        self.pas.http_auth.extractCredentials = \
-            lambda req: {'login': pastc.user_name, 'password': pastc.user_password, 'extra': u'M\344dchen'.encode('utf-16')
-                         }
+        self.pas.http_auth.extractCredentials = lambda req: {
+            'login': pastc.user_name,
+            'password': pastc.user_password,
+            'extra': u'M\344dchen'.encode('utf-16')
+        }
 
         user = self.pas.validate(request)
         self.failIf(user is None)

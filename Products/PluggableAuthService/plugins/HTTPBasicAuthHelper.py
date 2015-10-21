@@ -15,21 +15,13 @@
 
 $Id$
 """
-
 from AccessControl.SecurityInfo import ClassSecurityInfo
 from App.class_init import default__class_init__ as InitializeClass
-
-from zope.interface import Interface
-
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-from Products.PluggableAuthService.interfaces.plugins import \
-    ILoginPasswordHostExtractionPlugin
-from Products.PluggableAuthService.interfaces.plugins import \
-    IChallengePlugin
-from Products.PluggableAuthService.interfaces.plugins import \
-    ICredentialsResetPlugin
+from Products.PluggableAuthService.interfaces import plugins as iplugins
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PluggableAuthService.utils import classImplements
+from zope.interface import implementer
+from zope.interface import Interface
 
 
 manage_addHTTPBasicAuthHelperForm = PageTemplateFile(
@@ -54,6 +46,12 @@ def addHTTPBasicAuthHelper(dispatcher, id, title=None, REQUEST=None):
                                      % dispatcher.absolute_url())
 
 
+@implementer(
+    IHTTPBasicAuthHelper,
+    iplugins.ILoginPasswordHostExtractionPlugin,
+    iplugins.IChallengePlugin,
+    iplugins.ICredentialsResetPlugin
+)
 class HTTPBasicAuthHelper(BasePlugin):
 
     """ Multi-plugin for managing details of HTTP Basic Authentication.
@@ -112,8 +110,5 @@ class HTTPBasicAuthHelper(BasePlugin):
         """
         # XXX:  Does this need to check whether we have an HTTP response?
         response.unauthorized()
-
-classImplements(HTTPBasicAuthHelper, IHTTPBasicAuthHelper, ILoginPasswordHostExtractionPlugin, IChallengePlugin, ICredentialsResetPlugin
-                )
 
 InitializeClass(HTTPBasicAuthHelper)

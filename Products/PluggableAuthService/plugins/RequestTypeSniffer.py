@@ -15,29 +15,20 @@
 
 $Id$
 """
-
-from Acquisition import aq_parent
 from AccessControl import ClassSecurityInfo
 from App.class_init import InitializeClass
-from ZServer.FTPRequest import FTPRequest
-from ZPublisher import xmlrpc
-
-from zope.interface import Interface
-
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-
 from Products.PluggableAuthService.interfaces.plugins \
     import IRequestTypeSniffer
-from Products.PluggableAuthService.interfaces.request \
-    import IBrowserRequest
-from Products.PluggableAuthService.interfaces.request \
-    import IWebDAVRequest
-from Products.PluggableAuthService.interfaces.request \
-    import IFTPRequest
-from Products.PluggableAuthService.interfaces.request \
-    import IXMLRPCRequest
+from Products.PluggableAuthService.interfaces.request import IWebDAVRequest
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PluggableAuthService.utils import classImplements
+from zope.interface import implementer
+from zope.interface import Interface
+from zope.publisher.interfaces.browser import IBrowserRequest
+from zope.publisher.interfaces.ftp import IFTPRequest
+from zope.publisher.interfaces.xmlrpc import IXMLRPCRequest
+from ZPublisher import xmlrpc
+from ZServer.FTPRequest import FTPRequest
 
 
 class IRequestTypeSnifferPlugin(Interface):
@@ -71,6 +62,7 @@ def addRequestTypeSnifferPlugin(dispatcher, id, title=None, REQUEST=None):
             % dispatcher.absolute_url())
 
 
+@implementer(IRequestTypeSnifferPlugin, IRequestTypeSniffer)
 class RequestTypeSniffer(BasePlugin):
 
     """ PAS plugin for detecting a Request's type
@@ -94,11 +86,6 @@ class RequestTypeSniffer(BasePlugin):
 
         if found is not None:
             return found
-
-classImplements(RequestTypeSniffer,
-                IRequestTypeSnifferPlugin,
-                IRequestTypeSniffer,
-                )
 
 InitializeClass(RequestTypeSniffer)
 

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 # Copyright (c) 2001 Zope Foundation and Contributors
@@ -11,20 +12,18 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-import unittest
-
-from Acquisition import Implicit, aq_base
 from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import noSecurityManager
 from AccessControl.SecurityManager import setSecurityPolicy
-from OFS.ObjectManager import ObjectManager
-from zExceptions import Unauthorized
-
-from Products.PluggableAuthService.utils import directlyProvides
-from zope.interface import implements
-from ..interfaces.plugins import INotCompetentPlugin
-
+from Acquisition import Implicit, aq_base
 from conformance import IUserFolder_conformance
+from OFS.ObjectManager import ObjectManager
+from Products.PluggableAuthService.interfaces.plugins \
+    import INotCompetentPlugin
+from Products.PluggableAuthService.utils import directlyProvides
+from zExceptions import Unauthorized
+from zope.interface import implements
+import unittest
 
 
 class DummyPlugin(Implicit):
@@ -140,8 +139,8 @@ class DummyGroupEnumerator(DummyPlugin):
         self._group_id = self.PLUGINID = group_id
         self.identifier = None
 
-    def enumerateGroups(self, id=None, exact_match=True, sort_by=None, max_results=None, **kw
-                        ):
+    def enumerateGroups(self, id=None, exact_match=True, sort_by=None,
+                        max_results=None, **kw):
 
         _id = self._group_id
 
@@ -270,7 +269,6 @@ class FauxRequest(object):
         self._held = []
 
     def get(self, key, default=None):
-
         return self._dict.get(key, default)
 
     def has_key(self, key):
@@ -281,15 +279,16 @@ class FauxRequest(object):
         return (form.get('login'), form.get('password'))
 
     def __getitem__(self, key):
-
         return self._dict[key]
 
     def __setitem__(self, key, value):
-
         self._dict[key] = value
 
     def _hold(self, something):
         self._held.append(something)
+
+    def __contains__(self, key):
+        return self._dict.__contains__(key)
 
 
 class FauxNotFoundError(Exception):
@@ -406,8 +405,10 @@ class FauxUser(Implicit):
 
 def _extractLogin(request):
 
-    return {'login': request['form'].get('login'), 'password': request['form'].get('password')
-            }
+    return {
+        'login': request['form'].get('login'),
+        'password': request['form'].get('password')
+    }
 
 
 def _authLogin(credentials):
@@ -440,8 +441,8 @@ class RequestCleaner:
             self._request._held = []
 
 
-class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance, RequestCleaner
-                                ):
+class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
+                                RequestCleaner):
 
     _oldSecurityPolicy = None
 
@@ -791,10 +792,13 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance, Requ
             plugins.activatePlugin(IExtractionPlugin, 'borked')
 
             request = self._makeRequest(
-                form={'login': eu.getUserName(), 'password': eu._getPassword()})
+                form={'login': eu.getUserName(), 'password': eu._getPassword()}
+            )
 
-            user_ids = zcuf._extractUserIds(request=request, plugins=zcuf.plugins
-                                            )
+            user_ids = zcuf._extractUserIds(
+                request=request,
+                plugins=zcuf.plugins
+            )
 
             self.assertEqual(len(user_ids), 1)
             self.assertEqual(user_ids[0][0], 'foo')
@@ -873,8 +877,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance, Requ
         self.assertEqual(len(user_ids), 1)
         self.assertEqual(user_ids[0][0], 'foo')
 
-    def test__extractUserIds_authenticate_emergency_user_with_broken_authenticator(
-            self):
+    def test__extractUserIds_authenticate_emergency_user_with_broken_authenticator(self):  # noqa
 
         from Products.PluggableAuthService.interfaces.plugins \
             import IExtractionPlugin, IAuthenticationPlugin
@@ -915,10 +918,13 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance, Requ
             plugins.activatePlugin(IAuthenticationPlugin, 'borked')
 
             request = self._makeRequest(
-                form={'login': eu.getUserName(), 'password': eu._getPassword()})
+                form={'login': eu.getUserName(), 'password': eu._getPassword()}
+            )
 
-            user_ids = zcuf._extractUserIds(request=request, plugins=zcuf.plugins
-                                            )
+            user_ids = zcuf._extractUserIds(
+                request=request,
+                plugins=zcuf.plugins
+            )
 
             self.assertEqual(len(user_ids), 1)
             self.assertEqual(user_ids[0][0], 'foo')
@@ -958,11 +964,14 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance, Requ
             plugins.activatePlugin(IAuthenticationPlugin, 'login')
 
             request = self._makeRequest(
-                form={'login': eu.getUserName(), 'password': eu._getPassword()})
+                form={'login': eu.getUserName(), 'password': eu._getPassword()}
+            )
 
             # This should authenticate the emergency user and not 'baz'
-            user_ids = zcuf._extractUserIds(request=request, plugins=zcuf.plugins
-                                            )
+            user_ids = zcuf._extractUserIds(
+                request=request,
+                plugins=zcuf.plugins
+            )
 
             self.assertEqual(len(user_ids), 1)
             self.assertEqual(user_ids[0][0], 'foo')
@@ -1038,11 +1047,17 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance, Requ
             plugins.activatePlugin(IAuthenticationPlugin, 'login')
 
             request = self._makeRequest(
-                form={'login': eu.getUserName(), 'password': eu._getPassword()})
+                form={
+                    'login': eu.getUserName(),
+                    'password': eu._getPassword()
+                }
+            )
 
             # This should authenticate the emergency user and not 'baz'
-            user_ids = zcuf._extractUserIds(request=request, plugins=zcuf.plugins
-                                            )
+            user_ids = zcuf._extractUserIds(
+                request=request,
+                plugins=zcuf.plugins
+            )
 
             self.assertEqual(len(user_ids), 1)
             self.assertEqual(user_ids[0][0], 'Foo')
@@ -1102,8 +1117,11 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance, Requ
 
         local_index = FauxObject('index_html').__of__(object)
 
-        request = self._makeRequest(('folder', 'object', 'index_html'), RESPONSE=FauxResponse(), PARENTS=[object, folder, root]
-                                    )
+        request = self._makeRequest(
+            ('folder', 'object', 'index_html'),
+            RESPONSE=FauxResponse(),
+            PARENTS=[object, folder, root]
+        )
 
         published = local_index
 
@@ -1122,8 +1140,11 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance, Requ
 
         acquired_index = FauxObject('index_html').__of__(folder)
 
-        request = self._makeRequest(('folder', 'object', 'index_html'), RESPONSE=FauxResponse(), PARENTS=[object, folder, root]
-                                    )
+        request = self._makeRequest(
+            ('folder', 'object', 'index_html'),
+            RESPONSE=FauxResponse(),
+            PARENTS=[object, folder, root]
+        )
 
         published = acquired_index.__of__(object)
 
@@ -1142,8 +1163,11 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance, Requ
 
         acquired_index = FauxObject('index_html').__of__(root)
 
-        request = self._makeRequest(('folder', 'object', 'index_html'), RESPONSE=FauxResponse(), PARENTS=[object, folder, root]
-                                    )
+        request = self._makeRequest(
+            ('folder', 'object', 'index_html'),
+            RESPONSE=FauxResponse(),
+            PARENTS=[object, folder, root]
+        )
 
         published = acquired_index.__of__(object)
 
@@ -1162,8 +1186,11 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance, Requ
 
         acquired_index = FauxObject('index_html').__of__(rc)
 
-        request = self._makeRequest(('folder', 'object', 'index_html'), RESPONSE=FauxResponse(), PARENTS=[object, folder, root]
-                                    )
+        request = self._makeRequest(
+            ('folder', 'object', 'index_html'),
+            RESPONSE=FauxResponse(),
+            PARENTS=[object, folder, root]
+        )
 
         published = acquired_index.__of__(object)
 
@@ -1195,7 +1222,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance, Requ
 
         try:
             zcuf.getUser('foo')
-        except KeyError as e:
+        except KeyError, e:
             self.fail('exception should be caught by PAS: %s' % e)
 
     def test__verifyUser_no_plugins(self):
@@ -1585,14 +1612,22 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance, Requ
 
         class PermissiveSP:
 
-            def validate(self, user, accessed, container, name, value, roles=None
-                         ):
+            def validate(self, user, accessed, container, name, value,
+                         roles=None):
                 return 1
 
         self._oldSecurityPolicy = setSecurityPolicy(PermissiveSP())
 
-        self.failUnless(zcuf._authorizeUser(faux, accessed=FauxObject('a'), container=FauxObject('c'), name='name', value=FauxObject('v'), roles=()
-                                            ))
+        self.failUnless(
+            zcuf._authorizeUser(
+                faux,
+                accessed=FauxObject('a'),
+                container=FauxObject('c'),
+                name='name',
+                value=FauxObject('v'),
+                roles=()
+            )
+        )
 
     def test__authorizeUser_force_no_way(self):
 
@@ -1601,14 +1636,21 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance, Requ
 
         class ParanoidSP:
 
-            def validate(self, user, accessed, container, name, value, roles=None
-                         ):
+            def validate(self, user, accessed, container, name, value,
+                         roles=None):
                 return 0
 
         self._oldSecurityPolicy = setSecurityPolicy(ParanoidSP())
 
-        self.failIf(zcuf._authorizeUser(faux, accessed=FauxObject('a'), container=FauxObject('c'), name='name', value=FauxObject('v'), roles=()
-                                        ))
+        self.failIf(
+            zcuf._authorizeUser(
+                faux, accessed=FauxObject('a'),
+                container=FauxObject('c'),
+                name='name',
+                value=FauxObject('v'),
+                roles=()
+            )
+        )
 
     def test__authorizeUser_use_ZSP_implied_roles_OK(self):
 
@@ -1617,8 +1659,15 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance, Requ
         object = FauxObject('object')
         object.__roles__ = ('Anonymous', )
 
-        self.failUnless(zcuf._authorizeUser(faux, accessed=FauxObject('a'), container=FauxObject('c'), name='name', value=object
-                                            ))
+        self.failUnless(
+            zcuf._authorizeUser(
+                faux,
+                accessed=FauxObject('a'),
+                container=FauxObject('c'),
+                name='name',
+                value=object
+            )
+        )
 
     def test__authorizeUser_use_ZSP_implied_roles_fail(self):
 
@@ -1627,8 +1676,15 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance, Requ
         object = FauxObject('object')
         object.__roles__ = ('Manager', )
 
-        self.failIf(zcuf._authorizeUser(faux, accessed=FauxObject('a'), container=FauxObject('c'), name='name', value=object
-                                        ))
+        self.failIf(
+            zcuf._authorizeUser(
+                faux,
+                accessed=FauxObject('a'),
+                container=FauxObject('c'),
+                name='name',
+                value=object
+            )
+        )
 
     def test__authorizeUser_use_ZSP_implied_roles_mgr(self):
 
@@ -1637,8 +1693,15 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance, Requ
         object = FauxObject('object')
         object.__roles__ = ('Manager', )
 
-        self.failUnless(zcuf._authorizeUser(mgr, accessed=FauxObject('a'), container=FauxObject('c'), name='name', value=object
-                                            ))
+        self.failUnless(
+            zcuf._authorizeUser(
+                mgr,
+                accessed=FauxObject('a'),
+                container=FauxObject('c'),
+                name='name',
+                value=object
+            )
+        )
 
     def test__authorizeUser_use_ZSP_explicit_roles_OK(self):
 
@@ -1646,8 +1709,16 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance, Requ
         faux = FauxUser('faux')
         object = FauxObject('object')
 
-        self.failUnless(zcuf._authorizeUser(faux, accessed=FauxObject('a'), container=FauxObject('c'), name='name', value=object, roles=('Anonymous',)
-                                            ))
+        self.failUnless(
+            zcuf._authorizeUser(
+                faux,
+                accessed=FauxObject('a'),
+                container=FauxObject('c'),
+                name='name',
+                value=object,
+                roles=('Anonymous',)
+            )
+        )
 
     def test__authorizeUser_use_ZSP_explicit_roles_fail(self):
 
@@ -1655,8 +1726,16 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance, Requ
         faux = FauxUser('faux')
         object = FauxObject('object')
 
-        self.failIf(zcuf._authorizeUser(faux, accessed=FauxObject('a'), container=FauxObject('c'), name='name', value=object, roles=('Manager',)
-                                        ))
+        self.failIf(
+            zcuf._authorizeUser(
+                faux,
+                accessed=FauxObject('a'),
+                container=FauxObject('c'),
+                name='name',
+                value=object,
+                roles=('Manager',)
+            )
+        )
 
     def test__authorizeUser_use_ZSP_explicit_roles_mgr(self):
 
@@ -1664,8 +1743,16 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance, Requ
         mgr = FauxUser('mgr', roles=('Manager', ))
         object = FauxObject('object')
 
-        self.failUnless(zcuf._authorizeUser(mgr, accessed=FauxObject('a'), container=FauxObject('c'), name='name', value=object, roles=('Manager',)
-                                            ))
+        self.failUnless(
+            zcuf._authorizeUser(
+                mgr,
+                accessed=FauxObject('a'),
+                container=FauxObject('c'),
+                name='name',
+                value=object,
+                roles=('Manager',)
+            )
+        )
 
     def test_getUser_no_plugins(self):
 
@@ -1844,8 +1931,13 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance, Requ
         index.__roles__ = ('Hamlet', )
         acquired_index = index.__of__(root).__of__(object)
 
-        request = self._makeRequest(('folder', 'object', 'index_html'), RESPONSE=FauxResponse(), PARENTS=[object, folder, root], PUBLISHED=acquired_index, form={'login': 'foo', 'password': 'bar'}
-                                    )
+        request = self._makeRequest(
+            ('folder', 'object', 'index_html'),
+            RESPONSE=FauxResponse(),
+            PARENTS=[object, folder, root],
+            PUBLISHED=acquired_index,
+            form={'login': 'foo', 'password': 'bar'}
+        )
 
         wrapped = zcuf.__of__(root)
         validated = wrapped.validate(request)
@@ -1886,8 +1978,13 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance, Requ
         index.__roles__ = ('Anonymous', )
         acquired_index = index.__of__(root).__of__(object)
 
-        request = self._makeRequest(('folder', 'object', 'index_html'), RESPONSE=FauxResponse(), PARENTS=[object, folder, root], PUBLISHED=acquired_index, form={}
-                                    )
+        request = self._makeRequest(
+            ('folder', 'object', 'index_html'),
+            RESPONSE=FauxResponse(),
+            PARENTS=[object, folder, root],
+            PUBLISHED=acquired_index,
+            form={}
+        )
 
         wrapped = zcuf.__of__(root)
         validated = wrapped.validate(request)
@@ -1930,9 +2027,13 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance, Requ
         index.__roles__ = ('Hamlet', )
         acquired_index = index.__of__(root).__of__(object)
 
-        request = self._makeRequest(('folder', 'object', 'index_html'), RESPONSE=FauxResponse(), PARENTS=[object, folder, root], PUBLISHED=acquired_index.__of__(object), form={'login': 'olivier', 'password': 'arras'
-                                                                                                                                                                                }
-                                    )
+        request = self._makeRequest(
+            ('folder', 'object', 'index_html'),
+            RESPONSE=FauxResponse(),
+            PARENTS=[object, folder, root],
+            PUBLISHED=acquired_index.__of__(object),
+            form={'login': 'olivier', 'password': 'arras'}
+        )
 
         wrapped = zcuf.__of__(root)
 
@@ -1978,9 +2079,13 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance, Requ
         index.__roles__ = ('Hamlet', )
         acquired_index = index.__of__(root).__of__(object)
 
-        request = self._makeRequest(('folder', 'object', 'index_html'), RESPONSE=FauxResponse(), PARENTS=[object, folder, root], PUBLISHED=acquired_index.__of__(object), form={'login': 'OLIVIER', 'password': 'arras'
-                                                                                                                                                                                }
-                                    )
+        request = self._makeRequest(
+            ('folder', 'object', 'index_html'),
+            RESPONSE=FauxResponse(),
+            PARENTS=[object, folder, root],
+            PUBLISHED=acquired_index.__of__(object),
+            form={'login': 'OLIVIER', 'password': 'arras'}
+        )
 
         wrapped = zcuf.__of__(root)
 
@@ -1999,7 +2104,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance, Requ
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
-        nested = self._makeOne(plugins)
+        self._makeOne(plugins)  # XXX
 
         anon = DummyPlugin()
         directlyProvides(anon, IAnonymousUserFactoryPlugin)
@@ -2015,8 +2120,13 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance, Requ
         index.__roles__ = ('Anonymous', )
         acquired_index = index.__of__(root).__of__(object)
 
-        request = self._makeRequest(('folder', 'object', 'index_html'), RESPONSE=FauxResponse(), PARENTS=[object, folder, root], PUBLISHED=acquired_index, form={}
-                                    )
+        request = self._makeRequest(
+            ('folder', 'object', 'index_html'),
+            RESPONSE=FauxResponse(),
+            PARENTS=[object, folder, root],
+            PUBLISHED=acquired_index,
+            form={}
+        )
 
         root._setObject('acl_users', zcuf)
         root_users = root.acl_users
@@ -2068,9 +2178,13 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance, Requ
         index.__roles__ = ('Hamlet', )
         acquired_index = index.__of__(root).__of__(object)
 
-        request = self._makeRequest(('folder', 'object', 'index_html'), RESPONSE=FauxResponse(), PARENTS=[object, folder, root], PUBLISHED=acquired_index.__of__(object), form={'login': 'olivier', 'password': 'arras'
-                                                                                                                                                                                }
-                                    )
+        request = self._makeRequest(
+            ('folder', 'object', 'index_html'),
+            RESPONSE=FauxResponse(),
+            PARENTS=[object, folder, root],
+            PUBLISHED=acquired_index.__of__(object),
+            form={'login': 'olivier', 'password': 'arras'}
+        )
 
         return zcuf, request
 
@@ -2639,8 +2753,12 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance, Requ
         creds_store = zcuf._getOb('creds')
 
         plugins = zcuf._getOb('plugins')
-        directlyProvides(creds_store, IExtractionPlugin, ICredentialsUpdatePlugin, ICredentialsResetPlugin
-                         )
+        directlyProvides(
+            creds_store,
+            IExtractionPlugin,
+            ICredentialsUpdatePlugin,
+            ICredentialsResetPlugin
+        )
         plugins.activatePlugin(IExtractionPlugin, 'creds')
         plugins.activatePlugin(ICredentialsUpdatePlugin, 'creds')
         plugins.activatePlugin(ICredentialsResetPlugin, 'creds')

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 # Copyright (c) 2001 Zope Foundation and Contributors
@@ -19,13 +20,12 @@ $Id$
 from zope.interface.verify import verifyClass
 
 
-class IExtractionPlugin_conformance:
+class IExtractionPlugin_conformance(object):
 
     def test_IExtractionPlugin_conformance(self):
 
         from Products.PluggableAuthService.interfaces.plugins \
             import IExtractionPlugin
-
         verifyClass(IExtractionPlugin, self._getTargetClass())
 
     def test_IExtractionPlugin_listInterfaces(self):
@@ -37,7 +37,7 @@ class IExtractionPlugin_conformance:
         self.failUnless(IExtractionPlugin.__name__ in listed)
 
 
-class ILoginPasswordExtractionPlugin_conformance:
+class ILoginPasswordExtractionPlugin_conformance(object):
 
     def test_ILoginPasswordExtractionPlugin_conformance(self):
 
@@ -55,7 +55,7 @@ class ILoginPasswordExtractionPlugin_conformance:
         self.failUnless(ILoginPasswordExtractionPlugin.__name__ in listed)
 
 
-class ILoginPasswordHostExtractionPlugin_conformance:
+class ILoginPasswordHostExtractionPlugin_conformance(object):
 
     def test_ILoginPasswordHostExtractionPlugin_conformance(self):
 
@@ -73,7 +73,7 @@ class ILoginPasswordHostExtractionPlugin_conformance:
         self.failUnless(ILoginPasswordHostExtractionPlugin.__name__ in listed)
 
 
-class IChallengePlugin_conformance:
+class IChallengePlugin_conformance(object):
 
     def test_IChallengePlugin_conformance(self):
 
@@ -91,7 +91,7 @@ class IChallengePlugin_conformance:
         self.failUnless(IChallengePlugin.__name__ in listed)
 
 
-class ICredentialsUpdatePlugin_conformance:
+class ICredentialsUpdatePlugin_conformance(object):
 
     def test_ICredentialsUpdatePlugin_conformance(self):
 
@@ -109,7 +109,7 @@ class ICredentialsUpdatePlugin_conformance:
         self.failUnless(ICredentialsUpdatePlugin.__name__ in listed)
 
 
-class ICredentialsResetPlugin_conformance:
+class ICredentialsResetPlugin_conformance(object):
 
     def test_ICredentialsResetPlugin_conformance(self):
 
@@ -127,7 +127,7 @@ class ICredentialsResetPlugin_conformance:
         self.failUnless(ICredentialsResetPlugin.__name__ in listed)
 
 
-class IAuthenticationPlugin_conformance:
+class IAuthenticationPlugin_conformance(object):
 
     def test_AuthenticationPlugin_conformance(self):
 
@@ -145,7 +145,7 @@ class IAuthenticationPlugin_conformance:
         self.failUnless(IAuthenticationPlugin.__name__ in listed)
 
 
-class IUserEnumerationPlugin_conformance:
+class IUserEnumerationPlugin_conformance(object):
 
     def test_UserEnumerationPlugin_conformance(self):
 
@@ -163,7 +163,7 @@ class IUserEnumerationPlugin_conformance:
         self.failUnless(IUserEnumerationPlugin.__name__ in listed)
 
 
-class IUserAdderPlugin_conformance:
+class IUserAdderPlugin_conformance(object):
 
     def test_UserAdderPlugin_conformance(self):
 
@@ -181,7 +181,7 @@ class IUserAdderPlugin_conformance:
         self.failUnless(IUserAdderPlugin.__name__ in listed)
 
 
-class IGroupEnumerationPlugin_conformance:
+class IGroupEnumerationPlugin_conformance(object):
 
     def test_GroupEnumerationPlugin_conformance(self):
 
@@ -199,7 +199,7 @@ class IGroupEnumerationPlugin_conformance:
         self.failUnless(IGroupEnumerationPlugin.__name__ in listed)
 
 
-class IGroupsPlugin_conformance:
+class IGroupsPlugin_conformance(object):
 
     def test_GroupsPlugin_conformance(self):
 
@@ -217,7 +217,7 @@ class IGroupsPlugin_conformance:
         self.failUnless(IGroupsPlugin.__name__ in listed)
 
 
-class IRoleEnumerationPlugin_conformance:
+class IRoleEnumerationPlugin_conformance(object):
 
     def test_RoleEnumerationPlugin_conformance(self):
 
@@ -235,7 +235,7 @@ class IRoleEnumerationPlugin_conformance:
         self.failUnless(IRoleEnumerationPlugin.__name__ in listed)
 
 
-class IRolesPlugin_conformance:
+class IRolesPlugin_conformance(object):
 
     def test_RolesPlugin_conformance(self):
 
@@ -253,7 +253,7 @@ class IRolesPlugin_conformance:
         self.failUnless(IRolesPlugin.__name__ in listed)
 
 
-class IRoleAssignerPlugin_conformance:
+class IRoleAssignerPlugin_conformance(object):
 
     def test_RoleAssignerPlugin_conformance(self):
 
@@ -271,7 +271,7 @@ class IRoleAssignerPlugin_conformance:
         self.failUnless(IRoleAssignerPlugin.__name__ in listed)
 
 
-class IChallengeProtocolChooser_conformance:
+class IChallengeProtocolChooser_conformance(object):
 
     def test_ChallengeProtocolChooser_conformance(self):
 
@@ -289,7 +289,7 @@ class IChallengeProtocolChooser_conformance:
         self.failUnless(IChallengeProtocolChooser.__name__ in listed)
 
 
-class IRequestTypeSniffer_conformance:
+class IRequestTypeSniffer_conformance(object):
 
     def test_RequestTypeSniffer_conformance(self):
 
@@ -307,7 +307,7 @@ class IRequestTypeSniffer_conformance:
         self.failUnless(IRequestTypeSniffer.__name__ in listed)
 
 
-class IUserFolder_conformance:
+class IUserFolder_conformance(object):
 
     def test_conformance_IUserFolder(self):
 
@@ -317,7 +317,7 @@ class IUserFolder_conformance:
         verifyClass(IUserFolder, self._getTargetClass())
 
 
-class IBasicUser_conformance:
+class IBasicUser_conformance(object):
 
     def test_conformance_IBasicUser(self):
 
@@ -337,7 +337,7 @@ class IPropertiedUser_conformance:
         verifyClass(IPropertiedUser, self._getTargetClass())
 
 
-class IPropertySheet_conformance:
+class IPropertySheet_conformance(object):
 
     def test_conformance_IPropertySheet(self):
 
@@ -347,7 +347,7 @@ class IPropertySheet_conformance:
         verifyClass(IPropertySheet, self._getTargetClass())
 
 
-class INotCompetentPlugin_conformance:
+class INotCompetentPlugin_conformance(object):
 
     def test_INotCompetentPlugin_conformance(self):
 

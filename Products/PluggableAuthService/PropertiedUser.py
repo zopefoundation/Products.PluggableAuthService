@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 # Copyright (c) 2001 Zope Foundation and Contributors
@@ -15,32 +16,24 @@
 
 $Id$
 """
-
-from Acquisition import aq_inner, aq_parent
-from AccessControl.User import BasicUser
 from AccessControl.PermissionRole import _what_not_even_god_should_do
-
-from interfaces.authservice import IPropertiedUser
+from AccessControl.User import BasicUser
+from Acquisition import aq_inner, aq_parent
+from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser  # noqa
+from Products.PluggableAuthService.interfaces.propertysheets import IPropertySheet  # noqa
 from UserPropertySheet import UserPropertySheet
-from utils import classImplements
-from Products.PluggableAuthService.interfaces.propertysheets \
-    import IPropertySheet
+from zope.interface import implementer
 
 
+@implementer(IPropertiedUser)
 class PropertiedUser(BasicUser):
 
     """ User objects which manage propertysheets, obtained from decorators.
     """
 
     def __init__(self, id, login=None):
-
         self._id = id
-
-        if login is None:
-            login = id
-
-        self._login = login
-
+        self._login = id if login is None else login
         self._propertysheets = {}   # *Not* persistent!
         self._groups = {}
         self._roles = {}
@@ -101,17 +94,13 @@ class PropertiedUser(BasicUser):
         local = {}
         object = aq_inner(object)
 
-        while True:
-
+        while 1:
             local_roles = getattr(object, '__ac_local_roles__', None)
-
             if local_roles:
-
                 if callable(local_roles):
                     local_roles = local_roles()
 
                 dict = local_roles or {}
-
                 for principal_id in principal_ids:
                     for role in dict.get(principal_id, []):
                         local[role] = 1
@@ -124,9 +113,7 @@ class PropertiedUser(BasicUser):
                 continue
 
             new = getattr(object, 'im_self', None)
-
             if new is not None:
-
                 object = aq_inner(new)
                 continue
 
@@ -187,28 +174,18 @@ class PropertiedUser(BasicUser):
         principal_ids = list(group_ids)
         principal_ids.insert(0, user_id)
 
-        while True:
-
+        while 1:
             local_roles = getattr(inner_obj, '__ac_local_roles__', None)
-
             if local_roles:
-
                 if callable(local_roles):
                     local_roles = local_roles()
-
                 dict = local_roles or {}
-
                 for principal_id in principal_ids:
-
                     local_roles = dict.get(principal_id, [])
-
                     for role in object_roles:
-
                         if role in local_roles:
-
                             if self._check_context(object):
                                 return 1
-
                             return 0
 
             inner = aq_inner(inner_obj)
@@ -270,13 +247,9 @@ class PropertiedUser(BasicUser):
         o Raise KeyError if a sheet of the given ID already exists.
         """
         if self._propertysheets.get(id) is not None:
-            raise KeyError("Duplicate property sheet: %s" % id)
+            raise KeyError("Duplicate property sheet: {0}".format(id))
 
         if IPropertySheet.providedBy(data):
             self._propertysheets[id] = data
         else:
             self._propertysheets[id] = UserPropertySheet(id, **data)
-
-
-classImplements(PropertiedUser,
-                IPropertiedUser)

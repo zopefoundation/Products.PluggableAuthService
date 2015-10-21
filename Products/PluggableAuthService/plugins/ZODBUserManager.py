@@ -15,37 +15,24 @@
 
 $Id$
 """
-import copy
-import logging
-try:
-    from hashlib import sha1 as sha
-except:
-    from sha import sha
-
 from AccessControl import ClassSecurityInfo, AuthEncoding
 from AccessControl.requestmethod import postonly
 from AccessControl.SecurityManagement import getSecurityManager
 from App.class_init import default__class_init__ as InitializeClass
 from BTrees.OOBTree import OOBTree
+from hashlib import sha1 as sha
 from OFS.Cache import Cacheable
-
-from zope.interface import Interface
-
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-
-from Products.PluggableAuthService.interfaces.plugins \
-    import IAuthenticationPlugin
-from Products.PluggableAuthService.interfaces.plugins \
-    import IUserEnumerationPlugin
-from Products.PluggableAuthService.interfaces.plugins \
-    import IUserAdderPlugin
-
+from Products.PluggableAuthService.interfaces import plugins as iplugins
 from Products.PluggableAuthService.permissions import ManageUsers
 from Products.PluggableAuthService.permissions import SetOwnPassword
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PluggableAuthService.utils import classImplements
 from Products.PluggableAuthService.utils import createViewName
 from Products.PluggableAuthService.utils import csrf_only
+from zope.interface import implementer
+from zope.interface import Interface
+import copy
+import logging
 
 logger = logging.getLogger('PluggableAuthService')
 
@@ -67,12 +54,17 @@ def addZODBUserManager(dispatcher, id, title=None, REQUEST=None):
 
     if REQUEST is not None:
         REQUEST['RESPONSE'].redirect(
-            '%s/manage_workspace'
-            '?manage_tabs_message='
-            'ZODBUserManager+added.'
-            % dispatcher.absolute_url())
+            '%s/manage_workspace?manage_tabs_message=ZODBUserManager+added.'
+            % dispatcher.absolute_url()
+        )
 
 
+@implementer(
+    IZODBUserManager,
+    iplugins.IAuthenticationPlugin,
+    iplugins.IUserEnumerationPlugin,
+    iplugins.IUserAdderPlugin
+)
 class ZODBUserManager(BasePlugin, Cacheable):
 
     """ PAS plugin for managing users in the ZODB.
@@ -94,8 +86,7 @@ class ZODBUserManager(BasePlugin, Cacheable):
     #
     #   IAuthenticationPlugin implementation
     #
-    security.declarePrivate('authenticateCredentials')
-
+    @security.private
     def authenticateCredentials(self, credentials):
         """ See IAuthenticationPlugin.
 
@@ -144,10 +135,9 @@ class ZODBUserManager(BasePlugin, Cacheable):
     #
     #   IUserEnumerationPlugin implementation
     #
-    security.declarePrivate('enumerateUsers')
-
-    def enumerateUsers(self, id=None, login=None, exact_match=False, sort_by=None, max_results=None, **kw
-                       ):
+    @security.private
+    def enumerateUsers(self, id=None, login=None, exact_match=False,
+                       sort_by=None, max_results=None, **kw):
         """ See IUserEnumerationPlugin.
         """
         user_info = []
@@ -163,11 +153,18 @@ class ZODBUserManager(BasePlugin, Cacheable):
 
         # Look in the cache first...
         keywords = copy.deepcopy(kw)
-        keywords.update({'id': id, 'login': login, 'exact_match': exact_match, 'sort_by': sort_by, 'max_results': max_results
-                         }
-                        )
-        cached_info = self.ZCacheable_get(view_name=view_name, keywords=keywords, default=None
-                                          )
+        keywords.update({
+            'id': id,
+            'login': login,
+            'exact_match': exact_match,
+            'sort_by': sort_by,
+            'max_results': max_results
+        })
+        cached_info = self.ZCacheable_get(
+            view_name=view_name,
+            keywords=keywords,
+            default=None
+        )
         if cached_info is not None:
             return tuple(cached_info)
 
@@ -208,8 +205,12 @@ class ZODBUserManager(BasePlugin, Cacheable):
                 e_url = '%s/manage_users' % self.getId()
                 qs = 'user_id=%s' % user_id
 
-                info = {'id': self.prefix + user_id, 'login': self._userid_to_login[user_id], 'pluginid': plugin_id, 'editurl': '%s?%s' % (e_url, qs)
-                        }
+                info = {
+                    'id': self.prefix + user_id,
+                    'login': self._userid_to_login[user_id],
+                    'pluginid': plugin_id,
+                    'editurl': '%s?%s' % (e_url, qs)
+                }
 
                 if not user_filter or user_filter(info):
                     user_info.append(info)
@@ -222,8 +223,7 @@ class ZODBUserManager(BasePlugin, Cacheable):
     #
     #   IUserAdderPlugin implementation
     #
-    security.declarePrivate('doAddUser')
-
+    @security.private
     def doAddUser(self, login, password):
         try:
             self.addUser(login, login, password)
@@ -246,8 +246,11 @@ class ZODBUserManager(BasePlugin, Cacheable):
     def getUserInfo(self, user_id):
         """ user_id -> {}
         """
-        return {'user_id': user_id, 'login_name': self._userid_to_login[user_id], 'pluginid': self.getId()
-                }
+        return {
+            'user_id': user_id,
+            'login_name': self._userid_to_login[user_id],
+            'pluginid': self.getId()
+        }
 
     security.declareProtected(ManageUsers, 'listUserInfo')
 
@@ -279,8 +282,7 @@ class ZODBUserManager(BasePlugin, Cacheable):
         """
         return self._userid_to_login[user_id]
 
-    security.declarePrivate('addUser')
-
+    @security.private
     def addUser(self, user_id, login_name, password):
 
         if self._user_passwords.get(user_id) is not None:
@@ -297,8 +299,7 @@ class ZODBUserManager(BasePlugin, Cacheable):
         view_name = createViewName('enumerateUsers')
         self.ZCacheable_invalidate(view_name=view_name)
 
-    security.declarePrivate('updateUser')
-
+    @security.private
     def updateUser(self, user_id, login_name):
 
         # The following raises a KeyError if the user_id is invalid
@@ -315,8 +316,7 @@ class ZODBUserManager(BasePlugin, Cacheable):
         # Signal success.
         return True
 
-    security.declarePrivate('updateEveryLoginName')
-
+    @security.private
     def updateEveryLoginName(self, quit_on_first_error=True):
         # Update all login names to their canonical value.  This
         # should be done after changing the login_transform property
@@ -372,8 +372,7 @@ class ZODBUserManager(BasePlugin, Cacheable):
         # Store the new login mapping.
         self._login_to_userid = new_login_to_userid
 
-    security.declarePrivate('removeUser')
-
+    @security.private
     def removeUser(self, user_id):
 
         if self._user_passwords.get(user_id) is None:
@@ -391,8 +390,7 @@ class ZODBUserManager(BasePlugin, Cacheable):
         view_name = createViewName('enumerateUsers', user_id)
         self.ZCacheable_invalidate(view_name=view_name)
 
-    security.declarePrivate('updateUserPassword')
-
+    @security.private
     def updateUserPassword(self, user_id, password):
 
         if self._user_passwords.get(user_id) is None:
@@ -401,8 +399,7 @@ class ZODBUserManager(BasePlugin, Cacheable):
         if password:
             self._user_passwords[user_id] = self._pw_encrypt(password)
 
-    security.declarePrivate('_pw_encrypt')
-
+    @security.private
     def _pw_encrypt(self, password):
         """Returns the AuthEncoding encrypted password
 
@@ -424,19 +421,25 @@ class ZODBUserManager(BasePlugin, Cacheable):
                       )
 
     security.declarePublic('manage_widgets')
-    manage_widgets = PageTemplateFile('www/zuWidgets', globals(), __name__='manage_widgets'
-                                      )
+    manage_widgets = PageTemplateFile(
+        'www/zuWidgets',
+        globals(),
+        __name__='manage_widgets'
+    )
 
     security.declareProtected(ManageUsers, 'manage_users')
-    manage_users = PageTemplateFile('www/zuUsers', globals(), __name__='manage_users'
-                                    )
+    manage_users = PageTemplateFile(
+        'www/zuUsers',
+        globals(),
+        __name__='manage_users'
+    )
 
     security.declareProtected(ManageUsers, 'manage_addUser')
 
     @csrf_only
     @postonly
-    def manage_addUser(self, user_id, login_name, password, confirm, RESPONSE=None, REQUEST=None
-                       ):
+    def manage_addUser(self, user_id, login_name, password, confirm,
+                       RESPONSE=None, REQUEST=None):
         """ Add a user via the ZMI.
         """
         if password != confirm:
@@ -462,8 +465,8 @@ class ZODBUserManager(BasePlugin, Cacheable):
 
     @csrf_only
     @postonly
-    def manage_updateUserPassword(self, user_id, password, confirm, RESPONSE=None, REQUEST=None
-                                  ):
+    def manage_updateUserPassword(self, user_id, password, confirm,
+                                  RESPONSE=None, REQUEST=None):
         """ Update a user's login name / password via the ZMI.
         """
         if password and password != confirm:
@@ -484,8 +487,8 @@ class ZODBUserManager(BasePlugin, Cacheable):
 
     @csrf_only
     @postonly
-    def manage_updateUser(self, user_id, login_name, RESPONSE=None, REQUEST=None
-                          ):
+    def manage_updateUser(self, user_id, login_name,
+                          RESPONSE=None, REQUEST=None):
         """ Update a user's login name via the ZMI.
         """
         if not login_name:
@@ -506,8 +509,7 @@ class ZODBUserManager(BasePlugin, Cacheable):
 
     @csrf_only
     @postonly
-    def manage_removeUsers(self, user_ids, RESPONSE=None, REQUEST=None
-                           ):
+    def manage_removeUsers(self, user_ids, RESPONSE=None, REQUEST=None):
         """ Remove one or more users via the ZMI.
         """
         user_ids = filter(None, user_ids)
@@ -540,15 +542,17 @@ class ZODBUserManager(BasePlugin, Cacheable):
         return self.getUserInfo(user_id)
 
     security.declareProtected(SetOwnPassword, 'manage_updatePasswordForm')
-    manage_updatePasswordForm = PageTemplateFile('www/zuPasswd', globals(), __name__='manage_updatePasswordForm'
-                                                 )
+    manage_updatePasswordForm = PageTemplateFile(
+        'www/zuPasswd',
+        globals(),
+        __name__='manage_updatePasswordForm'
+    )
 
-    security.declareProtected(SetOwnPassword, 'manage_updatePassword')
-
+    @security.protected(SetOwnPassword)
     @csrf_only
     @postonly
-    def manage_updatePassword(self, login_name, password, confirm, RESPONSE=None, REQUEST=None
-                              ):
+    def manage_updatePassword(self, login_name, password, confirm,
+                              RESPONSE=None, REQUEST=None):
         """ Update the current user's password and login name.
         """
         user_id = getSecurityManager().getUser().getId()
@@ -571,9 +575,6 @@ class ZODBUserManager(BasePlugin, Cacheable):
                               '?manage_tabs_message=%s'
                               % (self.absolute_url(), message)
                               )
-
-classImplements(ZODBUserManager, IZODBUserManager, IAuthenticationPlugin, IUserEnumerationPlugin, IUserAdderPlugin
-                )
 
 InitializeClass(ZODBUserManager)
 

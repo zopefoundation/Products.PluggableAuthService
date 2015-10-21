@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 # Copyright (c) 2001 Zope Foundation and Contributors
@@ -32,9 +33,8 @@ try:
 except ImportError:
     pass
 
-security.declarePrivate('setDefaultRoles')
 
-
+@security.private
 def setDefaultRoles(permission, roles):
     """ Set the defaults roles for a permission.
     """

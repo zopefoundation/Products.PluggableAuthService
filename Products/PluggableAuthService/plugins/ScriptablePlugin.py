@@ -15,29 +15,24 @@
 
 $Id$
 """
-from sets import Set
-from urllib import quote_plus
-from OFS.Folder import Folder
 from AccessControl import ClassSecurityInfo
 from AccessControl.Permissions import manage_users as ManageUsers
 from App.class_init import default__class_init__ as InitializeClass
-
-from zope.interface import Interface
-from zope.interface import implementedBy
-from zope.interface import providedBy
-
+from OFS.Folder import Folder
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PluggableAuthService.utils import directlyProvides
-from Products.PluggableAuthService.utils import classImplements
+from sets import Set
+from zope.interface import directlyProvides
+from zope.interface import implementedBy
+from zope.interface import implementer
+from zope.interface import Interface
+from zope.interface import providedBy
+import Products
 
 
 class IScriptablePlugin(Interface):
     """ Marker interface.
     """
-
-import Products
 
 manage_addScriptablePluginForm = PageTemplateFile(
     'www/spAdd', globals(), __name__='manage_addScriptablePluginForm')
@@ -57,6 +52,7 @@ def addScriptablePlugin(dispatcher, id, title=None, REQUEST=None):
             % dispatcher.absolute_url())
 
 
+@implementer(IScriptablePlugin)
 class ScriptablePlugin(Folder, BasePlugin):
 
     """ Allow users to implement plugin interfaces using script objects.
@@ -101,8 +97,13 @@ class ScriptablePlugin(Folder, BasePlugin):
 
     def all_meta_types(self):
         """ What objects can be contained here? """
-        allowed_types = ('Script (Python)', 'External Method', 'Z SQL Method', 'DTML Method', 'Page Template'
-                         )
+        allowed_types = (
+            'Script (Python)',
+            'External Method',
+            'Z SQL Method',
+            'DTML Method',
+            'Page Template'
+        )
 
         return [x for x in Products.meta_types if x['name'] in allowed_types]
 
@@ -149,9 +150,5 @@ class ScriptablePlugin(Folder, BasePlugin):
                               '?manage_tabs_message='
                               'Interfaces+updated.'
                               % self.absolute_url())
-
-
-classImplements(ScriptablePlugin, IScriptablePlugin, *(implementedBy(Folder) + implementedBy(BasePlugin))
-                )
 
 InitializeClass(ScriptablePlugin)

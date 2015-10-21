@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 # Copyright (c) 2001 Zope Foundation and Contributors
@@ -15,45 +16,15 @@
 
 $Id$
 """
-# Eventually, those interfaces should be moved to Zope and imported
-# here as aliases for backward compatibility.
-
-from zope.interface import Interface
-
-
-class IRequest(Interface):
-
-    """ Base Request Interface
-
-    XXX Add methods from BaseRequest?
-    """
-
-
-class IHTTPRequest(IRequest):
-
-    """ HTTP Request
-    """
-
-
-class IBrowserRequest(IHTTPRequest):
-
-    """Browser Request
-    """
+# BBB import, DEPRECATED, remove in 3.1
+# XXX not sure how subsitute IWebDAVRequest
+from zope.publisher.interfaces import IRequest  # noqa
+from zope.publisher.interfaces.browser import IBrowserRequest  # noqa
+from zope.publisher.interfaces.ftp import IFTPRequest  # noqa
+from zope.publisher.interfaces.http import IHTTPRequest
+from zope.publisher.interfaces.xmlrpc import IXMLRPCRequest  # noqa
 
 
 class IWebDAVRequest(IHTTPRequest):
-
     """ WebDAV Request
-    """
-
-
-class IXMLRPCRequest(IHTTPRequest):
-
-    """ XML-RPC Request
-    """
-
-
-class IFTPRequest(IRequest):
-
-    """ FTP Request
     """

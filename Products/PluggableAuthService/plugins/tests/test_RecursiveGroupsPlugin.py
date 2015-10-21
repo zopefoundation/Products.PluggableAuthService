@@ -11,14 +11,12 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-import unittest
-
 from OFS.SimpleItem import SimpleItem
 from Products.PluggableAuthService.tests.conformance \
     import IGroupsPlugin_conformance
-
 from Products.PluggableAuthService.tests.test_PluggableAuthService \
     import FauxContainer
+import unittest
 
 
 class FauxPAS(FauxContainer):
@@ -114,8 +112,10 @@ class RecursiveGroupsPluginTests(unittest.TestCase, IGroupsPlugin_conformance
         dgm.addPrincipalToGroup(user, 'group1')
         dgm.addPrincipalToGroup(DummyPrincipal('dummy:group1'), 'group2')
 
-        self.assertEqual(rgp.getGroupsForPrincipal(user), ('dummy:group1', 'dummy:group2')
-                         )
+        self.assertEqual(
+            rgp.getGroupsForPrincipal(user),
+            ('dummy:group1', 'dummy:group2')
+        )
 
     def test_complex_flattening(self):
 
