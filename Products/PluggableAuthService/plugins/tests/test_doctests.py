@@ -20,13 +20,14 @@ ZopeTestCase.installProduct('PluginRegistry')
 ZopeTestCase.installProduct('PluggableAuthService')
 ZopeTestCase.installProduct('GenericSetup')
 
+
 def test_suite():
     suite = unittest.TestSuite()
     package = 'Products.PluggableAuthService.plugins.tests'
     tests = [
         ZopeTestCase.FunctionalDocFileSuite('ChallengeProtocolChooser.txt',
                                             package=package),
-        ]
+    ]
     for t in tests:
         suite.addTest(t)
     return suite

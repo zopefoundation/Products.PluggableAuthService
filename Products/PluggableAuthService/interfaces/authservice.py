@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 # Copyright (c) 2001 Zope Foundation and Contributors
@@ -20,7 +21,7 @@ from zope.interface import Interface
 from AccessControl.ZopeSecurityPolicy import _noroles
 
 
-class IBasicUser( Interface ):
+class IBasicUser(Interface):
 
     """ Specify the interface called out in AccessControl.User.BasicUser
         as the "Public User object interface", except that '_getPassword'
@@ -28,7 +29,6 @@ class IBasicUser( Interface ):
     """
 
     def getId():
-
         """ Get the ID of the user.
 
         o The ID can be used, at least from Python, to get the user from
@@ -36,7 +36,6 @@ class IBasicUser( Interface ):
         """
 
     def getUserName():
-
         """ Return the name used by the user to log into the system.
 
         o Note that this may not be identical to the user's 'getId'
@@ -45,12 +44,10 @@ class IBasicUser( Interface ):
         """
 
     def getRoles():
-
         """ Return the roles assigned to a user "globally".
         """
 
-    def getRolesInContext( object ):
-
+    def getRolesInContext(object):
         """ Return the roles assigned to the user in context of 'object'.
 
         o Roles include both global roles (ones assigned to the user
@@ -59,35 +56,31 @@ class IBasicUser( Interface ):
         """
 
     def getDomains():
-
         """ Return the list of domain restrictions for a user.
         """
 
 
-class IPropertiedUser( IBasicUser ):
+class IPropertiedUser(IBasicUser):
 
     """ A user which has property sheets associated with it,
         i.e. a mapping from strings (property sheet ids)
         to objects implementing IPropertySheet
     """
 
-    def addPropertysheet( id, data ):
-
+    def addPropertysheet(id, data):
         """ Add a new property sheet to the user.
 
         The property sheet has to be a map or an IPropertySheet instance.
         """
 
     def listPropertysheets():
-
         """ Return a sequence of property sheet ids
 
         o for each id in the list getPropertysheet(id)
           returns a IPropertySheet
         """
 
-    def getPropertysheet( id ):
-
+    def getPropertysheet(id):
         """ Return a property sheet for the given id
 
         o the returned object implements IPropertySheet
@@ -101,7 +94,7 @@ class IPropertiedUser( IBasicUser ):
         """
 
 
-class IUserFolder( Interface ):
+class IUserFolder(Interface):
 
     """ Specify the interface called out in AccessControl.User.BasicUserFolder
         as the "Public UserFolder object interface":
@@ -110,20 +103,17 @@ class IUserFolder( Interface ):
            part of the contract!  See IEnumerableUserFolder.
     """
 
-    def getUser( name ):
-
+    def getUser(name):
         """ Return the named user object or None.
         """
 
-    def getUserById( id, default=None ):
-
+    def getUserById(id, default=None):
         """ Return the user corresponding to the given id.
 
         o If no such user can be found, return 'default'.
         """
 
-    def validate( request, auth='', roles=_noroles ):
-
+    def validate(request, auth='', roles=_noroles):
         """ Perform identification, authentication, and authorization.
 
         o Return an IUser-conformant user object, or None if we can't
@@ -137,13 +127,13 @@ class IUserFolder( Interface ):
         o roles is the list of roles the caller
         """
 
-class IPluggableAuthService( IUserFolder ):
+
+class IPluggableAuthService(IUserFolder):
 
     """ The full, default contract for the pluggable authentication service.
     """
 
     def searchUsers(**kw):
-
         """ Search for users.  Returns a sequence of dicts, each dict
         representing a user matching the query, with the keys
         'userid','id', 'login', 'title', and 'principal_type',
@@ -240,7 +230,7 @@ class IPluggableAuthService( IUserFolder ):
 # interfaces describe contracts that other standard Zope user folders
 # implement.
 
-class IMutableUserFolder( Interface ):
+class IMutableUserFolder(Interface):
 
     """ Specify the interface called out in
         AccessControl.User.BasicUserFolder as the
@@ -250,32 +240,28 @@ class IMutableUserFolder( Interface ):
            part of the contract!  See IEnumerableUserFolder.
     """
 
-    def userFolderAddUser( name, password, roles, domains, **kw ):
-
+    def userFolderAddUser(name, password, roles, domains, **kw):
         """ Create a new user object.
         """
 
-    def userFolderEditUser( name, password, roles, domains, **kw ):
-
+    def userFolderEditUser(name, password, roles, domains, **kw):
         """ Change user object attributes.
         """
 
-    def userFolderDelUsers( names ):
-
+    def userFolderDelUsers(names):
         """ Delete one or more user objects.
         """
 
-class IEnumerableUserFolder( IUserFolder ):
+
+class IEnumerableUserFolder(IUserFolder):
 
     """ Interface for user folders which can afford to enumerate their users.
     """
 
     def getUserNames():
-
         """ Return a list of usernames.
         """
 
     def getUsers():
-
         """ Return a list of user objects.
         """

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 # Copyright (c) 2001 Zope Foundation and Contributors
@@ -18,12 +19,12 @@ $Id$
 from AccessControl import ModuleSecurityInfo
 from AccessControl import Permissions
 
-security = ModuleSecurityInfo( 'Products.PluggableAuthService.permissions' )
+security = ModuleSecurityInfo('Products.PluggableAuthService.permissions')
 
-security.declarePublic( 'ManageUsers' )
+security.declarePublic('ManageUsers')
 ManageUsers = Permissions.manage_users
 
-security.declarePublic( 'ManageGroups' )
+security.declarePublic('ManageGroups')
 ManageGroups = "Manage Groups"
 
 addPermission = None
@@ -32,8 +33,9 @@ try:
 except ImportError:
     pass
 
-security.declarePrivate( 'setDefaultRoles' )
-def setDefaultRoles( permission, roles ):
+
+@security.private
+def setDefaultRoles(permission, roles):
     """ Set the defaults roles for a permission.
     """
     if addPermission is not None:
@@ -45,18 +47,18 @@ def setDefaultRoles( permission, roles ):
         from AccessControl.Permission import ApplicationDefaultPermissions
         import Products
         registered = _registeredPermissions
-        if not registered.has_key( permission ):
-            registered[ permission ] = 1
-            Products.__ac_permissions__=(
-                Products.__ac_permissions__+((permission,(),roles),))
+        if permission not in registered:
+            registered[permission] = 1
+            Products.__ac_permissions__ = (
+                Products.__ac_permissions__ + ((permission, (), roles),))
             mangled = pname(permission)
             setattr(ApplicationDefaultPermissions, mangled, roles)
 
 
-security.declarePublic( 'SearchPrincipals' )
+security.declarePublic('SearchPrincipals')
 SearchPrincipals = 'Search for principals'
-setDefaultRoles( SearchPrincipals, ( 'Manager', ) )
+setDefaultRoles(SearchPrincipals, ('Manager', ))
 
-security.declarePublic( 'SetOwnPassword' )
+security.declarePublic('SetOwnPassword')
 SetOwnPassword = 'Set own password'
-setDefaultRoles( SetOwnPassword, ( 'Authenticated', ) )
+setDefaultRoles(SetOwnPassword, ('Authenticated', ))
