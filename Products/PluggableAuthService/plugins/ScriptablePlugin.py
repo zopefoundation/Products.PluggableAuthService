@@ -86,15 +86,13 @@ class ScriptablePlugin(Folder, BasePlugin):
         self._id = self.id = id
         self.title = title
 
-    security.declareProtected(ManageUsers, 'hasMethod')
-
+    @security.protected(ManageUsers)
     def hasMethod(self, method_name):
         """ Do we implement this method directly?
         """
         return method_name in self.objectIds()
 
-    security.declarePublic('all_meta_types')
-
+    @security.public
     def all_meta_types(self):
         """ What objects can be contained here? """
         allowed_types = (
@@ -107,8 +105,7 @@ class ScriptablePlugin(Folder, BasePlugin):
 
         return [x for x in Products.meta_types if x['name'] in allowed_types]
 
-    security.declareProtected(ManageUsers, '_delOb')
-
+    @security.protected(ManageUsers)
     def _delOb(self, id):
         """
             Override ObjectManager's _delOb to account for removing any
@@ -129,8 +126,7 @@ class ScriptablePlugin(Folder, BasePlugin):
 
         directlyProvides(self, *(list(curr_interfaces - del_interfaces)))
 
-    security.declareProtected(ManageUsers, 'manage_updateInterfaces')
-
+    @security.protected(ManageUsers)
     def manage_updateInterfaces(self, interfaces, RESPONSE=None):
         """ For ZMI update of interfaces. """
 

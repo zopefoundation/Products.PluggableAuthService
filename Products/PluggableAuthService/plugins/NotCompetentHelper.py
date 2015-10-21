@@ -94,8 +94,7 @@ class NotCompetentBase(BasePlugin, HigherLevelUserFolderAccessMixin):
         self.id = id
         self.title = title
 
-    security.declarePrivate('isNotCompetentToAuthenticate')
-
+    @security.private
     def isNotCompetentToAuthenticate(self, request):
         raise NotImplementedError()
 

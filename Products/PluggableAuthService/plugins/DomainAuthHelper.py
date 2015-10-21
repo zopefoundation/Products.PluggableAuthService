@@ -155,8 +155,7 @@ class DomainAuthHelper(BasePlugin):
         self.title = title
         self._domain_map = OOBTree()
 
-    security.declarePrivate('extractCredentials')
-
+    @security.private
     def extractCredentials(self, request):
         """ Extract credentials from 'request'.
         """
@@ -177,8 +176,7 @@ class DomainAuthHelper(BasePlugin):
 
         return creds
 
-    security.declarePrivate('authenticateCredentials')
-
+    @security.private
     def authenticateCredentials(self, credentials):
         """ Fulfill AuthenticationPlugin requirements """
         login = credentials.get('login', '')
@@ -197,8 +195,7 @@ class DomainAuthHelper(BasePlugin):
 
         return (None, None)
 
-    security.declarePrivate('getRolesForPrincipal')
-
+    @security.private
     def getRolesForPrincipal(self, user, request=None):
         """ Fulfill RolesPlugin requirements """
         roles = []
@@ -224,8 +221,7 @@ class DomainAuthHelper(BasePlugin):
 
         return tuple(roles)
 
-    security.declarePrivate('_findMatches')
-
+    @security.private
     def _findMatches(self, login, r_host='', r_address=''):
         """ Find the match """
         matches = []
@@ -265,14 +261,12 @@ class DomainAuthHelper(BasePlugin):
 
         return tuple(matches)
 
-    security.declareProtected(manage_users, 'listMatchTypes')
-
+    @security.protected(manage_users)
     def listMatchTypes(self):
         """ Return a sequence of possible match types """
         return _MATCH_TYPE_FILTERS.keys()
 
-    security.declareProtected(manage_users, 'listMappingsForUser')
-
+    @security.protected(manage_users)
     def listMappingsForUser(self, user_id=''):
         """ List the mappings for a specific user """
         result = []
@@ -289,8 +283,7 @@ class DomainAuthHelper(BasePlugin):
 
         return result
 
-    security.declareProtected(manage_users, 'manage_addMapping')
-
+    @security.protected(manage_users)
     def manage_addMapping(self, user_id='', match_type='', match_string='',
                           username='', roles=[], REQUEST=None):
         """ Add a mapping for a user """
@@ -339,8 +332,7 @@ class DomainAuthHelper(BasePlugin):
             else:
                 return self.manage_genericmap(manage_tabs_message=msg)
 
-    security.declareProtected(manage_users, 'manage_removeMappings')
-
+    @security.protected(manage_users)
     def manage_removeMappings(self, user_id='', match_ids=[], REQUEST=None):
         """ Remove mappings """
         msg = ''

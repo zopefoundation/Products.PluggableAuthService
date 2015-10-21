@@ -98,8 +98,7 @@ class ZODBRoleManager(BasePlugin):
     #
     #   IRolesPlugin implementation
     #
-    security.declarePrivate('getRolesForPrincipal')
-
+    @security.private
     def getRolesForPrincipal(self, principal, request=None):
         """ See IRolesPlugin.
         """
@@ -157,42 +156,36 @@ class ZODBRoleManager(BasePlugin):
     #
     #   IRoleAssignerPlugin implementation
     #
-    security.declarePrivate('doAssignRoleToPrincipal')
-
+    @security.private
     def doAssignRoleToPrincipal(self, principal_id, role):
         return self.assignRoleToPrincipal(role, principal_id)
 
-    security.declarePrivate('doRemoveRoleFromPrincipal')
-
+    @security.private
     def doRemoveRoleFromPrincipal(self, principal_id, role):
         return self.removeRoleFromPrincipal(role, principal_id)
 
     #
     #   Role management API
     #
-    security.declareProtected(ManageUsers, 'listRoleIds')
-
+    @security.protected(ManageUsers)
     def listRoleIds(self):
         """ Return a list of the role IDs managed by this object.
         """
         return self._roles.keys()
 
-    security.declareProtected(ManageUsers, 'listRoleInfo')
-
+    @security.protected(ManageUsers)
     def listRoleInfo(self):
         """ Return a list of the role mappings.
         """
         return self._roles.values()
 
-    security.declareProtected(ManageUsers, 'getRoleInfo')
-
+    @security.protected(ManageUsers)
     def getRoleInfo(self, role_id):
         """ Return a role mapping.
         """
         return self._roles[role_id]
 
-    security.declarePrivate('addRole')
-
+    @security.private
     def addRole(self, role_id, title='', description=''):
         """ Add 'role_id' to the list of roles managed by this object.
 
@@ -207,8 +200,7 @@ class ZODBRoleManager(BasePlugin):
             'description': description
         }
 
-    security.declarePrivate('updateRole')
-
+    @security.private
     def updateRole(self, role_id, title, description):
         """ Update title and description for the role.
 
@@ -217,8 +209,7 @@ class ZODBRoleManager(BasePlugin):
         self._roles[role_id].update({'title': title, 'description': description
                                      })
 
-    security.declarePrivate('removeRole')
-
+    @security.private
     def removeRole(self, role_id, REQUEST=None):
         """ Remove 'role_id' from the list of roles managed by this object.
 
@@ -236,8 +227,7 @@ class ZODBRoleManager(BasePlugin):
     #
     #   Role assignment API
     #
-    security.declareProtected(ManageUsers, 'listAvailablePrincipals')
-
+    @security.protected(ManageUsers)
     def listAvailablePrincipals(self, role_id, search_id):
         """ Return a list of principal IDs to whom a role can be assigned.
 
@@ -266,8 +256,7 @@ class ZODBRoleManager(BasePlugin):
 
         return result
 
-    security.declareProtected(ManageUsers, 'listAssignedPrincipals')
-
+    @security.protected(ManageUsers)
     def listAssignedPrincipals(self, role_id):
         """ Return a list of principal IDs to whom a role is assigned.
         """
@@ -295,8 +284,7 @@ class ZODBRoleManager(BasePlugin):
 
         return result
 
-    security.declarePrivate('assignRoleToPrincipal')
-
+    @security.private
     def assignRoleToPrincipal(self, role_id, principal_id):
         """ Assign a role to a principal (user or group).
 
@@ -316,8 +304,7 @@ class ZODBRoleManager(BasePlugin):
 
         return not already
 
-    security.declarePrivate('removeRoleFromPrincipal')
-
+    @security.private
     def removeRoleFromPrincipal(self, role_id, principal_id):
         """ Remove a role from a principal (user or group).
 
@@ -363,8 +350,7 @@ class ZODBRoleManager(BasePlugin):
         __name__='manage_twoLists'
     )
 
-    security.declareProtected(ManageUsers, 'manage_addRole')
-
+    @security.protected(ManageUsers)
     @csrf_only
     @postonly
     def manage_addRole(self, role_id, title, description,
@@ -380,8 +366,7 @@ class ZODBRoleManager(BasePlugin):
                               % (self.absolute_url(), message)
                               )
 
-    security.declareProtected(ManageUsers, 'manage_updateRole')
-
+    @security.protected(ManageUsers)
     @csrf_only
     @postonly
     def manage_updateRole(self, role_id, title, description,
@@ -398,8 +383,7 @@ class ZODBRoleManager(BasePlugin):
                               % (self.absolute_url(), role_id, message)
                               )
 
-    security.declareProtected(ManageUsers, 'manage_removeRoles')
-
+    @security.protected(ManageUsers)
     @csrf_only
     @postonly
     def manage_removeRoles(self, role_ids, RESPONSE=None, REQUEST=None
@@ -427,8 +411,7 @@ class ZODBRoleManager(BasePlugin):
                               % (self.absolute_url(), message)
                               )
 
-    security.declareProtected(ManageUsers, 'manage_assignRoleToPrincipals')
-
+    @security.protected(ManageUsers)
     @csrf_only
     @postonly
     def manage_assignRoleToPrincipals(self, role_id, principal_ids,
@@ -453,8 +436,7 @@ class ZODBRoleManager(BasePlugin):
                                ) % (self.absolute_url(), role_id, message)
                               )
 
-    security.declareProtected(ManageUsers, 'manage_removeRoleFromPrincipals')
-
+    @security.protected(ManageUsers)
     @csrf_only
     @postonly
     def manage_removeRoleFromPrincipals(self, role_id, principal_ids,

@@ -95,8 +95,7 @@ class ChallengeProtocolChooser(BasePlugin):
         if mapping is not None:
             self.manage_updateProtocolMapping(mapping=mapping)
 
-    security.declarePrivate('chooseProtocols')
-
+    @security.private
     def chooseProtocols(self, request):
         pas_instance = self._getPAS()
         plugins = pas_instance._getOb('plugins')

@@ -19,14 +19,10 @@ from AccessControl.SecurityInfo import ClassSecurityInfo
 from App.class_init import default__class_init__ as InitializeClass
 from OFS.Folder import Folder
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from Products.PluggableAuthService.interfaces import plugins as iplugins
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from zope.interface import implementer
 from zope.interface import Interface
-
-from Products.PluggableAuthService.interfaces.plugins import \
-    ILoginPasswordHostExtractionPlugin
-from Products.PluggableAuthService.interfaces.plugins import \
-    IChallengePlugin
 
 
 class IInlineAuthHelper(Interface):
@@ -53,8 +49,8 @@ def addInlineAuthHelper(dispatcher, id, title=None, REQUEST=None
 
 @implementer(
     IInlineAuthHelper,
-    ILoginPasswordHostExtractionPlugin,
-    IChallengePlugin
+    iplugins.ILoginPasswordHostExtractionPlugin,
+    iplugins.IChallengePlugin
 )
 class InlineAuthHelper(Folder, BasePlugin):
     """ Multi-plugin for managing details of Inline Authentication. """
@@ -78,8 +74,7 @@ class InlineAuthHelper(Folder, BasePlugin):
         self.title = title
         self.body = BASIC_LOGIN_FORM
 
-    security.declarePrivate('extractCredentials')
-
+    @security.private
     def extractCredentials(self, request):
         """ Extract credentials from cookie or 'request'. """
         creds = {}
@@ -102,8 +97,7 @@ class InlineAuthHelper(Folder, BasePlugin):
 
         return creds
 
-    security.declarePrivate('challenge')
-
+    @security.private
     def challenge(self, request, response, **kw):
         """ Challenge the user for credentials. """
         response.setStatus('200')

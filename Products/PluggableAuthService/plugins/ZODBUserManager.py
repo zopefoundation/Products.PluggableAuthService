@@ -234,15 +234,13 @@ class ZODBUserManager(BasePlugin, Cacheable):
     #
     #   (notional)IZODBUserManager interface
     #
-    security.declareProtected(ManageUsers, 'listUserIds')
-
+    @security.protected(ManageUsers)
     def listUserIds(self):
         """ -> ( user_id_1, ... user_id_n )
         """
         return self._user_passwords.keys()
 
-    security.declareProtected(ManageUsers, 'getUserInfo')
-
+    @security.protected(ManageUsers)
     def getUserInfo(self, user_id):
         """ user_id -> {}
         """
@@ -252,8 +250,7 @@ class ZODBUserManager(BasePlugin, Cacheable):
             'pluginid': self.getId()
         }
 
-    security.declareProtected(ManageUsers, 'listUserInfo')
-
+    @security.protected(ManageUsers)
     def listUserInfo(self):
         """ -> ( {}, ...{} )
 
@@ -264,8 +261,7 @@ class ZODBUserManager(BasePlugin, Cacheable):
         """
         return [self.getUserInfo(x) for x in self._user_passwords.keys()]
 
-    security.declareProtected(ManageUsers, 'getUserIdForLogin')
-
+    @security.protected(ManageUsers)
     def getUserIdForLogin(self, login_name):
         """ login_name -> user_id
 
@@ -273,8 +269,7 @@ class ZODBUserManager(BasePlugin, Cacheable):
         """
         return self._login_to_userid[login_name]
 
-    security.declareProtected(ManageUsers, 'getLoginForUserId')
-
+    @security.protected(ManageUsers)
     def getLoginForUserId(self, user_id):
         """ user_id -> login_name
 
@@ -434,8 +429,7 @@ class ZODBUserManager(BasePlugin, Cacheable):
         __name__='manage_users'
     )
 
-    security.declareProtected(ManageUsers, 'manage_addUser')
-
+    @security.protected(ManageUsers)
     @csrf_only
     @postonly
     def manage_addUser(self, user_id, login_name, password, confirm,
@@ -461,8 +455,7 @@ class ZODBUserManager(BasePlugin, Cacheable):
                               % (self.absolute_url(), message)
                               )
 
-    security.declareProtected(ManageUsers, 'manage_updateUserPassword')
-
+    @security.protected(ManageUsers)
     @csrf_only
     @postonly
     def manage_updateUserPassword(self, user_id, password, confirm,
@@ -483,8 +476,7 @@ class ZODBUserManager(BasePlugin, Cacheable):
                               % (self.absolute_url(), message)
                               )
 
-    security.declareProtected(ManageUsers, 'manage_updateUser')
-
+    @security.protected(ManageUsers)
     @csrf_only
     @postonly
     def manage_updateUser(self, user_id, login_name,
@@ -505,8 +497,7 @@ class ZODBUserManager(BasePlugin, Cacheable):
                               % (self.absolute_url(), message)
                               )
 
-    security.declareProtected(ManageUsers, 'manage_removeUsers')
-
+    @security.protected(ManageUsers)
     @csrf_only
     @postonly
     def manage_removeUsers(self, user_ids, RESPONSE=None, REQUEST=None):
@@ -532,8 +523,7 @@ class ZODBUserManager(BasePlugin, Cacheable):
     #
     #   Allow users to change their own login name and password.
     #
-    security.declareProtected(SetOwnPassword, 'getOwnUserInfo')
-
+    @security.protected(SetOwnPassword)
     def getOwnUserInfo(self):
         """ Return current user's info.
         """

@@ -64,7 +64,7 @@ from Products.GenericSetup.interfaces import IFilesystemExporter
 from Products.GenericSetup.interfaces import IFilesystemImporter
 from Products.GenericSetup.content import DAVAwareFileAdapter
 from Products.GenericSetup.content import FolderishExporterImporter
-from Products.GenericSetup.utils import PageTemplateResource
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
 
 def getPackagePath(instance):
@@ -98,8 +98,10 @@ class SimpleXMLExportImport(Implicit):
         """ See IFilesystemExporter.
         """
         package_path = getPackagePath(self)
-        template = PageTemplateResource('xml/%s' % self._FILENAME,
-                                        package_path).__of__(self.context)
+        template = PageTemplateFile(
+            'xml/%s' % self._FILENAME,
+            package_path
+        ).__of__(self.context)
         info = self._getExportInfo()
         export_context.writeDataFile(
             '%s.xml' % self.context.getId(),

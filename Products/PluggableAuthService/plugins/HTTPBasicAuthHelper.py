@@ -66,8 +66,7 @@ class HTTPBasicAuthHelper(BasePlugin):
         self._setId(id)
         self.title = title
 
-    security.declarePrivate('extractCredentials')
-
+    @security.private
     def extractCredentials(self, request):
         """ Extract basic auth credentials from 'request'.
         """
@@ -88,8 +87,7 @@ class HTTPBasicAuthHelper(BasePlugin):
 
         return creds
 
-    security.declarePrivate('challenge')
-
+    @security.private
     def challenge(self, request, response, **kw):
         """ Challenge the user for credentials.
         """
@@ -103,8 +101,7 @@ class HTTPBasicAuthHelper(BasePlugin):
         response.setStatus(401)
         return 1
 
-    security.declarePrivate('resetCredentials')
-
+    @security.private
     def resetCredentials(self, request, response):
         """ Raise unauthorized to tell browser to clear credentials.
         """

@@ -18,6 +18,7 @@ $Id$
 """
 from AccessControl import ModuleSecurityInfo
 from AccessControl import Permissions
+from AccessControl.Permission import addPermission
 
 security = ModuleSecurityInfo('Products.PluggableAuthService.permissions')
 
@@ -26,12 +27,6 @@ ManageUsers = Permissions.manage_users
 
 security.declarePublic('ManageGroups')
 ManageGroups = "Manage Groups"
-
-addPermission = None
-try:
-    from AccessControl.Permission import addPermission
-except ImportError:
-    pass
 
 
 @security.private

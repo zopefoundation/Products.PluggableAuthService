@@ -72,8 +72,7 @@ class SearchPrincipalsPlugin(BasePlugin):
         self.title = title
         self.delegate = delegate_path
 
-    security.declarePrivate('_getDelegate')
-
+    @security.private
     def _getDelegate(self):
         """ Safely retrieve a PluggableAuthService to work with """
         uf = getattr(aq_base(self), 'acl_users', None)
@@ -83,8 +82,7 @@ class SearchPrincipalsPlugin(BasePlugin):
 
         return uf
 
-    security.declarePrivate('enumerateUsers')
-
+    @security.private
     def enumerateUsers(self, id=None, login=None, exact_match=0, sort_by=None,
                        max_results=None, **kw):
         """ see IUserEnumerationPlugin """
@@ -96,8 +94,7 @@ class SearchPrincipalsPlugin(BasePlugin):
         return acl.searchUsers(id=id, login=login, exact_match=exact_match,
                                sort_by=sort_by, max_results=max_results, **kw)
 
-    security.declarePrivate('enumerateGroups')
-
+    @security.private
     def enumerateGroups(self, id=None, exact_match=0, sort_by=None,
                         max_results=None, **kw):
         """ see IGroupEnumerationPlugin """

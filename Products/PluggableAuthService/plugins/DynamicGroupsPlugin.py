@@ -110,8 +110,7 @@ class DynamicGroupDefinition(SimpleItem, PropertyManager):
 
         return result
 
-    security.declarePrivate('_setPredicate')
-
+    @security.private
     def _setPredicate(self, predicate):
 
         self.predicate = predicate
@@ -119,8 +118,7 @@ class DynamicGroupDefinition(SimpleItem, PropertyManager):
         if self._v_compiled is not None:
             del self._v_compiled
 
-    security.declarePrivate('_getPredicate')
-
+    @security.private
     def _getPredicate(self):
 
         if self._v_compiled is None:
@@ -128,8 +126,7 @@ class DynamicGroupDefinition(SimpleItem, PropertyManager):
 
         return self._v_compiled
 
-    security.declarePrivate('_updateProperty')
-
+    @security.private
     def _updateProperty(self, id, value):
 
         if id == 'predicate':
@@ -181,8 +178,7 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
     #
     #   Plugin implementations
     #
-    security.declareProtected(ManageGroups, 'getGroupsForPrincipal')
-
+    @security.protected(ManageGroups)
     def getGroupsForPrincipal(self, principal, request=None):
         """ See IGroupsPlugin.
         """
@@ -193,8 +189,7 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
                 grps.append('%s%s' % (self.prefix, group.getId()))
         return grps
 
-    security.declareProtected(ManageGroups, 'enumerateGroups')
-
+    @security.protected(ManageGroups)
     def enumerateGroups(self, id=None, exact_match=False, sort_by=None,
                         max_results=None, **kw):
         """ See IGroupEnumerationPlugin.
@@ -261,15 +256,13 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
     #
     #   Housekeeping
     #
-    security.declareProtected(ManageGroups, 'listGroupIds')
-
+    @security.protected(ManageGroups)
     def listGroupIds(self):
         """ Return a list of IDs for the dynamic groups we manage.
         """
         return self.objectIds(DynamicGroupDefinition.meta_type)
 
-    security.declareProtected(ManageGroups, 'getGroupInfo')
-
+    @security.protected(ManageGroups)
     def getGroupInfo(self, group_id, raise_keyerror=True):
         """ Return a mappings describing one dynamic group we manage.
 
@@ -309,8 +302,7 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
 
         return info
 
-    security.declareProtected(ManageGroups, 'listGroupInfo')
-
+    @security.protected(ManageGroups)
     def listGroupInfo(self):
         """ Return a list of mappings describing the dynamic groups we manage.
 
@@ -324,8 +316,7 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
         """
         return [self.getGroupInfo(x) for x in self.listGroupIds()]
 
-    security.declarePrivate('addGroup')
-
+    @security.private
     def addGroup(self, group_id, predicate, title='', description='',
                  active=True):
         """ Add a group definition.
@@ -350,8 +341,7 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
         view_name = createViewName('enumerateGroups')
         self.ZCacheable_invalidate(view_name=view_name)
 
-    security.declarePrivate('updateGroup')
-
+    @security.private
     def updateGroup(self, group_id, predicate, title=None, description=None,
                     active=None):
         """ Update a group definition.
@@ -383,8 +373,7 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
         view_name = createViewName('enumerateGroups', group_id)
         self.ZCacheable_invalidate(view_name=view_name)
 
-    security.declarePrivate('removeGroup')
-
+    @security.private
     def removeGroup(self, group_id):
         """ Remove a group definition.
 
@@ -420,8 +409,7 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
         __name__='manage_groups'
     )
 
-    security.declareProtected(ManageGroups, 'manage_addGroup')
-
+    @security.protected(ManageGroups)
     @csrf_only
     @postonly
     def manage_addGroup(self, group_id, title, description, predicate,
@@ -438,8 +426,7 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
                               % (self.absolute_url(), message)
                               )
 
-    security.declareProtected(ManageGroups, 'manage_updateGroup')
-
+    @security.protected(ManageGroups)
     @csrf_only
     @postonly
     def manage_updateGroup(self, group_id, predicate, title=None,
@@ -458,8 +445,7 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
                                ) % (self.absolute_url(), group_id, message)
                               )
 
-    security.declareProtected(ManageGroups, 'manage_removeGroups')
-
+    @security.protected(ManageGroups)
     @csrf_only
     @postonly
     def manage_removeGroups(self, group_ids, RESPONSE=None, REQUEST=None

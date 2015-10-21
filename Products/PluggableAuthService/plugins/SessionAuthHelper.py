@@ -63,8 +63,7 @@ class SessionAuthHelper(BasePlugin):
         self._setId(id)
         self.title = title
 
-    security.declarePrivate('extractCredentials')
-
+    @security.private
     def extractCredentials(self, request):
         """ Extract basic auth credentials from 'request'. """
         creds = {}
@@ -97,15 +96,13 @@ class SessionAuthHelper(BasePlugin):
 
         return creds
 
-    security.declarePrivate('updateCredentials')
-
+    @security.private
     def updateCredentials(self, request, response, login, new_password):
         """ Respond to change of credentials. """
         request.SESSION.set('__ac_name', login)
         request.SESSION.set('__ac_password', new_password)
 
-    security.declarePrivate('resetCredentials')
-
+    @security.private
     def resetCredentials(self, request, response):
         """ Empty out the currently-stored session values """
         request.SESSION.set('__ac_name', '')

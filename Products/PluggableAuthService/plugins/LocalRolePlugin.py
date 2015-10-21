@@ -62,8 +62,7 @@ class LocalRolePlugin(BasePlugin):
     #
     #    IRolesPlugin implementation
     #
-    security.declarePrivate('getRolesForPrincipal')
-
+    @security.private
     def getRolesForPrincipal(self, principal, request=None):
         """ See IRolesPlugin.
         """

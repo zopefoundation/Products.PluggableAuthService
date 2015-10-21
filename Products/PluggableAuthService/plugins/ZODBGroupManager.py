@@ -74,8 +74,7 @@ class ZODBGroupManager(BasePlugin):
     #
     #   IGroupEnumerationPlugin implementation
     #
-    security.declarePrivate('enumerateGroups')
-
+    @security.private
     def enumerateGroups(self, id=None, title=None, exact_match=False,
                         sort_by=None, max_results=None, **kw):
         """ See IGroupEnumerationPlugin.
@@ -128,8 +127,7 @@ class ZODBGroupManager(BasePlugin):
     #
     #   IGroupsPlugin implementation
     #
-    security.declarePrivate('getGroupsForPrincipal')
-
+    @security.private
     def getGroupsForPrincipal(self, principal, request=None):
         """ See IGroupsPlugin.
         """
@@ -139,15 +137,13 @@ class ZODBGroupManager(BasePlugin):
     #
     #   (notional)IZODBGroupManager interface
     #
-    security.declareProtected(ManageGroups, 'listGroupIds')
-
+    @security.protected(ManageGroups)
     def listGroupIds(self):
         """ -> ( group_id_1, ... group_id_n )
         """
         return self._groups.keys()
 
-    security.declareProtected(ManageGroups, 'listGroupInfo')
-
+    @security.protected(ManageGroups)
     def listGroupInfo(self):
         """ -> ( {}, ...{} )
 
@@ -157,15 +153,13 @@ class ZODBGroupManager(BasePlugin):
         """
         return self._groups.values()
 
-    security.declareProtected(ManageGroups, 'getGroupInfo')
-
+    @security.protected(ManageGroups)
     def getGroupInfo(self, group_id):
         """ group_id -> {}
         """
         return self._groups[group_id]
 
-    security.declarePrivate('addGroup')
-
+    @security.private
     def addGroup(self, group_id, title=None, description=None):
         """ Add 'group_id' to the list of groups managed by this object.
 
@@ -180,8 +174,7 @@ class ZODBGroupManager(BasePlugin):
             'description': description
         }
 
-    security.declarePrivate('updateGroup')
-
+    @security.private
     def updateGroup(self, group_id, title=None, description=None):
         """ Update properties for 'group_id'
 
@@ -193,8 +186,7 @@ class ZODBGroupManager(BasePlugin):
             self._groups[group_id]['description'] = description
         self._groups[group_id] = self._groups[group_id]
 
-    security.declarePrivate('removeGroup')
-
+    @security.private
     def removeGroup(self, group_id):
         """ Remove 'role_id' from the list of roles managed by this
             object, removing assigned members from it before doing so.
@@ -208,8 +200,7 @@ class ZODBGroupManager(BasePlugin):
     #
     #   Group assignment API
     #
-    security.declareProtected(ManageGroups, 'listAvailablePrincipals')
-
+    @security.protected(ManageGroups)
     def listAvailablePrincipals(self, group_id, search_id):
         """ Return a list of principal IDs to that can belong to the group.
 
@@ -238,8 +229,7 @@ class ZODBGroupManager(BasePlugin):
 
         return result
 
-    security.declareProtected(ManageGroups, 'listAssignedPrincipals')
-
+    @security.protected(ManageGroups)
     def listAssignedPrincipals(self, group_id):
         """ Return a list of principal IDs belonging to a group.
         """
@@ -258,8 +248,7 @@ class ZODBGroupManager(BasePlugin):
 
         return result
 
-    security.declarePrivate('addPrincipalToGroup')
-
+    @security.private
     def addPrincipalToGroup(self, principal_id, group_id):
         """ Add a principal to a group.
 
@@ -279,8 +268,7 @@ class ZODBGroupManager(BasePlugin):
 
         return not already
 
-    security.declarePrivate('removePrincipalFromGroup')
-
+    @security.private
     def removePrincipalFromGroup(self, principal_id, group_id):
         """ Remove a prinicpal from from a group.
 
@@ -334,8 +322,7 @@ class ZODBGroupManager(BasePlugin):
         __name__='manage_twoLists'
     )
 
-    security.declareProtected(ManageGroups, 'manage_addGroup')
-
+    @security.protected(ManageGroups)
     def manage_addGroup(self, group_id, title=None, description=None,
                         RESPONSE=None):
         """ Add a group via the ZMI.
@@ -349,8 +336,7 @@ class ZODBGroupManager(BasePlugin):
                               % (self.absolute_url(), message)
                               )
 
-    security.declareProtected(ManageGroups, 'manage_updateGroup')
-
+    @security.protected(ManageGroups)
     def manage_updateGroup(self, group_id, title, description, RESPONSE=None
                            ):
         """ Update a group via the ZMI.
@@ -364,8 +350,7 @@ class ZODBGroupManager(BasePlugin):
                               % (self.absolute_url(), message)
                               )
 
-    security.declareProtected(ManageGroups, 'manage_removeGroups')
-
+    @security.protected(ManageGroups)
     @csrf_only
     @postonly
     def manage_removeGroups(self, group_ids, RESPONSE=None, REQUEST=None
@@ -389,8 +374,7 @@ class ZODBGroupManager(BasePlugin):
                               % (self.absolute_url(), message)
                               )
 
-    security.declareProtected(ManageGroups, 'manage_addPrincipalsToGroup')
-
+    @security.protected(ManageGroups)
     @csrf_only
     @postonly
     def manage_addPrincipalsToGroup(self, group_id, principal_ids,
@@ -415,9 +399,7 @@ class ZODBGroupManager(BasePlugin):
                                ) % (self.absolute_url(), group_id, message)
                               )
 
-    security.declareProtected(ManageGroups, 'manage_removePrincipalsFromGroup'
-                              )
-
+    @security.protected(ManageGroups)
     @csrf_only
     @postonly
     def manage_removePrincipalsFromGroup(self, group_id, principal_ids,

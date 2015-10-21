@@ -88,8 +88,7 @@ class DelegatingMultiPlugin(Folder, BasePlugin):
         self.title = title
         self.delegate = delegate_path
 
-    security.declarePrivate('_getUserFolder')
-
+    @security.private
     def _getUserFolder(self):
         """ Safely retrieve a User Folder to work with """
         uf = getattr(aq_base(self), 'acl_users', None)
@@ -99,8 +98,7 @@ class DelegatingMultiPlugin(Folder, BasePlugin):
 
         return uf
 
-    security.declarePrivate('authenticateCredentials')
-
+    @security.private
     def authenticateCredentials(self, credentials):
         """ Fulfill AuthenticationPlugin requirements """
         acl = self._getUserFolder()
@@ -130,22 +128,19 @@ class DelegatingMultiPlugin(Folder, BasePlugin):
 
         return (None, None)
 
-    security.declarePrivate('updateCredentials')
-
+    @security.private
     def updateCredentials(self, request, response, login, new_password):
         """ Fulfill CredentialsUpdatePlugin requirements """
         # Need to at least remove user from cache
         pass
 
-    security.declarePrivate('resetCredentials')
-
+    @security.private
     def resetCredentials(self, request, response):
         """ Fulfill CredentialsResetPlugin requirements """
         # Remove user from cache?
         pass
 
-    security.declarePrivate('getPropertiesForUser')
-
+    @security.private
     def getPropertiesForUser(self, user, request=None):
         """ Fullfill PropertiesPlugin requirements """
         acl = self._getUserFolder()
@@ -161,8 +156,7 @@ class DelegatingMultiPlugin(Folder, BasePlugin):
         # XXX WAAA
         return copy.deepcopy(user.__dict__)
 
-    security.declarePrivate('getRolesForPrincipal')
-
+    @security.private
     def getRolesForPrincipal(self, user, request=None):
         """ Fullfill RolesPlugin requirements """
         acl = self._getUserFolder()
@@ -177,8 +171,7 @@ class DelegatingMultiPlugin(Folder, BasePlugin):
 
         return tuple(user.getRoles())
 
-    security.declarePrivate('enumerateUsers')
-
+    @security.private
     def enumerateUsers(self, id=None, login=None, exact_match=0, sort_by=None,
                        max_results=None, **kw):
         """ Fulfill the EnumerationPlugin requirements """

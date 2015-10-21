@@ -76,8 +76,7 @@ class RequestTypeSniffer(BasePlugin):
         self._id = self.id = id
         self.title = title
 
-    security.declarePrivate('sniffRequestType')
-
+    @security.private
     def sniffRequestType(self, request):
         found = None
         for iface, func in _sniffers:

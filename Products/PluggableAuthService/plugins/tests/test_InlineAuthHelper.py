@@ -11,22 +11,18 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-from Products.PluggableAuthService.plugins.tests.helpers import FauxContainer
-from Products.PluggableAuthService.plugins.tests.helpers import FauxObject
-from Products.PluggableAuthService.plugins.tests.helpers import FauxRequest
-from Products.PluggableAuthService.plugins.tests.helpers import FauxResponse
-from Products.PluggableAuthService.plugins.tests.helpers import FauxRoot
 from Products.PluggableAuthService.tests import conformance
 import unittest
+from Products.PluggableAuthService.tests import test_PluggableAuthService
 
 
-class FauxSettableRequest(FauxRequest):
+class FauxSettableRequest(test_PluggableAuthService.FauxRequest):
 
     def set(self, name, value):
         self._dict[name] = value
 
 
-class FauxInlineResponse(FauxResponse):
+class FauxInlineResponse(test_PluggableAuthService.FauxResponse):
 
     def __init__(self):
         self.setBody("Should never see this.")
@@ -59,10 +55,10 @@ class InlineAuthHelperTests(
 
     def _makeTree(self):
 
-        rc = FauxObject('rc')
-        root = FauxRoot('root').__of__(rc)
-        folder = FauxContainer('folder').__of__(root)
-        object = FauxObject('object').__of__(folder)
+        rc = test_PluggableAuthService.FauxObject('rc')
+        root = test_PluggableAuthService.FauxRoot('root').__of__(rc)
+        folder = test_PluggableAuthService.FauxContainer('folder').__of__(root)
+        object = test_PluggableAuthService.FauxObject('object').__of__(folder)
 
         return rc, root, folder, object
 
@@ -70,7 +66,7 @@ class InlineAuthHelperTests(
 
         helper = self._makeOne()
         response = FauxInlineResponse()
-        request = FauxRequest(RESPONSE=response)
+        request = test_PluggableAuthService.FauxRequest(RESPONSE=response)
 
         self.assertEqual(helper.extractCredentials(request), {})
 
@@ -78,9 +74,11 @@ class InlineAuthHelperTests(
 
         helper = self._makeOne()
         response = FauxInlineResponse()
-        request = FauxSettableRequest(__ac_name='foo',
-                                      __ac_password='bar',
-                                      RESPONSE=response)
+        request = FauxSettableRequest(
+            __ac_name='foo',
+            __ac_password='bar',
+            RESPONSE=response
+        )
 
         self.assertEqual(helper.extractCredentials(request),
                          {'login': 'foo',
@@ -91,7 +89,7 @@ class InlineAuthHelperTests(
     def test_challenge(self):
         rc, root, folder, object = self._makeTree()
         response = FauxInlineResponse()
-        request = FauxRequest(RESPONSE=response)
+        request = test_PluggableAuthService.FauxRequest(RESPONSE=response)
         root.REQUEST = request
 
         helper = self._makeOne().__of__(root)

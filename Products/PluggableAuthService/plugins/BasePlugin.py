@@ -57,8 +57,7 @@ class BasePlugin(SimpleItem, PropertyManager):
         'www/bpActivateInterfaces', globals(),
         __name__='manage_activateInterfacesForm')
 
-    security.declareProtected(ManageUsers, 'listInterfaces')
-
+    @security.protected(ManageUsers)
     def listInterfaces(self):
         """ For ZMI update of interfaces. """
 
@@ -69,14 +68,12 @@ class BasePlugin(SimpleItem, PropertyManager):
 
         return results
 
-    security.declareProtected(ManageUsers, 'testImplements')
-
+    @security.protected(ManageUsers)
     def testImplements(self, interface):
         """ Can't access Interface.providedBy() directly in ZPT. """
         return interface.providedBy(self)
 
-    security.declareProtected(ManageUsers, 'manage_activateInterfaces')
-
+    @security.protected(ManageUsers)
     def manage_activateInterfaces(self, interfaces, RESPONSE=None):
         """ For ZMI update of active interfaces. """
 
@@ -105,22 +102,19 @@ class BasePlugin(SimpleItem, PropertyManager):
                               'Interface+activations+updated.'
                               % self.absolute_url())
 
-    security.declarePrivate('_getPAS')
-
+    @security.private
     def _getPAS(self):
         """ Canonical way to get at the PAS instance from a plugin """
         return aq_parent(aq_inner(self))
 
-    security.declarePrivate('_invalidatePrincipalCache')
-
+    @security.private
     def _invalidatePrincipalCache(self, id):
         pas = self._getPAS()
         if pas is not None and hasattr(aq_base(pas), 'ZCacheable_invalidate'):
             view_name = createViewName('_findUser', id)
             pas.ZCacheable_invalidate(view_name)
 
-    security.declarePublic('applyTransform')
-
+    @security.public
     def applyTransform(self, value):
         """ Transform for login name.
 
