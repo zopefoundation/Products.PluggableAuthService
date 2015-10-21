@@ -40,16 +40,16 @@ def _guessSchema(kw):
 
         ptype = 'string'
 
-        if type(v) is IntType:
+        if isinstance(v, IntType):
             ptype = 'int'
 
-        elif type(v) is FloatType:
+        elif isinstance(v, FloatType):
             ptype = 'float'
 
-        elif type(v) is LongType:
+        elif isinstance(v, LongType):
             ptype = 'long'
 
-        elif type(v) is BooleanType:
+        elif isinstance(v, BooleanType):
             ptype = 'boolean'
 
         elif type(v) in _SequenceTypes:
@@ -59,10 +59,10 @@ def _guessSchema(kw):
 
             ptype = 'lines'
 
-        elif type(v) is DateTime:
+        elif isinstance(v, DateTime):
             ptype = 'date'
 
-        elif type(v) is InstanceType:
+        elif isinstance(v, InstanceType):
 
             if isinstance(v, DateTime):
                 ptype = 'date'

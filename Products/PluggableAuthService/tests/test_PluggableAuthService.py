@@ -1195,7 +1195,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance, Requ
 
         try:
             zcuf.getUser('foo')
-        except KeyError, e:
+        except KeyError as e:
             self.fail('exception should be caught by PAS: %s' % e)
 
     def test__verifyUser_no_plugins(self):

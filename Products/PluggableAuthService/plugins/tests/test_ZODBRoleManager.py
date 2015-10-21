@@ -121,8 +121,7 @@ class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance, IRoleEnu
 
         self.assertEqual(len(info_list), len(ID_LIST))
 
-        sorted = list(ID_LIST)
-        sorted.sort()
+        sorted = sorted(ID_LIST)
 
         for i in range(len(sorted)):
 
@@ -179,8 +178,7 @@ class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance, IRoleEnu
 
         self.assertEqual(len(info_list), len(ID_LIST) - 1)  # no 'foo'
 
-        sorted = list(ID_LIST)
-        sorted.sort()
+        sorted = sorted(ID_LIST)
 
         for i in range(len(sorted) - 1):
 

@@ -144,7 +144,7 @@ def get_suite(file):
 
         try:
             suite = loader.loadTestsFromName(module_name)
-        except ImportError, err:
+        except ImportError as err:
             print "Error importing %s\n%s" % (module_name, err)
             raise
     return suite
@@ -156,8 +156,7 @@ def allTests(from_dir=product_dir, test_prefix='test'):
     """
     import unittest
     os.path.walk(from_dir, remove_stale_bytecode, None)
-    test_files = find_unit_test_files(from_dir, test_prefix)
-    test_files.sort()
+    test_files = sorted(find_unit_test_files(from_dir, test_prefix))
 
     suite = unittest.TestSuite()
 
@@ -198,8 +197,7 @@ def createKeywords(**kw):
     """
     keywords = sha()
 
-    items = kw.items()
-    items.sort()
+    items = sorted(kw.items())
     for k, v in items:
         keywords.update(makestr(k))
         keywords.update(makestr(v))

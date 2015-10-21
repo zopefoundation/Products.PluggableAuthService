@@ -265,8 +265,7 @@ def _createHashedValue(items):
         from sha import new as sha
 
     hasher = sha()
-    items = list(items)
-    items.sort()
+    items = sorted(items)
     for k, v in items:
         if isinstance(k, unicode):
             k = k.encode('utf-8')

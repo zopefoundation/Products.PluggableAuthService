@@ -294,7 +294,7 @@ class DomainAuthHelper(BasePlugin):
             msg = 'Unknown match type %s' % match_type
         except re.error:
             msg = 'Invalid regular expression %s' % match_string
-        except ValueError, e:
+        except ValueError as e:
             msg = 'Invalid match string %s (%s)' % (match_string, e)
 
         if not match_string:

@@ -35,7 +35,7 @@ class UserPropertySheetTests(unittest.TestCase, IPropertySheet_conformance
     _STRING_VALUE = 'string'
     _INT_VALUE = 42
     _FLOAT_VALUE = 9.8
-    _LONG_VALUE = sys.maxint + 1
+    _LONG_VALUE = sys.maxsize + 1
     _DATE_VALUE = DateTime()
     _LIST_VALUE = ['a', 'b', 'c']
     _TUPLE_VALUE = ('d', 'e', 'f')

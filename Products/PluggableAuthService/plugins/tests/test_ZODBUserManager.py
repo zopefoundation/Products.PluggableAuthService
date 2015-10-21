@@ -191,8 +191,7 @@ class ZODBUserManagerTests(unittest.TestCase, IAuthenticationPlugin_conformance,
 
         self.assertEqual(len(info_list), len(ID_LIST))
 
-        sorted = list(ID_LIST)
-        sorted.sort()
+        sorted = sorted(ID_LIST)
 
         for i in range(len(sorted)):
 
@@ -245,8 +244,7 @@ class ZODBUserManagerTests(unittest.TestCase, IAuthenticationPlugin_conformance,
 
         self.assertEqual(len(info_list), len(ID_LIST))  # all match
 
-        sorted = list(ID_LIST)
-        sorted.sort()
+        sorted = sorted(ID_LIST)
 
         for i in range(len(sorted)):
 

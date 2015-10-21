@@ -101,7 +101,7 @@ class PropertiedUser(BasicUser):
         local = {}
         object = aq_inner(object)
 
-        while 1:
+        while True:
 
             local_roles = getattr(object, '__ac_local_roles__', None)
 
@@ -187,7 +187,7 @@ class PropertiedUser(BasicUser):
         principal_ids = list(group_ids)
         principal_ids.insert(0, user_id)
 
-        while 1:
+        while True:
 
             local_roles = getattr(inner_obj, '__ac_local_roles__', None)
 
