@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 # Copyright (c) 2001 Zope Foundation and Contributors
@@ -13,73 +14,56 @@
 ##############################################################################
 """ Classes: PluggableAuthService
 """
-import logging
-
 from AccessControl import ClassSecurityInfo, ModuleSecurityInfo
-from AccessControl.SecurityManagement import newSecurityManager
-from AccessControl.SecurityManagement import getSecurityManager
-from AccessControl.SecurityManagement import noSecurityManager
 from AccessControl.Permissions import manage_users as ManageUsers
-from AccessControl.User import nobody
+from AccessControl.SecurityManagement import getSecurityManager
+from AccessControl.SecurityManagement import newSecurityManager
+from AccessControl.SecurityManagement import noSecurityManager
 from AccessControl.SpecialUsers import emergency_user
-from Acquisition import Implicit
-from Acquisition import aq_parent
+from AccessControl.User import nobody
 from Acquisition import aq_base
 from Acquisition import aq_inner
+from Acquisition import aq_parent
+from Acquisition import Implicit
 from App.class_init import default__class_init__ as InitializeClass
 from App.ImageFile import ImageFile
-from OFS.Folder import Folder
 from OFS.Cache import Cacheable
+from OFS.Folder import Folder
 from OFS.interfaces import IObjectManager
 from OFS.interfaces import IPropertyManager
-from Products.StandardCacheManagers.RAMCacheManager import RAMCacheManager
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from Products.PluggableAuthService.events import PrincipalCreated
+from Products.PluggableAuthService.interfaces import authservice as iauth
+from Products.PluggableAuthService.interfaces import plugins as iplugins
+from Products.PluggableAuthService.interfaces.authservice import _noroles
+from Products.PluggableAuthService.permissions import SearchPrincipals
+from Products.PluggableAuthService.PropertiedUser import PropertiedUser
+from Products.PluggableAuthService.utils import _wwwdir
+from Products.PluggableAuthService.utils import createKeywords
+from Products.PluggableAuthService.utils import createViewName
+from Products.PluginRegistry.PluginRegistry import PluginRegistry
+from Products.StandardCacheManagers.RAMCacheManager import RAMCacheManager
 from zExceptions import Unauthorized
+from zope.event import notify
+from zope.interface import implementer
 from ZPublisher import BeforeTraverse
 from ZTUtils import Batch
-from zope.event import notify
-
-from Products.PluginRegistry.PluginRegistry import PluginRegistry
-
-from .events import PrincipalCreated
-from .interfaces.authservice import IPluggableAuthService
-from .interfaces.authservice import _noroles
-from .interfaces.plugins import IExtractionPlugin
-from .interfaces.plugins import ILoginPasswordHostExtractionPlugin
-from .interfaces.plugins import IAuthenticationPlugin
-from .interfaces.plugins import IChallengePlugin
-from .interfaces.plugins import ICredentialsUpdatePlugin
-from .interfaces.plugins import ICredentialsResetPlugin
-from .interfaces.plugins import IUserFactoryPlugin
-from .interfaces.plugins import IAnonymousUserFactoryPlugin
-from .interfaces.plugins import IPropertiesPlugin
-from .interfaces.plugins import IGroupsPlugin
-from .interfaces.plugins import IRolesPlugin
-from .interfaces.plugins import IUpdatePlugin
-from .interfaces.plugins import IValidationPlugin
-from .interfaces.plugins import IUserEnumerationPlugin
-from .interfaces.plugins import IUserAdderPlugin
-from .interfaces.plugins import IGroupEnumerationPlugin
-from .interfaces.plugins import IRoleEnumerationPlugin
-from .interfaces.plugins import IRoleAssignerPlugin
-from .interfaces.plugins import INotCompetentPlugin
-from .interfaces.plugins import IChallengeProtocolChooser
-from .interfaces.plugins import IRequestTypeSniffer
-from .permissions import SearchPrincipals
-from .PropertiedUser import PropertiedUser
-from .utils import _wwwdir
-from .utils import createViewName
-from .utils import createKeywords
-from .utils import classImplements
+import logging
 
 security = ModuleSecurityInfo(
-    'Products.PluggableAuthService.PluggableAuthService')
+    'Products.PluggableAuthService.PluggableAuthService'
+)
 
 logger = logging.getLogger('PluggableAuthService')
 
 #   Errors which plugins may raise, and which we suppress:
-_SWALLOWABLE_PLUGIN_EXCEPTIONS = (NameError, AttributeError, KeyError, TypeError, ValueError
-                                  )
+_SWALLOWABLE_PLUGIN_EXCEPTIONS = (
+    NameError,
+    AttributeError,
+    KeyError,
+    TypeError,
+    ValueError
+)
 # except if they tell us not to do so
 
 
@@ -103,12 +87,12 @@ def registerMultiPlugin(meta_type):
     MultiPlugins.append(meta_type)
 
 
+@implementer(iplugins.ILoginPasswordHostExtractionPlugin)
 class DumbHTTPExtractor(Implicit):
 
     security = ClassSecurityInfo()
 
-    security.declarePrivate('extractCredentials')
-
+    @security.private
     def extractCredentials(self, request):
         """ Pull HTTP credentials out of the request.
         """
@@ -129,18 +113,15 @@ class DumbHTTPExtractor(Implicit):
 
         return creds
 
-classImplements(DumbHTTPExtractor, ILoginPasswordHostExtractionPlugin
-                )
-
 InitializeClass(DumbHTTPExtractor)
 
 
+@implementer(iplugins.IAuthenticationPlugin)
 class EmergencyUserAuthenticator(Implicit):
 
     security = ClassSecurityInfo()
 
-    security.declarePrivate('authenticateCredentials')
-
+    @security.private
     def authenticateCredentials(self, credentials):
         """ Check credentials against the emergency user.
         """
@@ -158,25 +139,19 @@ class EmergencyUserAuthenticator(Implicit):
 
         return (None, None)
 
-classImplements(EmergencyUserAuthenticator, IAuthenticationPlugin
-                )
-
 InitializeClass(EmergencyUserAuthenticator)
 
 
+@implementer(iauth.IPluggableAuthService, IObjectManager, IPropertyManager)
 class PluggableAuthService(Folder, Cacheable):
 
     """ All-singing, all-dancing user folder.
     """
     security = ClassSecurityInfo()
-
     meta_type = 'Pluggable Auth Service'
-
     _id = id = 'acl_users'
-
     _emergency_user = emergency_user
     _nobody = nobody
-
     maxlistusers = -1   # Don't allow local role form to try to list us!
 
     # Method for transforming a login name.  This needs to be the name
@@ -191,14 +166,12 @@ class PluggableAuthService(Folder, Cacheable):
     )
 
     def getId(self):
-
         return self._id
 
     #
     #   IUserFolder implementation
     #
-    security.declareProtected(ManageUsers, 'getUser')
-
+    @security.protected(ManageUsers)
     def getUser(self, name):
         """ See IUserFolder.
         """
@@ -212,8 +185,7 @@ class PluggableAuthService(Folder, Cacheable):
 
         return self._findUser(plugins, user_info['id'], user_info['login'])
 
-    security.declareProtected(ManageUsers, 'getUserById')
-
+    @security.protected(ManageUsers)
     def getUserById(self, id, default=None):
         """ See IUserFolder.
         """
@@ -226,8 +198,7 @@ class PluggableAuthService(Folder, Cacheable):
 
         return self._findUser(plugins, user_info['id'], user_info['login'])
 
-    security.declarePublic('validate')     # XXX: public?
-
+    @security.public  # XXX: public?
     def validate(self, request, auth='', roles=_noroles):
         """ See IUserFolder.
         """
@@ -243,18 +214,18 @@ class PluggableAuthService(Folder, Cacheable):
          ) = self._getObjectContext(request['PUBLISHED'], request)
 
         for user_id, login in user_ids:
-
             user = self._findUser(plugins, user_id, login, request=request)
-
             if aq_base(user) is emergency_user:
+                return user if is_top else None
 
-                if is_top:
-                    return user
-                else:
-                    return None
-
-            if self._authorizeUser(user, accessed, container, name, value, roles
-                                   ):
+            if self._authorizeUser(
+                user,
+                accessed,
+                container,
+                name,
+                value,
+                roles
+            ):
                 return user
 
         if not is_top:
@@ -265,18 +236,22 @@ class PluggableAuthService(Folder, Cacheable):
         #   return a constructed anonymous only if anonymous is authorized.
         #
         anonymous = self._createAnonymousUser(plugins)
-        if self._authorizeUser(anonymous, accessed, container, name, value, roles
-                               ):
+        if self._authorizeUser(
+            anonymous,
+            accessed,
+            container,
+            name,
+            value,
+            roles
+        ):
             return anonymous
 
         return None
 
-    security.declareProtected(SearchPrincipals, 'searchUsers')
-
+    @security.protected(SearchPrincipals)
     def searchUsers(self, **kw):
         """ Search for users
         """
-        search_id = kw.get('id', None)
         search_name = kw.get('name', None)
 
         result = []
@@ -298,7 +273,7 @@ class PluggableAuthService(Folder, Cacheable):
             kw['login'] = self.applyTransform(kw['login'])
 
         plugins = self._getOb('plugins')
-        enumerators = plugins.listPlugins(IUserEnumerationPlugin)
+        enumerators = plugins.listPlugins(iplugins.IUserEnumerationPlugin)
 
         for enumerator_id, enum in enumerators:
             try:
@@ -308,18 +283,24 @@ class PluggableAuthService(Folder, Cacheable):
                     info.update(user_info)
                     info['userid'] = info['id']
                     info['principal_type'] = 'user'
-                    if not info.has_key('title'):
+                    if 'title' not in info:
                         info['title'] = info['login']
                     result.append(info)
 
             except _SWALLOWABLE_PLUGIN_EXCEPTIONS:
                 reraise(enum)
-                logger.debug('UserEnumerationPlugin %s error' % enumerator_id, exc_info=True
-                             )
+                logger.debug(
+                    'UserEnumerationPlugin {0} error'.format(enumerator_id),
+                    exc_info=True
+                )
 
         if sort_by:
-            result.sort(lambda a, b: cmp(a.get(sort_by, '').lower(), b.get(sort_by, '').lower()
-                                         ))
+            result.sort(
+                lambda a, b: cmp(
+                    a.get(sort_by, '').lower(),
+                    b.get(sort_by, '').lower()
+                )
+            )
 
         if max_results:
             try:
@@ -330,12 +311,10 @@ class PluggableAuthService(Folder, Cacheable):
 
         return tuple(result)
 
-    security.declareProtected(SearchPrincipals, 'searchGroups')
-
+    @security.protected(SearchPrincipals)
     def searchGroups(self, **kw):
         """ Search for groups
         """
-        search_id = kw.get('id', None)
         search_name = kw.get('name', None)
 
         result = []
@@ -351,11 +330,11 @@ class PluggableAuthService(Folder, Cacheable):
         if search_name:
             if kw.get('id') is not None:
                 del kw['id']
-            if not kw.has_key('title'):
+            if 'title' not in kw:
                 kw['title'] = kw['name']
 
         plugins = self._getOb('plugins')
-        enumerators = plugins.listPlugins(IGroupEnumerationPlugin)
+        enumerators = plugins.listPlugins(iplugins.IGroupEnumerationPlugin)
 
         for enumerator_id, enum in enumerators:
             try:
@@ -365,17 +344,23 @@ class PluggableAuthService(Folder, Cacheable):
                     info.update(group_info)
                     info['groupid'] = info['id']
                     info['principal_type'] = 'group'
-                    if not info.has_key('title'):
+                    if 'title' not in info:
                         info['title'] = "(Group) %s" % info['groupid']
                     result.append(info)
             except _SWALLOWABLE_PLUGIN_EXCEPTIONS:
                 reraise(enum)
-                logger.debug('GroupEnumerationPlugin %s error' % enumerator_id, exc_info=True
-                             )
+                logger.debug(
+                    'GroupEnumerationPlugin {0} error'.format(enumerator_id),
+                    exc_info=True
+                )
 
         if sort_by:
-            result.sort(lambda a, b: cmp(a.get(sort_by, '').lower(), b.get(sort_by, '').lower()
-                                         ))
+            result.sort(
+                lambda a, b: cmp(
+                    a.get(sort_by, '').lower(),
+                    b.get(sort_by, '').lower()
+                )
+            )
 
         if max_results:
             try:
@@ -386,17 +371,15 @@ class PluggableAuthService(Folder, Cacheable):
 
         return tuple(result)
 
-    security.declareProtected(SearchPrincipals, 'searchPrincipals')
-
+    @security.protected(SearchPrincipals)
     def searchPrincipals(self, groups_first=False, **kw):
         """ Search for principals (users, groups, or both)
         """
         max_results = kw.get('max_results', '')
 
-        search_id = kw.get('id', None)
         search_name = kw.get('name', None)
         if search_name:
-            if not kw.has_key('title'):
+            if 'title' not in kw:
                 kw['title'] = search_name
             kw['login'] = search_name
 
@@ -422,13 +405,11 @@ class PluggableAuthService(Folder, Cacheable):
 
         return tuple(result)
 
-    security.declarePrivate('__creatable_by_emergency_user__')
-
+    @security.private
     def __creatable_by_emergency_user__(self):
         return 1
 
-    security.declarePrivate('_setObject')
-
+    @security.private
     def _setObject(self, id, object, roles=None, user=None, set_owner=0):
         #
         #   Override ObjectManager's version to change the default for
@@ -436,14 +417,14 @@ class PluggableAuthService(Folder, Cacheable):
         #   objects).
         Folder._setObject(self, id, object, roles, user, set_owner)
 
-    security.declarePrivate('_delOb')
+    @security.private
     def _delOb(self, id):
         #
         # Override ObjectManager's version to clean up any plugin
         # registrations for the deleted object
         #
         # For ZopeVersionControl, we need to check 'plugins' for more than
-        # existence, since it replaces objects (like 'plugins') with 
+        # existence, since it replaces objects (like 'plugins') with
         # SimpleItems and calls _delOb, which tries to use special methods
         # of 'plugins'
 
@@ -474,8 +455,7 @@ class PluggableAuthService(Folder, Cacheable):
                       + Cacheable.manage_options
                       )
 
-    security.declareProtected(ManageUsers, 'resultsBatch')
-
+    @security.protected(ManageUsers)
     def resultsBatch(self, results, REQUEST, size=20, orphan=2, overlap=0):
         """ ZMI helper for getting batching for displaying search results
         """
@@ -489,26 +469,30 @@ class PluggableAuthService(Folder, Cacheable):
         batch = Batch(results, size, start, 0, orphan, overlap)
 
         if batch.end < len(results):
-            qs = self._getBatchLink(REQUEST.get('QUERY_STRING', ''), start, batch.end
-                                    )
-            REQUEST.set('next_batch_url', '%s?%s' % (REQUEST.get('URL'), qs)
-                        )
+            qs = self._getBatchLink(
+                REQUEST.get('QUERY_STRING', ''),
+                start,
+                batch.end
+            )
+            REQUEST.set('next_batch_url', '%s?%s' % (REQUEST.get('URL'), qs))
 
         if start > 0:
             new_start = start - size - 1
-
             if new_start < 0:
                 new_start = 0
 
-            qs = self._getBatchLink(REQUEST.get('QUERY_STRING', ''), start, new_start
-                                    )
-            REQUEST.set('previous_batch_url', '%s?%s' % (REQUEST.get('URL'), qs)
-                        )
-
+            qs = self._getBatchLink(
+                REQUEST.get('QUERY_STRING', ''),
+                start,
+                new_start
+            )
+            REQUEST.set(
+                'previous_batch_url',
+                '?'.join([REQUEST.get('URL'), qs])
+            )
         return batch
 
-    security.declarePrivate('_getBatchLink')
-
+    @security.private
     def _getBatchLink(self, qs, old_start, new_start):
         """ Internal helper to generate correct query strings
         """
@@ -516,28 +500,30 @@ class PluggableAuthService(Folder, Cacheable):
             if not qs:
                 qs = 'batch_start=%d' % new_start
             elif qs.startswith('batch_start='):
-                qs = qs.replace('batch_start=%d' % old_start, 'batch_start=%d' % new_start
-                                )
+                qs = qs.replace(
+                    'batch_start={0:d}'.format(old_start),
+                    'batch_start={0:d}'.format(new_start)
+                )
             elif qs.find('&batch_start=') != -1:
-                qs = qs.replace('&batch_start=%d' % old_start, '&batch_start=%d' % new_start
-                                )
+                qs = qs.replace(
+                    '&batch_start={0:d}'.format(old_start),
+                    '&batch_start={0:d}'.format(new_start)
+                )
             else:
-                qs = '%s&batch_start=%d' % (qs, new_start)
-
+                qs = '{0:s}&batch_start={1:d}'.format(qs, new_start)
         return qs
 
     #
     #   Helper methods
     #
-    security.declarePrivate('_isNotCompetent')
-
+    @security.private
     def _isNotCompetent(self, request, plugins):
         """ return true when this user folder should not try authentication.
 
         Never called for top level user folder.
         """
         try:
-            not_competents = plugins.listPlugins(INotCompetentPlugin)
+            not_competents = plugins.listPlugins(iplugins.INotCompetentPlugin)
         except _SWALLOWABLE_PLUGIN_EXCEPTIONS:
             logger.debug('NotCompetent plugin listing error', exc_info=True)
             not_competents = ()
@@ -548,13 +534,14 @@ class PluggableAuthService(Folder, Cacheable):
                     return True
             except _SWALLOWABLE_PLUGIN_EXCEPTIONS:
                 reraise(not_competent)
-                logger.debug('NotCompetentPlugin %s error' % not_competent_id, exc_info=True
-                             )
+                logger.debug(
+                    'NotCompetentPlugin {0} error'.format(not_competent_id),
+                    exc_info=True
+                )
                 continue
         return False
 
-    security.declarePrivate('_extractUserIds')
-
+    @security.private
     def _extractUserIds(self, request, plugins):
         """ request -> [ validated_user_id ]
 
@@ -563,7 +550,7 @@ class PluggableAuthService(Folder, Cacheable):
           our authentication and extraction plugins.
         """
         try:
-            extractors = plugins.listPlugins(IExtractionPlugin)
+            extractors = plugins.listPlugins(iplugins.IExtractionPlugin)
         except _SWALLOWABLE_PLUGIN_EXCEPTIONS:
             logger.debug('Extractor plugin listing error', exc_info=True)
             extractors = ()
@@ -572,7 +559,9 @@ class PluggableAuthService(Folder, Cacheable):
             extractors = (('default', DumbHTTPExtractor()), )
 
         try:
-            authenticators = plugins.listPlugins(IAuthenticationPlugin)
+            authenticators = plugins.listPlugins(
+                iplugins.IAuthenticationPlugin
+            )
         except _SWALLOWABLE_PLUGIN_EXCEPTIONS:
             logger.debug('Authenticator plugin listing error', exc_info=True)
             authenticators = ()
@@ -585,8 +574,10 @@ class PluggableAuthService(Folder, Cacheable):
                 credentials = extractor.extractCredentials(request)
             except _SWALLOWABLE_PLUGIN_EXCEPTIONS:
                 reraise(extractor)
-                logger.debug('ExtractionPlugin %s error' % extractor_id, exc_info=True
-                             )
+                logger.debug(
+                    'ExtractionPlugin {0} error'.format(extractor_id),
+                    exc_info=True
+                )
                 continue
 
             if credentials:
@@ -599,8 +590,10 @@ class PluggableAuthService(Folder, Cacheable):
                 except _SWALLOWABLE_PLUGIN_EXCEPTIONS:
                     # XXX: would reraise be good here, and which plugin to ask
                     # whether not to swallow the exception - the extractor?
-                    logger.debug('Credentials error: %s' % credentials, exc_info=True
-                                 )
+                    logger.debug(
+                        'Credentials error: {0}'.format(credentials),
+                        exc_info=True
+                    )
                     continue
 
                 # First try to authenticate against the emergency
@@ -617,13 +610,14 @@ class PluggableAuthService(Folder, Cacheable):
                 view_name = createViewName('_extractUserIds',
                                            credentials.get('login'))
                 keywords = createKeywords(**credentials)
-                user_ids = self.ZCacheable_get(view_name=view_name, keywords=keywords, default=None
-                                               )
+                user_ids = self.ZCacheable_get(
+                    view_name=view_name,
+                    keywords=keywords,
+                    default=None
+                )
                 if user_ids is None:
                     user_ids = []
-
                     for authenticator_id, auth in authenticators:
-
                         try:
                             uid_and_info = auth.authenticateCredentials(
                                 credentials)
@@ -644,22 +638,22 @@ class PluggableAuthService(Folder, Cacheable):
                             user_ids.append((user_id, info))
 
                     if user_ids:
-                        self.ZCacheable_set(user_ids, view_name=view_name, keywords=keywords
-                                            )
-
+                        self.ZCacheable_set(
+                            user_ids,
+                            view_name=view_name,
+                            keywords=keywords
+                        )
                 result.extend(user_ids)
 
         # Emergency user via HTTP basic auth always wins
         user_id, name = self._tryEmergencyUserAuthentication(
-            DumbHTTPExtractor().extractCredentials(request))
-
+            DumbHTTPExtractor().extractCredentials(request)
+        )
         if user_id is not None:
             return [(user_id, name)]
-
         return result
 
-    security.declarePrivate('_tryEmergencyUserAuthentication')
-
+    @security.private
     def _tryEmergencyUserAuthentication(self, credentials):
         """ credentials -> emergency_user or None
         """
@@ -672,21 +666,22 @@ class PluggableAuthService(Folder, Cacheable):
 
         return (user_id, name)
 
-    security.declarePrivate('_getGroupsForPrincipal')
-
-    def _getGroupsForPrincipal(self, principal, request=None, plugins=None, ignore_plugins=None
-                               ):
+    @security.private
+    def _getGroupsForPrincipal(
+        self,
+        principal,
+        request=None,
+        plugins=None,
+        ignore_plugins=None
+    ):
         all_groups = {}
-
         if ignore_plugins is None:
             ignore_plugins = ()
 
         if plugins is None:
             plugins = self._getOb('plugins')
-        groupmakers = plugins.listPlugins(IGroupsPlugin)
-
+        groupmakers = plugins.listPlugins(iplugins.IGroupsPlugin)
         for groupmaker_id, groupmaker in groupmakers:
-
             if groupmaker_id in ignore_plugins:
                 continue
             groups = groupmaker.getGroupsForPrincipal(principal, request)
@@ -696,41 +691,33 @@ class PluggableAuthService(Folder, Cacheable):
 
         return all_groups.keys()
 
-    security.declarePrivate('_createAnonymousUser')
-
+    @security.private
     def _createAnonymousUser(self, plugins):
         """ Allow IAnonymousUserFactoryPlugins to create or fall back.
         """
-        factories = plugins.listPlugins(IAnonymousUserFactoryPlugin)
-
+        factories = plugins.listPlugins(iplugins.IAnonymousUserFactoryPlugin)
         for factory_id, factory in factories:
-
             anon = factory.createAnonymousUser()
-
             if anon is not None:
                 return anon.__of__(self)
 
         return nobody.__of__(self)
 
-    security.declarePrivate('_createUser')
-
+    @security.private
     def _createUser(self, plugins, user_id, name):
         """ Allow IUserFactoryPlugins to create, or fall back to default.
         """
         name = self.applyTransform(name)
-        factories = plugins.listPlugins(IUserFactoryPlugin)
+        factories = plugins.listPlugins(iplugins.IUserFactoryPlugin)
 
         for factory_id, factory in factories:
-
             user = factory.createUser(user_id, name)
-
             if user is not None:
                 return user.__of__(self)
 
         return PropertiedUser(user_id, name).__of__(self)
 
-    security.declarePrivate('_findUser')
-
+    @security.private
     def _findUser(self, plugins, user_id, name=None, request=None):
         """ user_id -> decorated_user
         """
@@ -741,16 +728,17 @@ class PluggableAuthService(Folder, Cacheable):
         view_name = createViewName('_findUser', user_id)
         name = self.applyTransform(name)
         keywords = createKeywords(user_id=user_id, name=name)
-        user = self.ZCacheable_get(view_name=view_name, keywords=keywords, default=None
-                                   )
+        user = self.ZCacheable_get(
+            view_name=view_name,
+            keywords=keywords,
+            default=None
+        )
 
         if user is None:
-
             user = self._createUser(plugins, user_id, name)
-            propfinders = plugins.listPlugins(IPropertiesPlugin)
+            propfinders = plugins.listPlugins(iplugins.IPropertiesPlugin)
 
             for propfinder_id, propfinder in propfinders:
-
                 data = propfinder.getPropertiesForUser(user, request)
                 if data:
                     user.addPropertysheet(propfinder_id, data)
@@ -759,14 +747,16 @@ class PluggableAuthService(Folder, Cacheable):
                 user, request, plugins=plugins)
             user._addGroups(groups)
 
-            rolemakers = plugins.listPlugins(IRolesPlugin)
+            rolemakers = plugins.listPlugins(iplugins.IRolesPlugin)
 
             for rolemaker_id, rolemaker in rolemakers:
                 try:
                     roles = rolemaker.getRolesForPrincipal(user, request)
                 except _SWALLOWABLE_PLUGIN_EXCEPTIONS:
-                    logger.debug('IRolesPlugin %s error' % rolemaker_id, exc_info=True
-                                 )
+                    logger.debug(
+                        'IRolesPlugin %s error' % rolemaker_id,
+                        exc_info=True
+                    )
                 else:
                     if roles:
                         user._addRoles(roles)
@@ -776,13 +766,15 @@ class PluggableAuthService(Folder, Cacheable):
             # Cache the user if caching is enabled
             base_user = aq_base(user)
             if getattr(base_user, '_p_jar', None) is None:
-                self.ZCacheable_set(base_user, view_name=view_name, keywords=keywords
-                                    )
+                self.ZCacheable_set(
+                    base_user,
+                    view_name=view_name,
+                    keywords=keywords
+                )
 
         return user.__of__(self)
 
-    security.declarePrivate('_verifyUser')
-
+    @security.private
     def _verifyUser(self, plugins, user_id=None, login=None):
         """ user_id -> info_dict or None
         """
@@ -801,22 +793,26 @@ class PluggableAuthService(Folder, Cacheable):
 
         view_name = createViewName('_verifyUser', user_id or login)
         keywords = createKeywords(**criteria)
-        cached_info = self.ZCacheable_get(view_name=view_name, keywords=keywords, default=None
-                                          )
+        cached_info = self.ZCacheable_get(
+            view_name=view_name,
+            keywords=keywords,
+            default=None
+        )
 
         if cached_info is not None:
             return cached_info
 
-        enumerators = plugins.listPlugins(IUserEnumerationPlugin)
-
+        enumerators = plugins.listPlugins(iplugins.IUserEnumerationPlugin)
         for enumerator_id, enumerator in enumerators:
             try:
                 info = enumerator.enumerateUsers(**criteria)
-
                 if info:
                     # Put the computed value into the cache
-                    self.ZCacheable_set(info[0], view_name=view_name, keywords=keywords
-                                        )
+                    self.ZCacheable_set(
+                        info[0],
+                        view_name=view_name,
+                        keywords=keywords
+                    )
                     return info[0]
 
             except _SWALLOWABLE_PLUGIN_EXCEPTIONS:
@@ -826,10 +822,16 @@ class PluggableAuthService(Folder, Cacheable):
 
         return None
 
-    security.declarePrivate('_authorizeUser')
-
-    def _authorizeUser(self, user, accessed, container, name, value, roles=_noroles
-                       ):
+    @security.private
+    def _authorizeUser(
+        self,
+        user,
+        accessed,
+        container,
+        name,
+        value,
+        roles=_noroles
+    ):
         """ -> boolean (whether user has roles).
 
         o Add the user to the SM's stack, if successful.
@@ -842,12 +844,16 @@ class PluggableAuthService(Folder, Cacheable):
         try:
             try:
                 if roles is _noroles:
-                    if security.validate(accessed, container, name, value
-                                         ):
+                    if security.validate(accessed, container, name, value):
                         return 1
                 else:
-                    if security.validate(accessed, container, name, value, roles
-                                         ):
+                    if security.validate(
+                        accessed,
+                        container,
+                        name,
+                        value,
+                        roles
+                    ):
                         return 1
             except:
                 noSecurityManager()
@@ -858,8 +864,7 @@ class PluggableAuthService(Folder, Cacheable):
 
         return 0
 
-    security.declarePrivate('_isTop')
-
+    @security.private
     def _isTop(self):
         """ Are we the user folder in the root object?
         """
@@ -871,8 +876,7 @@ class PluggableAuthService(Folder, Cacheable):
         except AttributeError:
             return 0
 
-    security.declarePrivate('_getObjectContext')
-
+    @security.private
     def _getObjectContext(self, v, request):
         """ request -> ( a, c, n, v )
 
@@ -924,22 +928,20 @@ class PluggableAuthService(Folder, Cacheable):
 
         return a, c, n, v
 
-    security.declarePrivate('_getEmergencyUser')
-
+    @security.private
     def _getEmergencyUser(self):
 
         return emergency_user.__of__(self)
 
-    security.declarePrivate('_doAddUser')
-
+    @security.private
     def _doAddUser(self, login, password, roles, domains, **kw):
         """ Create a user with login, password and roles if, and only if,
             we have a registered user manager and role manager that will
             accept specific plugin interfaces.
         """
         plugins = self._getOb('plugins')
-        useradders = plugins.listPlugins(IUserAdderPlugin)
-        roleassigners = plugins.listPlugins(IRoleAssignerPlugin)
+        useradders = plugins.listPlugins(iplugins.IUserAdderPlugin)
+        roleassigners = plugins.listPlugins(iplugins.IRoleAssignerPlugin)
 
         user = None
         login = self.applyTransform(login)
@@ -965,16 +967,17 @@ class PluggableAuthService(Folder, Cacheable):
                     roleassigner.doAssignRoleToPrincipal(user.getId(), role)
                 except _SWALLOWABLE_PLUGIN_EXCEPTIONS:
                     reraise(roleassigner)
-                    logger.debug('RoleAssigner %s error' % roleassigner_id, exc_info=True
-                                 )
+                    logger.debug(
+                        'RoleAssigner %s error' % roleassigner_id,
+                        exc_info=True
+                    )
                     pass
 
         if user is not None:
             notify(PrincipalCreated(user))
         return user
 
-    security.declarePublic('all_meta_types')
-
+    @security.public
     def all_meta_types(self):
         """ What objects can be put in here?
         """
@@ -983,8 +986,7 @@ class PluggableAuthService(Folder, Cacheable):
 
         return [x for x in Products.meta_types if x['name'] in allowed_types]
 
-    security.declarePrivate('manage_beforeDelete')
-
+    @security.private
     def manage_beforeDelete(self, item, container):
         if item is self:
             try:
@@ -995,8 +997,7 @@ class PluggableAuthService(Folder, Cacheable):
             handle = self.meta_type + '/' + self.getId()
             BeforeTraverse.unregisterBeforeTraverse(container, handle)
 
-    security.declarePrivate('manage_afterAdd')
-
+    @security.private
     def manage_afterAdd(self, item, container):
         if item is self:
             container.__allow_groups__ = aq_base(self)
@@ -1017,8 +1018,7 @@ class PluggableAuthService(Folder, Cacheable):
         resp._unauthorized = self._unauthorized
         resp._has_challenged = False
 
-    security.declarePublic('applyTransform')
-
+    @security.public
     def applyTransform(self, value):
         """ Transform for login name.
 
@@ -1042,8 +1042,7 @@ class PluggableAuthService(Folder, Cacheable):
             return tuple(result)
         return result
 
-    security.declarePrivate('_get_login_transform_method')
-
+    @security.private
     def _get_login_transform_method(self):
         """ Get the transform method for the login name or None.
         """
@@ -1057,8 +1056,7 @@ class PluggableAuthService(Folder, Cacheable):
             return
         return transform
 
-    security.declarePrivate('_setPropValue')
-
+    @security.private
     def _setPropValue(self, id, value):
         if id == 'login_transform':
             orig_value = getattr(self, id)
@@ -1068,8 +1066,7 @@ class PluggableAuthService(Folder, Cacheable):
                          "Updating existing login names.", orig_value, value)
             self.updateAllLoginNames()
 
-    security.declarePublic('lower')
-
+    @security.public
     def lower(self, value):
         """ Transform for login name.
 
@@ -1079,8 +1076,7 @@ class PluggableAuthService(Folder, Cacheable):
         """
         return value.strip().lower()
 
-    security.declarePublic('upper')
-
+    @security.public
     def upper(self, value):
         """ Transform for login name.
 
@@ -1112,7 +1108,7 @@ class PluggableAuthService(Folder, Cacheable):
         valid_protocols = []
         choosers = []
         try:
-            choosers = plugins.listPlugins(IChallengeProtocolChooser)
+            choosers = plugins.listPlugins(iplugins.IChallengeProtocolChooser)
         except KeyError:
             # Work around the fact that old instances might not have
             # IChallengeProtocolChooser registered with the
@@ -1126,7 +1122,7 @@ class PluggableAuthService(Folder, Cacheable):
             valid_protocols.extend(choosen)
 
         # Go through all challenge plugins
-        challengers = plugins.listPlugins(IChallengePlugin)
+        challengers = plugins.listPlugins(iplugins.IChallengePlugin)
 
         protocol = None
 
@@ -1163,8 +1159,7 @@ class PluggableAuthService(Folder, Cacheable):
 
         return resp
 
-    security.declarePublic('hasUsers')
-
+    @security.public
     def hasUsers(self):
         """Zope quick start sacrifice.
 
@@ -1172,8 +1167,7 @@ class PluggableAuthService(Folder, Cacheable):
         """
         return True
 
-    security.declarePublic('updateCredentials')
-
+    @security.public
     def updateCredentials(self, request, response, login, new_password):
         """Central updateCredentials method
 
@@ -1186,13 +1180,12 @@ class PluggableAuthService(Folder, Cacheable):
         """
         login = self.applyTransform(login)
         plugins = self._getOb('plugins')
-        cred_updaters = plugins.listPlugins(ICredentialsUpdatePlugin)
+        cred_updaters = plugins.listPlugins(iplugins.ICredentialsUpdatePlugin)
 
         for updater_id, updater in cred_updaters:
             updater.updateCredentials(request, response, login, new_password)
 
-    security.declarePublic('logout')
-
+    @security.public
     def logout(self, REQUEST):
         """Publicly accessible method to log out a user
         """
@@ -1205,21 +1198,21 @@ class PluggableAuthService(Folder, Cacheable):
         if referrer:
             REQUEST['RESPONSE'].redirect(referrer)
 
-    security.declarePublic('resetCredentials')
-
+    @security.public
     def resetCredentials(self, request, response):
         """Reset credentials by informing all active resetCredentials plugins
         """
         user = getSecurityManager().getUser()
         if aq_base(user) is not nobody:
             plugins = self._getOb('plugins')
-            cred_resetters = plugins.listPlugins(ICredentialsResetPlugin)
+            cred_resetters = plugins.listPlugins(
+                iplugins.ICredentialsResetPlugin
+            )
 
             for resetter_id, resetter in cred_resetters:
                 resetter.resetCredentials(request, response)
 
-    security.declareProtected(ManageUsers, 'updateLoginName')
-
+    @security.protected(ManageUsers)
     def updateLoginName(self, user_id, login_name):
         """Update login name of user.
         """
@@ -1235,8 +1228,7 @@ class PluggableAuthService(Folder, Cacheable):
         # the backend.
         self._updateLoginName(user_id, login_name)
 
-    security.declarePublic('updateOwnLoginName')
-
+    @security.public
     def updateOwnLoginName(self, login_name):
         """Update own login name of authenticated user.
         """
@@ -1254,7 +1246,7 @@ class PluggableAuthService(Folder, Cacheable):
         # Note: we do not compare the login name here.  See the
         # comment in updateLoginName above.
         plugins = self._getOb('plugins')
-        updaters = plugins.listPlugins(IUserEnumerationPlugin)
+        updaters = plugins.listPlugins(iplugins.IUserEnumerationPlugin)
 
         # Call the updaters.  One of them *must* succeed without an
         # exception, even if it does not change anything.  When a
@@ -1283,8 +1275,7 @@ class PluggableAuthService(Folder, Cacheable):
             raise ValueError("Cannot update login name of user %r to %r. "
                              "Possibly duplicate." % (user_id, login_name))
 
-    security.declareProtected(ManageUsers, 'updateLoginName')
-
+    @security.protected(ManageUsers)
     def updateAllLoginNames(self, quit_on_first_error=True):
         """Update login names of all users to their canonical value.
 
@@ -1296,7 +1287,7 @@ class PluggableAuthService(Folder, Cacheable):
         to know how many problems there are, if any.
         """
         plugins = self._getOb('plugins')
-        updaters = plugins.listPlugins(IUserEnumerationPlugin)
+        updaters = plugins.listPlugins(iplugins.IUserEnumerationPlugin)
         for updater_id, updater in updaters:
             if not hasattr(updater, 'updateEveryLoginName'):
                 # This was a later addition to the interface, so we
@@ -1308,9 +1299,6 @@ class PluggableAuthService(Folder, Cacheable):
             updater.updateEveryLoginName(
                 quit_on_first_error=quit_on_first_error)
 
-
-classImplements(PluggableAuthService, (IPluggableAuthService, IObjectManager, IPropertyManager)
-                )
 
 InitializeClass(PluggableAuthService)
 
@@ -1345,45 +1333,149 @@ class ResponseCleanup:
             pass
 
 _PLUGIN_TYPE_INFO = (
-    (IExtractionPlugin, 'IExtractionPlugin', 'extraction', "Extraction plugins are responsible for extracting credentials "
-     "from the request."
-     ), (IAuthenticationPlugin, 'IAuthenticationPlugin', 'authentication', "Authentication plugins are responsible for validating credentials "
-         "generated by the Extraction Plugin."
-         ), (IChallengePlugin, 'IChallengePlugin', 'challenge', "Challenge plugins initiate a challenge to the user to provide "
-             "credentials."
-             ), (ICredentialsUpdatePlugin, 'ICredentialsUpdatePlugin', 'update credentials', "Credential update plugins respond to the user changing "
-                 "credentials."
-                 ), (ICredentialsResetPlugin, 'ICredentialsResetPlugin', 'reset credentials', "Credential clear plugins respond to a user logging out."
-                     ), (IUserFactoryPlugin, 'IUserFactoryPlugin', 'userfactory', "Create users."
-                         ), (IAnonymousUserFactoryPlugin, 'IAnonymousUserFactoryPlugin', 'anonymoususerfactory', "Create anonymous users."
-                             ), (IPropertiesPlugin, 'IPropertiesPlugin', 'properties', "Properties plugins generate property sheets for users."
-                                 ), (IGroupsPlugin, 'IGroupsPlugin', 'groups', "Groups plugins determine the groups to which a user belongs."
-                                     ), (IRolesPlugin, 'IRolesPlugin', 'roles', "Roles plugins determine the global roles which a user has."
-                                         ), (IUpdatePlugin, 'IUpdatePlugin', 'update', "Update plugins allow the user or the application to update "
-                                             "the user's properties."
-                                             ), (IValidationPlugin, 'IValidationPlugin', 'validation', "Validation plugins specify allowable values for user properties "
-                                                 "(e.g., minimum password length, allowed characters, etc.)"
-                                                 ), (IUserEnumerationPlugin, 'IUserEnumerationPlugin', 'user_enumeration', "Enumeration plugins allow querying users by ID, and searching for "
-                                                     "users who match particular criteria."
-                                                     ), (IUserAdderPlugin, 'IUserAdderPlugin', 'user_adder', "User Adder plugins allow the Pluggable Auth Service to create users."
-                                                         ), (IGroupEnumerationPlugin, 'IGroupEnumerationPlugin', 'group_enumeration', "Enumeration plugins allow querying groups by ID."
-                                                             ), (IRoleEnumerationPlugin, 'IRoleEnumerationPlugin', 'role_enumeration', "Enumeration plugins allow querying roles by ID."
-                                                                 ), (IRoleAssignerPlugin, 'IRoleAssignerPlugin', 'role_assigner', "Role Assigner plugins allow the Pluggable Auth Service to assign"
-                                                                     " roles to principals."
-                                                                     ), (IChallengeProtocolChooser, 'IChallengeProtocolChooser', 'challenge_protocol_chooser', "Challenge Protocol Chooser plugins decide what authorization"
-                                                                         "protocol to use for a given request type."
-                                                                         ), (IRequestTypeSniffer, 'IRequestTypeSniffer', 'request_type_sniffer', "Request Type Sniffer plugins detect the type of an incoming request."
-                                                                             ), (INotCompetentPlugin, 'INotCompetentPlugin', 'notcompetent', "Not-Competent plugins check whether this user folder should not "
-                                                                                 "authenticate the current request. "
-                                                                                 "These plugins are not used for a top level user folder. "
-                                                                                 "They are typically used to prevent shaddowing of authentications by "
-                                                                                 "higher level user folders."
-                                                                                 )
+    (
+        iplugins.IExtractionPlugin,
+        'IExtractionPlugin',
+        'extraction',
+        "Extraction plugins are responsible for extracting credentials from "
+        "the request."
+    ),
+    (
+        iplugins.IAuthenticationPlugin,
+        'IAuthenticationPlugin',
+        'authentication',
+        "Authentication plugins are responsible for validating credentials "
+        "generated by the Extraction Plugin."
+    ),
+    (
+        iplugins.IChallengePlugin,
+        'IChallengePlugin',
+        'challenge',
+        "Challenge plugins initiate a challenge to the user to provide "
+        "credentials."
+    ),
+    (
+        iplugins.ICredentialsUpdatePlugin,
+        'ICredentialsUpdatePlugin',
+        'update credentials',
+        "Credential update plugins respond to the user changing credentials."
+    ),
+    (
+        iplugins.ICredentialsResetPlugin,
+        'ICredentialsResetPlugin',
+        'reset credentials',
+        "Credential clear plugins respond to a user logging out."
+    ),
+    (
+        iplugins.IUserFactoryPlugin,
+        'IUserFactoryPlugin',
+        'userfactory',
+        "Create users."
+    ),
+    (
+        iplugins.IAnonymousUserFactoryPlugin,
+        'IAnonymousUserFactoryPlugin',
+        'anonymoususerfactory',
+        "Create anonymous users."
+    ),
+    (
+        iplugins.IPropertiesPlugin,
+        'IPropertiesPlugin',
+        'properties',
+        "Properties plugins generate property sheets for users."
+    ),
+    (
+        iplugins.IGroupsPlugin,
+        'IGroupsPlugin',
+        'groups',
+        "Groups plugins determine the groups to which a user belongs."
+    ),
+    (
+        iplugins.IRolesPlugin,
+        'IRolesPlugin',
+        'roles',
+        "Roles plugins determine the global roles which a user has."
+    ),
+    (
+        iplugins.IUpdatePlugin,
+        'IUpdatePlugin',
+        'update',
+        "Update plugins allow the user or the application to update "
+        "the user's properties."
+    ),
+    (
+        iplugins.IValidationPlugin,
+        'IValidationPlugin',
+        'validation',
+        "Validation plugins specify allowable values for user properties "
+        "(e.g., minimum password length, allowed characters, etc.)"
+    ),
+    (
+        iplugins.IUserEnumerationPlugin,
+        'IUserEnumerationPlugin',
+        'user_enumeration',
+        "Enumeration plugins allow querying users by ID, and searching for "
+        "users who match particular criteria."
+    ),
+    (
+        iplugins.IUserAdderPlugin,
+        'IUserAdderPlugin',
+        'user_adder',
+        "User Adder plugins allow the Pluggable Auth Service to create users."
+    ),
+    (
+        iplugins.IGroupEnumerationPlugin,
+        'IGroupEnumerationPlugin',
+        'group_enumeration',
+        "Enumeration plugins allow querying groups by ID."
+    ),
+    (
+        iplugins.IRoleEnumerationPlugin,
+        'IRoleEnumerationPlugin',
+        'role_enumeration',
+        "Enumeration plugins allow querying roles by ID."
+    ),
+    (
+        iplugins.IRoleAssignerPlugin,
+        'IRoleAssignerPlugin',
+        'role_assigner',
+        "Role Assigner plugins allow the Pluggable Auth Service to assign "
+        "roles to principals."
+    ),
+    (
+        iplugins.IChallengeProtocolChooser,
+        'IChallengeProtocolChooser',
+        'challenge_protocol_chooser',
+        "Challenge Protocol Chooser plugins decide what authorization"
+        "protocol to use for a given request type."
+    ),
+    (
+        iplugins.IRequestTypeSniffer,
+        'IRequestTypeSniffer',
+        'request_type_sniffer',
+        "Request Type Sniffer plugins detect the type of an incoming request."
+    ),
+    (
+        iplugins.INotCompetentPlugin,
+        'INotCompetentPlugin',
+        'notcompetent',
+        "Not-Competent plugins check whether this user folder should not "
+        "authenticate the current request. "
+        "These plugins are not used for a top level user folder. "
+        "They are typically used to prevent shaddowing of authentications by "
+        "higher level user folders."
+    )
 )
 
 
-def addPluggableAuthService(dispatcher, base_profile=None, extension_profiles=(), create_snapshot=True, setup_tool_id='setup_tool', REQUEST=None
-                            ):
+def addPluggableAuthService(
+    dispatcher,
+    base_profile=None,
+    extension_profiles=(),
+    create_snapshot=True,
+    setup_tool_id='setup_tool',
+    REQUEST=None
+):
     """ Add a PluggableAuthService to 'dispatcher'.
 
     o BBB for non-GenericSetup use.
@@ -1412,8 +1504,10 @@ def addConfiguredPASForm(dispatcher):
 
     base_profiles = []
     extension_profiles = []
-
-    for info in profile_registry.listProfileInfo(for_=IPluggableAuthService):
+    profile_info = profile_registry.listProfileInfo(
+        for_=iauth.IPluggableAuthService
+    )
+    for info in profile_info:
         if info.get('type') == EXTENSION:
             extension_profiles.append(info)
         else:
@@ -1423,8 +1517,14 @@ def addConfiguredPASForm(dispatcher):
                    extension_profiles=tuple(extension_profiles))
 
 
-def addConfiguredPAS(dispatcher, base_profile, extension_profiles=(), create_snapshot=True, setup_tool_id='setup_tool', REQUEST=None
-                     ):
+def addConfiguredPAS(
+    dispatcher,
+    base_profile,
+    extension_profiles=(),
+    create_snapshot=True,
+    setup_tool_id='setup_tool',
+    REQUEST=None
+):
     """ Add a PluggableAuthService to 'self.
     """
     from Products.GenericSetup.tool import SetupTool

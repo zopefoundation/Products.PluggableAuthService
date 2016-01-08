@@ -1,4 +1,6 @@
+# -*- coding: utf-8 -*-
 from zope.interface import Attribute, Interface
+
 
 class IPASEvent(Interface):
     """An event related to a PAS principal.
@@ -40,5 +42,3 @@ class IPropertiesUpdatedEvent(IPASEvent):
     """A principals properties have been updated.
     """
     properties = Attribute('List of modified property ids')
-
-
