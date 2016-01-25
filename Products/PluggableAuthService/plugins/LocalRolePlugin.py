@@ -17,35 +17,37 @@ $Id$
 """
 from AccessControl import ClassSecurityInfo
 from App.class_init import InitializeClass
-
-from zope.interface import Interface
-
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-
 from Products.PluggableAuthService.interfaces.plugins import IRolesPlugin
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PluggableAuthService.utils import classImplements
+from zope.interface import implementer
+from zope.interface import Interface
+
 
 class ILocalRolePlugin(Interface):
     """ Marker interface.
     """
 
 manage_addLocalRolePluginForm = PageTemplateFile(
-    'www/lrpAdd', globals(), __name__='manage_addLocalRolePluginForm' )
+    'www/lrpAdd', globals(), __name__='manage_addLocalRolePluginForm')
 
-def addLocalRolePlugin( dispatcher, id, title='', RESPONSE=None ):
+
+def addLocalRolePlugin(dispatcher, id, title='', RESPONSE=None):
     """ Add a Local Role Plugin to 'dispatcher'.
     """
 
-    lrp = LocalRolePlugin( id, title )
-    dispatcher._setObject( id, lrp )
+    lrp = LocalRolePlugin(id, title)
+    dispatcher._setObject(id, lrp)
 
     if RESPONSE is not None:
-        RESPONSE.redirect( '%s/manage_main?manage_tabs_message=%s' %
-                           ( dispatcher.absolute_url()
-                           , 'LocalRolePlugin+added.' ) )
+        RESPONSE.redirect(
+            '%s/manage_main?manage_tabs_message=%s' %
+            (dispatcher.absolute_url(), 'LocalRolePlugin+added.')
+        )
 
-class LocalRolePlugin( BasePlugin ):
+
+@implementer(ILocalRolePlugin, IRolesPlugin)
+class LocalRolePlugin(BasePlugin):
     """ Provide roles during Authentication from local roles
         assignments made on the root object.
     """
@@ -53,28 +55,21 @@ class LocalRolePlugin( BasePlugin ):
     meta_type = 'Local Role Plugin'
     security = ClassSecurityInfo()
 
-    def __init__( self, id, title=None ):
-        self._setId( id )
+    def __init__(self, id, title=None):
+        self._setId(id)
         self.title = title
 
     #
     #    IRolesPlugin implementation
     #
-    security.declarePrivate( 'getRolesForPrincipal' )
-    def getRolesForPrincipal( self, principal, request=None ):
-
+    @security.private
+    def getRolesForPrincipal(self, principal, request=None):
         """ See IRolesPlugin.
         """
-        local_roles = getattr( self.getPhysicalRoot()
-                             , '__ac_local_roles__'
-                             , None )
+        local_roles = getattr(self.getPhysicalRoot(),
+                              '__ac_local_roles__', None)
         if local_roles is None:
             return None
-        return local_roles.get( principal.getId() )
+        return local_roles.get(principal.getId())
 
-classImplements( LocalRolePlugin
-               , ILocalRolePlugin
-               , IRolesPlugin
-               )
-
-InitializeClass( LocalRolePlugin )
+InitializeClass(LocalRolePlugin)

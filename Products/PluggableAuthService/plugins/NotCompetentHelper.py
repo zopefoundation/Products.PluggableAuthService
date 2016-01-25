@@ -20,55 +20,52 @@ by higher level user folders and the class `NotCompetent_byRoles`
 to prevent shaddowing of higher level authentications with
 specified roles.
 """
-# General Zope imports
-from Acquisition import aq_inner, aq_parent, aq_base
 from AccessControl import ClassSecurityInfo
 from AccessControl.Permissions import manage_users
 from AccessControl.User import nobody
+from Acquisition import aq_inner, aq_parent, aq_base
+from OFS.PropertyManager import PropertyManager
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from Products.PluggableAuthService.interfaces.plugins import INotCompetentPlugin  # noqa
+from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
+from zope.interface import implementer
 from ZPublisher.BaseRequest import UNSPECIFIED_ROLES
 from ZPublisher.Response import Response
-from OFS.PropertyManager import PropertyManager
-
-from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-
-# PluggableAuthService imports
-from Products.PluggableAuthService.interfaces.plugins import \
-    INotCompetentPlugin
-from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PluggableAuthService.utils import classImplements
 
 
-class HigherLevelUserFolderAccessMixin( object ):
+class HigherLevelUserFolderAccessMixin(object):
     """mixin class for access to higher level user folders
 
        requires to be mixed with a `BasePlugin`.
     """
-    def _generateHigherLevelUserFolders( self ):
-        folder = aq_parent( aq_inner( self._getPAS( ) ) )
+
+    def _generateHigherLevelUserFolders(self):
+        folder = aq_parent(aq_inner(self._getPAS()))
         while True:
-            folder = aq_parent( aq_inner( folder ) )
-            if folder is None: return
-            uf = getattr( folder, "__allow_groups__", None )
-            validate = getattr( aq_base( uf ), "validate", None )
+            folder = aq_parent(aq_inner(folder))
+            if folder is None:
+                return
+            uf = getattr(folder, "__allow_groups__", None)
+            validate = getattr(aq_base(uf), "validate", None)
             if validate is not None:
                 yield uf
 
-    def _getHigherLevelUser( self, request, roles=None ):
+    def _getHigherLevelUser(self, request, roles=None):
         if roles:
-            accessed = self._getPAS( )._getObjectContext(
-                request[ "PUBLISHED" ], request
-                ) [ 1 ]
+            accessed = self._getPAS()._getObjectContext(
+                request["PUBLISHED"], request
+            )[1]
         req_roles = request.roles
         auth = request._auth
         # save response and install new one to prevent side effects
         saved_response = request.response
         try:
             request.response = Response()
-            for uf in self._generateHigherLevelUserFolders( ):
+            for uf in self._generateHigherLevelUserFolders():
                 if req_roles is UNSPECIFIED_ROLES:
-                    u = uf.validate( request, auth )
+                    u = uf.validate(request, auth)
                 else:
-                    u = uf.validate( request, auth, req_roles )
+                    u = uf.validate(request, auth, req_roles)
                 if u is None or u is nobody:
                     continue
                 # this user folder has authenticated a user able to perform
@@ -83,7 +80,8 @@ class HigherLevelUserFolderAccessMixin( object ):
             request.response = saved_response
 
 
-class NotCompetentBase( BasePlugin, HigherLevelUserFolderAccessMixin ):
+@implementer(INotCompetentPlugin)
+class NotCompetentBase(BasePlugin, HigherLevelUserFolderAccessMixin):
     """abstract `INotCompententPlugin` base class.
 
     with access to higher level user folders.
@@ -92,18 +90,16 @@ class NotCompetentBase( BasePlugin, HigherLevelUserFolderAccessMixin ):
     security = ClassSecurityInfo()
     security.declareObjectProtected(manage_users)
 
-    def __init__( self, id, title='' ):
+    def __init__(self, id, title=''):
         self.id = id
         self.title = title
 
-    security.declarePrivate( 'isNotCompetentToAuthenticate' )
-    def isNotCompetentToAuthenticate( self, request ):
-        raise NotImplementedError( )
-
-classImplements(NotCompetentBase, INotCompetentPlugin)
+    @security.private
+    def isNotCompetentToAuthenticate(self, request):
+        raise NotImplementedError()
 
 
-class NotCompetent_byRoles( NotCompetentBase ):
+class NotCompetent_byRoles(NotCompetentBase):
     """`INotCompetentPlugin` to prevent authentication shaddowing by roles.
     """
 
@@ -112,25 +108,26 @@ class NotCompetent_byRoles( NotCompetentBase ):
     _properties = (
         PropertyManager._properties +
         (
-            dict( id="roles", label="roles (empty means all roles)",
-                  type="lines", mode="rw",
-                  ),
+            dict(id="roles", label="roles (empty means all roles)",
+                 type="lines", mode="rw",
+                 ),
         )
     )
     roles = ()
 
     manage_options = (
-        ( NotCompetentBase.manage_options[ 0 ], )
+        (NotCompetentBase.manage_options[0], )
         + PropertyManager.manage_options
-        + NotCompetentBase.manage_options[ 1:-1 ]
-        )
-  
-    def isNotCompetentToAuthenticate( self, request ):
-        return self._getHigherLevelUser( request, self.roles ) is not None
+        + NotCompetentBase.manage_options[1:-1]
+    )
+
+    def isNotCompetentToAuthenticate(self, request):
+        return self._getHigherLevelUser(request, self.roles) is not None
 
 
 manage_addNotCompetent_byRolesForm = PageTemplateFile(
-    'www/ncbrAdd', globals(), __name__='manage_addNotCompetent_byRolesForm' )
+    'www/ncbrAdd', globals(), __name__='manage_addNotCompetent_byRolesForm')
+
 
 def manage_addNotCompetent_byRoles(self, id, title='', REQUEST=None):
     """ Factory method to instantiate a NotCompetent_byRoles """

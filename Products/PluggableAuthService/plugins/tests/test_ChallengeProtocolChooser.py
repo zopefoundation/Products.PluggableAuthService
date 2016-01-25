@@ -16,32 +16,31 @@
 $Id$
 """
 import unittest
-
 from Products.PluggableAuthService.tests.conformance \
     import IChallengeProtocolChooser_conformance
 
-class ChallengeProtocolChooser( unittest.TestCase
-                                , IChallengeProtocolChooser_conformance
-                              ):
 
+class ChallengeProtocolChooser(
+    unittest.TestCase,
+    IChallengeProtocolChooser_conformance
+):
 
-    def _getTargetClass( self ):
+    def _getTargetClass(self):
 
         from Products.PluggableAuthService.plugins.ChallengeProtocolChooser \
             import ChallengeProtocolChooser
 
         return ChallengeProtocolChooser
 
-    def _makeOne( self, id='test', *args, **kw ):
-
-        return self._getTargetClass()( id, *args, **kw )
+    def _makeOne(self, id='test', *args, **kw):
+        return self._getTargetClass()(id, *args, **kw)
 
 
 if __name__ == "__main__":
     unittest.main()
 
+
 def test_suite():
     return unittest.TestSuite((
-        unittest.makeSuite( ChallengeProtocolChooser ),
-        ))
-
+        unittest.makeSuite(ChallengeProtocolChooser),
+    ))
