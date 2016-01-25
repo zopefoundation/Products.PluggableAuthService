@@ -55,16 +55,18 @@ TODO:
 
 $Id$
 """
-import sys
-import os
-from xml.dom.minidom import parseString
 from Acquisition import Implicit
-from zope.interface import implementer
-from Products.GenericSetup.interfaces import IFilesystemExporter
-from Products.GenericSetup.interfaces import IFilesystemImporter
 from Products.GenericSetup.content import DAVAwareFileAdapter
 from Products.GenericSetup.content import FolderishExporterImporter
+from Products.GenericSetup.interfaces import IContentFactory
+from Products.GenericSetup.interfaces import IContentFactoryName
+from Products.GenericSetup.interfaces import IFilesystemExporter
+from Products.GenericSetup.interfaces import IFilesystemImporter
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from xml.dom.minidom import parseString
+from zope.interface import implementer
+import os
+import sys
 
 
 def getPackagePath(instance):
@@ -541,3 +543,27 @@ class NotCompetent_byRolesExportImport(SimpleXMLExportImport):
             'title': self.context.title,
             'roles': self.context.roles,
         }
+
+
+@implementer(IContentFactory)
+class PAS_PR_ContentFactory(object):
+
+    def __init__(self, context):
+        self.context = context
+
+    def __call__(self, object_id):
+        from Products.PluginRegistry.PluginRegistry import PluginRegistry
+        registry = PluginRegistry(())
+        registry._setId(object_id)
+        self.context._setObject(object_id, registry)
+        return registry
+
+
+@implementer(IContentFactoryName)
+class PAS_CF_Namer(object):
+
+    def __init__(self, context):
+        self.context = context
+
+    def __call__(self):
+        return 'plugins'

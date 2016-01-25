@@ -17,11 +17,21 @@
 $Id$
 """
 from csv import reader
+from Products.GenericSetup.interfaces import IFilesystemExporter
+from Products.GenericSetup.interfaces import IFilesystemImporter
 from Products.GenericSetup.tests.common import BaseRegistryTests
 from Products.PluggableAuthService.tests.utils import _setUpDefaultTraversable
 from StringIO import StringIO
 from zope.component.testing import PlacelessSetup
 import unittest
+
+
+def exportPAS(context):
+    IFilesystemExporter(context.getSite()).export(context, 'PAS', True)
+
+
+def importPAS(context):
+    IFilesystemImporter(context.getSite()).import_(context, 'PAS', True)
 
 
 class _TestBase(PlacelessSetup, BaseRegistryTests):
@@ -95,7 +105,6 @@ class Test_exportPAS(_TestBase):
 
     def test_empty(self):
         from Products.GenericSetup.tests.common import DummyExportContext
-        from Products.PluggableAuthService.exportimport import exportPAS
 
         _setUpDefaultTraversable()
 
@@ -130,7 +139,6 @@ class Test_exportPAS(_TestBase):
         from Products.GenericSetup.tests.faux_objects \
             import TestCSVAware
         from Products.GenericSetup.utils import _getDottedName
-        from Products.PluggableAuthService.exportimport import exportPAS
 
         _setUpDefaultTraversable()
 
@@ -241,7 +249,6 @@ class Test_importPAS(_TestBase):
 
     def test_empty_modifying_plugin_types(self):
         from Products.GenericSetup.tests.common import DummyImportContext
-        from Products.PluggableAuthService.exportimport import importPAS
 
         self._setUpAdapters()
         app, pas = self._initPAS()
@@ -260,7 +267,6 @@ class Test_importPAS(_TestBase):
         from Products.GenericSetup.tests.common import DummyImportContext
         from Products.GenericSetup.tests.faux_objects \
             import TestCSVAware, KNOWN_CSV
-        from Products.PluggableAuthService.exportimport import importPAS
 
         self._setUpAdapters()
         app, pas = self._initPAS()
