@@ -13,46 +13,6 @@
 ##############################################################################
 """ Export / import adapters for stock PAS plugins.
 
-TODO:
-
- o Add export / import adapters for all stock plugin types:
-
-   - [X] ChallengeProtocolChooser (ChallengeProtocolChooserExportImport)
-
-   - [X] CookieAuthHelper (CookieAuthHelperExportImport)
-
-   - [X] DelegatingMultiPlugin (DelegatePathExportImport)
-
-   - [X] DomainAuthHelper (DomainAuthHelperExportImport)
-
-   - [X] DynamicGroupsPlugin (DynamicGroupsPluginExportImport)
-
-   - [X] HTTPBasicAuthHelper (TitleOnlyExportImport)
-
-   - [X] InlineAuthHelper (TitleOnlyExportImport)
-
-   - [X] LocalRolePlugin (TitleOnlyExportImport)
-
-   - [X] NotCompetent_byRoles (NotCompetent_byRolesExportImport)
-
-   - [X] RecursiveGroupsPlugin (TitleOnlyExportImport)
-
-   - [X] RequestTypeSniffer (TitleOnlyExportImport)
-
-   - [X] ScriptablePlugin (ScriptablePluginExportImport)
-
-   - [X] SearchPrincipalsPlugin (DelegatePathExportImport)
-
-   - [X] SessionAuthHelper (TitleOnlyExportImport)
-
-   - [X] ZODBGroupsManager (ZODBGroupManagerExportImport)
-
-   - [X] ZODBRolesManager (ZODBRoleManagerExportImport)
-
-   - [X] ZODBUserManager (ZODBUserManagerExportImport)
-
- o Review BasePlugin to ensure we haven't left anything out.
-
 $Id$
 """
 from Acquisition import Implicit
