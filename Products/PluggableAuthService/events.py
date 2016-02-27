@@ -25,6 +25,8 @@ from Products.PluggableAuthService.interfaces.events \
 from Products.PluggableAuthService.interfaces.events \
     import IPrincipalDeletedEvent
 from Products.PluggableAuthService.interfaces.events \
+    import IGroupDeletedEvent
+from Products.PluggableAuthService.interfaces.events \
     import IPropertiesUpdatedEvent
 
 
@@ -42,6 +44,10 @@ class PrincipalCreated(PASEvent):
 
 class PrincipalDeleted(PASEvent):
     implements(IPrincipalDeletedEvent)
+
+
+class GroupDeleted(PASEvent):
+    implements(IGroupDeletedEvent)
 
 
 class CredentialsUpdated(PASEvent):

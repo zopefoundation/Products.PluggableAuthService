@@ -139,3 +139,32 @@ class PropertiesUpdatedTests(unittest.TestCase, ConformsToIPASEvent):
 
 class DummyPrincipal(object):
     pass
+
+
+class GroupDeletedTests(unittest.TestCase, ConformsToIPASEvent):
+
+    def _getTargetClass(self):
+        from Products.PluggableAuthService.events import GroupDeleted
+        return GroupDeleted
+
+    def _makeOne(self, Group=None):
+        if Group is None:
+            Group = DummyGroup()
+        return self._getTargetClass()(Group)
+
+    def test_class_conforms_to_IGroupDeletedEvent(self):
+        from zope.interface.verify import verifyClass
+        from Products.PluggableAuthService.interfaces.events \
+            import IGroupDeletedEvent
+        verifyClass(IGroupDeletedEvent, self._getTargetClass())
+
+    def test_instance_conforms_to_IGroupDeletedEvent(self):
+        from zope.interface.verify import verifyObject
+        from Products.PluggableAuthService.interfaces.events \
+            import IGroupDeletedEvent
+        verifyObject(IGroupDeletedEvent, self._makeOne())
+
+
+class DummyGroup(object):
+    pass
+
