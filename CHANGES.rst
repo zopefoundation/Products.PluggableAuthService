@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-1.10.1 (unreleased)
+1.11.0 (2016-03-01)
 -------------------
 
 - Add new event to be able to notify group deletion.
