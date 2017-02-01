@@ -278,20 +278,30 @@ def initialize(context):
                                )
                              , icon='www/PluggableAuthService.png'
                              )
-        profile_registry.registerProfile('simple',
-                                         'Simple PAS Content Profile',
-                                         'Content for a simple PAS.',
-                                         'profiles/simple',
-                                         'PluggableAuthService',
-                                         BASE,
-                                         IPluggableAuthService,
-                                        )
-        profile_registry.registerProfile('empty',
-                                         'Empty PAS Content Profile',
-                                         'Content for an empty PAS '
-                                         '(plugins registry only).',
-                                         'profiles/empty',
-                                         'PluggableAuthService',
-                                         BASE,
-                                         IPluggableAuthService,
-                                        )
+        try:
+            profile_registry.getProfileInfo('PluggableAuthService:simple')
+        except KeyError:
+            # not yet registered
+            profile_registry.registerProfile(
+                'simple',
+                'Simple PAS Content Profile',
+                'Content for a simple PAS.',
+                'profiles/simple',
+                'PluggableAuthService',
+                BASE,
+                IPluggableAuthService,
+            )
+        try:
+            profile_registry.getProfileInfo('PluggableAuthService:empty')
+        except KeyError:
+            # not yet registered
+            profile_registry.registerProfile(
+                'empty',
+                'Empty PAS Content Profile',
+                'Content for an empty PAS '
+                '(plugins registry only).',
+                'profiles/empty',
+                'PluggableAuthService',
+                BASE,
+                IPluggableAuthService,
+                )
