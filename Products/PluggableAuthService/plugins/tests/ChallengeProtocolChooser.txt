@@ -145,9 +145,9 @@ And with valid credentials the reqeuest should succeed:
   ... </methodCall>
   ... """ % (folder_name, username, password), handle_errors=True)
   HTTP/1.1 200 OK
+  ...
   Content-Length: 140
   Content-Type: text/xml
-  <BLANKLINE>
   <?xml version='1.0'?>
   <methodResponse>
   <params>
@@ -156,6 +156,7 @@ And with valid credentials the reqeuest should succeed:
   </param>
   </params>
   </methodResponse>
+  <BLANKLINE>
 
 Adding a Cookie Auth Helper now to test the correct behaviour of the
 Challenge Protocol Helper.
