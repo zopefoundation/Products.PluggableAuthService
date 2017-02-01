@@ -181,19 +181,19 @@ normal (eg: browser) request:
   >>> print http(r"""
   ... GET /%s/test_script HTTP/1.1
   ... """ % (folder_name), handle_errors=True)
-  HTTP/1.1 302 Moved Temporarily...
+  HTTP/1.1 302 Found...
 
 And the same for a WebDAV request:
 
   >>> print http(r"""
   ... PROPFIND /%s/test_script HTTP/1.1
   ... """ % (folder_name), handle_errors=True)
-  HTTP/1.1 302 Moved Temporarily...
+  HTTP/1.1 302 Found...
 
   >>> print http(r"""
   ... GET /%s/test_script/manage_DAVget HTTP/1.1
   ... """ % (folder_name), handle_errors=True)
-  HTTP/1.1 302 Moved Temporarily...
+  HTTP/1.1 302 Found...
 
 And for a XML-RPC request:
 
@@ -205,7 +205,7 @@ And for a XML-RPC request:
   ... <methodName>test_script</methodName>
   ... </methodCall>
   ... """ % (folder_name), handle_errors=True)
-  HTTP/1.1 302 Moved Temporarily...
+  HTTP/1.1 302 Found...
 
 However, not all WebDAV and XML-RPC clients understand the
 redirect. Even worse, they will not be able to display the login form
@@ -241,7 +241,7 @@ normal (eg: browser) request:
   >>> print http(r"""
   ... GET /%s/test_script HTTP/1.1
   ... """ % (folder_name), handle_errors=True)
-  HTTP/1.1 302 Moved Temporarily...
+  HTTP/1.1 302 Found...
 
 A WebDAV request should result in a 401 response status:
 
