@@ -1,0 +1,15 @@
+language: python
+sudo: false
+python:
+    - "2.7"
+install:
+    - python bootstrap.py
+    - bin/buildout
+script:
+    - bin/test -v
+notifications:
+    email: false
+cache:
+  pip: true
+  directories:
+    - eggs/
