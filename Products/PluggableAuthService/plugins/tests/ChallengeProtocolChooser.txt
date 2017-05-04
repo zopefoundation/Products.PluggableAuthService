@@ -143,8 +143,10 @@ And with valid credentials the reqeuest should succeed:
   ... <methodCall>
   ... <methodName>test_script</methodName>
   ... </methodCall>
-  ... """ % (folder_name, username, password), handle_errors=True)
+  ... """ % (folder_name, username, password), handle_errors=True
+  ... ) # doctest: +NORMALIZE_WHITESPACE +ELLIPSIS
   HTTP/1.1 200 OK
+  ...
   Content-Length: 140
   Content-Type: text/xml
   <BLANKLINE>
