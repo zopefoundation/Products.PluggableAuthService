@@ -19,7 +19,7 @@ from DateTime.DateTime import DateTime
 
 from OFS.Image import Image
 
-from conformance import IPropertySheet_conformance
+from .conformance import IPropertySheet_conformance
 
 path = os.path.dirname(__file__)
 path = os.path.join(path, 'image.gif')
@@ -43,7 +43,7 @@ class UserPropertySheetTests( unittest.TestCase
     _STRING_VALUE = 'string'
     _INT_VALUE = 42
     _FLOAT_VALUE = 9.8
-    _LONG_VALUE = sys.maxint + 1
+    _LONG_VALUE = sys.maxsize + 1
     _DATE_VALUE = DateTime()
     _LIST_VALUE = [ 'a', 'b', 'c' ]
     _TUPLE_VALUE = ( 'd', 'e', 'f' )

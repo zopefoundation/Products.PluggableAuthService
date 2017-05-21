@@ -16,7 +16,7 @@
 $Id$
 """
 from sets import Set
-from urllib import quote_plus
+from urllib.parse import quote_plus
 from OFS.Folder import Folder
 from AccessControl import ClassSecurityInfo
 from AccessControl.Permissions import manage_users as ManageUsers

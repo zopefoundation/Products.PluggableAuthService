@@ -58,7 +58,7 @@ def registerRequestType(label, iface):
     _request_type_bmap[iface] = label
 
 def listRequestTypesLabels():
-    return _request_type_bmap.values()
+    return list(_request_type_bmap.values())
 
 manage_addChallengeProtocolChooserForm = PageTemplateFile(
     'www/cpcAdd', globals(), __name__='manage_addChallengeProtocolChooserForm' )
@@ -174,10 +174,10 @@ class ChallengeProtocolChooser( BasePlugin ):
     def manage_updateProtocolMapping(self, mapping, REQUEST=None):
         """ Update mapping of Request Type to Protocols
         """
-        for key, value in mapping.items():
-            value = filter(None, value)
+        for key, value in list(mapping.items()):
+            value = [_f for _f in value if _f]
             if not value:
-                if self._map.has_key(key):
+                if key in self._map:
                     del self._map[key]
             else:
                 self._map[key] = value

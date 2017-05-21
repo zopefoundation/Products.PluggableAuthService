@@ -17,8 +17,8 @@ $Id$
 from zope.configuration.fields import PythonIdentifier
 from zope.interface import Interface
 
-from PluggableAuthService import MultiPlugins
-from PluggableAuthService import registerMultiPlugin as rMP
+from .PluggableAuthService import MultiPlugins
+from .PluggableAuthService import registerMultiPlugin as rMP
 
 
 class IRegisterMultiPlugin(Interface):
@@ -27,13 +27,13 @@ class IRegisterMultiPlugin(Interface):
     """
 
     class_ = PythonIdentifier(
-        title=u'Class',
-        description=u'',
+        title='Class',
+        description='',
         required=False)
 
     meta_type = PythonIdentifier(
-        title=u'Meta-Type',
-        description=u"If not specified, 'class/meta_type' is used.",
+        title='Meta-Type',
+        description="If not specified, 'class/meta_type' is used.",
         required=False)
 
 

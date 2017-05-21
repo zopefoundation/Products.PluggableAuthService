@@ -14,14 +14,14 @@
 import unittest
 
 from Acquisition import Implicit
-from conformance import IBasicUser_conformance, \
+from .conformance import IBasicUser_conformance, \
                         IPropertiedUser_conformance
 
 class FauxMethod:
 
     def __init__( self, im_self, local_roles=() ):
 
-        self.im_self = im_self
+        self.__self__ = im_self
         self.__ac_local_roles__ = local_roles
 
 class FauxProtected( Implicit ):

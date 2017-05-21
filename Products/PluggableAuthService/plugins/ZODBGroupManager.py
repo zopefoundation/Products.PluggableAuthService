@@ -91,10 +91,10 @@ class ZODBGroupManager( BasePlugin ):
         group_ids = []
         plugin_id = self.getId()
 
-        if isinstance( id, basestring ):
+        if isinstance( id, str ):
             id = [ id ]
 
-        if isinstance( title, basestring ):
+        if isinstance( title, str ):
             title = [ title ]
 
         if exact_match and ( id or title ):
@@ -151,7 +151,7 @@ class ZODBGroupManager( BasePlugin ):
 
         """ -> ( group_id_1, ... group_id_n )
         """
-        return self._groups.keys()
+        return list(self._groups.keys())
 
     security.declareProtected( ManageGroups, 'listGroupInfo' )
     def listGroupInfo( self ):
@@ -162,7 +162,7 @@ class ZODBGroupManager( BasePlugin ):
 
           - 'id'
         """
-        return self._groups.values()
+        return list(self._groups.values())
 
     security.declareProtected( ManageGroups, 'getGroupInfo' )
     def getGroupInfo( self, group_id ):
@@ -179,7 +179,7 @@ class ZODBGroupManager( BasePlugin ):
         o Raise KeyError on duplicate.
         """
         if self._groups.get( group_id ) is not None:
-            raise KeyError, 'Duplicate group ID: %s' % group_id
+            raise KeyError('Duplicate group ID: %s' % group_id)
 
         self._groups[ group_id ] = { 'id' : group_id
                                    , 'title' : title
@@ -207,7 +207,7 @@ class ZODBGroupManager( BasePlugin ):
 
         o Raise KeyError if 'group_id' doesn't already exist.
         """
-        for principal_id in self._principal_groups.keys():
+        for principal_id in list(self._principal_groups.keys()):
             self.removePrincipalFromGroup( principal_id, group_id )
         del self._groups[ group_id ]
 
@@ -250,7 +250,7 @@ class ZODBGroupManager( BasePlugin ):
         """
         result = []
 
-        for k, v in self._principal_groups.items():
+        for k, v in list(self._principal_groups.items()):
             if group_id in v:
                 parent = aq_parent( self )
                 info = parent.searchPrincipals( id=k, exact_match=True )
@@ -383,7 +383,7 @@ class ZODBGroupManager( BasePlugin ):
                            ):
         """ Remove one or more groups via the ZMI.
         """
-        group_ids = filter( None, group_ids )
+        group_ids = [_f for _f in group_ids if _f]
 
         if not group_ids:
             message = 'no+groups+selected'

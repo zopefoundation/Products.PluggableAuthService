@@ -317,7 +317,7 @@ class ZODBUserManagerTests( unittest.TestCase
 
             zum.addUser( id, '%s@example.com' % id, 'password' )
 
-        info_list = zum.enumerateUsers( id = u'abc',
+        info_list = zum.enumerateUsers( id = 'abc',
                                         exact_match=False )
         self.assertEqual( len( info_list ), 0 )
 

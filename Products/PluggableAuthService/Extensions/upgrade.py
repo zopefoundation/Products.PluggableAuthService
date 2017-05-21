@@ -32,6 +32,7 @@ $Id$
 """
 import logging
 import transaction
+import collections
 
 def _write(response, tool, message):
     logger = logging.getLogger('PluggableAuthService.upgrade.%s' % tool)
@@ -143,10 +144,10 @@ def _upgradeLocalRoleAssignments(self, RESPONSE=None):
             # with new spellings.
             seen[path] = 1
             if getattr( aq_base( obj ), '__ac_local_roles__', None ):
-                if not callable(obj.__ac_local_roles__):
+                if not isinstance(obj.__ac_local_roles__, collections.Callable):
                     new_map = {}
                     map = obj.__ac_local_roles__
-                    for key in map.keys():
+                    for key in list(map.keys()):
                         new_principals = user_folder.searchPrincipals(id=key)
                         if not new_principals:
                             _write(

@@ -57,7 +57,7 @@ $Id$
 """
 import os, sys
 
-from xml.dom.minidom import parseString
+from .xml.dom.minidom import parseString
 
 from Acquisition import Implicit
 from zope.interface import implements
@@ -142,7 +142,7 @@ class SimpleXMLExportImport(Implicit):
         if attr is None:
             return default
         value = attr.value
-        if isinstance(value, unicode) and self.encoding is not None:
+        if isinstance(value, str) and self.encoding is not None:
             value = value.encode(self.encoding)
         return value
 
@@ -164,7 +164,7 @@ class ZODBUserManagerExportImport(SimpleXMLExportImport):
             password_hash = self._getNodeAttr(user, 'password_hash', None)
 
             if user_id is None or login_name is None or password_hash is None:
-                raise ValueError, 'Invalid user record'
+                raise ValueError('Invalid user record')
 
             self.context.addUser(user_id, login_name, 'x')
             self.context._user_passwords[user_id] = password_hash
@@ -227,7 +227,7 @@ class ZODBGroupManagerExportImport(SimpleXMLExportImport):
         """ List the principal IDs of the group's members.
         """
         result = []
-        for k, v in self.context._principal_groups.items():
+        for k, v in list(self.context._principal_groups.items()):
             if group_id in v:
                 result.append(k)
         return tuple(result)
@@ -279,7 +279,7 @@ class ZODBRoleManagerExportImport(SimpleXMLExportImport):
         """ List the principal IDs of the group's members.
         """
         result = []
-        for k, v in self.context._principal_roles.items():
+        for k, v in list(self.context._principal_roles.items()):
             if role_id in v:
                 result.append(k)
         return tuple(result)
@@ -347,7 +347,7 @@ class DomainAuthHelperExportImport(SimpleXMLExportImport):
 
     def _getExportInfo(self):
         user_map = {}
-        for k, v in self.context._domain_map.items():
+        for k, v in list(self.context._domain_map.items()):
             user_map[k] = matches = []
             for match in v:
                 match = match.copy()
@@ -452,7 +452,7 @@ class ChallengeProtocolChooserExportImport(SimpleXMLExportImport):
         for mapping in root.getElementsByTagName('mapping'):
             label = self._getNodeAttr(mapping, 'label', None)
             protocols = self._getNodeAttr(mapping, 'protocols', '').split(',')
-            self.context._map[label] = tuple(filter(None, protocols))
+            self.context._map[label] = tuple([_f for _f in protocols if _f])
 
     def _getExportInfo(self):
         from Products.PluggableAuthService.plugins.ChallengeProtocolChooser \

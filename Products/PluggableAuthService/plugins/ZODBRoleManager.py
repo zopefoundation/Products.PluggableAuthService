@@ -178,14 +178,14 @@ class ZODBRoleManager( BasePlugin ):
 
         """ Return a list of the role IDs managed by this object.
         """
-        return self._roles.keys()
+        return list(self._roles.keys())
 
     security.declareProtected( ManageUsers, 'listRoleInfo' )
     def listRoleInfo( self ):
 
         """ Return a list of the role mappings.
         """
-        return self._roles.values()
+        return list(self._roles.values())
 
     security.declareProtected( ManageUsers, 'getRoleInfo' )
     def getRoleInfo( self, role_id ):
@@ -202,7 +202,7 @@ class ZODBRoleManager( BasePlugin ):
         o Raise KeyError on duplicate.
         """
         if self._roles.get( role_id ) is not None:
-            raise KeyError, 'Duplicate role: %s' % role_id
+            raise KeyError('Duplicate role: %s' % role_id)
 
         self._roles[ role_id ] = { 'id' : role_id
                                  , 'title' : title
@@ -231,7 +231,7 @@ class ZODBRoleManager( BasePlugin ):
         remove it from the roles in the root of the site (at the
         bottom of the Security tab at manage_access).
         """
-        for principal_id in self._principal_roles.keys():
+        for principal_id in list(self._principal_roles.keys()):
             self.removeRoleFromPrincipal( role_id, principal_id )
 
         del self._roles[ role_id ]
@@ -275,7 +275,7 @@ class ZODBRoleManager( BasePlugin ):
         """
         result = []
 
-        for k, v in self._principal_roles.items():
+        for k, v in list(self._principal_roles.items()):
             if role_id in v:
                 # should be at most one and only one mapping to 'k'
 
@@ -421,7 +421,7 @@ class ZODBRoleManager( BasePlugin ):
         remove it from the roles in the root of the site (at the
         bottom of the Security tab at manage_access).
         """
-        role_ids = filter( None, role_ids )
+        role_ids = [_f for _f in role_ids if _f]
 
         if not role_ids:
             message = 'no+roles+selected'

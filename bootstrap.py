@@ -20,7 +20,7 @@ use the -c option to specify an alternate configuration file.
 $Id$
 """
 
-import os, shutil, sys, tempfile, urllib2
+import os, shutil, sys, tempfile, urllib.request, urllib.error, urllib.parse
 
 tmpeggs = tempfile.mkdtemp()
 
@@ -28,8 +28,8 @@ try:
     import pkg_resources
 except ImportError:
     ez = {}
-    exec urllib2.urlopen('http://peak.telecommunity.com/dist/ez_setup.py'
-                         ).read() in ez
+    exec(urllib.request.urlopen('http://peak.telecommunity.com/dist/ez_setup.py'
+                         ).read(), ez)
     ez['use_setuptools'](to_dir=tmpeggs, download_delay=0)
 
     import pkg_resources

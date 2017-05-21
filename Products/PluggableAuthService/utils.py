@@ -55,7 +55,7 @@ def remove_stale_bytecode( arg, dirname, names ):
     """
         Troll product, removing compiled turds whose source is now gone.
     """
-    names = map( os.path.normcase, names )
+    names = list(map( os.path.normcase, names ))
 
     for name in names:
 
@@ -68,7 +68,7 @@ def remove_stale_bytecode( arg, dirname, names ):
                 fullname = os.path.join( dirname, name )
 
                 if __debug__:
-                    print "Removing stale bytecode file", fullname
+                    print("Removing stale bytecode file", fullname)
 
                 os.unlink( fullname )
 
@@ -91,7 +91,7 @@ class TestFileFinder:
                 return
 
             if 0 and __debug__: # XXX: don't care!
-                print "not a package", dir
+                print("not a package", dir)
 
             return
 
@@ -135,8 +135,8 @@ def get_suite( file ):
 
         try:
             suite = loader.loadTestsFromName(  module_name )
-        except ImportError, err:
-            print "Error importing %s\n%s" % (module_name, err)
+        except ImportError as err:
+            print("Error importing %s\n%s" % (module_name, err))
             raise
     return suite
 
@@ -162,7 +162,7 @@ def allTests( from_dir=product_dir, test_prefix='test' ):
 
 def makestr(s):
     """Converts 's' to a non-Unicode string"""
-    if isinstance(s, unicode):
+    if isinstance(s, str):
         s = s.encode('utf-8')
     return str(s)
 
@@ -186,7 +186,7 @@ def createKeywords(**kw):
     """
     keywords = sha()
 
-    items = kw.items()
+    items = list(kw.items())
     items.sort()
     for k, v in items:
         keywords.update(makestr(k))
@@ -247,7 +247,7 @@ def csrf_only(wrapped):
 
     arglen = len(args)
     if defaults is not None:
-        defaults = zip(args[arglen - len(defaults):], defaults)
+        defaults = list(zip(args[arglen - len(defaults):], defaults))
         arglen -= len(defaults)
 
     spec = (args, varargs, kwargs, defaults)
@@ -261,6 +261,6 @@ def csrf_only(wrapped):
     g = globals().copy()
     l = locals().copy()
     g['wrapped'] = wrapped
-    exec '\n'.join(lines) in g, l
+    exec('\n'.join(lines), g, l)
 
     return functools.wraps(wrapped)(l['wrapper'])

@@ -197,7 +197,7 @@ class CachingTests(pastc.PASTestCase):
         self.pas.http_auth.extractCredentials = \
             lambda req: { 'login': pastc.user_name
                         , 'password': pastc.user_password
-                        , 'extra': u'M\344dchen'
+                        , 'extra': 'M\344dchen'
                         }
 
         user = self.pas.validate(request)
@@ -224,7 +224,7 @@ class CachingTests(pastc.PASTestCase):
         self.pas.http_auth.extractCredentials = \
             lambda req: { 'login': pastc.user_name
                         , 'password': pastc.user_password
-                        , 'extra': u'M\344dchen'.encode('utf-16')
+                        , 'extra': 'M\344dchen'.encode('utf-16')
                         }
 
         user = self.pas.validate(request)

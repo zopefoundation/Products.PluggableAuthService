@@ -22,7 +22,7 @@ try:
     import Products.GenericSetup
 except ImportError:  # No GenericSetup, so no tests
 
-    print 'XXXX:  No GenericSetup!'
+    print('XXXX:  No GenericSetup!')
     def test_suite():
         return unittest.TestSuite()
 
@@ -747,7 +747,7 @@ else:
             self.assertEqual(len(plugin._domain_map), 1)
             self.assertEqual(plugin.title, TITLE)
 
-            username, match_list = plugin._domain_map.items()[0]
+            username, match_list = list(plugin._domain_map.items())[0]
             self.assertEqual(username, USER_ID)
             self.assertEqual(len(match_list), 1)
             match = match_list[0]

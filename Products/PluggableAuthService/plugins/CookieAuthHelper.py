@@ -18,7 +18,7 @@ $Id$
 
 from base64 import encodestring, decodestring
 from binascii import Error
-from urllib import quote, unquote
+from urllib.parse import quote, unquote
 
 from AccessControl.SecurityInfo import ClassSecurityInfo
 from AccessControl.Permissions import view
@@ -113,7 +113,7 @@ class CookieAuthHelper(Folder, BasePlugin):
         # Look in the request.form for the names coming from the login form
         login = request.form.get('__ac_name', '')
 
-        if login and request.form.has_key('__ac_password'):
+        if login and '__ac_password' in request.form:
             creds['login'] = login
             creds['password'] = request.form.get('__ac_password', '')
 
@@ -188,7 +188,7 @@ class CookieAuthHelper(Folder, BasePlugin):
         resp = req['RESPONSE']
 
         # If we set the auth cookie before, delete it now.
-        if resp.cookies.has_key(self.cookie_name):
+        if self.cookie_name in resp.cookies:
             del resp.cookies[self.cookie_name]
 
         # Redirect if desired.

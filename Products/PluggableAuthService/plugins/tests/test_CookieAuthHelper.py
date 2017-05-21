@@ -11,7 +11,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-import unittest, urllib
+import unittest, urllib.request, urllib.parse, urllib.error
 
 from Products.PluggableAuthService.tests.conformance \
      import ILoginPasswordHostExtractionPlugin_conformance
@@ -128,7 +128,7 @@ class CookieAuthHelperTests( unittest.TestCase
         helper.challenge(request, response)
         self.assertEqual(response.status, 302)
         self.assertEqual(len(response.headers), 3)
-        self.failUnless(response.headers['Location'].endswith(urllib.quote(testURL)))
+        self.failUnless(response.headers['Location'].endswith(urllib.parse.quote(testURL)))
         self.assertEqual(response.headers['Cache-Control'], 'no-cache')
         self.assertEqual(response.headers['Expires'], 'Sat, 01 Jan 2000 00:00:00 GMT')
 
@@ -147,8 +147,8 @@ class CookieAuthHelperTests( unittest.TestCase
         helper.challenge(request, response)
         self.assertEqual(response.status, 302)
         self.assertEqual(len(response.headers), 3)
-        self.failUnless(response.headers['Location'].endswith(urllib.quote(actualURL)))
-        self.failIf(response.headers['Location'].endswith(urllib.quote(vhmURL)))
+        self.failUnless(response.headers['Location'].endswith(urllib.parse.quote(actualURL)))
+        self.failIf(response.headers['Location'].endswith(urllib.parse.quote(vhmURL)))
         self.assertEqual(response.headers['Cache-Control'], 'no-cache')
         self.assertEqual(response.headers['Expires'], 'Sat, 01 Jan 2000 00:00:00 GMT')
 

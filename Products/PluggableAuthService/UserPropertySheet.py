@@ -21,7 +21,7 @@ from types import LongType
 from types import InstanceType
 from types import BooleanType
 
-StringTypes = (str, unicode, )
+StringTypes = (str, str, )
 _SequenceTypes = (tuple, list, )
 
 from DateTime.DateTime import DateTime
@@ -36,7 +36,7 @@ from Products.PluggableAuthService.interfaces.propertysheets \
 def _guessSchema( kw ):
 
     schema = []
-    for k, v in kw.items():
+    for k, v in list(kw.items()):
 
         ptype = 'string'
 
@@ -55,7 +55,7 @@ def _guessSchema( kw ):
         elif type( v ) in _SequenceTypes:
 
             if v and type( v[0] ) not in StringTypes:
-                raise ValueError, 'Property %s: sequence items not strings' % k
+                raise ValueError('Property %s: sequence items not strings' % k)
 
             ptype = 'lines'
 
@@ -67,13 +67,13 @@ def _guessSchema( kw ):
             if isinstance( v, DateTime ):
                 ptype = 'date'
             else:
-                raise ValueError, 'Property %s: unknown class' % k
+                raise ValueError('Property %s: unknown class' % k)
 
         elif isinstance( v, Image ):
             ptype = 'image'
 
         elif type( v ) not in StringTypes:
-            raise ValueError, 'Property %s: unknown type' % k
+            raise ValueError('Property %s: unknown type' % k)
 
         schema.append( ( k, ptype ) )
 

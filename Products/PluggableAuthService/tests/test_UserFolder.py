@@ -187,7 +187,7 @@ class UserFolderTests(pastc.PASTestCase):
                 self.users = []
                 self.acl_users = self
                 self.__allow_groups__ = self
-                for i in xrange(count):
+                for i in range(count):
                     self.users.append("Nobody")
 
             def getUsers(self):

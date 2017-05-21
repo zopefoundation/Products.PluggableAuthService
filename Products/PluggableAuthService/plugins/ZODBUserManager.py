@@ -160,10 +160,10 @@ class ZODBUserManager( BasePlugin, Cacheable ):
         view_name = createViewName('enumerateUsers', id or login)
 
 
-        if isinstance( id, basestring ):
+        if isinstance( id, str ):
             id = [ id ]
 
-        if isinstance( login, basestring ):
+        if isinstance( login, str ):
             login = [ login ]
 
         # Look in the cache first...
@@ -252,7 +252,7 @@ class ZODBUserManager( BasePlugin, Cacheable ):
 
         """ -> ( user_id_1, ... user_id_n )
         """
-        return self._user_passwords.keys()
+        return list(self._user_passwords.keys())
 
     security.declareProtected( ManageUsers, 'getUserInfo' )
     def getUserInfo( self, user_id ):
@@ -274,7 +274,7 @@ class ZODBUserManager( BasePlugin, Cacheable ):
           - 'user_id'
           - 'login_name'
         """
-        return [ self.getUserInfo( x ) for x in self._user_passwords.keys() ]
+        return [ self.getUserInfo( x ) for x in list(self._user_passwords.keys()) ]
 
     security.declareProtected( ManageUsers, 'getUserIdForLogin' )
     def getUserIdForLogin( self, login_name ):
@@ -298,10 +298,10 @@ class ZODBUserManager( BasePlugin, Cacheable ):
     def addUser( self, user_id, login_name, password ):
 
         if self._user_passwords.get( user_id ) is not None:
-            raise KeyError, 'Duplicate user ID: %s' % user_id
+            raise KeyError('Duplicate user ID: %s' % user_id)
 
         if self._login_to_userid.get( login_name ) is not None:
-            raise KeyError, 'Duplicate login name: %s' % login_name
+            raise KeyError('Duplicate login name: %s' % login_name)
 
         self._user_passwords[ user_id ] = self._pw_encrypt( password)
         self._login_to_userid[ login_name ] = user_id
@@ -348,7 +348,7 @@ class ZODBUserManager( BasePlugin, Cacheable ):
         # it.
         new_login_to_userid = OOBTree()
         errors = []
-        for old_login_name, user_id in self._login_to_userid.items():
+        for old_login_name, user_id in list(self._login_to_userid.items()):
             new_login_name = transform(old_login_name)
             if new_login_name in new_login_to_userid:
                 logger.error("User id %s: login name %r already taken.",
@@ -376,8 +376,8 @@ class ZODBUserManager( BasePlugin, Cacheable ):
                              ', '.join(errors))
 
         # Make sure we did not lose any users.
-        assert(len(self._login_to_userid.keys())
-               == len(new_login_to_userid.keys()))
+        assert(len(list(self._login_to_userid.keys()))
+               == len(list(new_login_to_userid.keys())))
         # Empty the main cache.
         view_name = createViewName('enumerateUsers')
         self.ZCacheable_invalidate(view_name=view_name)
@@ -388,7 +388,7 @@ class ZODBUserManager( BasePlugin, Cacheable ):
     def removeUser( self, user_id ):
 
         if self._user_passwords.get( user_id ) is None:
-            raise KeyError, 'Invalid user ID: %s' % user_id
+            raise KeyError('Invalid user ID: %s' % user_id)
 
         login_name = self._userid_to_login[ user_id ]
 
@@ -406,7 +406,7 @@ class ZODBUserManager( BasePlugin, Cacheable ):
     def updateUserPassword( self, user_id, password ):
 
         if self._user_passwords.get( user_id ) is None:
-            raise KeyError, 'Invalid user ID: %s' % user_id
+            raise KeyError('Invalid user ID: %s' % user_id)
 
         if password:
             self._user_passwords[ user_id ] = self._pw_encrypt( password )
@@ -538,7 +538,7 @@ class ZODBUserManager( BasePlugin, Cacheable ):
                           ):
         """ Remove one or more users via the ZMI.
         """
-        user_ids = filter( None, user_ids )
+        user_ids = [_f for _f in user_ids if _f]
 
         if not user_ids:
             message = 'no+users+selected'

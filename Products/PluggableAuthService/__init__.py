@@ -16,35 +16,35 @@
 $Id$
 """
 
-from utils import allTests
+from .utils import allTests
 
 from AccessControl.Permissions import manage_users as ManageUsers
 
 from Products.PluginRegistry import PluginRegistry
 
-from PluggableAuthService import registerMultiPlugin
+from .PluggableAuthService import registerMultiPlugin
 
-import PluggableAuthService
+from . import PluggableAuthService
 
-from permissions import ManageGroups
+from .permissions import ManageGroups
 
-from plugins import HTTPBasicAuthHelper as HBAH
-from plugins import InlineAuthHelper as IAH
-from plugins import CookieAuthHelper as CAH
-from plugins import SessionAuthHelper as SAH
-from plugins import DomainAuthHelper as DAH
-from plugins import ScriptablePlugin
-from plugins import ZODBGroupManager
-from plugins import ZODBUserManager
-from plugins import ZODBRoleManager
-from plugins import LocalRolePlugin
-from plugins import DelegatingMultiPlugin as DMP
-from plugins import SearchPrincipalsPlugin as SPP
-from plugins import RecursiveGroupsPlugin as RGP
-from plugins import DynamicGroupsPlugin as DGP
-from plugins import ChallengeProtocolChooser as CPC
-from plugins import RequestTypeSniffer as RTS
-from plugins import NotCompetentHelper as NCH
+from .plugins import HTTPBasicAuthHelper as HBAH
+from .plugins import InlineAuthHelper as IAH
+from .plugins import CookieAuthHelper as CAH
+from .plugins import SessionAuthHelper as SAH
+from .plugins import DomainAuthHelper as DAH
+from .plugins import ScriptablePlugin
+from .plugins import ZODBGroupManager
+from .plugins import ZODBUserManager
+from .plugins import ZODBRoleManager
+from .plugins import LocalRolePlugin
+from .plugins import DelegatingMultiPlugin as DMP
+from .plugins import SearchPrincipalsPlugin as SPP
+from .plugins import RecursiveGroupsPlugin as RGP
+from .plugins import DynamicGroupsPlugin as DGP
+from .plugins import ChallengeProtocolChooser as CPC
+from .plugins import RequestTypeSniffer as RTS
+from .plugins import NotCompetentHelper as NCH
 
 registerMultiPlugin(HBAH.HTTPBasicAuthHelper.meta_type)
 registerMultiPlugin(IAH.InlineAuthHelper.meta_type)
@@ -75,7 +75,7 @@ else:
 
 # monkey patch Zope to cause zmi logout to be PAS-aware
 from App.Management import Navigation
-from interfaces.authservice import IPluggableAuthService
+from .interfaces.authservice import IPluggableAuthService
 from zExceptions import Unauthorized
 
 def manage_zmi_logout(self, REQUEST, RESPONSE):

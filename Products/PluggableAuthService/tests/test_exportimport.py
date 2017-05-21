@@ -17,7 +17,7 @@ $Id$
 """
 import unittest
 from csv import reader
-from StringIO import StringIO
+from io import StringIO
 
 try:
     import Products.GenericSetup
@@ -127,7 +127,7 @@ else:
             filename, text, content_type = context._wrote[1]
             self.assertEqual(filename, 'PAS/.properties')
             self.assertEqual(content_type, 'text/plain')
-            lines = filter(None, [x.strip() for x in text.splitlines()])
+            lines = [_f for _f in [x.strip() for x in text.splitlines()] if _f]
             lines = sorted(lines)
             self.assertEqual(len(lines), 3)
             self.assertEqual(lines[0], '[DEFAULT]')
@@ -174,7 +174,7 @@ else:
             filename, text, content_type = context._wrote[1]
             self.assertEqual(filename, 'PAS/.properties')
             self.assertEqual(content_type, 'text/plain')
-            lines = filter(None, [x.strip() for x in text.splitlines()])
+            lines = [_f for _f in [x.strip() for x in text.splitlines()] if _f]
             lines = sorted(lines)
             self.assertEqual(len(lines), 3)
             self.assertEqual(lines[0], '[DEFAULT]')

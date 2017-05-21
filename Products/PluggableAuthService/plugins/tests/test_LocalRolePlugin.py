@@ -69,7 +69,7 @@ class FauxUser( Implicit ):
 
     def getRoles( self ):
 
-        return self._roles.keys()
+        return list(self._roles.keys())
 
     def _addRoles(self, roles):
         for role in roles:

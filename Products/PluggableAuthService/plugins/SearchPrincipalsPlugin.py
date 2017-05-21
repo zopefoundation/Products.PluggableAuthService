@@ -18,7 +18,7 @@
 
 # General Python imports
 import copy, os
-from urllib import quote_plus
+from urllib.parse import quote_plus
 
 # Zope imports
 from Acquisition import aq_base

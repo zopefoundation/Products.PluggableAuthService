@@ -24,7 +24,7 @@ from Products.PluggableAuthService.utils import directlyProvides
 from zope.interface import implements
 from ..interfaces.plugins import INotCompetentPlugin
 
-from conformance import IUserFolder_conformance
+from .conformance import IUserFolder_conformance
 
 class DummyPlugin(Implicit):
     pass
@@ -60,13 +60,13 @@ class DummyUserEnumerator( DummyPlugin ):
 
         # Both id and login can be strings or sequences.
         user_id = kw.get( 'id' )
-        if isinstance( user_id, basestring ):
+        if isinstance( user_id, str ):
             user_id = [ user_id ]
         if user_id and _id in user_id:
             return tuple(result)
 
         login = kw.get( 'login' )
-        if isinstance( login, basestring ):
+        if isinstance( login, str ):
             login = [ login ]
         if login and self._login in login:
             return tuple(result)
@@ -295,7 +295,7 @@ class FauxResponse:
         pass
 
     def notFoundError( self, message ):
-        raise FauxNotFoundError, message
+        raise FauxNotFoundError(message)
 
     def _unauthorized(self):
         self.challenger = self
@@ -369,7 +369,7 @@ class FauxUser( Implicit ):
 
     def getGroups(self):
 
-        return self._groups.keys()
+        return list(self._groups.keys())
 
     def allowed( self, value, roles ):
 
@@ -1209,7 +1209,7 @@ class PluggableAuthServiceTests( unittest.TestCase
 
         try:
             zcuf.getUser('foo')
-        except KeyError, e:
+        except KeyError as e:
             self.fail('exception should be caught by PAS: %s' % e)
 
     def test__verifyUser_no_plugins( self ):
@@ -2755,20 +2755,20 @@ class PluggableAuthServiceTests( unittest.TestCase
         request['login'] = 'foo'
         request['HTTP_REFERER'] = ''
         extracted = creds_store.extractCredentials(request)
-        self.failIf(len(extracted.keys()) == 0)
+        self.failIf(len(list(extracted.keys())) == 0)
 
         # Now call the logout method - the credentials should go away
         newSecurityManager(None, FauxUser('foo', 'foo'))
         zcuf.logout(request)
         extracted = creds_store.extractCredentials(request)
-        self.failUnless(len(extracted.keys()) == 0)
+        self.failUnless(len(list(extracted.keys())) == 0)
 
     def test_applyTransform( self ):
         zcuf = self._makeOne()
         self.assertEqual(zcuf.applyTransform(' User '), ' User ')
         zcuf.login_transform =  'lower'
         self.assertEqual(zcuf.applyTransform(' User '), 'user')
-        self.assertEqual(zcuf.applyTransform(u' User '), u'user')
+        self.assertEqual(zcuf.applyTransform(' User '), 'user')
         self.assertEqual(zcuf.applyTransform(''), '')
         self.assertEqual(zcuf.applyTransform(None), None)
         self.assertEqual(zcuf.applyTransform([' User ']), ['user'])

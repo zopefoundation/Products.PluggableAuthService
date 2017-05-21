@@ -233,7 +233,7 @@ class ZODBGroupManagerTests( unittest.TestCase
         for id in ID_LIST:
             zgm.addGroup(id, 'Group %s' % id, 'This is group, %s' % id)
 
-        info = zgm.enumerateGroups(id=u'foo', exact_match=True)
+        info = zgm.enumerateGroups(id='foo', exact_match=True)
         self.assertEqual(len(info), 1)
         self.assertEqual(info[0]['id'], 'foo')
 

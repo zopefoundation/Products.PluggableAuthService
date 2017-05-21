@@ -258,7 +258,7 @@ class DomainAuthHelper(BasePlugin):
             if filter is None:  # legacy data
                 filter = _MATCH_TYPE_FILTERS[m_type](m_string)
 
-            matches.extend([match_info for x in candidates if filter(x)])
+            matches.extend([match_info for x in candidates if list(filter(x))])
 
         return tuple(matches)
 
@@ -266,7 +266,7 @@ class DomainAuthHelper(BasePlugin):
     security.declareProtected(manage_users, 'listMatchTypes')
     def listMatchTypes(self):
         """ Return a sequence of possible match types """
-        return _MATCH_TYPE_FILTERS.keys()
+        return list(_MATCH_TYPE_FILTERS.keys())
 
 
     security.declareProtected(manage_users, 'listMappingsForUser')
@@ -304,7 +304,7 @@ class DomainAuthHelper(BasePlugin):
             msg = 'Unknown match type %s' % match_type
         except re.error:
             msg = 'Invalid regular expression %s' % match_string
-        except ValueError, e:
+        except ValueError as e:
             msg = 'Invalid match string %s (%s)' % (match_string, e)
 
         if not match_string:
@@ -314,7 +314,7 @@ class DomainAuthHelper(BasePlugin):
             if REQUEST is not None:
                 return self.manage_map(manage_tabs_message=msg)
 
-            raise ValueError, msg
+            raise ValueError(msg)
 
         record = self._domain_map.get(user_id, [])
 
