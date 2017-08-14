@@ -148,7 +148,7 @@ And with valid credentials the reqeuest should succeed:
   HTTP/1.1 200 OK
   ...
   Content-Length: 140
-  Content-Type: text/xml
+  Content-Type: text/xml; charset=utf-8
   <BLANKLINE>
   <?xml version='1.0'?>
   <methodResponse>
