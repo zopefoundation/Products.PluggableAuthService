@@ -143,11 +143,13 @@ And with valid credentials the reqeuest should succeed:
   ... <methodCall>
   ... <methodName>test_script</methodName>
   ... </methodCall>
-  ... """ % (folder_name, username, password), handle_errors=True)
+  ... """ % (folder_name, username, password), handle_errors=True
+  ... ) # doctest: +NORMALIZE_WHITESPACE +ELLIPSIS
   HTTP/1.1 200 OK
   ...
   Content-Length: 140
   Content-Type: text/xml; charset=utf-8
+  <BLANKLINE>
   <?xml version='1.0'?>
   <methodResponse>
   <params>
@@ -182,19 +184,19 @@ normal (eg: browser) request:
   >>> print http(r"""
   ... GET /%s/test_script HTTP/1.1
   ... """ % (folder_name), handle_errors=True)
-  HTTP/1.1 302 Found...
+  HTTP/1.1 302 ...
 
 And the same for a WebDAV request:
 
   >>> print http(r"""
   ... PROPFIND /%s/test_script HTTP/1.1
   ... """ % (folder_name), handle_errors=True)
-  HTTP/1.1 302 Found...
+  HTTP/1.1 302 ...
 
   >>> print http(r"""
   ... GET /%s/test_script/manage_DAVget HTTP/1.1
   ... """ % (folder_name), handle_errors=True)
-  HTTP/1.1 302 Found...
+  HTTP/1.1 302 ...
 
 And for a XML-RPC request:
 
@@ -206,7 +208,7 @@ And for a XML-RPC request:
   ... <methodName>test_script</methodName>
   ... </methodCall>
   ... """ % (folder_name), handle_errors=True)
-  HTTP/1.1 302 Found...
+  HTTP/1.1 302 ...
 
 However, not all WebDAV and XML-RPC clients understand the
 redirect. Even worse, they will not be able to display the login form
@@ -242,7 +244,7 @@ normal (eg: browser) request:
   >>> print http(r"""
   ... GET /%s/test_script HTTP/1.1
   ... """ % (folder_name), handle_errors=True)
-  HTTP/1.1 302 Found...
+  HTTP/1.1 302 ...
 
 A WebDAV request should result in a 401 response status:
 
