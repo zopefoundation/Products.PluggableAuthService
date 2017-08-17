@@ -1,12 +1,13 @@
 language: python
 sudo: false
+dist: trusty
 python:
     - "2.7"
 install:
     - python bootstrap.py
     - bin/buildout
 script:
-    - bin/test -v
+    - bin/test -pvc
 notifications:
     email: false
 cache:

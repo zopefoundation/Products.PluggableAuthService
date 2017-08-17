@@ -6,3 +6,5 @@ bin/
 develop-eggs/
 eggs/
 parts/
+.mr.developer.cfg
+src/
