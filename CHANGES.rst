@@ -4,7 +4,8 @@ Change Log
 1.12.0 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Do not fail when our base profiles are already registered.
+  This may happen in tests if our ``initialize`` code is called twice.
 
 
 1.11.0 (2016-03-01)

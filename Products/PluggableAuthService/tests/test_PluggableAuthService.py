@@ -764,7 +764,7 @@ class PluggableAuthServiceTests( unittest.TestCase
         from Products.PluggableAuthService.interfaces.plugins \
             import IExtractionPlugin
 
-        from AccessControl.User import UnrestrictedUser
+        from AccessControl.users import UnrestrictedUser
 
         from Products.PluggableAuthService import PluggableAuthService
 
@@ -879,7 +879,7 @@ class PluggableAuthServiceTests( unittest.TestCase
         from Products.PluggableAuthService.interfaces.plugins \
             import IExtractionPlugin, IAuthenticationPlugin
 
-        from AccessControl.User import UnrestrictedUser
+        from AccessControl.users import UnrestrictedUser
 
         from Products.PluggableAuthService import PluggableAuthService
 
@@ -930,7 +930,7 @@ class PluggableAuthServiceTests( unittest.TestCase
         from Products.PluggableAuthService.interfaces.plugins \
             import IExtractionPlugin, IAuthenticationPlugin
 
-        from AccessControl.User import UnrestrictedUser
+        from AccessControl.users import UnrestrictedUser
 
         from Products.PluggableAuthService import PluggableAuthService
 
@@ -1008,7 +1008,7 @@ class PluggableAuthServiceTests( unittest.TestCase
         from Products.PluggableAuthService.interfaces.plugins \
             import IExtractionPlugin, IAuthenticationPlugin
 
-        from AccessControl.User import UnrestrictedUser
+        from AccessControl.users import UnrestrictedUser
 
         from Products.PluggableAuthService import PluggableAuthService
 
@@ -1411,7 +1411,7 @@ class PluggableAuthServiceTests( unittest.TestCase
 
     def test__findEmergencyUser_no_plugins( self ):
 
-        from AccessControl.User import UnrestrictedUser
+        from AccessControl.users import UnrestrictedUser
 
         from Products.PluggableAuthService import PluggableAuthService
 

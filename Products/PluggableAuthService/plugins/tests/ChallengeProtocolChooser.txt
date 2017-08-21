@@ -158,6 +158,7 @@ And with valid credentials the reqeuest should succeed:
   </param>
   </params>
   </methodResponse>
+  <BLANKLINE>
 
 Adding a Cookie Auth Helper now to test the correct behaviour of the
 Challenge Protocol Helper.
