@@ -17,7 +17,7 @@ $Id$
 """
 import unittest
 from csv import reader
-from StringIO import StringIO
+from six import StringIO
 
 try:
     import Products.GenericSetup
