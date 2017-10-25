@@ -20,6 +20,7 @@ try:
 except:
     from sha import new as sha
 
+import six
 
 from AccessControl import ClassSecurityInfo
 from App.Common import package_home
@@ -162,7 +163,7 @@ def allTests( from_dir=product_dir, test_prefix='test' ):
 
 def makestr(s):
     """Converts 's' to a non-Unicode string"""
-    if isinstance(s, unicode):
+    if isinstance(s, six.text_type):
         s = s.encode('utf-8')
     return str(s)
 

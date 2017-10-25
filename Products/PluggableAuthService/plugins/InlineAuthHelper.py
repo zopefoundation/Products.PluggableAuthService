@@ -17,7 +17,6 @@ $Id$
 """
 
 from base64 import encodestring, decodestring
-from urllib import quote
 
 from AccessControl.SecurityInfo import ClassSecurityInfo
 from OFS.Folder import Folder

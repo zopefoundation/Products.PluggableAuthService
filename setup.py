@@ -48,6 +48,7 @@ setup(name='Products.%s' % NAME,
       zip_safe=False,
       install_requires=[
           'setuptools',
+          'six',
           'Zope2 >= 4.0a4',
           'Products.PluginRegistry >= 1.5',
           'Products.GenericSetup >= 1.9.0',

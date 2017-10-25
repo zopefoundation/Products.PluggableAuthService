@@ -15,8 +15,11 @@
 
 $Id$
 """
-from sets import Set
-from urllib import quote_plus
+try:
+    from sets import Set as set
+except ImportError:
+    pass
+
 from OFS.Folder import Folder
 from AccessControl import ClassSecurityInfo
 from AccessControl.Permissions import manage_users as ManageUsers
@@ -37,6 +40,7 @@ class IScriptablePlugin(Interface):
     """
 
 import Products
+
 
 manage_addScriptablePluginForm = PageTemplateFile(
     'www/spAdd', globals(), __name__='manage_addScriptablePluginForm' )
@@ -115,9 +119,9 @@ class ScriptablePlugin(Folder, BasePlugin):
         myId = self.getId()
         pas_instance = self._getPAS()
         plugins = pas_instance._getOb( 'plugins' )
-        curr_interfaces = Set(providedBy(self))
+        curr_interfaces = set(providedBy(self))
 
-        del_interfaces = Set([x for x in providedBy(self) if id in x.names()])
+        del_interfaces = set([x for x in providedBy(self) if id in x.names()])
 
         for interface in del_interfaces:
             if myId in plugins.listPluginIds( interface ):

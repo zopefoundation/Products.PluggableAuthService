@@ -21,7 +21,9 @@ from types import LongType
 from types import InstanceType
 from types import BooleanType
 
-StringTypes = (str, unicode, )
+import six
+
+StringTypes = (str, six.text_type, )
 _SequenceTypes = (tuple, list, )
 
 from DateTime.DateTime import DateTime
