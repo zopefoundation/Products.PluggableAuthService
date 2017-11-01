@@ -15,11 +15,6 @@
 
 $Id$
 """
-try:
-    from sets import Set as set
-except ImportError:
-    pass
-
 from OFS.Folder import Folder
 from AccessControl import ClassSecurityInfo
 from AccessControl.Permissions import manage_users as ManageUsers
