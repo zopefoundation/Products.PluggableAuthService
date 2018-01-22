@@ -18,7 +18,7 @@ $Id$
 
 from base64 import encodestring, decodestring
 from binascii import Error
-from urllib import quote, unquote
+from six.moves.urllib.parse import quote, unquote
 
 from AccessControl.SecurityInfo import ClassSecurityInfo
 from AccessControl.Permissions import view

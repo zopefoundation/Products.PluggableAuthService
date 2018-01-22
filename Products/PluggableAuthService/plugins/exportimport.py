@@ -57,6 +57,7 @@ $Id$
 """
 import os, sys
 
+import six
 from xml.dom.minidom import parseString
 
 from Acquisition import Implicit
@@ -142,7 +143,7 @@ class SimpleXMLExportImport(Implicit):
         if attr is None:
             return default
         value = attr.value
-        if isinstance(value, unicode) and self.encoding is not None:
+        if isinstance(value, six.text_type) and self.encoding is not None:
             value = value.encode(self.encoding)
         return value
 

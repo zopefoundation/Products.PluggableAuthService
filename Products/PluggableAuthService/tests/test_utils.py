@@ -13,6 +13,8 @@
 ##############################################################################
 import unittest
 
+import six
+
 
 class Test_createViewName(unittest.TestCase):
 
@@ -264,10 +266,10 @@ def _createHashedValue(items):
     items = list(items)
     items.sort()
     for k, v in items:
-        if isinstance(k, unicode):
+        if isinstance(k, six.text_type):
             k = k.encode('utf-8')
         hasher.update(k)
-        if isinstance(v, unicode):
+        if isinstance(v, six.text_type):
             v = v.encode('utf-8')
         hasher.update(v)
     return hasher.hexdigest()
