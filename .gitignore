@@ -1,10 +1,14 @@
 *.pyc
 *.pyo
 *.egg-info
+.coverage
 .installed.cfg
+.tox/
 bin/
+coverage.xml
 develop-eggs/
 eggs/
+htmlcov/
 parts/
 .mr.developer.cfg
 src/
