@@ -1,17 +1,20 @@
 language: python
 sudo: false
-dist: trusty
 python:
-    - "2.7"
+    - 2.7
 install:
-    - python bootstrap.py
-    - bin/buildout
+    - pip install six==1.10.0 # force to avoid conflict with zc.recipe.testrunner
+    - pip install -U setuptools==33.1.1
+    - pip install zc.buildout coverage coveralls
+    - buildout bootstrap
+    - buildout
 script:
-    - bin/test -pvc
+    - coverage run bin/test --all -v
+after_success:
+    - coveralls
 notifications:
     email: false
 cache:
   pip: true
   directories:
     - eggs/
-
