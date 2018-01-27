@@ -304,7 +304,7 @@ class DomainAuthHelper(BasePlugin):
             msg = 'Unknown match type %s' % match_type
         except re.error:
             msg = 'Invalid regular expression %s' % match_string
-        except ValueError, e:
+        except ValueError as e:
             msg = 'Invalid match string %s (%s)' % (match_string, e)
 
         if not match_string:
@@ -314,7 +314,7 @@ class DomainAuthHelper(BasePlugin):
             if REQUEST is not None:
                 return self.manage_map(manage_tabs_message=msg)
 
-            raise ValueError, msg
+            raise ValueError(msg)
 
         record = self._domain_map.get(user_id, [])
 

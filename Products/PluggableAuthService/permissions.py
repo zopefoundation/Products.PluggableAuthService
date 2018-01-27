@@ -45,7 +45,7 @@ def setDefaultRoles( permission, roles ):
         from AccessControl.Permission import ApplicationDefaultPermissions
         import Products
         registered = _registeredPermissions
-        if not registered.has_key( permission ):
+        if not permission in registered:
             registered[ permission ] = 1
             Products.__ac_permissions__=(
                 Products.__ac_permissions__+((permission,(),roles),))

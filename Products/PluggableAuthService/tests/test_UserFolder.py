@@ -30,6 +30,9 @@ from Products.PluggableAuthService.events import CredentialsUpdated
 from Products.PluggableAuthService.events import PASEventNotify
 from Products.PluggableAuthService.events import userCredentialsUpdatedHandler
 
+from six.moves import range
+
+
 @adapter(IPrincipalCreatedEvent)
 def userCreatedHandler(event):
     pas = event.principal.aq_parent
@@ -187,7 +190,7 @@ class UserFolderTests(pastc.PASTestCase):
                 self.users = []
                 self.acl_users = self
                 self.__allow_groups__ = self
-                for i in xrange(count):
+                for i in range(count):
                     self.users.append("Nobody")
 
             def getUsers(self):

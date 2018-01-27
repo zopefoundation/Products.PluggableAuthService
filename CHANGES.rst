@@ -9,6 +9,8 @@ Change Log
 
 - Improve Python 3 support using six.
 
+- Prepare for Python 2 / 3 compatibility.
+
 1.11.0 (2016-03-01)
 -------------------
 

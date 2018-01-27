@@ -16,15 +16,13 @@
 $Id$
 """
 
-from utils import allTests
+from .utils import allTests
 
 from AccessControl.Permissions import manage_users as ManageUsers
 
-from Products.PluginRegistry import PluginRegistry
+from .PluggableAuthService import registerMultiPlugin
 
-from PluggableAuthService import registerMultiPlugin
-
-import PluggableAuthService
+from . import PluggableAuthService
 
 from permissions import ManageGroups
 

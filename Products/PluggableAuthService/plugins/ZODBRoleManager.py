@@ -202,7 +202,7 @@ class ZODBRoleManager( BasePlugin ):
         o Raise KeyError on duplicate.
         """
         if self._roles.get( role_id ) is not None:
-            raise KeyError, 'Duplicate role: %s' % role_id
+            raise KeyError('Duplicate role: %s' % role_id)
 
         self._roles[ role_id ] = { 'id' : role_id
                                  , 'title' : title

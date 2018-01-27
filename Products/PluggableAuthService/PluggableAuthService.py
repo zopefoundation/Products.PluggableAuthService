@@ -72,6 +72,9 @@ from .utils import createViewName
 from .utils import createKeywords
 from .utils import classImplements
 
+import six
+
+
 security = ModuleSecurityInfo(
     'Products.PluggableAuthService.PluggableAuthService' )
 
@@ -323,7 +326,7 @@ class PluggableAuthService( Folder, Cacheable ):
                     info.update( user_info )
                     info[ 'userid' ] = info[ 'id' ]
                     info[ 'principal_type' ] = 'user'
-                    if not info.has_key('title'):
+                    if 'title' not in info:
                         info[ 'title' ] = info[ 'login' ]
                     result.append(info)
 
@@ -367,7 +370,7 @@ class PluggableAuthService( Folder, Cacheable ):
         if search_name:
             if kw.get('id') is not None:
                 del kw['id']
-            if not kw.has_key('title'):
+            if 'title' not in kw:
                 kw['title'] = kw['name']
 
         plugins = self._getOb( 'plugins' )
@@ -381,7 +384,7 @@ class PluggableAuthService( Folder, Cacheable ):
                     info.update( group_info )
                     info[ 'groupid' ] = info[ 'id' ]
                     info[ 'principal_type' ] = 'group'
-                    if not info.has_key('title'):
+                    if 'title' not in info:
                         info[ 'title' ] = "(Group) %s" % info[ 'groupid' ]
                     result.append(info)
             except _SWALLOWABLE_PLUGIN_EXCEPTIONS:
@@ -413,7 +416,7 @@ class PluggableAuthService( Folder, Cacheable ):
         search_id = kw.get( 'id', None )
         search_name = kw.get( 'name', None )
         if search_name:
-            if not kw.has_key('title'):
+            if 'title' not in kw:
                 kw['title'] = search_name
             kw['login'] = search_name
 
@@ -1081,7 +1084,7 @@ class PluggableAuthService( Folder, Cacheable ):
         transform = self._get_login_transform_method()
         if not transform:
             return value
-        if isinstance(value, basestring):
+        if isinstance(value, six.string_types):
             return transform(value)
         result = []
         for v in value:

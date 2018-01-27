@@ -26,6 +26,9 @@ from ..interfaces.plugins import INotCompetentPlugin
 
 from conformance import IUserFolder_conformance
 
+import six
+
+
 class DummyPlugin(Implicit):
     pass
 
@@ -60,13 +63,13 @@ class DummyUserEnumerator( DummyPlugin ):
 
         # Both id and login can be strings or sequences.
         user_id = kw.get( 'id' )
-        if isinstance( user_id, basestring ):
+        if isinstance( user_id, six.string_types ):
             user_id = [ user_id ]
         if user_id and _id in user_id:
             return tuple(result)
 
         login = kw.get( 'login' )
-        if isinstance( login, basestring ):
+        if isinstance( login, six.string_types ):
             login = [ login ]
         if login and self._login in login:
             return tuple(result)
@@ -267,7 +270,7 @@ class FauxRequest( object ):
 
         return self._dict.get( key, default )
 
-    def has_key( self, key ):
+    def __contains__(self, key):
         return key in self._dict
 
     def _authUserPW( self ):
@@ -295,7 +298,7 @@ class FauxResponse:
         pass
 
     def notFoundError( self, message ):
-        raise FauxNotFoundError, message
+        raise FauxNotFoundError(message)
 
     def _unauthorized(self):
         self.challenger = self
@@ -1209,7 +1212,7 @@ class PluggableAuthServiceTests( unittest.TestCase
 
         try:
             zcuf.getUser('foo')
-        except KeyError, e:
+        except KeyError as e:
             self.fail('exception should be caught by PAS: %s' % e)
 
     def test__verifyUser_no_plugins( self ):
