@@ -124,7 +124,7 @@ class NotCompetent_byRoles( NotCompetentBase ):
         + PropertyManager.manage_options
         + NotCompetentBase.manage_options[ 1:-1 ]
         )
-  
+
     def isNotCompetentToAuthenticate( self, request ):
         return self._getHigherLevelUser( request, self.roles ) is not None
 
