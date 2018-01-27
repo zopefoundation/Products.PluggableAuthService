@@ -135,7 +135,7 @@ class CachingTests(pastc.PASTestCase):
         request._auth = 'Basic %s' % pastc.user_auth
 
         user = self.pas.validate(request)
-        self.failIf(user is None)
+        self.assertIsNotNone(user)
         self.assertEqual(user.getId(), pastc.user_name)
         self.assertEqual(user.getRoles(), ['Authenticated', pastc.user_role])
 
@@ -155,7 +155,7 @@ class CachingTests(pastc.PASTestCase):
         request.steps = list(self.doc.getPhysicalPath())
 
         user = self.pas.validate(request)
-        self.failUnless(user is None)
+        self.assertIsNone(user)
 
         self.assertCacheStats(0, 0, 0)
 
@@ -174,7 +174,7 @@ class CachingTests(pastc.PASTestCase):
                         }
 
         user = self.pas.validate(request)
-        self.failIf(user is None)
+        self.assertIsNotNone(user)
         self.assertEqual(user.getId(), pastc.user_name)
         self.assertEqual(user.getRoles(), ['Authenticated', pastc.user_role])
 
@@ -201,7 +201,7 @@ class CachingTests(pastc.PASTestCase):
                         }
 
         user = self.pas.validate(request)
-        self.failIf(user is None)
+        self.assertIsNotNone(user)
         self.assertEqual(user.getId(), pastc.user_name)
         self.assertEqual(user.getRoles(), ['Authenticated', pastc.user_role])
 
@@ -228,7 +228,7 @@ class CachingTests(pastc.PASTestCase):
                         }
 
         user = self.pas.validate(request)
-        self.failIf(user is None)
+        self.assertIsNotNone(user)
         self.assertEqual(user.getId(), pastc.user_name)
         self.assertEqual(user.getRoles(), ['Authenticated', pastc.user_role])
 
@@ -251,7 +251,7 @@ class CachingTests(pastc.PASTestCase):
         self.assertCacheStats(2, 2, 0)
 
         user = self.pas.getUserById(user_id)
-        self.failIf(user is None)
+        self.assertIsNotNone(user)
         self.assertEqual(user.getId(), user_id)
         self.assertEqual(user.getRoles(), ['Authenticated'])
 

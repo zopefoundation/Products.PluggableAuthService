@@ -128,7 +128,7 @@ class CookieAuthHelperTests( unittest.TestCase
         helper.challenge(request, response)
         self.assertEqual(response.status, 302)
         self.assertEqual(len(response.headers), 3)
-        self.failUnless(response.headers['Location'].endswith(urllib.quote(testURL)))
+        self.assertTrue(response.headers['Location'].endswith(urllib.quote(testURL)))
         self.assertEqual(response.headers['Cache-Control'], 'no-cache')
         self.assertEqual(response.headers['Expires'], 'Sat, 01 Jan 2000 00:00:00 GMT')
 
@@ -147,8 +147,8 @@ class CookieAuthHelperTests( unittest.TestCase
         helper.challenge(request, response)
         self.assertEqual(response.status, 302)
         self.assertEqual(len(response.headers), 3)
-        self.failUnless(response.headers['Location'].endswith(urllib.quote(actualURL)))
-        self.failIf(response.headers['Location'].endswith(urllib.quote(vhmURL)))
+        self.assertTrue(response.headers['Location'].endswith(urllib.quote(actualURL)))
+        self.assertFalse(response.headers['Location'].endswith(urllib.quote(vhmURL)))
         self.assertEqual(response.headers['Cache-Control'], 'no-cache')
         self.assertEqual(response.headers['Expires'], 'Sat, 01 Jan 2000 00:00:00 GMT')
 

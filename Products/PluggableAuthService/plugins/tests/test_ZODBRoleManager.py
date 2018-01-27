@@ -219,7 +219,7 @@ class ZODBRoleManagerTests( unittest.TestCase
         self.assertEqual( len( info_list ), len( ID_LIST ) )
 
         for info in info_list:
-            self.failUnless( info[ 'id' ] in ID_LIST )
+            self.assertTrue( info[ 'id' ] in ID_LIST )
 
         SUBSET = ID_LIST[:3]
 
@@ -228,7 +228,7 @@ class ZODBRoleManagerTests( unittest.TestCase
         self.assertEqual( len( info_list ), len( SUBSET ) )
 
         for info in info_list:
-            self.failUnless( info[ 'id' ] in SUBSET )
+            self.assertTrue( info[ 'id' ] in SUBSET )
 
     def test_enumerateRoles_exact_nonesuch( self ):
 
@@ -275,14 +275,14 @@ class ZODBRoleManagerTests( unittest.TestCase
 
         roles = zrm.getRolesForPrincipal( user )
         self.assertEqual( len( roles ), 1 )
-        self.failUnless( 'test1' in roles )
+        self.assertTrue( 'test1' in roles )
 
         zrm.assignRoleToPrincipal( 'test2', 'foo' )
 
         roles = zrm.getRolesForPrincipal( user )
         self.assertEqual( len( roles ), 2 )
-        self.failUnless( 'test1' in roles )
-        self.failUnless( 'test2' in roles )
+        self.assertTrue( 'test1' in roles )
+        self.assertTrue( 'test2' in roles )
 
     def test_assignRoleToPrincipal_group( self ):
 
@@ -302,7 +302,7 @@ class ZODBRoleManagerTests( unittest.TestCase
 
         roles = zrm.getRolesForPrincipal( user )
         self.assertEqual( len( roles ), 1 )
-        self.failUnless( 'test1' in roles )
+        self.assertTrue( 'test1' in roles )
 
     def test_assignRoleToPrincipal_new( self ):
 
@@ -314,7 +314,7 @@ class ZODBRoleManagerTests( unittest.TestCase
 
         new = zrm.assignRoleToPrincipal( 'test', 'foo' )
 
-        self.failUnless( new )
+        self.assertTrue( new )
 
         assigned = [x[0] for x in zrm.listAssignedPrincipals( 'test' )]
 
@@ -331,7 +331,7 @@ class ZODBRoleManagerTests( unittest.TestCase
         zrm.assignRoleToPrincipal( 'test', 'foo' )
         new = zrm.assignRoleToPrincipal( 'test', 'foo' )
 
-        self.failIf( new )
+        self.assertFalse( new )
 
         assigned = [x[0] for x in zrm.listAssignedPrincipals( 'test' )]
 
@@ -350,7 +350,7 @@ class ZODBRoleManagerTests( unittest.TestCase
 
         new = zrm.assignRoleToPrincipal( 'test', 'foo' )
 
-        self.failUnless( new )
+        self.assertTrue( new )
 
         assigned = [x[1] for x in zrm.listAssignedPrincipals( 'test' )]
 
@@ -388,19 +388,19 @@ class ZODBRoleManagerTests( unittest.TestCase
 
         assigned = [x[0] for x in zrm.listAssignedPrincipals( 'test' )]
         self.assertEqual( len( assigned ), 3 )
-        self.failUnless( 'foo' in assigned )
-        self.failUnless( 'bar' in assigned )
-        self.failUnless( 'baz' in assigned )
+        self.assertTrue( 'foo' in assigned )
+        self.assertTrue( 'bar' in assigned )
+        self.assertTrue( 'baz' in assigned )
 
         removed = zrm.removeRoleFromPrincipal( 'test', 'bar' )
 
-        self.failUnless( removed )
+        self.assertTrue( removed )
 
         assigned = [x[0] for x in zrm.listAssignedPrincipals( 'test' )]
         self.assertEqual( len( assigned ), 2 )
-        self.failUnless( 'foo' in assigned )
-        self.failIf( 'bar' in assigned )
-        self.failUnless( 'baz' in assigned )
+        self.assertTrue( 'foo' in assigned )
+        self.assertFalse( 'bar' in assigned )
+        self.assertTrue( 'baz' in assigned )
 
     def test_removeRoleFromPrincipal_noop( self ):
 
@@ -414,12 +414,12 @@ class ZODBRoleManagerTests( unittest.TestCase
 
         assigned = [x[0] for x in zrm.listAssignedPrincipals( 'test' )]
         self.assertEqual( len( assigned ), 2 )
-        self.failUnless( 'foo' in assigned )
-        self.failUnless( 'baz' in assigned )
+        self.assertTrue( 'foo' in assigned )
+        self.assertTrue( 'baz' in assigned )
 
         removed = zrm.removeRoleFromPrincipal( 'test', 'bar' )
 
-        self.failIf( removed )
+        self.assertFalse( removed )
 
     def test_listAssignedPrincipals_duplicate_principals( self ):
         from Products.PluggableAuthService.plugins.ZODBRoleManager \
@@ -485,12 +485,12 @@ class ZODBRoleManagerTests( unittest.TestCase
 
         zrm.addRole( 'test' )
         zrm.assignRoleToPrincipal( 'test', 'foo' )
-        self.failUnless( 'test' in zrm.getRolesForPrincipal( user ) )
+        self.assertTrue( 'test' in zrm.getRolesForPrincipal( user ) )
 
         zrm.removeRole( 'test' )
         zrm.addRole( 'test' )
 
-        self.failIf( 'test' in zrm.getRolesForPrincipal( user ) )
+        self.assertFalse( 'test' in zrm.getRolesForPrincipal( user ) )
 
     def test_manage_assignRoleToPrincipal_POST_permissions(self):
         USER_ID = 'testuser'

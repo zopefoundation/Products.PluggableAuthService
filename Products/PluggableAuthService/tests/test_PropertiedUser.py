@@ -132,7 +132,7 @@ class PropertiedUserTests( unittest.TestCase
 
         local_roles = user.getRolesInContext( faux )
         self.assertEqual( len( local_roles ), 1 )
-        self.failUnless( 'Manager' in local_roles )
+        self.assertTrue( 'Manager' in local_roles )
 
     def test_getRolesInContext_group_overlap( self ):
 
@@ -146,8 +146,8 @@ class PropertiedUserTests( unittest.TestCase
 
         local_roles = user.getRolesInContext( faux )
         self.assertEqual( len( local_roles ), 2 )
-        self.failUnless( 'Manager' in local_roles )
-        self.failUnless( 'Owner' in local_roles )
+        self.assertTrue( 'Manager' in local_roles )
+        self.assertTrue( 'Owner' in local_roles )
 
     def test_getRolesInContext_group_nomatch( self ):
 
@@ -172,7 +172,7 @@ class PropertiedUserTests( unittest.TestCase
 
         local_roles = user.getRolesInContext( faux_contained )
         self.assertEqual( len( local_roles ), 1 )
-        self.failUnless( 'Manager' in local_roles )
+        self.assertTrue( 'Manager' in local_roles )
 
     def test_getRolesInContext_weslayan( self ):
 
@@ -188,60 +188,60 @@ class PropertiedUserTests( unittest.TestCase
 
         local_roles = user.getRolesInContext( faux_method )
         self.assertEqual( len( local_roles ), 1 )
-        self.failUnless( 'Manager' in local_roles )
+        self.assertTrue( 'Manager' in local_roles )
 
     def test_allowed_not_even_god_should( self ):
 
         from AccessControl.PermissionRole import _what_not_even_god_should_do
         user = self._makeOne()
 
-        self.failIf( user.allowed( None, _what_not_even_god_should_do ) )
+        self.assertFalse( user.allowed( None, _what_not_even_god_should_do ) )
 
     def test_allowed_anonymous( self ):
 
         user = self._makeOne()
 
-        self.failUnless( user.allowed( None, ('Anonymous',) ) )
+        self.assertTrue( user.allowed( None, ('Anonymous',) ) )
 
     def test_allowed_authenticated( self ):
 
         user = self._makeOne()
 
-        self.failUnless( user.allowed( None, ('Authenticated',) ) )
+        self.assertTrue( user.allowed( None, ('Authenticated',) ) )
 
     def test_allowed_authenticated_required_but_anonymous( self ):
 
         user = self._makeOne('Anonymous User')
 
-        self.failIf( user.allowed( None, ('Authenticated',) ) )
+        self.assertFalse( user.allowed( None, ('Authenticated',) ) )
 
     def test_allowed_global_roles_ok( self ):
 
         user = self._makeOne()
         user._addRoles( ( 'Role 1', 'Role 2' ) )
 
-        self.failUnless( user.allowed( None, ( 'Role 1', ) ) )
+        self.assertTrue( user.allowed( None, ( 'Role 1', ) ) )
 
     def test_allowed_global_roles_not_ok( self ):
 
         user = self._makeOne()
         user._addRoles( ( 'Role 1', 'Role 2' ) )
 
-        self.failIf( user.allowed( None, ( 'Role 3', ) ) )
+        self.assertFalse( user.allowed( None, ( 'Role 3', ) ) )
 
     def test_allowed_local_roles_on_user_ok( self ):
 
         user = self._makeOne( 'user' )
         object = FauxProtected( { 'user' : ( 'Role 1', ) } )
 
-        self.failUnless( user.allowed( object, ( 'Role 1', ) ) )
+        self.assertTrue( user.allowed( object, ( 'Role 1', ) ) )
 
     def test_allowed_local_roles_on_user_not_ok( self ):
 
         user = self._makeOne( 'user' )
         object = FauxProtected( { 'user' : ( 'Role 1', ) } )
 
-        self.failIf( user.allowed( object, ( 'Role 2', ) ) )
+        self.assertFalse( user.allowed( object, ( 'Role 2', ) ) )
 
     def test_allowed_local_roles_on_group_ok( self ):
 
@@ -249,7 +249,7 @@ class PropertiedUserTests( unittest.TestCase
         user._addGroups( ( 'Group 1', 'Group 2' ) )
         object = FauxProtected( { 'Group 1' : ( 'Role 1', ) } )
 
-        self.failUnless( user.allowed( object, ( 'Role 1', ) ) )
+        self.assertTrue( user.allowed( object, ( 'Role 1', ) ) )
 
     def test_allowed_acquisition( self ):
 
@@ -261,7 +261,7 @@ class PropertiedUserTests( unittest.TestCase
         faux_contained = FauxProtected( { 'Group C' : ( 'Manager', 'Owner' ) }
                                       ).__of__( faux_container )
 
-        self.failUnless( user.allowed( faux_contained, ( 'Manager', ) ) )
+        self.assertTrue( user.allowed( faux_contained, ( 'Manager', ) ) )
 
     def test_allowed_weslayan( self ):
 
@@ -275,7 +275,7 @@ class PropertiedUserTests( unittest.TestCase
         faux_method = FauxMethod( faux_self
                                 , { 'Group C' : ( 'Manager', 'Owner' ) } )
 
-        self.failUnless( user.allowed( faux_method, ( 'Manager', ) ) )
+        self.assertTrue( user.allowed( faux_method, ( 'Manager', ) ) )
 
 
 if __name__ == "__main__":

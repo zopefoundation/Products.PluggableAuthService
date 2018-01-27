@@ -20,7 +20,7 @@ from Acquisition import aq_parent
 from AccessControl import ClassSecurityInfo
 from App.class_init import InitializeClass
 from ZServer.FTPRequest import FTPRequest
-from ZPublisher import xmlrpc
+from ZServer.ZPublisher import xmlrpc
 
 from zope.interface import Interface
 
