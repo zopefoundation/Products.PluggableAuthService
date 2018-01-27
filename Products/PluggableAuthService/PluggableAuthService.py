@@ -416,7 +416,7 @@ class PluggableAuthService( Folder, Cacheable ):
             if not kw.has_key('title'):
                 kw['title'] = search_name
             kw['login'] = search_name
-            
+
         # For groups we search the original name
         # (e.g. Administrators), for users we apply the transform,
         # which could lowercase the name.
@@ -572,7 +572,7 @@ class PluggableAuthService( Folder, Cacheable ):
                 continue
         return False
 
-        
+
     security.declarePrivate( '_extractUserIds' )
     def _extractUserIds( self, request, plugins ):
 

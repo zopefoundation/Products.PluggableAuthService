@@ -123,7 +123,7 @@ class DummyMultiUserEnumerator( DummyPlugin ):
         # Let's lowercase all login names.
         for info in self.users:
             info['login'] = info['login'].lower()
-        
+
 
 class WantonUserEnumerator(DummyMultiUserEnumerator):
     def enumerateUsers( self, *args, **kw):
