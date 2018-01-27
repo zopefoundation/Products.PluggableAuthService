@@ -5,7 +5,7 @@ python:
 install:
     - pip install six==1.10.0 # force to avoid conflict with zc.recipe.testrunner
     - pip install -U setuptools==33.1.1
-    - pip install zc.buildout
+    - pip install zc.buildout coverage coveralls
     - buildout bootstrap
     - buildout
 script:
