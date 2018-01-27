@@ -54,10 +54,13 @@ setup(name='Products.%s' % NAME,
           'Products.PluginRegistry >= 1.5',
           'Products.GenericSetup >= 1.9.0',
           'Products.StandardCacheManagers',
-          'ZServer >= 4.0a1',
           ],
-      extras_require={'ip_range': ['IPy'],
-                     },
+      extras_require={
+          'ip_range': ['IPy'],
+          'zserver': [
+              'ZServer >= 4.0a1',
+          ]
+      },
       entry_points="""
       [zope2.initialize]
       Products.%s = Products.%s:initialize

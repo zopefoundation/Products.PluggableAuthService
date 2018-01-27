@@ -16,7 +16,15 @@
 $Id$
 """
 
-from .utils import allTests
+try:
+    import ZServer  # noqa
+except ImportError:
+    HAVE_ZSERVER = False
+else:
+    HAVE_ZSERVER = True
+
+
+from utils import allTests
 
 from AccessControl.Permissions import manage_users as ManageUsers
 

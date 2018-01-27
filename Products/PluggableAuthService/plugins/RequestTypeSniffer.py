@@ -19,8 +19,6 @@ $Id$
 from Acquisition import aq_parent
 from AccessControl import ClassSecurityInfo
 from App.class_init import InitializeClass
-from ZServer.FTPRequest import FTPRequest
-from ZServer.ZPublisher import xmlrpc
 
 from zope.interface import Interface
 
@@ -33,11 +31,18 @@ from Products.PluggableAuthService.interfaces.request \
 from Products.PluggableAuthService.interfaces.request \
     import IWebDAVRequest
 from Products.PluggableAuthService.interfaces.request \
-    import IFTPRequest
-from Products.PluggableAuthService.interfaces.request \
     import IXMLRPCRequest
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.utils import classImplements
+
+
+from Products.PluggableAuthService import HAVE_ZSERVER
+
+if HAVE_ZSERVER:
+    from ZServer.FTPRequest import FTPRequest
+    from ZServer.ZPublisher import xmlrpc
+    from Products.PluggableAuthService.interfaces.request import IFTPRequest
+
 
 class IRequestTypeSnifferPlugin(Interface):
     """ Marker interface.
@@ -116,24 +121,30 @@ def webdavSniffer(request):
 
 registerSniffer(IWebDAVRequest, webdavSniffer)
 
-def xmlrpcSniffer(request):
-    response = request['RESPONSE']
-    method = request.get('REQUEST_METHOD', 'GET').upper()
 
-    if method in ('GET', 'POST') and isinstance(response, xmlrpc.Response):
-        return True
+if HAVE_ZSERVER:
+    def xmlrpcSniffer(request):
+        response = request['RESPONSE']
+        method = request.get('REQUEST_METHOD', 'GET').upper()
 
-registerSniffer(IXMLRPCRequest, xmlrpcSniffer)
+        if method in ('GET', 'POST') and isinstance(response, xmlrpc.Response):
+            return True
 
-def ftpSniffer(request):
-    if isinstance(request, FTPRequest):
-        return True
+    registerSniffer(IXMLRPCRequest, xmlrpcSniffer)
 
-registerSniffer(IFTPRequest, ftpSniffer)
+    def ftpSniffer(request):
+        if isinstance(request, FTPRequest):
+            return True
+
+    registerSniffer(IFTPRequest, ftpSniffer)
+    _known_sniffers = (webdavSniffer, ftpSniffer, xmlrpcSniffer)
+else:
+    _known_sniffers = (webdavSniffer, )
+
 
 def browserSniffer(request):
     # If it's none of the above, it's very likely a browser request.
-    for sniffer in (webdavSniffer, ftpSniffer, xmlrpcSniffer):
+    for sniffer in _known_sniffers:
         if sniffer(request):
             return False
     return True
