@@ -24,7 +24,7 @@ import six
 
 from AccessControl import ClassSecurityInfo
 from App.Common import package_home
-from ZPublisher import Forbidden
+from zExceptions import Forbidden
 from zope.publisher.interfaces.browser import IBrowserRequest
 
 

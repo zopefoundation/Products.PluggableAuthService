@@ -148,13 +148,13 @@ class PluggableAuthServiceCachingTests( unittest.TestCase ):
 
         # Now add a user and make sure it's there
         zcuf._doAddUser('testlogin', 'secret', ['Member', 'Anonymous'], [])
-        self.failIf(zcuf.getUser('testlogin') is None)
+        self.assertFalse(zcuf.getUser('testlogin') is None)
 
         # Then we activate caching for the PAS instance itself
         zcuf.ZCacheable_setManagerId(rcm.getId())
 
         # Make sure the PAS instance is associated with the cache
-        self.failUnless(aq_base(zcuf.ZCacheable_getManager()) is aq_base(rcm))
+        self.assertTrue(aq_base(zcuf.ZCacheable_getManager()) is aq_base(rcm))
 
         # Now we can see if the cache is getting used. Test for emptiness
         # first, then retrieve a user, and the cache should have content.
@@ -165,7 +165,7 @@ class PluggableAuthServiceCachingTests( unittest.TestCase ):
 
         # First check: The cache must be empty
         report = rcm.getCacheReport()
-        self.failUnless(len(report) == 0)
+        self.assertTrue(len(report) == 0)
 
         # The user is being requested once. At this point there must be one
         # entry for the PAS instance. The number of "misses" must be >0 because
@@ -173,13 +173,13 @@ class PluggableAuthServiceCachingTests( unittest.TestCase ):
         # be zero.
         zcuf.getUser('testlogin')
         report = rcm.getCacheReport()
-        self.failUnless(len(report) == 1)
+        self.assertTrue(len(report) == 1)
         report_item = report[0]
         firstpass_misses = report_item.get('misses')
         firstpass_hits = report_item.get('hits')
         firstpass_entries = report_item.get('entries')
-        self.failUnless(firstpass_misses > 0)
-        self.failUnless(firstpass_hits == 0)
+        self.assertTrue(firstpass_misses > 0)
+        self.assertTrue(firstpass_hits == 0)
 
         # The user is requested again. This request should produce a cache hit,
         # so the number of "misses" must have stayed the same as after the
@@ -188,11 +188,11 @@ class PluggableAuthServiceCachingTests( unittest.TestCase ):
         # reusing the same cache entries.
         zcuf.getUser('testlogin')
         report = rcm.getCacheReport()
-        self.failUnless(len(report) == 1)
+        self.assertTrue(len(report) == 1)
         report_item = report[0]
-        self.failIf(report_item.get('misses') != firstpass_misses)
-        self.failUnless(report_item.get('hits') > firstpass_hits)
-        self.failIf(report_item.get('entries') != firstpass_entries)
+        self.assertFalse(report_item.get('misses') != firstpass_misses)
+        self.assertTrue(report_item.get('hits') > firstpass_hits)
+        self.assertFalse(report_item.get('entries') != firstpass_entries)
 
 
 if __name__ == "__main__":

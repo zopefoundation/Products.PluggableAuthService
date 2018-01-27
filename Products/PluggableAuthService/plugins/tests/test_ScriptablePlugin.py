@@ -55,8 +55,8 @@ class ScriptablePluginTests( unittest.TestCase ):
     def test_empty( self ):
 
         scriptable_plugin = self._makeOne()
-        self.failIf( IFaux in providedBy(scriptable_plugin) )
-        self.failIf( IFauxTwo in providedBy(scriptable_plugin) )
+        self.assertFalse( IFaux in providedBy(scriptable_plugin) )
+        self.assertFalse( IFauxTwo in providedBy(scriptable_plugin) )
 
     def test_withTwo( self ):
 
@@ -73,8 +73,8 @@ class ScriptablePluginTests( unittest.TestCase ):
 
         scriptable_plugin.manage_updateInterfaces( ['IFaux', 'IFauxTwo'] )
 
-        self.failUnless( IFaux in providedBy(scriptable_plugin) )
-        self.failUnless( IFauxTwo in providedBy(scriptable_plugin) )
+        self.assertTrue( IFaux in providedBy(scriptable_plugin) )
+        self.assertTrue( IFauxTwo in providedBy(scriptable_plugin) )
 
     def test_withTwoOnlyOneWired( self ):
 
@@ -91,7 +91,7 @@ class ScriptablePluginTests( unittest.TestCase ):
 
         scriptable_plugin.manage_updateInterfaces( ['IFaux',] )
 
-        self.failUnless( IFaux in providedBy(scriptable_plugin) )
+        self.assertTrue( IFaux in providedBy(scriptable_plugin) )
 
     def test_withTwoMinusOne( self ):
 
@@ -110,8 +110,8 @@ class ScriptablePluginTests( unittest.TestCase ):
 
         scriptable_plugin._delObject( 'two_method' )
 
-        self.failUnless( IFaux in providedBy(scriptable_plugin) )
-        self.failIf( IFauxTwo in providedBy(scriptable_plugin) )
+        self.assertTrue( IFaux in providedBy(scriptable_plugin) )
+        self.assertFalse( IFauxTwo in providedBy(scriptable_plugin) )
 
 
 if __name__ == '__main__':

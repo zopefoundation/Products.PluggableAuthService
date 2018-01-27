@@ -165,11 +165,11 @@ class EqualsFilterTests(unittest.TestCase):
 
     def test_hit(self):
         filter = self._makeOne('hitme')
-        self.failUnless(filter('hitme'))
+        self.assertTrue(filter('hitme'))
 
     def test_miss(self):
         filter = self._makeOne('hitme')
-        self.failIf(filter('miss'))
+        self.assertFalse(filter('miss'))
 
 class StartsWithFilterTests(unittest.TestCase):
 
@@ -183,15 +183,15 @@ class StartsWithFilterTests(unittest.TestCase):
 
     def test_hit_exact(self):
         filter = self._makeOne('hitme')
-        self.failUnless(filter('hitme'))
+        self.assertTrue(filter('hitme'))
 
     def test_hit_prefix(self):
         filter = self._makeOne('hit')
-        self.failUnless(filter('hitme'))
+        self.assertTrue(filter('hitme'))
 
     def test_miss(self):
         filter = self._makeOne('hitme')
-        self.failIf(filter('miss'))
+        self.assertFalse(filter('miss'))
 
 class EndsWithFilterTests(unittest.TestCase):
 
@@ -205,15 +205,15 @@ class EndsWithFilterTests(unittest.TestCase):
 
     def test_hit_exact(self):
         filter = self._makeOne('hitme')
-        self.failUnless(filter('hitme'))
+        self.assertTrue(filter('hitme'))
 
     def test_hit_suffix(self):
         filter = self._makeOne('tme')
-        self.failUnless(filter('hitme'))
+        self.assertTrue(filter('hitme'))
 
     def test_miss(self):
         filter = self._makeOne('hitme')
-        self.failIf(filter('miss'))
+        self.assertFalse(filter('miss'))
 
 class RegexFilterTests(unittest.TestCase):
 
@@ -227,15 +227,15 @@ class RegexFilterTests(unittest.TestCase):
 
     def test_hit_exact(self):
         filter = self._makeOne('^hitme$')
-        self.failUnless(filter('hitme'))
+        self.assertTrue(filter('hitme'))
 
     def test_hit_pattern(self):
         filter = self._makeOne('^h.*tme$')
-        self.failUnless(filter('hitme'))
+        self.assertTrue(filter('hitme'))
 
     def test_miss(self):
         filter = self._makeOne('^hitme$')
-        self.failIf(filter('miss'))
+        self.assertFalse(filter('miss'))
 
 class IPFilterTests(unittest.TestCase):
 
@@ -249,27 +249,27 @@ class IPFilterTests(unittest.TestCase):
 
     def test_hit_exact(self):
         filter = self._makeOne('192.168.1.24')
-        self.failUnless(filter('192.168.1.24'))
+        self.assertTrue(filter('192.168.1.24'))
 
     def test_miss_exact(self):
         filter = self._makeOne('192.168.1.24')
-        self.failIf(filter('192.168.1.13'))
+        self.assertFalse(filter('192.168.1.13'))
 
     def test_hit_prefix(self):
         filter = self._makeOne('192.168.1.0/24')
-        self.failUnless(filter('192.168.1.13'))
+        self.assertTrue(filter('192.168.1.13'))
 
     def test_miss_prefix(self):
         filter = self._makeOne('192.168.1.0/24')
-        self.failIf(filter('192.168.0.13'))
+        self.assertFalse(filter('192.168.0.13'))
 
     def test_hit_range(self):
         filter = self._makeOne('192.168.1.0-192.168.1.255')
-        self.failUnless(filter('192.168.1.13'))
+        self.assertTrue(filter('192.168.1.13'))
 
     def test_miss_range(self):
         filter = self._makeOne('192.168.1.0-192.168.1.255')
-        self.failIf(filter('192.168.0.13'))
+        self.assertFalse(filter('192.168.0.13'))
 
 if __name__ == "__main__":
     unittest.main()

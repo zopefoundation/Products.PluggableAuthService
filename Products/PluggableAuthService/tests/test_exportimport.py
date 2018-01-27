@@ -264,9 +264,9 @@ else:
             context._files['PAS/pluginregistry.xml'
                           ] = _EMPTY_PLUGINREGISTRY_EXPORT
 
-            self.failUnless(pas.plugins.listPluginTypeInfo())
+            self.assertTrue(pas.plugins.listPluginTypeInfo())
             importPAS(context)
-            self.failIf(pas.plugins.listPluginTypeInfo())
+            self.assertFalse(pas.plugins.listPluginTypeInfo())
 
         def test_empty_adding_plugins(self):
             from Products.GenericSetup.tests.common import DummyImportContext
@@ -286,16 +286,16 @@ else:
                           ] = KNOWN_CSV
 
             self.assertEqual(len(pas.objectIds()), 1)
-            self.failUnless('plugins' in pas.objectIds())
+            self.assertTrue('plugins' in pas.objectIds())
 
             importPAS(context)
 
             self.assertEqual(len(pas.objectIds()), 2)
-            self.failUnless('plugins' in pas.objectIds())
-            self.failUnless('csv_plugin' in pas.objectIds())
+            self.assertTrue('plugins' in pas.objectIds())
+            self.assertTrue('csv_plugin' in pas.objectIds())
 
             csv_plugin = pas._getOb('csv_plugin')
-            self.failUnless(csv_plugin.__class__ is TestCSVAware)
+            self.assertTrue(csv_plugin.__class__ is TestCSVAware)
             self.assertEqual(csv_plugin._was_put.getvalue().strip(),
                              KNOWN_CSV.strip())
 
