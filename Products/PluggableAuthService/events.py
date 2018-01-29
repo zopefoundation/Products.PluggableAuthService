@@ -14,7 +14,7 @@
 from Acquisition import aq_parent
 from zope.component import adapter
 from zope.component import subscribers
-from zope.interface import implements
+from zope.interface import implementer
 
 from Products.PluggableAuthService.interfaces.authservice import IBasicUser
 from Products.PluggableAuthService.interfaces.events \
@@ -30,36 +30,39 @@ from Products.PluggableAuthService.interfaces.events \
     import IPropertiesUpdatedEvent
 
 
+@implementer(IPASEvent)
 class PASEvent(object):
-    implements(IPASEvent)
 
     def __init__(self, principal):
         self.principal = principal
         self.object = principal
 
 
+@implementer(IPrincipalCreatedEvent)
 class PrincipalCreated(PASEvent):
-    implements(IPrincipalCreatedEvent)
+    pass
 
 
+@implementer(IPrincipalDeletedEvent)
 class PrincipalDeleted(PASEvent):
-    implements(IPrincipalDeletedEvent)
+    pass
 
 
+@implementer(IGroupDeletedEvent)
 class GroupDeleted(PASEvent):
-    implements(IGroupDeletedEvent)
+    pass
 
 
+@implementer(ICredentialsUpdatedEvent)
 class CredentialsUpdated(PASEvent):
-    implements(ICredentialsUpdatedEvent)
 
     def __init__(self, principal, password):
         super(CredentialsUpdated, self).__init__(principal)
         self.password = password
 
 
+@implementer(IPropertiesUpdatedEvent)
 class PropertiesUpdated(PASEvent):
-    implements(IPropertiesUpdatedEvent)
 
     def __init__(self, principal, properties):
         super(PropertiesUpdated, self).__init__(principal)
@@ -81,6 +84,6 @@ def userCredentialsUpdatedHandler(principal, event):
 def PASEventNotify(event):
     """Event subscriber to dispatch PASEvent to interested adapters."""
     adapters = subscribers((event.principal, event), None)
-    for adapter in adapters:
+    for adapter_ in adapters:
         pass # getting them does the work
 

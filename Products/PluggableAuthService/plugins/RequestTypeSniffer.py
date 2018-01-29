@@ -16,7 +16,6 @@
 $Id$
 """
 
-from Acquisition import aq_parent
 from AccessControl import ClassSecurityInfo
 from App.class_init import InitializeClass
 
@@ -34,7 +33,6 @@ from Products.PluggableAuthService.interfaces.request \
     import IXMLRPCRequest
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.utils import classImplements
-
 
 from Products.PluggableAuthService import HAVE_ZSERVER
 

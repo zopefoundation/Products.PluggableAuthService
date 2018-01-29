@@ -15,73 +15,66 @@
 
 $Id$
 """
-from types import IntType
-from types import FloatType
-from types import LongType
-from types import InstanceType
-from types import BooleanType
-
-import six
-
-StringTypes = (str, six.text_type, )
-_SequenceTypes = (tuple, list, )
 
 from DateTime.DateTime import DateTime
-
 from OFS.Image import Image
-
 from Products.PluggableAuthService.utils import classImplements
 from Products.PluggableAuthService.interfaces.propertysheets \
     import IPropertySheet
 
+import six
 
-def _guessSchema( kw ):
+StringTypes = (str, six.text_type)
+
+
+def _guessSchema(kw):
 
     schema = []
     for k, v in kw.items():
 
         ptype = 'string'
 
-        if type( v ) is IntType:
+        if isinstance(v, six.integer_types):
             ptype = 'int'
 
-        elif type( v ) is FloatType:
+        elif isinstance(v, float):
             ptype = 'float'
 
-        elif type( v ) is LongType:
+        elif isinstance(v, six.long):
             ptype = 'long'
 
-        elif type( v ) is BooleanType:
+        elif isinstance(v, bool):
             ptype = 'boolean'
 
-        elif type( v ) in _SequenceTypes:
+        elif isinstance(v, (tuple, list)):
 
-            if v and type( v[0] ) not in StringTypes:
+            if v and not isinstance(v[0], (str, six.text_type)):
                 raise ValueError('Property %s: sequence items not strings' % k)
 
             ptype = 'lines'
 
-        elif type( v ) is DateTime:
+        elif isinstance(v, DateTime):
             ptype = 'date'
 
-        elif type( v ) is InstanceType:
+        elif isinstance(v, type):
 
-            if isinstance( v, DateTime ):
+            if isinstance(v, DateTime):
                 ptype = 'date'
             else:
                 raise ValueError('Property %s: unknown class' % k)
 
-        elif isinstance( v, Image ):
+        elif isinstance(v, Image):
             ptype = 'image'
 
-        elif type( v ) not in StringTypes:
+        elif isinstance(v, six.string_types):
             raise ValueError('Property %s: unknown type' % k)
 
-        schema.append( ( k, ptype ) )
+        schema.append((k, ptype))
 
     return schema
 
-class UserPropertySheet:
+
+class UserPropertySheet(object):
 
     """ Model a single, read-only set of properties about a user.
 
@@ -92,94 +85,93 @@ class UserPropertySheet:
       guess the schema from the keyword args.
     """
 
-    def __init__( self, id, schema=None, **kw ):
+    def __init__(self, id, schema=None, **kw):
 
         self._id = id
 
         if schema is None:
-            schema = _guessSchema( kw )
+            schema = _guessSchema(kw)
 
-        self._schema = tuple( schema )
+        self._schema = tuple(schema)
         self._properties = {}
 
         for id, ptype in schema:
 
-            value = kw.get( id )
+            value = kw.get(id)
 
             if ptype == 'lines':
                 if value is not None:
-                    value = tuple( value )
+                    value = tuple(value)
 
-            self._properties[ id ] = value
+            self._properties[id] = value
 
     #
     #   IPropertySheet implementation
     #
-    def getId( self ):
+    def getId(self):
 
         """ See IPropertySheet.
         """
         return self._id
 
-    def hasProperty( self, id ):
+    def hasProperty(self, id):
 
         """ See IPropertySheet.
         """
         return id in self.propertyIds()
 
-    def getProperty( self, id, default=None ):
+    def getProperty(self, id, default=None):
 
         """ See IPropertySheet.
         """
-        return self._properties.get( id, default )
+        return self._properties.get(id, default)
 
-    def getPropertyType( self, id ):
+    def getPropertyType(self, id):
 
         """ See IPropertySheet.
         """
-        found = [ x[1] for x in self._schema if x[0] == id ]
+        found = [x[1] for x in self._schema if x[0] == id]
 
         return found and found[0] or None
 
-    def propertyInfo( self, id ):
+    def propertyInfo(self, id):
 
         """ See IPropertySheet.
         """
         for schema_id, ptype in self._schema:
 
             if schema_id == id:
-                return { 'id' : id, 'type' : ptype, 'mode' : '' }
+                return {'id': id, 'type': ptype, 'mode': ''}
 
         return None
 
-    def propertyMap( self ):
+    def propertyMap(self):
 
         """ See IPropertySheet.
         """
         result = []
 
         for id, ptype in self._schema:
-            result.append( { 'id' : id, 'type' : ptype, 'mode' : '' } )
+            result.append({'id': id, 'type': ptype, 'mode': ''})
 
-        return tuple( result )
+        return tuple(result)
 
-    def propertyIds( self ):
-
-        """ See IPropertySheet.
-        """
-        return [ x[0] for x in self._schema ]
-
-    def propertyValues( self ):
+    def propertyIds(self):
 
         """ See IPropertySheet.
         """
-        return [ self._properties.get( x ) for x in self.propertyIds() ]
+        return [x[0] for x in self._schema]
 
-    def propertyItems( self ):
+    def propertyValues(self):
+
         """ See IPropertySheet.
         """
-        return [ ( x, self._properties.get( x ) ) for x in self.propertyIds() ]
+        return [self._properties.get(x) for x in self.propertyIds()]
 
-classImplements( UserPropertySheet
-               , IPropertySheet
-               )
+    def propertyItems(self):
+        """ See IPropertySheet.
+        """
+        return [(x, self._properties.get(x)) for x in self.propertyIds()]
+
+
+classImplements(UserPropertySheet, IPropertySheet)

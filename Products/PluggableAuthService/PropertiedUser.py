@@ -16,15 +16,15 @@
 $Id$
 """
 
-from Acquisition import aq_inner, aq_parent
-from AccessControl.User import BasicUser
+from .interfaces.authservice import IPropertiedUser
+from .UserPropertySheet import UserPropertySheet
+from .utils import classImplements
 from AccessControl.PermissionRole import _what_not_even_god_should_do
-
-from interfaces.authservice import IPropertiedUser
-from UserPropertySheet import UserPropertySheet
-from utils import classImplements
+from AccessControl.User import BasicUser
+from Acquisition import aq_inner, aq_parent
 from Products.PluggableAuthService.interfaces.propertysheets \
     import IPropertySheet
+
 
 class PropertiedUser( BasicUser ):
 

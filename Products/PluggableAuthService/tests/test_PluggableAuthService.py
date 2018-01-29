@@ -11,31 +11,31 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-import unittest
 
-from Acquisition import Implicit, aq_base
+from ..interfaces.plugins import INotCompetentPlugin
 from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import noSecurityManager
 from AccessControl.SecurityManager import setSecurityPolicy
-from OFS.ObjectManager import ObjectManager
-from zExceptions import Unauthorized
-
-from Products.PluggableAuthService.utils import directlyProvides
-from zope.interface import implements
-from ..interfaces.plugins import INotCompetentPlugin
-
+from Acquisition import Implicit, aq_base
 from conformance import IUserFolder_conformance
+from OFS.ObjectManager import ObjectManager
+from Products.PluggableAuthService.utils import directlyProvides
+from zExceptions import Unauthorized
+from zope.interface import implementer
 
+import unittest
 import six
 
 
 class DummyPlugin(Implicit):
     pass
 
+
 class FaultyRolesPlugin(DummyPlugin):
 
     def getRolesForPrincipal(self, principal, request=None):
         raise KeyError("intentional KeyError from FaultyRolesPlugin")
+
 
 class DummyUserEnumerator( DummyPlugin ):
 
@@ -241,8 +241,9 @@ class DummyCounterChallenger( DummyChallenger ):
         self.count += 1
         return True
 
+
+@implementer( INotCompetentPlugin )
 class DummyNotCompetentPlugin( DummyPlugin ):
-    implements( INotCompetentPlugin )
 
     def __init__( self, id, type ):
         self.id, self.type = id, type

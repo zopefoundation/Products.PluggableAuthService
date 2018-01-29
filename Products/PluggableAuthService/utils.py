@@ -11,29 +11,29 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
+from AccessControl import ClassSecurityInfo
+from App.Common import package_home
+from hashlib import sha1
+from ZPublisher import Forbidden
+from zope import interface
+from zope.publisher.interfaces.browser import IBrowserRequest  # noqa
+
 import binascii
 import functools
 import inspect
 import os
-try:
-    from hashlib import sha1 as sha
-except:
-    from sha import new as sha
-
 import six
 
-from AccessControl import ClassSecurityInfo
-from App.Common import package_home
-from zExceptions import Forbidden
-from zope.publisher.interfaces.browser import IBrowserRequest
+# BBB import
+from AccessControl.requestmethod import postonly
 
 
-from zope import interface
 def directlyProvides(obj, *interfaces):
     normalized_interfaces = []
     for i in interfaces:
         normalized_interfaces.append(i)
     return interface.directlyProvides(obj, *normalized_interfaces)
+
 
 def classImplements(class_, *interfaces):
     normalized_interfaces = []
@@ -41,8 +41,6 @@ def classImplements(class_, *interfaces):
         normalized_interfaces.append(i)
     return interface.classImplements(class_, *normalized_interfaces)
 
-# BBB import
-from AccessControl.requestmethod import postonly
 
 product_dir = package_home( globals() )
 product_prefix = os.path.split(product_dir)[0]
@@ -182,8 +180,7 @@ def createKeywords(**kw):
         Keywords are hashed so we don't accidentally expose sensitive
         information.
     """
-    keywords = sha()
-
+    keywords = sha1()
     items = kw.items()
     items.sort()
     for k, v in items:
@@ -191,6 +188,7 @@ def createKeywords(**kw):
         keywords.update(makestr(v))
 
     return {'keywords': keywords.hexdigest()}
+
 
 def getCSRFToken(request):
     session = getattr(request, 'SESSION', None)
@@ -201,6 +199,7 @@ def getCSRFToken(request):
     if token is None:
         token = session['_csrft_'] = binascii.hexlify(os.urandom(20))
     return token
+
 
 def checkCSRFToken(request, token='csrf_token', raises=True):
     """ Check CSRF token in session against token formdata.
@@ -225,13 +224,17 @@ class CSRFToken(object):
     #
     #   <input type="hidden" name="csrf_token"
     #          tal:attributes="value context/@@csrf_token" />
+
     security = ClassSecurityInfo()
     security.declareObjectPublic()
+
     def __init__(self, context, request):
         self.context = context
         self.request = request
+
     def __call__(self):
         raise Forbidden()
+
     def token(self):
         # API for template use
         return getCSRFToken(self.request)
@@ -245,7 +248,7 @@ def csrf_only(wrapped):
 
     arglen = len(args)
     if defaults is not None:
-        defaults = zip(args[arglen - len(defaults):], defaults)
+        defaults = list(zip(args[arglen - len(defaults):], defaults))
         arglen -= len(defaults)
 
     spec = (args, varargs, kwargs, defaults)
@@ -255,7 +258,7 @@ def csrf_only(wrapped):
              '    if IBrowserRequest.providedBy(REQUEST):',
              '        checkCSRFToken(REQUEST)',
              '    return wrapped(' + ','.join(args) + ')',
-            ]
+             ]
     g = globals().copy()
     l = locals().copy()
     g['wrapped'] = wrapped
