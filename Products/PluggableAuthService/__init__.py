@@ -16,7 +16,7 @@
 $Id$
 """
 
-from utils import allTests
+from Products.PluggableAuthService.utils import allTests
 
 from AccessControl.Permissions import manage_users as ManageUsers
 
@@ -26,25 +26,24 @@ from PluggableAuthService import registerMultiPlugin
 
 import PluggableAuthService
 
-from permissions import ManageGroups
-
-from plugins import HTTPBasicAuthHelper as HBAH
-from plugins import InlineAuthHelper as IAH
-from plugins import CookieAuthHelper as CAH
-from plugins import SessionAuthHelper as SAH
-from plugins import DomainAuthHelper as DAH
-from plugins import ScriptablePlugin
-from plugins import ZODBGroupManager
-from plugins import ZODBUserManager
-from plugins import ZODBRoleManager
-from plugins import LocalRolePlugin
-from plugins import DelegatingMultiPlugin as DMP
-from plugins import SearchPrincipalsPlugin as SPP
-from plugins import RecursiveGroupsPlugin as RGP
-from plugins import DynamicGroupsPlugin as DGP
-from plugins import ChallengeProtocolChooser as CPC
-from plugins import RequestTypeSniffer as RTS
-from plugins import NotCompetentHelper as NCH
+from Products.PluggableAuthService.permissions import ManageGroups
+from Products.PluggableAuthService.plugins import HTTPBasicAuthHelper as HBAH
+from Products.PluggableAuthService.plugins import InlineAuthHelper as IAH
+from Products.PluggableAuthService.plugins import CookieAuthHelper as CAH
+from Products.PluggableAuthService.plugins import SessionAuthHelper as SAH
+from Products.PluggableAuthService.plugins import DomainAuthHelper as DAH
+from Products.PluggableAuthService.plugins import ScriptablePlugin
+from Products.PluggableAuthService.plugins import ZODBGroupManager
+from Products.PluggableAuthService.plugins import ZODBUserManager
+from Products.PluggableAuthService.plugins import ZODBRoleManager
+from Products.PluggableAuthService.plugins import LocalRolePlugin
+from Products.PluggableAuthService.plugins import DelegatingMultiPlugin as DMP
+from Products.PluggableAuthService.plugins import SearchPrincipalsPlugin as SPP
+from Products.PluggableAuthService.plugins import RecursiveGroupsPlugin as RGP
+from Products.PluggableAuthService.plugins import DynamicGroupsPlugin as DGP
+from Products.PluggableAuthService.plugins import ChallengeProtocolChooser as CPC
+from Products.PluggableAuthService.plugins import RequestTypeSniffer as RTS
+from Products.PluggableAuthService.plugins import NotCompetentHelper as NCH
 
 registerMultiPlugin(HBAH.HTTPBasicAuthHelper.meta_type)
 registerMultiPlugin(IAH.InlineAuthHelper.meta_type)

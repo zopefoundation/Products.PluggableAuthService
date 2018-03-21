@@ -11,6 +11,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
+from __future__ import print_function
 import binascii
 import functools
 import inspect
@@ -69,7 +70,7 @@ def remove_stale_bytecode( arg, dirname, names ):
                 fullname = os.path.join( dirname, name )
 
                 if __debug__:
-                    print "Removing stale bytecode file", fullname
+                    print("Removing stale bytecode file", fullname)
 
                 os.unlink( fullname )
 
@@ -92,7 +93,7 @@ class TestFileFinder:
                 return
 
             if 0 and __debug__: # XXX: don't care!
-                print "not a package", dir
+                print("not a package", dir)
 
             return
 
@@ -136,8 +137,8 @@ def get_suite( file ):
 
         try:
             suite = loader.loadTestsFromName(  module_name )
-        except ImportError, err:
-            print "Error importing %s\n%s" % (module_name, err)
+        except ImportError as err:
+            print("Error importing %s\n%s" % (module_name, err))
             raise
     return suite
 
@@ -262,6 +263,6 @@ def csrf_only(wrapped):
     g = globals().copy()
     l = locals().copy()
     g['wrapped'] = wrapped
-    exec '\n'.join(lines) in g, l
+    exec('\n'.join(lines), g, l)
 
     return functools.wraps(wrapped)(l['wrapper'])
