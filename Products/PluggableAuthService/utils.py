@@ -160,7 +160,9 @@ def makestr(s):
     """Converts 's' to a non-Unicode string"""
     if isinstance(s, six.text_type):
         s = s.encode('utf-8')
-    return str(s)
+    if isinstance(s, bool):
+        s = str(s).encode('utf-8')
+    return s
 
 def createViewName(method_name, user_handle=None):
     """
