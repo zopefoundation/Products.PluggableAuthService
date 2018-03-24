@@ -183,9 +183,7 @@ def createKeywords(**kw):
         information.
     """
     keywords = sha1()
-    items = kw.items()
-    items.sort()
-    for k, v in items:
+    for k, v in sorted(kw.items()):
         keywords.update(makestr(k))
         keywords.update(makestr(v))
 
