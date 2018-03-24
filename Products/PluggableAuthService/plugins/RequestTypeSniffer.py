@@ -101,23 +101,24 @@ classImplements(RequestTypeSniffer,
 
 InitializeClass(RequestTypeSniffer)
 
-# Most of the sniffing code below has been inspired by
-# similar tests found in BaseRequest, HTTPRequest and ZServer
-def webdavSniffer(request):
-    dav_src = request.get('WEBDAV_SOURCE_PORT', None)
-    method = request.get('REQUEST_METHOD', 'GET').upper()
-    path_info = request.get('PATH_INFO', '')
+if HAS_ZSERVER:
+    # Most of the sniffing code below has been inspired by
+    # similar tests found in BaseRequest, HTTPRequest and ZServer
+    def webdavSniffer(request):
+        dav_src = request.get('WEBDAV_SOURCE_PORT', None)
+        method = request.get('REQUEST_METHOD', 'GET').upper()
+        path_info = request.get('PATH_INFO', '')
 
-    if dav_src:
-        return True
+        if dav_src:
+            return True
 
-    if method not in ('GET', 'POST'):
-        return True
+        if method not in ('GET', 'POST'):
+            return True
 
-    if method in ('GET',) and path_info.endswith('manage_DAVget'):
-        return True
+        if method in ('GET',) and path_info.endswith('manage_DAVget'):
+            return True
 
-registerSniffer(IWebDAVRequest, webdavSniffer)
+    registerSniffer(IWebDAVRequest, webdavSniffer)
 
 
 if HAVE_ZSERVER:
