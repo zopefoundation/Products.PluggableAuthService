@@ -18,6 +18,7 @@ $Id$
 
 from base64 import encodestring, decodestring
 from binascii import Error
+from binascii import hexlify
 from six.moves.urllib.parse import quote, unquote
 
 from AccessControl.SecurityInfo import ClassSecurityInfo
@@ -158,7 +159,9 @@ class CookieAuthHelper(Folder, BasePlugin):
     security.declarePrivate('updateCredentials')
     def updateCredentials(self, request, response, login, new_password):
         """ Respond to change of credentials (NOOP for basic auth). """
-        cookie_str = '%s:%s' % (login.encode('hex'), new_password.encode('hex'))
+        cookie_str = b':'.join([
+            hexlify(login.encode('utf-8')),
+            hexlify(new_password.encode('utf-8'))])
         cookie_val = encodestring(cookie_str)
         cookie_val = cookie_val.rstrip()
         response.setCookie(self.cookie_name, quote(cookie_val), path='/')
