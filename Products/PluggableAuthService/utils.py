@@ -162,6 +162,8 @@ def makestr(s):
         s = s.encode('utf-8')
     if s is None:
         return b'None'
+    if s is True:
+        return b'True'
     return s
 
 def createViewName(method_name, user_handle=None):

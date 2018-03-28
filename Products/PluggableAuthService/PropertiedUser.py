@@ -136,7 +136,7 @@ class PropertiedUser( BasicUser ):
 
             break
 
-        return list( self.getRoles() ) + local.keys()
+        return list( self.getRoles() ) + list(local.keys())
 
     def allowed( self, object, object_roles=None ):
 
