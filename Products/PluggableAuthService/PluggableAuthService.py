@@ -618,8 +618,7 @@ class PluggableAuthService( Folder, Cacheable ):
                 try:
                     credentials[ 'extractor' ] = extractor_id # XXX: in key?
                     # Test if ObjectCacheEntries.aggregateIndex would work
-                    items = credentials.items()
-                    items.sort()
+                    items = sorted(credentials.items())
                 except _SWALLOWABLE_PLUGIN_EXCEPTIONS:
                     # XXX: would reraise be good here, and which plugin to ask
                     # whether not to swallow the exception - the extractor?
