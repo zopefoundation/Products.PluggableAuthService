@@ -34,21 +34,25 @@ def _guessSchema(kw):
 
         ptype = 'string'
 
-        if isinstance(v, six.integer_types):
+        if isinstance(v, (six.binary_type, six.text_type)):
+            ptype = 'string'
+
+        elif six.PY2 and isinstance(v, long):
+            ptype = 'long'
+
+        elif type(v) == int:
+            # bool is a subsclass of int, so we cannot use isinstance
             ptype = 'int'
 
         elif isinstance(v, float):
             ptype = 'float'
-
-        elif isinstance(v, six.long):
-            ptype = 'long'
 
         elif isinstance(v, bool):
             ptype = 'boolean'
 
         elif isinstance(v, (tuple, list)):
 
-            if v and not isinstance(v[0], (str, six.text_type)):
+            if v and not isinstance(v[0], (six.binary_type, six.text_type)):
                 raise ValueError('Property %s: sequence items not strings' % k)
 
             ptype = 'lines'
@@ -66,7 +70,7 @@ def _guessSchema(kw):
         elif isinstance(v, Image):
             ptype = 'image'
 
-        elif isinstance(v, six.string_types):
+        elif not isinstance(v, (six.binary_type, six.text_type)):
             raise ValueError('Property %s: unknown type' % k)
 
         schema.append((k, ptype))
