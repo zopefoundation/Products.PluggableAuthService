@@ -294,7 +294,7 @@ class UserTests(pastc.PASTestCase):
         f = self.user
         # XXX: PAS returns roles as list
         #self.assertEqual(f.getRoles(), ('Manager', 'Authenticated'))
-        self.assertEqual(f.getRoles(), ['Manager', 'Authenticated'])
+        self.assertItemsEqual(f.getRoles(), ['Manager', 'Authenticated'])
 
     def testGetDomains(self):
         f = self.user

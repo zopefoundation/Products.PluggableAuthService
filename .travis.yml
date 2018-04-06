@@ -2,6 +2,9 @@ language: python
 sudo: false
 python:
     - 2.7
+env:
+    - EXTRA=
+    - EXTRA=-zserver
 install:
     - pip install six==1.10.0 # force to avoid conflict with zc.recipe.testrunner
     - pip install -U setuptools==33.1.1
@@ -9,7 +12,7 @@ install:
     - buildout bootstrap
     - buildout
 script:
-    - coverage run bin/test --all -v
+    - coverage run bin/test$EXTRA --all -cv
 after_success:
     - coveralls
 notifications:
@@ -18,3 +21,4 @@ cache:
   pip: true
   directories:
     - eggs/
+    - develop/

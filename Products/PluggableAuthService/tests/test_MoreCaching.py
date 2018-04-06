@@ -137,7 +137,8 @@ class CachingTests(pastc.PASTestCase):
         user = self.pas.validate(request)
         self.assertIsNotNone(user)
         self.assertEqual(user.getId(), pastc.user_name)
-        self.assertEqual(user.getRoles(), ['Authenticated', pastc.user_role])
+        self.assertItemsEqual(
+            user.getRoles(), ['Authenticated', pastc.user_role])
 
         self.assertCacheStats(2, 2, 0)
 
@@ -176,7 +177,8 @@ class CachingTests(pastc.PASTestCase):
         user = self.pas.validate(request)
         self.assertIsNotNone(user)
         self.assertEqual(user.getId(), pastc.user_name)
-        self.assertEqual(user.getRoles(), ['Authenticated', pastc.user_role])
+        self.assertItemsEqual(
+            user.getRoles(), ['Authenticated', pastc.user_role])
 
         self.assertCacheStats(2, 2, 0)
 
@@ -203,7 +205,8 @@ class CachingTests(pastc.PASTestCase):
         user = self.pas.validate(request)
         self.assertIsNotNone(user)
         self.assertEqual(user.getId(), pastc.user_name)
-        self.assertEqual(user.getRoles(), ['Authenticated', pastc.user_role])
+        self.assertItemsEqual(
+            user.getRoles(), ['Authenticated', pastc.user_role])
 
         self.assertCacheStats(2, 2, 0)
 
@@ -230,7 +233,8 @@ class CachingTests(pastc.PASTestCase):
         user = self.pas.validate(request)
         self.assertIsNotNone(user)
         self.assertEqual(user.getId(), pastc.user_name)
-        self.assertEqual(user.getRoles(), ['Authenticated', pastc.user_role])
+        self.assertItemsEqual(
+            user.getRoles(), ['Authenticated', pastc.user_role])
 
         self.assertCacheStats(2, 2, 0)
 

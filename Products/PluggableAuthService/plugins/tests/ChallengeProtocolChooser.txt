@@ -146,7 +146,6 @@ And with valid credentials the reqeuest should succeed:
   ... """ % (folder_name, username, password), handle_errors=True
   ... ) # doctest: +NORMALIZE_WHITESPACE +ELLIPSIS
   HTTP/1.1 200 OK
-  ...
   Content-Length: 140
   Content-Type: text/xml; charset=utf-8
   <BLANKLINE>
