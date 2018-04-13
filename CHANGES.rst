@@ -1,15 +1,15 @@
 Change Log
 ==========
 
-1.12.0 (unreleased)
--------------------
+2.0 (unreleased)
+----------------
+
+- The dependency on ``ZServer`` is now optional. To use the features which
+  require ``ZServer`` (WebDav, XML-RPC, FTP) use the setuptools extra `zserver`
+  when installing the package.
 
 - Do not fail when our base profiles are already registered.
   This may happen in tests if our ``initialize`` code is called twice.
-
-- Improve Python 3 support using six.
-
-- Prepare for Python 2 / 3 compatibility.
 
 1.11.0 (2016-03-01)
 -------------------
