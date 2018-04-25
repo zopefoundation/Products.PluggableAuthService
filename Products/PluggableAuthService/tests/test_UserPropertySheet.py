@@ -19,7 +19,7 @@ from DateTime.DateTime import DateTime
 
 from OFS.Image import Image
 
-from conformance import IPropertySheet_conformance
+from .conformance import IPropertySheet_conformance
 
 path = os.path.dirname(__file__)
 path = os.path.join(path, 'image.gif')

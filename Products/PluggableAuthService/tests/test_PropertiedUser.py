@@ -14,7 +14,7 @@
 import unittest
 
 from Acquisition import Implicit
-from conformance import IBasicUser_conformance, \
+from .conformance import IBasicUser_conformance, \
                         IPropertiedUser_conformance
 
 class FauxMethod:

@@ -17,7 +17,7 @@ from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import noSecurityManager
 from AccessControl.SecurityManager import setSecurityPolicy
 from Acquisition import Implicit, aq_base
-from conformance import IUserFolder_conformance
+from .conformance import IUserFolder_conformance
 from OFS.ObjectManager import ObjectManager
 from Products.PluggableAuthService.utils import directlyProvides
 from zExceptions import Unauthorized
