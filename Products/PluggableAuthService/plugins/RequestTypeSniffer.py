@@ -101,7 +101,7 @@ classImplements(RequestTypeSniffer,
 
 InitializeClass(RequestTypeSniffer)
 
-if HAS_ZSERVER:
+if HAVE_ZSERVER:
     # Most of the sniffing code below has been inspired by
     # similar tests found in BaseRequest, HTTPRequest and ZServer
     def webdavSniffer(request):
@@ -120,8 +120,6 @@ if HAS_ZSERVER:
 
     registerSniffer(IWebDAVRequest, webdavSniffer)
 
-
-if HAVE_ZSERVER:
     def xmlrpcSniffer(request):
         response = request['RESPONSE']
         method = request.get('REQUEST_METHOD', 'GET').upper()
@@ -136,14 +134,13 @@ if HAVE_ZSERVER:
             return True
 
     registerSniffer(IFTPRequest, ftpSniffer)
-    _known_sniffers = (webdavSniffer, ftpSniffer, xmlrpcSniffer)
-else:
-    _known_sniffers = (webdavSniffer, )
 
 
 def browserSniffer(request):
     # If it's none of the above, it's very likely a browser request.
-    for sniffer in _known_sniffers:
+    if HAVE_ZSERVER:
+        return True
+    for sniffer in (webdavSniffer, ftpSniffer, xmlrpcSniffer):
         if sniffer(request):
             return False
     return True
