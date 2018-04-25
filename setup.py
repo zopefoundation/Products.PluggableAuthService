@@ -23,12 +23,12 @@ README = ( README + _boundary + CHANGES)
 
 setup(name='Products.%s' % NAME,
       version=_package_doc('version.txt').strip(),
-      description='Pluggable Zope2 authentication / authorization framework',
+      description='Pluggable Zope authentication / authorization framework',
       long_description=README,
       classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Framework :: Plone",
-        "Framework :: Zope2",
+        "Framework :: Zope :: 4",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: Zope Public License",
         "Programming Language :: Python",
@@ -37,10 +37,10 @@ setup(name='Products.%s' % NAME,
         "Topic :: System :: Systems Administration :: "
                 "Authentication/Directory",
         ],
-      keywords='web application server zope zope2',
+      keywords='web application server zope',
       author="Zope Foundation and Contributors",
       author_email="zope-cmf@zope.org",
-      url="http://pypi.python.org/pypi/Products.PluggableAuthService",
+      url="https://github.com/zopefoundation/Products.PluggableAuthService",
       license="ZPL 2.1 (http://www.zope.org/Resources/License/ZPL-2.1)",
       packages=find_packages(),
       include_package_data=True,
@@ -49,15 +49,18 @@ setup(name='Products.%s' % NAME,
       install_requires=[
           'setuptools',
           'six',
-          'Zope2 >= 4.0a4',
+          'Zope >= 4.0b4',
           'AccessControl >= 4.0a1',
           'Products.PluginRegistry >= 1.5',
           'Products.GenericSetup >= 1.9.0',
           'Products.StandardCacheManagers',
-          'ZServer >= 4.0a1',
           ],
-      extras_require={'ip_range': ['IPy'],
-                     },
+      extras_require={
+          'ip_range': ['IPy'],
+          'zserver': [
+              'ZServer >= 4.0a1',
+          ]
+      },
       entry_points="""
       [zope2.initialize]
       Products.%s = Products.%s:initialize
