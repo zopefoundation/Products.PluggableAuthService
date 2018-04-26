@@ -138,7 +138,7 @@ if HAVE_ZSERVER:
 
 def browserSniffer(request):
     # If it's none of the above, it's very likely a browser request.
-    if HAVE_ZSERVER:
+    if not HAVE_ZSERVER:
         return True
     for sniffer in (webdavSniffer, ftpSniffer, xmlrpcSniffer):
         if sniffer(request):
