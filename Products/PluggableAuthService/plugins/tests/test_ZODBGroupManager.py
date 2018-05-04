@@ -129,7 +129,7 @@ class ZODBGroupManagerTests( unittest.TestCase
 
         new = zgm.addPrincipalToGroup( 'foo', 'group' )
 
-        self.failUnless( new )
+        self.assertTrue( new )
 
         assigned = [x[1] for x in zgm.listAssignedPrincipals( 'group' )]
 
@@ -254,7 +254,7 @@ class ZODBGroupManagerTests( unittest.TestCase
         self.assertEqual( len( info_list ), len( ID_LIST ) )
 
         for info in info_list:
-            self.failUnless( info[ 'id' ] in ID_LIST )
+            self.assertTrue( info[ 'id' ] in ID_LIST )
 
         SUBSET = ID_LIST[:3]
 
@@ -263,7 +263,7 @@ class ZODBGroupManagerTests( unittest.TestCase
         self.assertEqual( len( info_list ), len( SUBSET ) )
 
         for info in info_list:
-            self.failUnless( info[ 'id' ] in SUBSET )
+            self.assertTrue( info[ 'id' ] in SUBSET )
 
     def test_enumerateGroups_prefixed( self ):
         from Products.PluggableAuthService.tests.test_PluggableAuthService \
@@ -285,7 +285,7 @@ class ZODBGroupManagerTests( unittest.TestCase
         self.assertEqual( len( info_list ), len( ID_LIST ) )
 
         for info in info_list:
-            self.failUnless( info[ 'id' ] in PRE_LIST )
+            self.assertTrue( info[ 'id' ] in PRE_LIST )
 
     def test_addPrincipalToGroup_w_prefix( self ):
         zgm = self._makeOne()

@@ -357,7 +357,7 @@ class ZODBUserManagerTests( unittest.TestCase
         self.assertEqual( len( info_list ), len( ID_LIST ) )
 
         for info in info_list:
-            self.failUnless( info[ 'id' ] in ID_LIST )
+            self.assertTrue( info[ 'id' ] in ID_LIST )
 
         SUBSET = ID_LIST[:3]
 
@@ -366,7 +366,7 @@ class ZODBUserManagerTests( unittest.TestCase
         self.assertEqual( len( info_list ), len( SUBSET ) )
 
         for info in info_list:
-            self.failUnless( info[ 'id' ] in SUBSET )
+            self.assertTrue( info[ 'id' ] in SUBSET )
 
     def test_enumerateUsers_multiple_logins( self ):
 
@@ -388,8 +388,8 @@ class ZODBUserManagerTests( unittest.TestCase
         self.assertEqual( len( info_list ), len( LOGIN_LIST ) )
 
         for info in info_list:
-            self.failUnless( info[ 'id' ] in ID_LIST )
-            self.failUnless( info[ 'login' ] in LOGIN_LIST )
+            self.assertTrue( info[ 'id' ] in ID_LIST )
+            self.assertTrue( info[ 'login' ] in LOGIN_LIST )
 
         SUBSET_LOGINS = LOGIN_LIST[:3]
         SUBSET_IDS = ID_LIST[:3]
@@ -399,8 +399,8 @@ class ZODBUserManagerTests( unittest.TestCase
         self.assertEqual( len( info_list ), len( SUBSET_LOGINS ) )
 
         for info in info_list:
-            self.failUnless( info[ 'id' ] in SUBSET_IDS )
-            self.failUnless( info[ 'login' ] in SUBSET_LOGINS )
+            self.assertTrue( info[ 'id' ] in SUBSET_IDS )
+            self.assertTrue( info[ 'login' ] in SUBSET_LOGINS )
 
     def test_authenticateWithOldPasswords( self ):
 
@@ -452,7 +452,7 @@ class ZODBUserManagerTests( unittest.TestCase
         # Give the user a new password; attempting to authenticate with the
         # old password must fail
         zum.updateUserPassword('user1', 'new_password')
-        self.failIf(zum.authenticateCredentials(info1))
+        self.assertFalse(zum.authenticateCredentials(info1))
 
         # Try to authenticate with the new password, this must succeed.
         info2 = { 'login' : 'user1@example.com', 'password' : 'new_password' }
@@ -474,7 +474,7 @@ class ZODBUserManagerTests( unittest.TestCase
         # Give the user a new login; attempts to authenticate with the
         # old login must fail.
         zum.updateUser('user1', 'user1@foobar.com')
-        self.failIf(zum.authenticateCredentials(info1))
+        self.assertFalse(zum.authenticateCredentials(info1))
 
         # Try to authenticate with the new login, this must succeed.
         info2 = { 'login' : 'user1@foobar.com', 'password' : 'password' }
@@ -513,8 +513,8 @@ class ZODBUserManagerTests( unittest.TestCase
         # Give all users a new login, using the applyTransform method
         # of PAS.  There should be no changes.
         zum.updateEveryLoginName()
-        self.failUnless(zum.authenticateCredentials(info1))
-        self.failUnless(zum.authenticateCredentials(info2))
+        self.assertTrue(zum.authenticateCredentials(info1))
+        self.assertTrue(zum.authenticateCredentials(info2))
 
         # Use a PAS configured to transform login names to lower case.
         zum._getPAS = lambda: FakeLowerCasePAS()
@@ -526,8 +526,8 @@ class ZODBUserManagerTests( unittest.TestCase
         # query PAS (via the validate or _extractUserIds method), PAS
         # is responsible for transforming the login before passing it
         # to our plugin.
-        self.failIf(zum.authenticateCredentials(info1))
-        self.failIf(zum.authenticateCredentials(info2))
+        self.assertFalse(zum.authenticateCredentials(info1))
+        self.assertFalse(zum.authenticateCredentials(info2))
 
         # Authentication with all lowercase login works.
         info1 = { 'login' : 'user1@example.com', 'password' : 'password' }
@@ -571,7 +571,7 @@ class ZODBUserManagerTests( unittest.TestCase
         USER_ID = 'not_yet_encrypted'
         PASSWORD = 'password'
 
-        self.failIf(is_encrypted(PASSWORD))
+        self.assertFalse(is_encrypted(PASSWORD))
 
         zum = self._makeOne()
         zum.addUser(USER_ID, USER_ID, PASSWORD)
@@ -608,7 +608,7 @@ class ZODBUserManagerTests( unittest.TestCase
         USER_ID = 'not_yet_encrypted'
         PASSWORD = 'password'
 
-        self.failIf(is_encrypted(PASSWORD))
+        self.assertFalse(is_encrypted(PASSWORD))
 
         zum = self._makeOne()
         zum.addUser(USER_ID, USER_ID, '')
@@ -649,7 +649,7 @@ class ZODBUserManagerTests( unittest.TestCase
         # Create a user and make sure we can authenticate with it
         zum.addUser( 'user1', 'user1@example.com', 'password' )
         info1 = { 'login' : 'user1@example.com', 'password' : 'password' }
-        self.failUnless(zum.authenticateCredentials(info1))
+        self.assertTrue(zum.authenticateCredentials(info1))
 
         # Give the user a new password; attempting to authenticate with the
         # old password must fail
@@ -676,7 +676,7 @@ class ZODBUserManagerTests( unittest.TestCase
         finally:
             noSecurityManager()
 
-        self.failIf(zum.authenticateCredentials(info1))
+        self.assertFalse(zum.authenticateCredentials(info1))
 
         # Try to authenticate with the new password, this must succeed.
         info2 = { 'login' : 'user2@example.com', 'password' : 'new_password' }

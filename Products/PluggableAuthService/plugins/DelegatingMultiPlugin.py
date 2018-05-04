@@ -20,7 +20,6 @@ __version__ = '$Revision$'[11:-2]
 
 # General Python imports
 import copy, os
-from urllib import quote_plus
 
 # Zope imports
 from Acquisition import aq_base
@@ -212,7 +211,7 @@ class DelegatingMultiPlugin(Folder, BasePlugin):
                 user = acl.getUser(login)
             else:
                 msg = 'Exact Match specified but no ID or Login given'
-                raise ValueError, msg
+                raise ValueError(msg)
 
             if user is not None:
                 result.append( { 'id' : user.getId()

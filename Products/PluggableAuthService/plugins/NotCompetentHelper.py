@@ -26,7 +26,7 @@ from AccessControl import ClassSecurityInfo
 from AccessControl.Permissions import manage_users
 from AccessControl.User import nobody
 from ZPublisher.BaseRequest import UNSPECIFIED_ROLES
-from ZPublisher.Response import Response
+from ZPublisher.HTTPResponse import HTTPResponse as Response
 from OFS.PropertyManager import PropertyManager
 
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
@@ -124,7 +124,7 @@ class NotCompetent_byRoles( NotCompetentBase ):
         + PropertyManager.manage_options
         + NotCompetentBase.manage_options[ 1:-1 ]
         )
-  
+
     def isNotCompetentToAuthenticate( self, request ):
         return self._getHigherLevelUser( request, self.roles ) is not None
 

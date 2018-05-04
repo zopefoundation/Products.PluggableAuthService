@@ -34,7 +34,7 @@ class IExtractionPlugin_conformance:
             import IExtractionPlugin
 
         listed = self._makeOne().listInterfaces()
-        self.failUnless(IExtractionPlugin.__name__ in listed)
+        self.assertTrue(IExtractionPlugin.__name__ in listed)
 
 
 class ILoginPasswordExtractionPlugin_conformance:
@@ -52,7 +52,7 @@ class ILoginPasswordExtractionPlugin_conformance:
             import ILoginPasswordExtractionPlugin
 
         listed = self._makeOne().listInterfaces()
-        self.failUnless(ILoginPasswordExtractionPlugin.__name__ in listed)
+        self.assertTrue(ILoginPasswordExtractionPlugin.__name__ in listed)
 
 
 class ILoginPasswordHostExtractionPlugin_conformance:
@@ -71,7 +71,7 @@ class ILoginPasswordHostExtractionPlugin_conformance:
             import ILoginPasswordHostExtractionPlugin
 
         listed = self._makeOne().listInterfaces()
-        self.failUnless(ILoginPasswordHostExtractionPlugin.__name__ in listed)
+        self.assertTrue(ILoginPasswordHostExtractionPlugin.__name__ in listed)
 
 
 class IChallengePlugin_conformance:
@@ -89,7 +89,7 @@ class IChallengePlugin_conformance:
             import IChallengePlugin
 
         listed = self._makeOne().listInterfaces()
-        self.failUnless(IChallengePlugin.__name__ in listed)
+        self.assertTrue(IChallengePlugin.__name__ in listed)
 
 
 class ICredentialsUpdatePlugin_conformance:
@@ -107,7 +107,7 @@ class ICredentialsUpdatePlugin_conformance:
             import ICredentialsUpdatePlugin
 
         listed = self._makeOne().listInterfaces()
-        self.failUnless(ICredentialsUpdatePlugin.__name__ in listed)
+        self.assertTrue(ICredentialsUpdatePlugin.__name__ in listed)
 
 
 class ICredentialsResetPlugin_conformance:
@@ -125,7 +125,7 @@ class ICredentialsResetPlugin_conformance:
             import ICredentialsResetPlugin
 
         listed = self._makeOne().listInterfaces()
-        self.failUnless(ICredentialsResetPlugin.__name__ in listed)
+        self.assertTrue(ICredentialsResetPlugin.__name__ in listed)
 
 
 class IAuthenticationPlugin_conformance:
@@ -143,7 +143,7 @@ class IAuthenticationPlugin_conformance:
             import IAuthenticationPlugin
 
         listed = self._makeOne().listInterfaces()
-        self.failUnless(IAuthenticationPlugin.__name__ in listed)
+        self.assertTrue(IAuthenticationPlugin.__name__ in listed)
 
 
 class IUserEnumerationPlugin_conformance:
@@ -161,7 +161,7 @@ class IUserEnumerationPlugin_conformance:
             import IUserEnumerationPlugin
 
         listed = self._makeOne().listInterfaces()
-        self.failUnless(IUserEnumerationPlugin.__name__ in listed)
+        self.assertTrue(IUserEnumerationPlugin.__name__ in listed)
 
 
 class IUserAdderPlugin_conformance:
@@ -179,7 +179,7 @@ class IUserAdderPlugin_conformance:
             import IUserAdderPlugin
 
         listed = self._makeOne().listInterfaces()
-        self.failUnless(IUserAdderPlugin.__name__ in listed)
+        self.assertTrue(IUserAdderPlugin.__name__ in listed)
 
 
 class IGroupEnumerationPlugin_conformance:
@@ -197,7 +197,7 @@ class IGroupEnumerationPlugin_conformance:
             import IGroupEnumerationPlugin
 
         listed = self._makeOne().listInterfaces()
-        self.failUnless(IGroupEnumerationPlugin.__name__ in listed)
+        self.assertTrue(IGroupEnumerationPlugin.__name__ in listed)
 
 
 class IGroupsPlugin_conformance:
@@ -215,7 +215,7 @@ class IGroupsPlugin_conformance:
             import IGroupsPlugin
 
         listed = self._makeOne().listInterfaces()
-        self.failUnless(IGroupsPlugin.__name__ in listed)
+        self.assertTrue(IGroupsPlugin.__name__ in listed)
 
 
 class IRoleEnumerationPlugin_conformance:
@@ -233,7 +233,7 @@ class IRoleEnumerationPlugin_conformance:
             import IRoleEnumerationPlugin
 
         listed = self._makeOne().listInterfaces()
-        self.failUnless(IRoleEnumerationPlugin.__name__ in listed)
+        self.assertTrue(IRoleEnumerationPlugin.__name__ in listed)
 
 
 class IRolesPlugin_conformance:
@@ -251,7 +251,7 @@ class IRolesPlugin_conformance:
             import IRolesPlugin
 
         listed = self._makeOne().listInterfaces()
-        self.failUnless(IRolesPlugin.__name__ in listed)
+        self.assertTrue(IRolesPlugin.__name__ in listed)
 
 
 class IRoleAssignerPlugin_conformance:
@@ -269,7 +269,7 @@ class IRoleAssignerPlugin_conformance:
             import IRoleAssignerPlugin
 
         listed = self._makeOne().listInterfaces()
-        self.failUnless(IRoleAssignerPlugin.__name__ in listed)
+        self.assertTrue(IRoleAssignerPlugin.__name__ in listed)
 
 
 class IChallengeProtocolChooser_conformance:
@@ -287,7 +287,7 @@ class IChallengeProtocolChooser_conformance:
             import IChallengeProtocolChooser
 
         listed = self._makeOne().listInterfaces()
-        self.failUnless(IChallengeProtocolChooser.__name__ in listed)
+        self.assertTrue(IChallengeProtocolChooser.__name__ in listed)
 
 
 class IRequestTypeSniffer_conformance:
@@ -305,7 +305,7 @@ class IRequestTypeSniffer_conformance:
             import IRequestTypeSniffer
 
         listed = self._makeOne().listInterfaces()
-        self.failUnless(IRequestTypeSniffer.__name__ in listed)
+        self.assertTrue(IRequestTypeSniffer.__name__ in listed)
 
 
 class IUserFolder_conformance:
@@ -363,5 +363,5 @@ class INotCompetentPlugin_conformance:
             import INotCompetentPlugin
 
         listed = self._makeOne().listInterfaces()
-        self.failUnless(INotCompetentPlugin.__name__ in listed)
+        self.assertTrue(INotCompetentPlugin.__name__ in listed)
 

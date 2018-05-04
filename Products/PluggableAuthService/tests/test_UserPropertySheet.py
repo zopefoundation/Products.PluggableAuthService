@@ -67,9 +67,9 @@ class UserPropertySheetTests( unittest.TestCase
 
         self.assertEqual( ups.getId(), 'empty' )
 
-        self.failIf( ups.hasProperty( 'empty' ) )
-        self.failIf( ups.hasProperty( 'foo' ) )
-        self.failIf( ups.hasProperty( 'bar' ) )
+        self.assertFalse( ups.hasProperty( 'empty' ) )
+        self.assertFalse( ups.hasProperty( 'foo' ) )
+        self.assertFalse( ups.hasProperty( 'bar' ) )
 
         self.assertEqual( ups.getProperty( 'foo' ), None )
         self.assertEqual( ups.getPropertyType( 'foo' ), None )
@@ -82,16 +82,16 @@ class UserPropertySheetTests( unittest.TestCase
 
     def _checkStockSchema( self, ups, values_are_none=False ):
 
-        self.failIf( ups.hasProperty( 'x' ) )
-        self.failUnless( ups.hasProperty( 's' ) )
-        self.failUnless( ups.hasProperty( 'i' ) )
-        self.failUnless( ups.hasProperty( 'f' ) )
-        self.failUnless( ups.hasProperty( 'n' ) )
-        self.failUnless( ups.hasProperty( 'd' ) )
-        self.failUnless( ups.hasProperty( 'l' ) )
-        self.failUnless( ups.hasProperty( 't' ) )
-        self.failUnless( ups.hasProperty( 'b' ) )
-        self.failUnless( ups.hasProperty( 'img' ) )
+        self.assertFalse( ups.hasProperty( 'x' ) )
+        self.assertTrue( ups.hasProperty( 's' ) )
+        self.assertTrue( ups.hasProperty( 'i' ) )
+        self.assertTrue( ups.hasProperty( 'f' ) )
+        self.assertTrue( ups.hasProperty( 'n' ) )
+        self.assertTrue( ups.hasProperty( 'd' ) )
+        self.assertTrue( ups.hasProperty( 'l' ) )
+        self.assertTrue( ups.hasProperty( 't' ) )
+        self.assertTrue( ups.hasProperty( 'b' ) )
+        self.assertTrue( ups.hasProperty( 'img' ) )
 
         self.assertEqual( ups.getPropertyType( 's' ), 'string' )
         self.assertEqual( ups.propertyInfo( 's' )[ 'type' ], 'string' )

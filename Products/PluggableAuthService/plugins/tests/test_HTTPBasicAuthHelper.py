@@ -105,10 +105,10 @@ class HTTPBasicAuthHelperTests( unittest.TestCase
         request = FauxHTTPRequest()
         response = FauxHTTPResponse()
 
-        self.failIf( response._unauthorized_called )
+        self.assertFalse( response._unauthorized_called )
         helper.challenge(request, response)
-        self.failUnless(response.status, 401)
-        self.failUnless(response.headers['WWW-Authenticate'],
+        self.assertTrue(response.status, 401)
+        self.assertTrue(response.headers['WWW-Authenticate'],
             'basic realm="unit test"')
 
     def test_multi_challenge( self ):
@@ -117,14 +117,14 @@ class HTTPBasicAuthHelperTests( unittest.TestCase
         request = FauxHTTPRequest()
         response = FauxHTTPResponse()
 
-        self.failIf( response._unauthorized_called )
+        self.assertFalse( response._unauthorized_called )
         helper.challenge(request, response)
 
         response.realm = 'second realm'
         helper.challenge(request, response)
 
-        self.failUnless(response.status, 401)
-        self.failUnless(response.headers['WWW-Authenticate'],
+        self.assertTrue(response.status, 401)
+        self.assertTrue(response.headers['WWW-Authenticate'],
             ['basic realm="unit test"', 'basic realm="second realm"'])
 
 
@@ -134,9 +134,9 @@ class HTTPBasicAuthHelperTests( unittest.TestCase
         request = FauxHTTPRequest()
         response = FauxHTTPResponse()
 
-        self.failIf( response._unauthorized_called )
+        self.assertFalse( response._unauthorized_called )
         helper.resetCredentials( request, response )
-        self.failUnless( response._unauthorized_called )
+        self.assertTrue( response._unauthorized_called )
 
 if __name__ == "__main__":
     unittest.main()

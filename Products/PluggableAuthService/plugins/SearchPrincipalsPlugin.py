@@ -18,8 +18,6 @@
 
 # General Python imports
 import copy, os
-from urllib import quote_plus
-
 # Zope imports
 from Acquisition import aq_base
 from OFS.Folder import Folder
@@ -37,6 +35,7 @@ from Products.PluggableAuthService.interfaces.plugins import \
      IGroupEnumerationPlugin
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.utils import classImplements
+
 
 class ISearchPrincipalsPlugin(Interface):
     """ Marker interface.

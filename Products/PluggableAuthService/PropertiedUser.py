@@ -281,7 +281,7 @@ class PropertiedUser( BasicUser ):
         o Raise KeyError if a sheet of the given ID already exists.
         """
         if self._propertysheets.get( id ) is not None:
-            raise KeyError, "Duplicate property sheet: %s" % id
+            raise KeyError("Duplicate property sheet: %s" % id)
 
         if IPropertySheet.providedBy(data):
             self._propertysheets[ id ] = data

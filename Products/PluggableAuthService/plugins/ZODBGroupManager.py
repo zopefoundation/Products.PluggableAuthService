@@ -36,6 +36,9 @@ from Products.PluggableAuthService.utils import classImplements
 from Products.PluggableAuthService.utils import csrf_only
 
 
+import six
+
+
 class IZODBGroupManager(Interface):
     """ Marker interface.
     """
@@ -91,10 +94,10 @@ class ZODBGroupManager( BasePlugin ):
         group_ids = []
         plugin_id = self.getId()
 
-        if isinstance( id, basestring ):
+        if isinstance( id, six.string_types ):
             id = [ id ]
 
-        if isinstance( title, basestring ):
+        if isinstance( title, six.string_types ):
             title = [ title ]
 
         if exact_match and ( id or title ):
@@ -179,7 +182,7 @@ class ZODBGroupManager( BasePlugin ):
         o Raise KeyError on duplicate.
         """
         if self._groups.get( group_id ) is not None:
-            raise KeyError, 'Duplicate group ID: %s' % group_id
+            raise KeyError('Duplicate group ID: %s' % group_id)
 
         self._groups[ group_id ] = { 'id' : group_id
                                    , 'title' : title

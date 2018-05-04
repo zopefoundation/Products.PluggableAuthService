@@ -57,6 +57,7 @@ $Id$
 """
 import os, sys
 
+import six
 from xml.dom.minidom import parseString
 
 from Acquisition import Implicit
@@ -142,7 +143,7 @@ class SimpleXMLExportImport(Implicit):
         if attr is None:
             return default
         value = attr.value
-        if isinstance(value, unicode) and self.encoding is not None:
+        if isinstance(value, six.text_type) and self.encoding is not None:
             value = value.encode(self.encoding)
         return value
 
@@ -164,7 +165,7 @@ class ZODBUserManagerExportImport(SimpleXMLExportImport):
             password_hash = self._getNodeAttr(user, 'password_hash', None)
 
             if user_id is None or login_name is None or password_hash is None:
-                raise ValueError, 'Invalid user record'
+                raise ValueError('Invalid user record')
 
             self.context.addUser(user_id, login_name, 'x')
             self.context._user_passwords[user_id] = password_hash

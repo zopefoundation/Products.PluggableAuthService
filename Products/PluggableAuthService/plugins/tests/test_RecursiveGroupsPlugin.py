@@ -147,10 +147,10 @@ class RecursiveGroupsPluginTests( unittest.TestCase
 
         groups = rgp.getGroupsForPrincipal( user )
         self.assertEqual( len( groups ), 4 )
-        self.failUnless( 'dummy:group1' in groups )
-        self.failUnless( 'dummy:group2' in groups )
-        self.failUnless( 'other_dummy:group3' in groups )
-        self.failUnless( 'other_dummy:group4' in groups )
+        self.assertTrue( 'dummy:group1' in groups )
+        self.assertTrue( 'dummy:group2' in groups )
+        self.assertTrue( 'other_dummy:group3' in groups )
+        self.assertTrue( 'other_dummy:group4' in groups )
 
     def test_cross_nested_flattening( self ):
 
@@ -183,8 +183,8 @@ class RecursiveGroupsPluginTests( unittest.TestCase
 
         groups = rgp.getGroupsForPrincipal( user )
         self.assertEqual( len( groups ), 2 )
-        self.failUnless( 'dummy:group1' in groups )
-        self.failUnless( 'other_dummy:group2' in groups )
+        self.assertTrue( 'dummy:group1' in groups )
+        self.assertTrue( 'other_dummy:group2' in groups )
 
 if __name__ == "__main__":
     unittest.main()

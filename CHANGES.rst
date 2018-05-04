@@ -1,11 +1,24 @@
 Change Log
 ==========
 
-1.10.1 (unreleased)
+2.0 (unreleased)
+----------------
+
+- The dependency on ``ZServer`` is now optional. To use the features which
+  require ``ZServer`` (WebDav, XML-RPC, FTP) use the setuptools extra `zserver`
+  when installing the package.
+
+- Do not fail when our base profiles are already registered.
+  This may happen in tests if our ``initialize`` code is called twice.
+
+1.11.0 (2016-03-01)
 -------------------
+
+- Add new event to be able to notify group deletion.
 
 - Fix usage of os.path.split(). Could result in Errors during import
   on Windows.
+
 
 1.10.0 (2013-02-19)
 -------------------
@@ -161,7 +174,7 @@ Change Log
 - Allow CookieAuthHelper's ``login_path`` to be set to an absolute url for
   integration with external authentication mechanisms.
 
-- Fixed xml templates directory path computation to allow reuse of 
+- Fixed xml templates directory path computation to allow reuse of
   ``SimpleXMLExportImport`` class outside ``Products.PluggableAuthService``.
 
 
@@ -205,7 +218,7 @@ Change Log
 - Launchpad #273680:  Avoid expensive / incorrect dive into ``enumerateUsers``
   when trying to validate w/o either a real ID or login.
 
-- Launchpad #300321: 
+- Launchpad #300321:
   ``Products.PluggableAuthService.pluginsZODBGroupManager.enumerateGroups``
   failed to find groups with unicode IDs.
 
@@ -264,9 +277,9 @@ Change Log
 1.5.1 (2007-09-11)
 ------------------
 
-- PluggableAuthService._verifyUser: changed to use exact_match to the 
-  enumerator, otherwise a user with login ``foobar`` might get returned 
-  by _verifyUser for a query for ``login='foo'`` because the enumerator 
+- PluggableAuthService._verifyUser: changed to use exact_match to the
+  enumerator, otherwise a user with login ``foobar`` might get returned
+  by _verifyUser for a query for ``login='foo'`` because the enumerator
   happened to return 'foobar' first in the results.
 
 - Add a test for manage_zmi_logout and replace a call to isImplementedBy
@@ -328,8 +341,8 @@ Change Log
   Authentication if the EmergencyUser login was passed in.  Added
   password validation utilizing AuthEncoding.pw_validate
 
-- Fixed a set of tests that tested values computed from dictionaries 
-  and could break since dictionaries are not guaranteed to have any 
+- Fixed a set of tests that tested values computed from dictionaries
+  and could break since dictionaries are not guaranteed to have any
   sort order.
 
 - Fixed test breakage induced by use of Z3 pagetemplates in Zope
@@ -349,6 +362,6 @@ Change Log
 - Cleaned up code in CookieAuthHelper which allowed the form to override
   login/password if a cookie had already been set.
 
-- Removed some BBB code for Zope versions < 2.8, which is not needed 
+- Removed some BBB code for Zope versions < 2.8, which is not needed
   since we require Zope > 2.8.5 nowadays.
 

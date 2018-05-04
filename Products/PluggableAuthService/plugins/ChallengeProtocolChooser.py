@@ -177,7 +177,7 @@ class ChallengeProtocolChooser( BasePlugin ):
         for key, value in mapping.items():
             value = filter(None, value)
             if not value:
-                if self._map.has_key(key):
+                if key in self._map:
                     del self._map[key]
             else:
                 self._map[key] = value

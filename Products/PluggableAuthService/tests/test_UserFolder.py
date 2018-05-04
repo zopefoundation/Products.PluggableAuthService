@@ -30,6 +30,9 @@ from Products.PluggableAuthService.events import CredentialsUpdated
 from Products.PluggableAuthService.events import PASEventNotify
 from Products.PluggableAuthService.events import userCredentialsUpdatedHandler
 
+from six.moves import range
+
+
 @adapter(IPrincipalCreatedEvent)
 def userCreatedHandler(event):
     pas = event.principal.aq_parent
@@ -64,25 +67,25 @@ class UserFolderTests(pastc.PASTestCase):
         self.logout()
 
     def testGetUser(self):
-        self.failIfEqual(self.uf.getUser('user1'), None)
+        self.assertNotEqual(self.uf.getUser('user1'), None)
 
     def testGetBadUser(self):
         self.assertEqual(self.uf.getUser('user2'), None)
 
     def testGetUserById(self):
-        self.failIfEqual(self.uf.getUserById('user1'), None)
+        self.assertNotEqual(self.uf.getUserById('user1'), None)
 
     def testGetBadUserById(self):
         self.assertEqual(self.uf.getUserById('user2'), None)
 
     def NOTIMPLEMENTED_testGetUsers(self):
         users = self.uf.getUsers()
-        self.failUnless(users)
+        self.assertTrue(users)
         self.assertEqual(users[0].getUserName(), 'user1')
 
     def NOTIMPLEMENTED_testGetUserNames(self):
         names = self.uf.getUserNames()
-        self.failUnless(names)
+        self.assertTrue(names)
         self.assertEqual(names[0], 'user1')
 
     def NOTIMPLEMENTED_testIdentify(self):
@@ -92,49 +95,49 @@ class UserFolderTests(pastc.PASTestCase):
 
     def testGetRoles(self):
         user = self.uf.getUser('user1')
-        self.failUnless('role1' in user.getRoles())
-        self.failIf('role2' in user.getRoles())
+        self.assertTrue('role1' in user.getRoles())
+        self.assertFalse('role2' in user.getRoles())
 
     def testGetRolesInContext(self):
         user = self.uf.getUser('user1')
         self.folder.manage_addLocalRoles('user1', ['role2'])
         roles = user.getRolesInContext(self.folder)
-        self.failUnless('role1' in roles)
-        self.failUnless('role2' in roles)
+        self.assertTrue('role1' in roles)
+        self.assertTrue('role2' in roles)
 
     def testHasRole(self):
         user = self.uf.getUser('user1')
-        self.failUnless(user.has_role('role1', self.folder))
+        self.assertTrue(user.has_role('role1', self.folder))
 
     def testHasLocalRole(self):
         user = self.uf.getUser('user1')
-        self.failIf(user.has_role('role2', self.folder))
+        self.assertFalse(user.has_role('role2', self.folder))
         self.folder.manage_addLocalRoles('user1', ['role2'])
-        self.failUnless(user.has_role('role2', self.folder))
+        self.assertTrue(user.has_role('role2', self.folder))
 
     def testHasPermission(self):
         user = self.uf.getUser('user1')
-        self.failUnless(user.has_permission(View, self.folder))
-        self.failIf(user.has_permission(AddFolders, self.folder))
+        self.assertTrue(user.has_permission(View, self.folder))
+        self.assertFalse(user.has_permission(AddFolders, self.folder))
         self.folder.manage_role('role1', [AddFolders])
-        self.failUnless(user.has_permission(AddFolders, self.folder))
+        self.assertTrue(user.has_permission(AddFolders, self.folder))
 
     def testHasLocalRolePermission(self):
         user = self.uf.getUser('user1')
         self.folder.manage_role('role2', [AddFolders])
-        self.failIf(user.has_permission(AddFolders, self.folder))
+        self.assertFalse(user.has_permission(AddFolders, self.folder))
         self.folder.manage_addLocalRoles('user1', ['role2'])
-        self.failUnless(user.has_permission(AddFolders, self.folder))
+        self.assertTrue(user.has_permission(AddFolders, self.folder))
 
     def NOTIMPLEMENTED_testAuthenticate(self):
         user = self.uf.getUser('user1')
-        self.failUnless(user.authenticate('secret', self.app.REQUEST))
+        self.assertTrue(user.authenticate('secret', self.app.REQUEST))
 
     def testValidate(self):
         # XXX: PAS validate ignores auth argument
         self.app.REQUEST._auth = self.basic
         user = self.uf.validate(self.app.REQUEST, self.basic, ['role1'])
-        self.failIfEqual(user, None)
+        self.assertNotEqual(user, None)
         self.assertEqual(user.getUserName(), 'user1')
 
     def testNotValidateWithoutAuth(self):
@@ -187,7 +190,7 @@ class UserFolderTests(pastc.PASTestCase):
                 self.users = []
                 self.acl_users = self
                 self.__allow_groups__ = self
-                for i in xrange(count):
+                for i in range(count):
                     self.users.append("Nobody")
 
             def getUsers(self):
@@ -224,7 +227,7 @@ class UserFolderTests(pastc.PASTestCase):
         USER_ID = 'not_yet_encrypted'
         PASSWORD = 'password'
 
-        self.failIf(is_encrypted(PASSWORD))
+        self.assertFalse(is_encrypted(PASSWORD))
 
         self.uf._doAddUser(USER_ID, PASSWORD, [], [])
 
@@ -291,7 +294,7 @@ class UserTests(pastc.PASTestCase):
         f = self.user
         # XXX: PAS returns roles as list
         #self.assertEqual(f.getRoles(), ('Manager', 'Authenticated'))
-        self.assertEqual(f.getRoles(), ['Manager', 'Authenticated'])
+        self.assertItemsEqual(f.getRoles(), ['Manager', 'Authenticated'])
 
     def testGetDomains(self):
         f = self.user
@@ -317,7 +320,7 @@ class UserEvents(pastc.PASTestCase):
 
         self.assertEqual(len(self.uf.events), 1)
         event = self.uf.events[0]
-        self.failUnless(IPrincipalCreatedEvent.providedBy(event))
+        self.assertTrue(IPrincipalCreatedEvent.providedBy(event))
         self.assertEqual(event.principal.getUserName(), 'event1')
         self.assertEqual(event.principal.getId(), 'event1')
 

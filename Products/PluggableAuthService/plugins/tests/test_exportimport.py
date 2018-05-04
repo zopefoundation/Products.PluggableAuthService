@@ -22,7 +22,7 @@ try:
     import Products.GenericSetup
 except ImportError:  # No GenericSetup, so no tests
 
-    print 'XXXX:  No GenericSetup!'
+    print('XXXX:  No GenericSetup!')
     def test_suite():
         return unittest.TestSuite()
 
@@ -293,7 +293,7 @@ else:
                 self.assertEqual(finfo['description'], ginfo['description'])
                 for principal_id in ginfo['principals']:
                     groups = plugin._principal_groups[principal_id]
-                    self.failUnless(ginfo['group_id'] in groups)
+                    self.assertTrue(ginfo['group_id'] in groups)
 
         def test_import_without_purge_leaves_existing_users(self):
 
@@ -438,7 +438,7 @@ else:
                 self.assertEqual(finfo['description'], rinfo['description'])
                 for principal_id in rinfo['principals']:
                     roles = plugin._principal_roles[principal_id]
-                    self.failUnless(rinfo['role_id'] in roles)
+                    self.assertTrue(rinfo['role_id'] in roles)
 
         def test_import_without_purge_leaves_existing_users(self):
 
@@ -679,7 +679,7 @@ else:
             self.assertEqual(info['title'], TITLE)
             user_map = info['map']
             self.assertEqual(len(user_map), 1)
-            self.failUnless(USER_ID in user_map)
+            self.assertTrue(USER_ID in user_map)
             match_list = user_map[USER_ID]
             self.assertEqual(len(match_list), 1)
             match = match_list[0]
@@ -747,19 +747,19 @@ else:
             self.assertEqual(len(plugin._domain_map), 1)
             self.assertEqual(plugin.title, TITLE)
 
-            username, match_list = plugin._domain_map.items()[0]
+            username, match_list = list(plugin._domain_map.items())[0]
             self.assertEqual(username, USER_ID)
             self.assertEqual(len(match_list), 1)
             match = match_list[0]
             self.assertEqual(match['username'], USER_ID)
             self.assertEqual(match['match_string'], DOMAIN)
             filter = match['match_filter']
-            self.failUnless(isinstance(filter, EqualsFilter))
+            self.assertTrue(isinstance(filter, EqualsFilter))
             self.assertEquals(filter.match_string, DOMAIN)
             self.assertEqual(match['match_type'], 'equals')
             self.assertEqual(len(match['roles']), len(ROLES))
             for role in ROLES:
-                self.failUnless(role in match['roles'])
+                self.assertTrue(role in match['roles'])
 
         def test_import_without_purge_leaves_existing_users(self):
             TITLE = 'With Map'
