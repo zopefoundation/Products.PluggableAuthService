@@ -755,7 +755,7 @@ else:
             self.assertEqual(match['match_string'], DOMAIN)
             filter = match['match_filter']
             self.assertTrue(isinstance(filter, EqualsFilter))
-            self.assertEquals(filter.match_string, DOMAIN)
+            self.assertEqual(filter.match_string, DOMAIN)
             self.assertEqual(match['match_type'], 'equals')
             self.assertEqual(len(match['roles']), len(ROLES))
             for role in ROLES:

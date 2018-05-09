@@ -111,7 +111,7 @@ class LocalRolePluginTestCase( unittest.TestCase
 
         user = FauxUser( 'loser' ).__of__(root)
 
-        self.assertEquals( lrp.getRolesForPrincipal( user ), None )
+        self.assertEqual( lrp.getRolesForPrincipal( user ), None )
 
     def test_some_local_roles( self ):
 
@@ -123,7 +123,7 @@ class LocalRolePluginTestCase( unittest.TestCase
 
         user = FauxUser( 'some_manager' ).__of__(root)
 
-        self.assertEquals( lrp.getRolesForPrincipal( user ), [ 'Manager' ] )
+        self.assertEqual( lrp.getRolesForPrincipal( user ), [ 'Manager' ] )
 
 if __name__ == "__main__":
     unittest.main()

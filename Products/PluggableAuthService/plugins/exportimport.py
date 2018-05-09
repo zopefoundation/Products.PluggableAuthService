@@ -129,7 +129,9 @@ class SimpleXMLExportImport(Implicit):
             self._purgeContext()
 
         data = import_context.readDataFile('%s.xml' % self.context.getId(),
-                                           subdir).decode('utf-8')
+                                           subdir)
+        if six.PY2:
+            data = data.decode('utf-8')
 
         if data is not None:
 
@@ -145,7 +147,7 @@ class SimpleXMLExportImport(Implicit):
         if attr is None:
             return default
         value = attr.value
-        if isinstance(value, six.text_type) and self.encoding is not None:
+        if six.PY2 and isinstance(value, six.text_type) and self.encoding is not None:
             value = value.encode(self.encoding)
         return value
 

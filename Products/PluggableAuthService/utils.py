@@ -14,7 +14,7 @@
 from AccessControl import ClassSecurityInfo
 from App.Common import package_home
 from hashlib import sha1
-from ZPublisher import Forbidden
+from zExceptions import Forbidden
 from zope import interface
 from zope.publisher.interfaces.browser import IBrowserRequest  # noqa
 
@@ -158,13 +158,14 @@ def allTests( from_dir=product_dir, test_prefix='test' ):
 
 def makestr(s):
     """Converts 's' to a non-Unicode string"""
+    if isinstance(s, six.binary_type):
+        return s
+    if not isinstance(s, six.text_type):
+        s = repr(s)
     if isinstance(s, six.text_type):
         s = s.encode('utf-8')
-    if s is None:
-        return b'None'
-    if s is True:
-        return b'True'
     return s
+
 
 def createViewName(method_name, user_handle=None):
     """
@@ -174,7 +175,8 @@ def createViewName(method_name, user_handle=None):
     if not user_handle:
         return makestr(method_name)
     else:
-        return '%s-%s' % (makestr(method_name), makestr(user_handle))
+        return b'%s-%s' % (makestr(method_name), makestr(user_handle))
+
 
 def createKeywords(**kw):
     """
@@ -194,12 +196,15 @@ def createKeywords(**kw):
 
 def getCSRFToken(request):
     session = getattr(request, 'SESSION', None)
-    if not session:
+    if session:
+        token = session.get('_csrft_', None)
+        if token is None:
+            token = session['_csrft_'] = binascii.hexlify(os.urandom(20))
+    else:
         # Can happen in tests.
-        return binascii.hexlify(os.urandom(20))
-    token = session.get('_csrft_', None)
-    if token is None:
-        token = session['_csrft_'] = binascii.hexlify(os.urandom(20))
+        token = binascii.hexlify(os.urandom(20))
+    if six.PY3 and isinstance(token, bytes):
+        token = token.decode('utf8')
     return token
 
 

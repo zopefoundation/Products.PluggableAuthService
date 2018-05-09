@@ -244,7 +244,7 @@ class ZODBRoleManagerTests( unittest.TestCase
 
             zgm.addRole( id, 'Role %s' % id, 'This is role, %s' % id )
 
-        self.assertEquals( zgm.enumerateRoles( id='qux', exact_match=True )
+        self.assertEqual( zgm.enumerateRoles( id='qux', exact_match=True )
                          , () )
 
     def test_assignRoleToPrincipal_nonesuch( self ):

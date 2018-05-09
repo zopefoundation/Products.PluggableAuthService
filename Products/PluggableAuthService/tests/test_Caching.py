@@ -105,14 +105,14 @@ class PluggableAuthServiceCachingTests( unittest.TestCase ):
         setattr(rcm, 'REQUEST', FauxRequest())
 
         # Make sure the PAS instance itself is Cacheable
-        self.assert_(isCacheable(zcuf))
+        self.assertTrue(isCacheable(zcuf))
 
         # Make sure the PAS instance is not associated with any cache manager
         # by default
-        self.assert_(zcuf.ZCacheable_getManager() is None)
+        self.assertTrue(zcuf.ZCacheable_getManager() is None)
 
         # Make sure the RAMCacheManager is empty
-        self.assert_(len(rcm.getCacheReport()) == 0)
+        self.assertTrue(len(rcm.getCacheReport()) == 0)
 
     def test_caching_in_PAS(self):
         zcuf = self._makeAndFill()

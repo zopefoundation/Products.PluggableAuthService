@@ -335,7 +335,7 @@ class ZODBUserManagerTests( unittest.TestCase
 
             zum.addUser( id, '%s@example.com' % id, 'password' )
 
-        self.assertEquals( zum.enumerateUsers( id='qux', exact_match=True )
+        self.assertEqual( zum.enumerateUsers( id='qux', exact_match=True )
                          , () )
 
     def test_enumerateUsers_multiple_ids( self ):
@@ -413,7 +413,7 @@ class ZODBUserManagerTests( unittest.TestCase
 
         # synthesize an older account
 
-        old_password = sha( 'old_password' ).hexdigest()
+        old_password = sha( b'old_password' ).hexdigest()
         zum._user_passwords[ 'old_user' ] = old_password
         zum._login_to_userid[ 'old_user@example.com' ] = 'old_user'
         zum._userid_to_login[ 'old_user' ] = 'old_user@example.com'

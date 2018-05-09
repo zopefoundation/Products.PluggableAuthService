@@ -143,12 +143,12 @@ class ChallengeProtocolChooserTestHelper(object):
         dispatcher.manage_addDTMLMethod('test_script')
 
         script = self.folder._getOb('test_script')
-        script.manage_upload(b'Access Granted')
+        script.munge('Access Granted')
         script.manage_permission(permission_to_manage='View',
                                  roles=['Manager'], acquire=0)
 
     def assertStatus(self, response, status):
-        self.assertEqual(status, response.getOutput().split('\r\n')[0])
+        self.assertEqual(status, response.getOutput().split(b'\r\n')[0])
 
 
 class ChallengeProtocolChooserBasicAuthTests(
@@ -174,13 +174,13 @@ class ChallengeProtocolChooserBasicAuthTests(
         # response status.
 
         response = self.publish('/{0.folder_name}/test_script'.format(self))
-        self.assertStatus(response, 'HTTP/1.1 401 Unauthorized')
+        self.assertStatus(response, b'HTTP/1.1 401 Unauthorized')
 
     def test_GET_authorized(self):
         # With the right credentials though the request should succeed:
         response = self.publish(
             '/{0.folder_name}/test_script'.format(self), basic=self.basic_auth)
-        self.assertStatus(response, 'HTTP/1.1 200 OK')
+        self.assertStatus(response, b'HTTP/1.1 200 OK')
         self.assertIn('Access Granted', str(response))
 
     @unittest.skipIf(not HAVE_ZSERVER, 'WebDAV requires ZServer')
@@ -189,12 +189,12 @@ class ChallengeProtocolChooserBasicAuthTests(
         # should be challenged with a 401 response status:
         response = self.publish('/{0.folder_name}/test_script'.format(self),
                                 request_method='PROPFIND')
-        self.assertStatus(response, 'HTTP/1.1 401 Unauthorized')
+        self.assertStatus(response, b'HTTP/1.1 401 Unauthorized')
 
         response = self.publish(
             '/{0.folder_name}/test_script/manage_DAVget'.format(self),
             request_method='GET')
-        self.assertStatus(response, 'HTTP/1.1 401 Unauthorized')
+        self.assertStatus(response, b'HTTP/1.1 401 Unauthorized')
 
     @unittest.skipIf(not HAVE_ZSERVER, 'WebDAV requires ZServer')
     def test_WebDAV_authorized(self):
@@ -202,12 +202,12 @@ class ChallengeProtocolChooserBasicAuthTests(
         response = self.publish('/{0.folder_name}/test_script'.format(self),
                                 request_method='PROPFIND',
                                 basic=self.basic_auth)
-        self.assertStatus(response, 'HTTP/1.1 207 Multi-Status')
+        self.assertStatus(response, b'HTTP/1.1 207 Multi-Status')
 
         response = self.publish(
             '/{0.folder_name}/test_script/manage_DAVget'.format(self),
             request_method='GET', basic=self.basic_auth)
-        self.assertStatus(response, 'HTTP/1.1 200 OK')
+        self.assertStatus(response, b'HTTP/1.1 200 OK')
 
     @unittest.skipIf(not HAVE_ZSERVER, 'XML-RPC requires ZServer')
     def test_XMLRPC_unauthorized(self):
@@ -217,7 +217,7 @@ class ChallengeProtocolChooserBasicAuthTests(
             '/{0.folder_name}'.format(self), request_method='POST',
             env={'CONTENT_TYPE': 'text/xml; charset="utf-8"'},
             stdin=io.BytesIO(self.xmlrpc_call))
-        self.assertStatus(response, 'HTTP/1.1 401 Unauthorized')
+        self.assertStatus(response, b'HTTP/1.1 401 Unauthorized')
 
     @unittest.skipIf(not HAVE_ZSERVER, 'XML-RPC requires ZServer')
     def test_XMLRPC_authorized(self):
@@ -226,7 +226,7 @@ class ChallengeProtocolChooserBasicAuthTests(
             '/{0.folder_name}'.format(self), request_method='POST',
             env={'CONTENT_TYPE': 'text/xml; charset="utf-8"'},
             stdin=io.BytesIO(self.xmlrpc_call), basic=self.basic_auth)
-        self.assertStatus(response, 'HTTP/1.1 200 OK')
+        self.assertStatus(response, b'HTTP/1.1 200 OK')
         self.assertEqual(
             response.getHeader('Content-Type'), 'text/xml; charset=utf-8')
         self.assertEqual(textwrap.dedent("""\
@@ -259,19 +259,19 @@ class ChallengeProtocolChooserCookieAuthTests(
         # Now, invalid credentials should result in a 302 response status for a
         # normal (eg: browser) request:
         response = self.publish('/{0.folder_name}/test_script'.format(self))
-        self.assertStatus(response, 'HTTP/1.1 302 Found')
+        self.assertStatus(response, b'HTTP/1.1 302 Found')
 
     @unittest.skipIf(not HAVE_ZSERVER, 'WebDAV requires ZServer')
     def test_WebDAV_unauthorized(self):
         # And the same for a WebDAV request:
         response = self.publish('/{0.folder_name}/test_script'.format(self),
                                 request_method='PROPFIND')
-        self.assertStatus(response, 'HTTP/1.1 302 Found')
+        self.assertStatus(response, b'HTTP/1.1 302 Found')
 
         response = self.publish(
             '/{0.folder_name}/test_script/manage_DAVget'.format(self),
             request_method='GET')
-        self.assertStatus(response, 'HTTP/1.1 302 Found')
+        self.assertStatus(response, b'HTTP/1.1 302 Found')
 
     @unittest.skipIf(not HAVE_ZSERVER, 'XML-RPC requires ZServer')
     def test_XMLRPC_unauthorized(self):
@@ -280,7 +280,7 @@ class ChallengeProtocolChooserCookieAuthTests(
             '/{0.folder_name}'.format(self), request_method='POST',
             env={'CONTENT_TYPE': 'text/xml; charset="utf-8"'},
             stdin=io.BytesIO(self.xmlrpc_call))
-        self.assertStatus(response, 'HTTP/1.1 302 Found')
+        self.assertStatus(response, b'HTTP/1.1 302 Found')
 
 
 class ChallengeProtocolChooserCookieAuthTypeSnifferTests(
@@ -314,19 +314,19 @@ class ChallengeProtocolChooserCookieAuthTypeSnifferTests(
         # Now, invalid credentials should result in a 302 response status for a
         # normal (eg: browser) request:
         response = self.publish('/{0.folder_name}/test_script'.format(self))
-        self.assertStatus(response, 'HTTP/1.1 302 Found')
+        self.assertStatus(response, b'HTTP/1.1 302 Found')
 
     @unittest.skipIf(not HAVE_ZSERVER, 'WebDAV requires ZServer')
     def test_WebDAV_unauthorized(self):
         # A WebDAV request should result in a 401 response status:
         response = self.publish('/{0.folder_name}/test_script'.format(self),
                                 request_method='PROPFIND')
-        self.assertStatus(response, 'HTTP/1.1 401 Unauthorized')
+        self.assertStatus(response, b'HTTP/1.1 401 Unauthorized')
 
         response = self.publish(
             '/{0.folder_name}/test_script/manage_DAVget'.format(self),
             request_method='GET')
-        self.assertStatus(response, 'HTTP/1.1 401 Unauthorized')
+        self.assertStatus(response, b'HTTP/1.1 401 Unauthorized')
 
     @unittest.skipIf(not HAVE_ZSERVER, 'XML-RPC requires ZServer')
     def test_XMLRPC_unauthorized(self):
@@ -335,4 +335,4 @@ class ChallengeProtocolChooserCookieAuthTypeSnifferTests(
             '/{0.folder_name}'.format(self), request_method='POST',
             env={'CONTENT_TYPE': 'text/xml; charset="utf-8"'},
             stdin=io.BytesIO(self.xmlrpc_call))
-        self.assertStatus(response, 'HTTP/1.1 401 Unauthorized')
+        self.assertStatus(response, b'HTTP/1.1 401 Unauthorized')

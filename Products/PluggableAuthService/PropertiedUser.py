@@ -65,14 +65,14 @@ class PropertiedUser( BasicUser ):
 
         o Include only "global" roles.
         """
-        return self._roles.keys()
+        return list(self._roles.keys())
 
     def getGroups(self):
         """ -> [group]
 
         o Return the groups the user is in.
         """
-        return self._groups.keys()
+        return list(self._groups.keys())
 
     def getDomains( self ):
 
@@ -262,7 +262,7 @@ class PropertiedUser( BasicUser ):
 
         """ -> [ propertysheet_id ]
         """
-        return self._propertysheets.keys()
+        return list(self._propertysheets.keys())
 
     def getPropertysheet( self, id ):
 
