@@ -86,7 +86,7 @@ else:
             self.assertEqual( len( context._wrote ), 1 )
             filename, text, content_type = context._wrote[ 0 ]
             self.assertEqual( filename, 'plugins/empty.xml' )
-            self._compareDOM( text, _EMPTY_ZODB_USERS )
+            self._compareDOM(text.decode('UTF-8'), _EMPTY_ZODB_USERS )
             self.assertEqual( content_type, 'text/xml' )
 
         def test__getExportInfo_with_users(self):
@@ -132,7 +132,7 @@ else:
             self.assertEqual( len(context._wrote), 1)
             filename, text, content_type = context._wrote[ 0 ]
             self.assertEqual(filename, 'plugins/with_users.xml')
-            self._compareDOM(text, _FILLED_ZODB_USERS % tuple(hashes))
+            self._compareDOM(text.decode('UTF-8'), _FILLED_ZODB_USERS % tuple(hashes))
             self.assertEqual(content_type, 'text/xml')
 
         def test_import_empty(self):
@@ -230,7 +230,7 @@ else:
             self.assertEqual( len( context._wrote ), 1 )
             filename, text, content_type = context._wrote[ 0 ]
             self.assertEqual( filename, 'plugins/empty.xml' )
-            self._compareDOM( text, _EMPTY_ZODB_GROUPS )
+            self._compareDOM(text.decode('UTF-8'), _EMPTY_ZODB_GROUPS )
             self.assertEqual( content_type, 'text/xml' )
 
         def test__getExportInfo_with_groups(self):
@@ -270,7 +270,7 @@ else:
             self.assertEqual( len(context._wrote), 1)
             filename, text, content_type = context._wrote[ 0 ]
             self.assertEqual(filename, 'plugins/with_groups.xml')
-            self._compareDOM(text, _FILLED_ZODB_GROUPS)
+            self._compareDOM(text.decode('UTF-8'), _FILLED_ZODB_GROUPS)
             self.assertEqual(content_type, 'text/xml')
 
         def test_import_empty(self):
@@ -375,7 +375,7 @@ else:
             self.assertEqual( len( context._wrote ), 1 )
             filename, text, content_type = context._wrote[ 0 ]
             self.assertEqual( filename, 'plugins/empty.xml' )
-            self._compareDOM( text, _EMPTY_ZODB_ROLES )
+            self._compareDOM(text.decode('UTF-8'), _EMPTY_ZODB_ROLES )
             self.assertEqual( content_type, 'text/xml' )
 
         def test__getExportInfo_with_roles(self):
@@ -415,7 +415,7 @@ else:
             self.assertEqual( len(context._wrote), 1)
             filename, text, content_type = context._wrote[ 0 ]
             self.assertEqual(filename, 'plugins/with_roles.xml')
-            self._compareDOM(text, _FILLED_ZODB_ROLES)
+            self._compareDOM(text.decode('UTF-8'), _FILLED_ZODB_ROLES)
             self.assertEqual(content_type, 'text/xml')
 
         def test_import_empty(self):
@@ -526,7 +526,7 @@ else:
             self.assertEqual(len(context._wrote), 1)
             filename, text, content_type = context._wrote[0]
             self.assertEqual(filename, 'plugins/default.xml' )
-            self._compareDOM(text,
+            self._compareDOM(text.decode('UTF-8'),
                              _COOKIE_AUTH_TEMPLATE_NO_TITLE % (CAH.cookie_name,
                                                                CAH.login_path,
                                                               ))
@@ -565,7 +565,7 @@ else:
             self.assertEqual(len(context._wrote), 1)
             filename, text, content_type = context._wrote[0]
             self.assertEqual(filename, 'plugins/explicit.xml' )
-            self._compareDOM(text,
+            self._compareDOM(text.decode('UTF-8'),
                              _COOKIE_AUTH_TEMPLATE % (TITLE,
                                                       COOKIE_NAME,
                                                       LOGIN_PATH,
@@ -658,7 +658,7 @@ else:
             self.assertEqual( len( context._wrote ), 1 )
             filename, text, content_type = context._wrote[ 0 ]
             self.assertEqual( filename, 'plugins/empty.xml' )
-            self._compareDOM( text, _EMPTY_DOMAIN_AUTH )
+            self._compareDOM(text.decode('UTF-8'), _EMPTY_DOMAIN_AUTH )
             self.assertEqual( content_type, 'text/xml' )
 
         def test__getExportInfo_with_map(self):
@@ -710,7 +710,7 @@ else:
             self.assertEqual(len(context._wrote), 1)
             filename, text, content_type = context._wrote[0]
             self.assertEqual(filename, 'plugins/with_map.xml' )
-            self._compareDOM(text,
+            self._compareDOM(text.decode('UTF-8'),
                              _FILLED_DOMAIN_AUTH %
                               (TITLE,
                                USER_ID,
@@ -862,7 +862,7 @@ else:
             self.assertEqual( len( context._wrote ), 1 )
             filename, text, content_type = context._wrote[ 0 ]
             self.assertEqual( filename, 'plugins/no_title.xml' )
-            self._compareDOM( text, _TITLE_ONLY_TEMPLATE_NO_TITLE )
+            self._compareDOM(text.decode('UTF-8'), _TITLE_ONLY_TEMPLATE_NO_TITLE )
             self.assertEqual( content_type, 'text/xml' )
 
         def test_export_with_title(self):
@@ -879,7 +879,7 @@ else:
             self.assertEqual( len( context._wrote ), 1 )
             filename, text, content_type = context._wrote[ 0 ]
             self.assertEqual( filename, 'plugins/with_title.xml' )
-            self._compareDOM( text, _TITLE_ONLY_TEMPLATE % TITLE )
+            self._compareDOM(text.decode('UTF-8'), _TITLE_ONLY_TEMPLATE % TITLE )
             self.assertEqual( content_type, 'text/xml' )
 
         def test_import_with_title(self):
@@ -957,7 +957,7 @@ else:
             self.assertEqual(len(context._wrote), 1)
             filename, text, content_type = context._wrote[0]
             self.assertEqual(filename, 'plugins/default.xml' )
-            self._compareDOM(text, _DELEGATE_PATH_TEMPLATE_NO_TITLE % "")
+            self._compareDOM(text.decode('UTF-8'), _DELEGATE_PATH_TEMPLATE_NO_TITLE % "")
             self.assertEqual( content_type, 'text/xml' )
 
         def test__getExportInfo_explicitly_set(self):
@@ -988,7 +988,7 @@ else:
             self.assertEqual(len(context._wrote), 1)
             filename, text, content_type = context._wrote[0]
             self.assertEqual(filename, 'plugins/explicit.xml' )
-            self._compareDOM(text,
+            self._compareDOM(text.decode('UTF-8'),
                              _DELEGATE_PATH_TEMPLATE % (TITLE,
                                                         DELEGATE_PATH,
                                                        ))
@@ -1067,7 +1067,7 @@ else:
             self.assertEqual( len( context._wrote ), 1 )
             filename, text, content_type = context._wrote[ 0 ]
             self.assertEqual( filename, 'plugins/empty.xml' )
-            self._compareDOM( text, _EMPTY_DYNAMIC_GROUPS )
+            self._compareDOM(text.decode('UTF-8'), _EMPTY_DYNAMIC_GROUPS )
             self.assertEqual( content_type, 'text/xml' )
 
         def test__getExportInfo_with_groups(self):
@@ -1113,7 +1113,7 @@ else:
             self.assertEqual( len(context._wrote), 1)
             filename, text, content_type = context._wrote[ 0 ]
             self.assertEqual(filename, 'plugins/with_groups.xml')
-            self._compareDOM(text, _FILLED_DYNAMIC_GROUPS)
+            self._compareDOM(text.decode('UTF-8'), _FILLED_DYNAMIC_GROUPS)
             self.assertEqual(content_type, 'text/xml')
 
         def test_import_empty(self):
@@ -1235,7 +1235,7 @@ else:
             self.assertEqual( len( context._wrote ), 1 )
             filename, text, content_type = context._wrote[ 0 ]
             self.assertEqual( filename, 'plugins/empty.xml' )
-            self._compareDOM( text, _EMPTY_CHOOSER )
+            self._compareDOM(text.decode('UTF-8'), _EMPTY_CHOOSER )
             self.assertEqual( content_type, 'text/xml' )
 
         def test__getExportInfo_non_empty(self):
@@ -1279,7 +1279,7 @@ else:
             self.assertEqual( len(context._wrote), 1)
             filename, text, content_type = context._wrote[ 0 ]
             self.assertEqual(filename, 'plugins/with_map.xml')
-            self._compareDOM(text, _FILLED_CHOOSER)
+            self._compareDOM(text.decode('UTF-8'), _FILLED_CHOOSER)
             self.assertEqual(content_type, 'text/xml')
 
         def test_import_empty(self):
@@ -1364,7 +1364,7 @@ else:
             self.assertEqual( len( context._wrote ), 1 )
             filename, text, content_type = context._wrote[ 0 ]
             self.assertEqual( filename, 'plugins/empty.xml' )
-            self._compareDOM( text, _EMPTY_NONCOMPETENT )
+            self._compareDOM(text.decode('UTF-8'), _EMPTY_NONCOMPETENT )
             self.assertEqual( content_type, 'text/xml' )
 
         def test__getExportInfo_non_empty(self):
@@ -1391,7 +1391,7 @@ else:
             self.assertEqual( len(context._wrote), 1)
             filename, text, content_type = context._wrote[ 0 ]
             self.assertEqual(filename, 'plugins/non_empty.xml')
-            self._compareDOM(text, _FILLED_NONCOMPETENT)
+            self._compareDOM(text.decode('UTF-8'), _FILLED_NONCOMPETENT)
             self.assertEqual(content_type, 'text/xml')
 
         def test_import_empty(self):
