@@ -12,14 +12,12 @@
 #
 ##############################################################################
 """ Classes: ChallengeProtocolChooser
-
-$Id$
 """
 
-from Acquisition import aq_parent
 from AccessControl import ClassSecurityInfo
+from AccessControl.class_init import InitializeClass
+from Acquisition import aq_parent
 from BTrees.OOBTree import OOBTree
-from App.class_init import InitializeClass
 
 from zope.interface import Interface
 

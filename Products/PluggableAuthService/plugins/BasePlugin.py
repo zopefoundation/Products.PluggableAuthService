@@ -12,14 +12,13 @@
 #
 ##############################################################################
 """ Class: BasePlugin
-
-$Id$
 """
-from OFS.SimpleItem import SimpleItem
-from OFS.PropertyManager import PropertyManager
-from Acquisition import aq_base, aq_parent, aq_inner
+
+from AccessControl.class_init import InitializeClass
 from AccessControl import ClassSecurityInfo
-from App.class_init import default__class_init__ as InitializeClass
+from Acquisition import aq_base, aq_parent, aq_inner
+from OFS.PropertyManager import PropertyManager
+from OFS.SimpleItem import SimpleItem
 
 from zope.interface import implementedBy
 from zope.interface import providedBy
@@ -27,8 +26,8 @@ from zope.interface import providedBy
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
 from Products.PluggableAuthService.utils import classImplements
-from Products.PluggableAuthService.permissions import ManageUsers
 from Products.PluggableAuthService.utils import createViewName
+from Products.PluggableAuthService.permissions import ManageUsers
 
 def flattenInterfaces(implemented):
     return implemented.flattened()

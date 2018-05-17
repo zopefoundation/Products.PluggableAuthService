@@ -12,12 +12,10 @@
 #
 ##############################################################################
 """ Class: SessionAuthHelper
-
-$Id$
 """
 
+from AccessControl.class_init import InitializeClass
 from AccessControl.SecurityInfo import ClassSecurityInfo
-from App.class_init import default__class_init__ as InitializeClass
 
 from zope.interface import Interface
 

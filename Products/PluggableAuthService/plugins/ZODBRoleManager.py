@@ -12,16 +12,15 @@
 #
 ##############################################################################
 """ Classes: ZODBRoleManager
-
-$Id$
 """
+
 import logging
 
-from Acquisition import aq_parent, aq_inner
 from AccessControl import ClassSecurityInfo
+from AccessControl.class_init import InitializeClass
 from AccessControl.requestmethod import postonly
+from Acquisition import aq_parent, aq_inner
 from BTrees.OOBTree import OOBTree
-from App.class_init import InitializeClass
 
 from zope.interface import Interface
 

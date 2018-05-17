@@ -14,26 +14,20 @@
 """ DomainAuthHelper   Authentication Plugin for Domain authentication
 """
 
-__doc__     = """ Authentication Plugin for Domain authentication """
-__version__ = '$Revision$'[11:-2]
-
-# General Python imports
-import socket
-import os
-import time
 import copy
+import os
 import re
-
+import socket
+import time
 try:
     from IPy import IP
 except ImportError:
     IP = None
 
-# General Zope imports
-from BTrees.OOBTree import OOBTree
-from App.class_init import InitializeClass
 from AccessControl import ClassSecurityInfo
+from AccessControl.class_init import InitializeClass
 from AccessControl.Permissions import manage_users
+from BTrees.OOBTree import OOBTree
 
 from zope.interface import Interface
 

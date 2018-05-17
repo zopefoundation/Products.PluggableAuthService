@@ -15,21 +15,22 @@
 """
 import logging
 
-from AccessControl import ClassSecurityInfo, ModuleSecurityInfo
+from AccessControl import ClassSecurityInfo
+from AccessControl import ModuleSecurityInfo
+from AccessControl.class_init import InitializeClass
+from AccessControl.Permissions import manage_users as ManageUsers
 from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import getSecurityManager
 from AccessControl.SecurityManagement import noSecurityManager
-from AccessControl.Permissions import manage_users as ManageUsers
 from AccessControl.User import nobody
 from AccessControl.SpecialUsers import emergency_user
-from Acquisition import Implicit
 from Acquisition import aq_parent
 from Acquisition import aq_base
 from Acquisition import aq_inner
-from App.class_init import default__class_init__ as InitializeClass
+from Acquisition import Implicit
 from App.ImageFile import ImageFile
-from OFS.Folder import Folder
 from OFS.Cache import Cacheable
+from OFS.Folder import Folder
 from OFS.interfaces import IObjectManager
 from OFS.interfaces import IPropertyManager
 from Products.StandardCacheManagers.RAMCacheManager import RAMCacheManager

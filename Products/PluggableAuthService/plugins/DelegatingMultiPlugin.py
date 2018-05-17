@@ -15,21 +15,17 @@
                             PluggableAuthenticationService
 """
 
-__doc__     = """ Delegating User Folder shim module """
-__version__ = '$Revision$'[11:-2]
+import copy
+import os
 
-# General Python imports
-import copy, os
-
-# Zope imports
+from AccessControl import AuthEncoding
+from AccessControl import ClassSecurityInfo
+from AccessControl.class_init import InitializeClass
+from AccessControl.SpecialUsers import emergency_user
 from Acquisition import aq_base
 from OFS.Folder import Folder
-from App.class_init import InitializeClass
-from AccessControl import ClassSecurityInfo
-from AccessControl.SpecialUsers import emergency_user
 
 from zope.interface import Interface
-from AccessControl import AuthEncoding
 
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 

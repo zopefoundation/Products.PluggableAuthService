@@ -22,10 +22,10 @@ try:
 except:
     from sha import sha
 
+from AccessControl.class_init import InitializeClass
 from AccessControl import ClassSecurityInfo, AuthEncoding
 from AccessControl.requestmethod import postonly
 from AccessControl.SecurityManagement import getSecurityManager
-from App.class_init import default__class_init__ as InitializeClass
 from BTrees.OOBTree import OOBTree
 from OFS.Cache import Cacheable
 

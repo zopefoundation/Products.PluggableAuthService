@@ -12,19 +12,18 @@
 #
 ##############################################################################
 """ Classes: DynamicGroupsPlugin
-
-$Id$
 """
+
 import copy
 
-from Acquisition import aq_inner, aq_parent
 from AccessControl import ClassSecurityInfo
+from AccessControl.class_init import InitializeClass
 from AccessControl.requestmethod import postonly
-from OFS.SimpleItem import SimpleItem
-from OFS.PropertyManager import PropertyManager
-from OFS.Folder import Folder
+from Acquisition import aq_inner, aq_parent
 from OFS.Cache import Cacheable
-from App.class_init import InitializeClass
+from OFS.Folder import Folder
+from OFS.PropertyManager import PropertyManager
+from OFS.SimpleItem import SimpleItem
 
 from zope.interface import Interface
 

@@ -12,12 +12,11 @@
 #
 ##############################################################################
 """ Classes: RecursiveGroupsPlugin
-
-$Id$
 """
-from Acquisition import aq_parent
+
 from AccessControl import ClassSecurityInfo
-from App.class_init import InitializeClass
+from AccessControl.class_init import InitializeClass
+from Acquisition import aq_parent
 from BTrees.OOBTree import OOBTree
 
 from zope.interface import Interface

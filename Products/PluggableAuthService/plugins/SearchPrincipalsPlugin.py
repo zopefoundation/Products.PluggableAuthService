@@ -16,14 +16,14 @@
                              PluggableAuthService
 """
 
-# General Python imports
-import copy, os
-# Zope imports
+import copy
+import os
+
+from AccessControl import ClassSecurityInfo
+from AccessControl.class_init import InitializeClass
+from AccessControl.SpecialUsers import emergency_user
 from Acquisition import aq_base
 from OFS.Folder import Folder
-from App.class_init import InitializeClass
-from AccessControl import ClassSecurityInfo
-from AccessControl.SpecialUsers import emergency_user
 
 from zope.interface import Interface
 

@@ -12,21 +12,19 @@
 #
 ##############################################################################
 """ Class: CookieAuthHelper
-
-$Id$
 """
 
 from base64 import encodestring, decodestring
 from binascii import Error
 from binascii import hexlify
-from six.moves.urllib.parse import quote, unquote
 import codecs
 import six
+from six.moves.urllib.parse import quote, unquote
 
-from AccessControl.SecurityInfo import ClassSecurityInfo
+from AccessControl.class_init import InitializeClass
 from AccessControl.Permissions import view
+from AccessControl.SecurityInfo import ClassSecurityInfo
 from OFS.Folder import Folder
-from App.class_init import default__class_init__ as InitializeClass
 
 from zope.interface import Interface
 
