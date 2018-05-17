@@ -45,7 +45,7 @@ class CachingTests(pastc.PASTestCase):
 
     def test__extractUserIds(self):
         request = self.app.REQUEST
-        request._auth = 'Basic %s' % pastc.user_auth
+        request._auth = pastc.user_auth
 
         # Extract, we should see a cache miss
         self.pas._extractUserIds(request, self.pas.plugins)
@@ -62,7 +62,7 @@ class CachingTests(pastc.PASTestCase):
     def test__extractUserIds_two_extractors(self):
         # Two extractors should result in two cache entries
         request = self.app.REQUEST
-        request._auth = 'Basic %s' % pastc.user_auth
+        request._auth = pastc.user_auth
 
         factory = self.pas.manage_addProduct['PluggableAuthService']
         factory.addHTTPBasicAuthHelper('http_auth_2')
@@ -132,13 +132,13 @@ class CachingTests(pastc.PASTestCase):
         request['PUBLISHED'] = self.doc
         request['PARENTS'] = [self.app, self.folder]
         request.steps = list(self.doc.getPhysicalPath())
-        request._auth = 'Basic %s' % pastc.user_auth
+        request._auth = pastc.user_auth
 
         user = self.pas.validate(request)
         self.assertIsNotNone(user)
         self.assertEqual(user.getId(), pastc.user_name)
-        self.assertItemsEqual(
-            user.getRoles(), ['Authenticated', pastc.user_role])
+        self.assertEqual(
+            set(user.getRoles()), {'Authenticated', pastc.user_role})
 
         self.assertCacheStats(2, 2, 0)
 
@@ -177,8 +177,8 @@ class CachingTests(pastc.PASTestCase):
         user = self.pas.validate(request)
         self.assertIsNotNone(user)
         self.assertEqual(user.getId(), pastc.user_name)
-        self.assertItemsEqual(
-            user.getRoles(), ['Authenticated', pastc.user_role])
+        self.assertEqual(
+            set(user.getRoles()), {'Authenticated', pastc.user_role})
 
         self.assertCacheStats(2, 2, 0)
 
@@ -205,8 +205,8 @@ class CachingTests(pastc.PASTestCase):
         user = self.pas.validate(request)
         self.assertIsNotNone(user)
         self.assertEqual(user.getId(), pastc.user_name)
-        self.assertItemsEqual(
-            user.getRoles(), ['Authenticated', pastc.user_role])
+        self.assertEqual(
+            set(user.getRoles()), {'Authenticated', pastc.user_role})
 
         self.assertCacheStats(2, 2, 0)
 
@@ -233,8 +233,8 @@ class CachingTests(pastc.PASTestCase):
         user = self.pas.validate(request)
         self.assertIsNotNone(user)
         self.assertEqual(user.getId(), pastc.user_name)
-        self.assertItemsEqual(
-            user.getRoles(), ['Authenticated', pastc.user_role])
+        self.assertEqual(
+            set(user.getRoles()), {'Authenticated', pastc.user_role})
 
         self.assertCacheStats(2, 2, 0)
 

@@ -2,9 +2,14 @@ language: python
 sudo: false
 python:
     - 2.7
+    - 3.5
+    - 3.6
 env:
     - EXTRA=
-    - EXTRA=-zserver
+matrix:
+    include:
+        - python: 2.7
+          env: EXTRA=-zserver
 install:
     - pip install six==1.10.0 # force to avoid conflict with zc.recipe.testrunner
     - pip install -U setuptools==33.1.1

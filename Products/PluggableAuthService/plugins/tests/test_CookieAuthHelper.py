@@ -11,7 +11,10 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-import unittest, urllib
+from six.moves.urllib.parse import quote
+import codecs
+import six
+import unittest
 
 from Products.PluggableAuthService.tests.conformance \
      import ILoginPasswordHostExtractionPlugin_conformance
@@ -128,7 +131,7 @@ class CookieAuthHelperTests( unittest.TestCase
         helper.challenge(request, response)
         self.assertEqual(response.status, 302)
         self.assertEqual(len(response.headers), 3)
-        self.assertTrue(response.headers['Location'].endswith(urllib.quote(testURL)))
+        self.assertTrue(response.headers['Location'].endswith(quote(testURL)))
         self.assertEqual(response.headers['Cache-Control'], 'no-cache')
         self.assertEqual(response.headers['Expires'], 'Sat, 01 Jan 2000 00:00:00 GMT')
 
@@ -147,8 +150,8 @@ class CookieAuthHelperTests( unittest.TestCase
         helper.challenge(request, response)
         self.assertEqual(response.status, 302)
         self.assertEqual(len(response.headers), 3)
-        self.assertTrue(response.headers['Location'].endswith(urllib.quote(actualURL)))
-        self.assertFalse(response.headers['Location'].endswith(urllib.quote(vhmURL)))
+        self.assertTrue(response.headers['Location'].endswith(quote(actualURL)))
+        self.assertFalse(response.headers['Location'].endswith(quote(vhmURL)))
         self.assertEqual(response.headers['Cache-Control'], 'no-cache')
         self.assertEqual(response.headers['Expires'], 'Sat, 01 Jan 2000 00:00:00 GMT')
 
@@ -182,9 +185,13 @@ class CookieAuthHelperTests( unittest.TestCase
         response = FauxCookieResponse()
         request = FauxSettableRequest(RESPONSE=response)
 
-        cookie_str = '%s:%s' % ('foo'.encode('hex'), 'b:ar'.encode('hex'))
+        username = codecs.encode(b'foo', 'hex_codec')
+        password = codecs.encode(b'b:ar', 'hex_codec')
+        cookie_str = b'%s:%s' % (username, password)
         cookie_val = encodestring(cookie_str)
         cookie_val = cookie_val.rstrip()
+        if six.PY3:
+            cookie_val = cookie_val.decode('utf8')
         request.set(helper.cookie_name, cookie_val)
 
         self.assertEqual(helper.extractCredentials(request),
@@ -201,9 +208,11 @@ class CookieAuthHelperTests( unittest.TestCase
         response = FauxCookieResponse()
         request = FauxSettableRequest(RESPONSE=response)
 
-        cookie_str = 'cookie:from_other_plugin'
+        cookie_str = b'cookie:from_other_plugin'
         cookie_val = encodestring(cookie_str)
         cookie_val = cookie_val.rstrip()
+        if six.PY3:
+            cookie_val = cookie_val.decode('utf8')
         request.set(helper.cookie_name, cookie_val)
 
         self.assertEqual(helper.extractCredentials(request),

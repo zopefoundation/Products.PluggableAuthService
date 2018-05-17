@@ -11,6 +11,9 @@ Change Log
 - Do not fail when our base profiles are already registered.
   This may happen in tests if our ``initialize`` code is called twice.
 
+- Add support for Python 3.
+
+
 1.11.0 (2016-03-01)
 -------------------
 

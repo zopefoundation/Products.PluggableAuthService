@@ -24,7 +24,8 @@ from Testing.ZopeTestCase import user_password
 from Testing.ZopeTestCase import user_role
 
 from base64 import encodestring
-user_auth = encodestring('%s:%s' % (user_name, user_password)).rstrip()
+from ZPublisher.utils import basic_auth_encode
+user_auth = basic_auth_encode(user_name, user_password)
 
 from Products.PluggableAuthService.interfaces.plugins import \
     IAuthenticationPlugin, IUserEnumerationPlugin, IRolesPlugin, \

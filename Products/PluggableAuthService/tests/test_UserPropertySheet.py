@@ -13,26 +13,28 @@
 ##############################################################################
 import unittest
 import os.path
+import six
 import sys
 
 from DateTime.DateTime import DateTime
 
 from OFS.Image import Image
 
-from conformance import IPropertySheet_conformance
+from .conformance import IPropertySheet_conformance
 
 path = os.path.dirname(__file__)
 path = os.path.join(path, 'image.gif')
-img_file = open(path, 'r')
+img_file = open(path, 'rb')
 
 class UserPropertySheetTests( unittest.TestCase
                             , IPropertySheet_conformance
                             ):
 
+    _LONG_TYPE = 'long' if six.PY2 else 'int'
     _SCHEMA = ( ( 's', 'string'  )
               , ( 'i', 'int'     )
               , ( 'f', 'float'   )
-              , ( 'n', 'long'    )
+              , ( 'n', _LONG_TYPE )
               , ( 'd', 'date'    )
               , ( 'l', 'lines'   )
               , ( 't', 'lines'   )
@@ -43,7 +45,7 @@ class UserPropertySheetTests( unittest.TestCase
     _STRING_VALUE = 'string'
     _INT_VALUE = 42
     _FLOAT_VALUE = 9.8
-    _LONG_VALUE = sys.maxint + 1
+    _LONG_VALUE = sys.maxsize + 1
     _DATE_VALUE = DateTime()
     _LIST_VALUE = [ 'a', 'b', 'c' ]
     _TUPLE_VALUE = ( 'd', 'e', 'f' )
@@ -114,8 +116,8 @@ class UserPropertySheetTests( unittest.TestCase
         else:
             self.assertEqual( ups.getProperty( 'f' ), self._FLOAT_VALUE )
 
-        self.assertEqual( ups.getPropertyType( 'n' ), 'long' )
-        self.assertEqual( ups.propertyInfo( 'n' )[ 'type' ], 'long' )
+        self.assertEqual( ups.getPropertyType( 'n' ), self._LONG_TYPE )
+        self.assertEqual( ups.propertyInfo( 'n' )[ 'type' ], self._LONG_TYPE )
         if values_are_none:
             self.assertEqual( ups.getProperty( 'n' ), None )
         else:

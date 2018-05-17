@@ -11,31 +11,31 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-import unittest
 
-from Acquisition import Implicit, aq_base
+from ..interfaces.plugins import INotCompetentPlugin
 from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import noSecurityManager
 from AccessControl.SecurityManager import setSecurityPolicy
+from Acquisition import Implicit, aq_base
+from .conformance import IUserFolder_conformance
 from OFS.ObjectManager import ObjectManager
-from zExceptions import Unauthorized
-
 from Products.PluggableAuthService.utils import directlyProvides
-from zope.interface import implements
-from ..interfaces.plugins import INotCompetentPlugin
+from zExceptions import Unauthorized
+from zope.interface import implementer
 
-from conformance import IUserFolder_conformance
-
+import unittest
 import six
 
 
 class DummyPlugin(Implicit):
     pass
 
+
 class FaultyRolesPlugin(DummyPlugin):
 
     def getRolesForPrincipal(self, principal, request=None):
         raise KeyError("intentional KeyError from FaultyRolesPlugin")
+
 
 class DummyUserEnumerator( DummyPlugin ):
 
@@ -241,8 +241,9 @@ class DummyCounterChallenger( DummyChallenger ):
         self.count += 1
         return True
 
+
+@implementer( INotCompetentPlugin )
 class DummyNotCompetentPlugin( DummyPlugin ):
-    implements( INotCompetentPlugin )
 
     def __init__( self, id, type ):
         self.id, self.type = id, type
@@ -372,7 +373,7 @@ class FauxUser( Implicit ):
 
     def getGroups(self):
 
-        return self._groups.keys()
+        return list(self._groups.keys())
 
     def allowed( self, value, roles ):
 
@@ -1870,12 +1871,12 @@ class PluggableAuthServiceTests( unittest.TestCase
 
         groups = foo.getGroupsForPrincipal(faux)
         for g in groups:
-            self.assert_(g in default_groups)
+            self.assertTrue(g in default_groups)
 
         faux._addGroups(groups)
 
-        self.assert_('Group A' in faux.getGroups())
-        self.assert_('Group B' in faux.getGroups())
+        self.assertTrue('Group A' in faux.getGroups())
+        self.assertTrue('Group B' in faux.getGroups())
 
     def test_validate_simple_unauth( self ):
 
@@ -2203,10 +2204,10 @@ class PluggableAuthServiceTests( unittest.TestCase
         f = Folder()
         zcuf = self._makeOne()
         f._setObject(zcuf.getId(), zcuf)
-        self.assert_(zcuf.getId() in f.objectIds())
-        self.assert_(aq_base(f.__allow_groups__) is aq_base(f.acl_users))
+        self.assertTrue(zcuf.getId() in f.objectIds())
+        self.assertTrue(aq_base(f.__allow_groups__) is aq_base(f.acl_users))
         f._delObject(zcuf.getId())
-        self.assert_(not zcuf.getId() in f.objectIds())
+        self.assertTrue(not zcuf.getId() in f.objectIds())
 
     def test__setObject_no_ownership_fixup( self ):
 

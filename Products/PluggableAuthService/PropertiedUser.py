@@ -16,15 +16,15 @@
 $Id$
 """
 
-from Acquisition import aq_inner, aq_parent
-from AccessControl.User import BasicUser
+from .interfaces.authservice import IPropertiedUser
+from .UserPropertySheet import UserPropertySheet
+from .utils import classImplements
 from AccessControl.PermissionRole import _what_not_even_god_should_do
-
-from interfaces.authservice import IPropertiedUser
-from UserPropertySheet import UserPropertySheet
-from utils import classImplements
+from AccessControl.User import BasicUser
+from Acquisition import aq_inner, aq_parent
 from Products.PluggableAuthService.interfaces.propertysheets \
     import IPropertySheet
+
 
 class PropertiedUser( BasicUser ):
 
@@ -65,14 +65,14 @@ class PropertiedUser( BasicUser ):
 
         o Include only "global" roles.
         """
-        return self._roles.keys()
+        return list(self._roles.keys())
 
     def getGroups(self):
         """ -> [group]
 
         o Return the groups the user is in.
         """
-        return self._groups.keys()
+        return list(self._groups.keys())
 
     def getDomains( self ):
 
@@ -136,7 +136,7 @@ class PropertiedUser( BasicUser ):
 
             break
 
-        return list( self.getRoles() ) + local.keys()
+        return list( self.getRoles() ) + list(local.keys())
 
     def allowed( self, object, object_roles=None ):
 
@@ -262,7 +262,7 @@ class PropertiedUser( BasicUser ):
 
         """ -> [ propertysheet_id ]
         """
-        return self._propertysheets.keys()
+        return list(self._propertysheets.keys())
 
     def getPropertysheet( self, id ):
 

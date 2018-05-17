@@ -14,7 +14,7 @@
 import unittest
 
 from Acquisition import Implicit
-from conformance import IBasicUser_conformance, \
+from .conformance import IBasicUser_conformance, \
                         IPropertiedUser_conformance
 
 class FauxMethod:
@@ -68,7 +68,7 @@ class PropertiedUserTests( unittest.TestCase
         user._addGroups(groups)
         self.assertEqual(len(user.getGroups()), len(groups))
         for g in user.getGroups():
-            self.assert_(g in groups)
+            self.assertTrue(g in groups)
 
     def test_username(self):
         user = self._makeOne('username', 'User with Username')
@@ -80,7 +80,7 @@ class PropertiedUserTests( unittest.TestCase
         user._addRoles(roles)
         self.assertEqual(len(user.getRoles()), 2)
         for r in user.getRoles():
-            self.assert_(r in roles)
+            self.assertTrue(r in roles)
 
     def test_addPropertysheet( self ):
 

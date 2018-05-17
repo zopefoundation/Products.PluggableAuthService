@@ -15,12 +15,11 @@
 $Id$
 """
 
-from zope.interface import implements
+from zope.interface import implementer
 from Products.GenericSetup.interfaces import IContentFactory
 from Products.GenericSetup.interfaces import IContentFactoryName
 from Products.GenericSetup.interfaces import IFilesystemExporter
 from Products.GenericSetup.interfaces import IFilesystemImporter
-from Products.GenericSetup.utils import _getDottedName
 
 #
 #   setup_tool handlers
@@ -28,13 +27,13 @@ from Products.GenericSetup.utils import _getDottedName
 def exportPAS(context):
     IFilesystemExporter(context.getSite()).export(context, 'PAS', True)
 
+
 def importPAS(context):
     IFilesystemImporter(context.getSite()).import_(context, 'PAS', True)
 
 
+@implementer(IContentFactory)
 class PAS_PR_ContentFactory(object):
-
-    implements(IContentFactory)
 
     def __init__(self, context):
         self.context = context
@@ -46,9 +45,9 @@ class PAS_PR_ContentFactory(object):
         self.context._setObject(object_id, registry)
         return registry
 
-class PAS_CF_Namer(object):
 
-    implements(IContentFactoryName)
+@implementer(IContentFactoryName)
+class PAS_CF_Namer(object):
 
     def __init__(self, context):
         self.context = context

@@ -23,28 +23,28 @@ class Test_createViewName(unittest.TestCase):
         return createViewName(*args, **kw)
 
     def test_simple(self):
-        self.assertEqual(self._callFUT('foo', 'bar'), 'foo-bar')
+        self.assertEqual(self._callFUT('foo', 'bar'), b'foo-bar')
 
     def test_no_user_handle(self):
-        self.assertEqual(self._callFUT('foo', None), 'foo')
+        self.assertEqual(self._callFUT('foo', None), b'foo')
 
     def test_latin1_umlaut_in_method(self):
-        self.assertEqual(self._callFUT('f\366o'), 'f\366o')
+        self.assertEqual(self._callFUT(u'f\366o'), b'f\xc3\xb6o')
 
     def test_utf8_umlaut_in_method(self):
-        self.assertEqual(self._callFUT('f\303\266o'), 'f\303\266o')
+        self.assertEqual(self._callFUT(b'f\303\266o'), b'f\303\266o')
 
     def test_unicode_umlaut_in_method(self):
-        self.assertEqual(self._callFUT(u'f\366o'), 'f\303\266o')
+        self.assertEqual(self._callFUT(u'f\366o'), b'f\xc3\xb6o')
 
     def test_latin1_umlaut_in_handle(self):
-        self.assertEqual(self._callFUT('foo', 'b\344r'), 'foo-b\344r')
+        self.assertEqual(self._callFUT('foo', u'b\344r'), b'foo-b\xc3\xa4r')
 
     def test_utf8_umlaut_in_handle(self):
-        self.assertEqual(self._callFUT('foo', 'b\303\244r'), 'foo-b\303\244r')
+        self.assertEqual(self._callFUT('foo', b'b\303\244r'), b'foo-b\xc3\xa4r')
 
     def test_unicode_umlaut_in_handle(self):
-        self.assertEqual(self._callFUT('foo', u'b\344r'), 'foo-b\303\244r')
+        self.assertEqual(self._callFUT('foo', u'b\344r'), b'foo-b\303\244r')
 
 
 class Test_createKeywords(unittest.TestCase):

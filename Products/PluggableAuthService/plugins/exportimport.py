@@ -61,7 +61,7 @@ import six
 from xml.dom.minidom import parseString
 
 from Acquisition import Implicit
-from zope.interface import implements
+from zope.interface import implementer
 
 from Products.GenericSetup.interfaces import IFilesystemExporter
 from Products.GenericSetup.interfaces import IFilesystemImporter
@@ -74,10 +74,13 @@ except ImportError: # BBB
     from Products.PageTemplates.PageTemplateFile \
         import PageTemplateFile as PageTemplateResource
 
+
 def getPackagePath(instance):
     module = sys.modules[instance.__module__]
     return os.path.dirname(module.__file__)
 
+
+@implementer(IFilesystemExporter, IFilesystemImporter)
 class SimpleXMLExportImport(Implicit):
     """ Base for plugins whose configuration can be dumped to an XML file.
 
@@ -94,7 +97,6 @@ class SimpleXMLExportImport(Implicit):
 
       '_updateFromDOM' -- a method taking the root node of the DOM.
     """
-    implements(IFilesystemExporter, IFilesystemImporter)
     encoding = None
 
     def __init__(self, context):
@@ -127,7 +129,9 @@ class SimpleXMLExportImport(Implicit):
             self._purgeContext()
 
         data = import_context.readDataFile('%s.xml' % self.context.getId(),
-                                           subdir).decode('utf-8')
+                                           subdir)
+        if six.PY2:
+            data = data.decode('utf-8')
 
         if data is not None:
 
@@ -143,14 +147,15 @@ class SimpleXMLExportImport(Implicit):
         if attr is None:
             return default
         value = attr.value
-        if isinstance(value, six.text_type) and self.encoding is not None:
+        if six.PY2 and isinstance(value, six.text_type) and self.encoding is not None:
             value = value.encode(self.encoding)
         return value
 
+
+@implementer(IFilesystemExporter, IFilesystemImporter)
 class ZODBUserManagerExportImport(SimpleXMLExportImport):
     """ Adapter for dumping / loading ZODBUSerManager to an XML file.
     """
-    implements(IFilesystemExporter, IFilesystemImporter)
 
     _FILENAME = 'zodbusers.xml'
     _ROOT_TAGNAME = 'zodb-users'

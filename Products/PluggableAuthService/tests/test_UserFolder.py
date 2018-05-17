@@ -19,6 +19,7 @@ from Products.PluggableAuthService.tests import pastc
 from AccessControl import Unauthorized
 from AccessControl.Permissions import view as View
 from AccessControl.Permissions import add_folders as AddFolders
+from ZPublisher.utils import basic_auth_encode
 
 from Products.PluggableAuthService.PluggableAuthService import PluggableAuthService
 
@@ -62,7 +63,7 @@ class UserFolderTests(pastc.PASTestCase):
         self.app.REQUEST['PUBLISHED'] = self.doc
         self.app.REQUEST['PARENTS'] = [self.app, self.folder]
         self.app.REQUEST.steps = list(self.doc.getPhysicalPath())
-        self.basic = 'Basic %s' % base64.encodestring('user1:secret').rstrip()
+        self.basic = basic_auth_encode('user1', 'secret')
         # Make sure we are not logged in
         self.logout()
 
@@ -292,9 +293,7 @@ class UserTests(pastc.PASTestCase):
 
     def testGetRoles(self):
         f = self.user
-        # XXX: PAS returns roles as list
-        #self.assertEqual(f.getRoles(), ('Manager', 'Authenticated'))
-        self.assertItemsEqual(f.getRoles(), ['Manager', 'Authenticated'])
+        self.assertEqual(set(f.getRoles()), {'Authenticated', 'Manager'})
 
     def testGetDomains(self):
         f = self.user

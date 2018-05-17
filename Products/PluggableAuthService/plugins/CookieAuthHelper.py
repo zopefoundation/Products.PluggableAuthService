@@ -18,7 +18,10 @@ $Id$
 
 from base64 import encodestring, decodestring
 from binascii import Error
+from binascii import hexlify
 from six.moves.urllib.parse import quote, unquote
+import codecs
+import six
 
 from AccessControl.SecurityInfo import ClassSecurityInfo
 from AccessControl.Permissions import view
@@ -66,6 +69,24 @@ def addCookieAuthHelper( dispatcher
                                       'CookieAuthHelper+added.'
                                     % dispatcher.absolute_url() )
 
+
+def decode_cookie(raw):
+    value = unquote(raw)
+    if six.PY3:
+        value = value.encode('utf8')
+    value = decodestring(value)
+    if six.PY3:
+        value = value.decode('utf8')
+    return value
+
+
+def decode_hex(raw):
+    if isinstance(raw, six.text_type):
+        raw = raw.encode('utf8')
+    value = codecs.decode(raw, 'hex_codec')
+    if six.PY3:
+        value = value.decode('utf-8')
+    return value
 
 class CookieAuthHelper(Folder, BasePlugin):
     """ Multi-plugin for managing details of Cookie Authentication. """
@@ -118,9 +139,8 @@ class CookieAuthHelper(Folder, BasePlugin):
             creds['password'] = request.form.get('__ac_password', '')
 
         elif cookie and cookie != 'deleted':
-            raw = unquote(cookie)
             try:
-                cookie_val = decodestring(raw)
+                cookie_val = decode_cookie(cookie)
             except Error:
                 # Cookie is in a different format, so it is not ours
                 return creds
@@ -132,9 +152,9 @@ class CookieAuthHelper(Folder, BasePlugin):
                 return creds
 
             try:
-                creds['login'] = login.decode('hex')
-                creds['password'] = password.decode('hex')
-            except TypeError:
+                creds['login'] = decode_hex(login)
+                creds['password'] = decode_hex(password)
+            except (Error, TypeError):
                 # Cookie is in a different format, so it is not ours
                 return {}
 
@@ -158,7 +178,9 @@ class CookieAuthHelper(Folder, BasePlugin):
     security.declarePrivate('updateCredentials')
     def updateCredentials(self, request, response, login, new_password):
         """ Respond to change of credentials (NOOP for basic auth). """
-        cookie_str = '%s:%s' % (login.encode('hex'), new_password.encode('hex'))
+        cookie_str = b':'.join([
+            hexlify(login.encode('utf-8')),
+            hexlify(new_password.encode('utf-8'))])
         cookie_val = encodestring(cookie_str)
         cookie_val = cookie_val.rstrip()
         response.setCookie(self.cookie_name, quote(cookie_val), path='/')

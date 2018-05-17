@@ -135,6 +135,8 @@ class ZODBUserManager( BasePlugin, Cacheable ):
                 return userid, login
 
         # Support previous naive behavior
+        if isinstance(password, six.text_type):
+            password = password.encode('utf8')
         digested = sha( password ).hexdigest()
 
         if reference == digested:
@@ -342,8 +344,9 @@ class ZODBUserManager( BasePlugin, Cacheable ):
         pas = self._getPAS()
         transform = pas._get_login_transform_method()
         if not transform:
-            logger.warn("PAS has a non-existing, empty or wrong "
-                        "login_transform property.")
+            logger.warning(
+                "PAS has a non-existing, empty or wrong "
+                "login_transform property.")
             return
 
         # Make a fresh mapping, as we do not want to add or remove
