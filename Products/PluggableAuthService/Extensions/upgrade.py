@@ -154,10 +154,10 @@ def _upgradeLocalRoleAssignments(self, RESPONSE=None):
                         npid = new_principals[0]['id']
                         new_map[npid] = map[key]
                         _write(RESPONSE,
-                               'upgradeLocalRoleAssignmentsFromRoot'
+                               'upgradeLocalRoleAssignmentsFromRoot',
                                '  Translated %s to %s\n' % (key, npid))
                         _write(RESPONSE,
-                               'upgradeLocalRoleAssignmentsFromRoot'
+                               'upgradeLocalRoleAssignmentsFromRoot',
                                '  Assigned roles %s to %s\n' %
                                (map[key], npid))
                     obj.__ac_local_roles__ = new_map
