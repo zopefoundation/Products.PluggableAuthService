@@ -15,6 +15,8 @@ Change Log
 
 - Reformatted code for PEP-8 compliance.
 
+- Require Zope 4.0b5 as minimum Zope version.
+
 
 1.11.0 (2016-03-01)
 -------------------
