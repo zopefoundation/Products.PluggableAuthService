@@ -1,8 +1,8 @@
 Change Log
 ==========
 
-2.0 (unreleased)
-----------------
+2.0b1 (2018005-18)
+------------------
 
 - The dependency on ``ZServer`` is now optional. To use the features which
   require ``ZServer`` (WebDav, XML-RPC, FTP) use the setuptools extra `zserver`
