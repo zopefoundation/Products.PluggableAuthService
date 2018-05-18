@@ -5,11 +5,10 @@ from setuptools import find_packages
 NAME = 'PluggableAuthService'
 
 here = os.path.abspath(os.path.dirname(__file__))
-package = os.path.join(here, 'Products', NAME)
 
 
 def _package_doc(name):
-    f = open(os.path.join(package, name))
+    f = open(os.path.join(here, name))
     return f.read()
 
 
