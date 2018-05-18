@@ -6,9 +6,11 @@
 .mr.developer.cfg
 .tox/
 bin/
+build/
 coverage.xml
 develop-eggs/
 develop/
+dist/
 docs/_build/
 eggs/
 htmlcov/

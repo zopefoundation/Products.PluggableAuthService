@@ -1,7 +1,11 @@
 Change Log
 ==========
 
-2.0b1 (2018005-18)
+2.0 (unreleased)
+----------------
+
+
+2.0b1 (2018-05-18)
 ------------------
 
 - The dependency on ``ZServer`` is now optional. To use the features which
