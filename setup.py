@@ -59,9 +59,8 @@ setup(name='Products.%s' % NAME,
           ],
       extras_require={
           'ip_range': ['IPy'],
-          'zserver': [
-              'ZServer >= 4.0a1',
-          ]
+          'zserver': ['ZServer >= 4.0a1'],
+          'docs': ['Sphinx', 'repoze.sphinx.autointerface'],
       },
       entry_points="""
       [zope2.initialize]
