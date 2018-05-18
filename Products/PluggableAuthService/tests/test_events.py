@@ -167,4 +167,3 @@ class GroupDeletedTests(unittest.TestCase, ConformsToIPASEvent):
 
 class DummyGroup(object):
     pass
-

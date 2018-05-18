@@ -12,6 +12,8 @@
 #
 ##############################################################################
 
+import unittest
+
 from AccessControl.Permissions import view as View
 
 from Products.PluggableAuthService.tests import pastc
@@ -169,10 +171,9 @@ class CachingTests(pastc.PASTestCase):
 
         # Rig the extractor so it returns UTF-8 credentials
         self.pas.http_auth.extractCredentials = \
-            lambda req: { 'login': pastc.user_name
-                        , 'password': pastc.user_password
-                        , 'extra': 'M\303\244dchen'
-                        }
+            lambda req: {'login': pastc.user_name,
+                         'password': pastc.user_password,
+                         'extra': 'M\303\244dchen'}
 
         user = self.pas.validate(request)
         self.assertIsNotNone(user)
@@ -197,10 +198,9 @@ class CachingTests(pastc.PASTestCase):
 
         # Rig the extractor so it returns Unicode credentials
         self.pas.http_auth.extractCredentials = \
-            lambda req: { 'login': pastc.user_name
-                        , 'password': pastc.user_password
-                        , 'extra': u'M\344dchen'
-                        }
+            lambda req: {'login': pastc.user_name,
+                         'password': pastc.user_password,
+                         'extra': u'M\344dchen'}
 
         user = self.pas.validate(request)
         self.assertIsNotNone(user)
@@ -225,10 +225,9 @@ class CachingTests(pastc.PASTestCase):
 
         # Rig the extractor so it returns UTF-16 credentials
         self.pas.http_auth.extractCredentials = \
-            lambda req: { 'login': pastc.user_name
-                        , 'password': pastc.user_password
-                        , 'extra': u'M\344dchen'.encode('utf-16')
-                        }
+            lambda req: {'login': pastc.user_name,
+                         'password': pastc.user_password,
+                         'extra': u'M\344dchen'.encode('utf-16')}
 
         user = self.pas.validate(request)
         self.assertIsNotNone(user)
@@ -267,7 +266,7 @@ class CachingTests(pastc.PASTestCase):
 
         self.pas._doAddUser(user_id, password, [], [])
         self.assertCacheStats(2, 2, 0)
-        self.pas.roles.assignRoleToPrincipal( pastc.user_role, user_id )
+        self.pas.roles.assignRoleToPrincipal(pastc.user_role, user_id)
         self.assertCacheStats(0, 0, 0)
 
     def test_removingRoleResetsCache(self):
@@ -276,8 +275,8 @@ class CachingTests(pastc.PASTestCase):
 
         self.pas._doAddUser(user_id, password, [], [])
         self.assertCacheStats(2, 2, 0)
-        self.pas.roles._principal_roles[ user_id ] = (pastc.user_role, )
-        self.pas.roles.removeRoleFromPrincipal( pastc.user_role, user_id )
+        self.pas.roles._principal_roles[user_id] = (pastc.user_role,)
+        self.pas.roles.removeRoleFromPrincipal(pastc.user_role, user_id)
         self.assertCacheStats(0, 0, 0)
 
     def test_addPrincipalToGroupResetsCache(self):
@@ -286,13 +285,13 @@ class CachingTests(pastc.PASTestCase):
         password = 'secret'
 
         factory = self.pas.manage_addProduct['PluggableAuthService']
-        factory.addZODBGroupManager( 'groups' )
+        factory.addZODBGroupManager('groups')
         self.pas._doAddUser(user_id, password, [], [])
         groups = self.pas.groups
-        groups.addGroup( group_id )
+        groups.addGroup(group_id)
         self.assertCacheStats(2, 2, 0)
 
-        groups.addPrincipalToGroup( user_id, group_id)
+        groups.addPrincipalToGroup(user_id, group_id)
         self.assertCacheStats(0, 0, 0)
 
     def test_removePrincipalFromGroupResetsCache(self):
@@ -301,22 +300,21 @@ class CachingTests(pastc.PASTestCase):
         password = 'secret'
 
         factory = self.pas.manage_addProduct['PluggableAuthService']
-        factory.addZODBGroupManager( 'groups' )
+        factory.addZODBGroupManager('groups')
         self.pas._doAddUser(user_id, password, [], [])
         groups = self.pas.groups
-        groups.addGroup( group_id )
+        groups.addGroup(group_id)
         groups._principal_groups[user_id] = (group_id,)
         self.assertCacheStats(2, 2, 0)
 
-        groups.removePrincipalFromGroup( user_id, group_id)
+        groups.removePrincipalFromGroup(user_id, group_id)
         self.assertCacheStats(0, 0, 0)
 
 
 def test_suite():
-    from unittest import TestSuite, makeSuite
-    return TestSuite((
-        makeSuite(CachingTests),
-    ))
+    return unittest.TestSuite((
+        unittest.makeSuite(CachingTests),))
+
 
 if __name__ == '__main__':
     unittest.main(defaultTest='test_suite')

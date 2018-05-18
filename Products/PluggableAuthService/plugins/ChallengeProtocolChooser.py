@@ -16,7 +16,6 @@
 
 from AccessControl import ClassSecurityInfo
 from AccessControl.class_init import InitializeClass
-from Acquisition import aq_parent
 from BTrees.OOBTree import OOBTree
 
 from zope.interface import Interface
@@ -41,12 +40,15 @@ from Products.PluggableAuthService.interfaces.request \
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.utils import classImplements
 
+
 class IChallengeProtocolChooserPlugin(Interface):
     """ Marker interface.
     """
 
+
 _request_types = ()
 _request_type_bmap = {}
+
 
 def registerRequestType(label, iface):
     global _request_types
@@ -55,28 +57,30 @@ def registerRequestType(label, iface):
     _request_types = tuple(registry)
     _request_type_bmap[iface] = label
 
+
 def listRequestTypesLabels():
     return _request_type_bmap.values()
 
-manage_addChallengeProtocolChooserForm = PageTemplateFile(
-    'www/cpcAdd', globals(), __name__='manage_addChallengeProtocolChooserForm' )
 
-def addChallengeProtocolChooserPlugin( dispatcher, id, title=None,
-                                       mapping=None, REQUEST=None ):
+manage_addChallengeProtocolChooserForm = PageTemplateFile(
+    'www/cpcAdd', globals(), __name__='manage_addChallengeProtocolChooserForm')
+
+
+def addChallengeProtocolChooserPlugin(dispatcher, id, title=None,
+                                      mapping=None, REQUEST=None):
     """ Add a ChallengeProtocolChooserPlugin to a Pluggable Auth Service. """
 
     cpc = ChallengeProtocolChooser(id, title=title, mapping=mapping)
     dispatcher._setObject(cpc.getId(), cpc)
 
     if REQUEST is not None:
-        REQUEST['RESPONSE'].redirect(
-                                '%s/manage_workspace'
-                                '?manage_tabs_message='
-                                'ChallengeProtocolChooser+added.'
-                            % dispatcher.absolute_url())
+        REQUEST['RESPONSE'].redirect('%s/manage_workspace'
+                                     '?manage_tabs_message='
+                                     'ChallengeProtocolChooser+added.' %
+                                     dispatcher.absolute_url())
 
 
-class ChallengeProtocolChooser( BasePlugin ):
+class ChallengeProtocolChooser(BasePlugin):
 
     """ PAS plugin for choosing challenger protocol based on request
     """
@@ -85,11 +89,8 @@ class ChallengeProtocolChooser( BasePlugin ):
     security = ClassSecurityInfo()
 
     manage_options = (({'label': 'Mapping',
-                        'action': 'manage_editProtocolMapping'
-                        },
-                       )
-                      + BasePlugin.manage_options
-                      )
+                        'action': 'manage_editProtocolMapping'},)
+                      + BasePlugin.manage_options)
 
     def __init__(self, id, title=None, mapping=None):
         self._id = self.id = id
@@ -98,12 +99,12 @@ class ChallengeProtocolChooser( BasePlugin ):
         if mapping is not None:
             self.manage_updateProtocolMapping(mapping=mapping)
 
-    security.declarePrivate('chooseProtocols')
+    @security.private
     def chooseProtocols(self, request):
         pas_instance = self._getPAS()
         plugins = pas_instance._getOb('plugins')
 
-        sniffers = plugins.listPlugins( IRequestTypeSniffer )
+        sniffers = plugins.listPlugins(IRequestTypeSniffer)
 
         for sniffer_id, sniffer in sniffers:
             request_type = sniffer.sniffRequestType(request)
@@ -116,12 +117,11 @@ class ChallengeProtocolChooser( BasePlugin ):
             return
         return self._map.get(label, None)
 
-
     def _listProtocols(self):
         pas_instance = self._getPAS()
         plugins = pas_instance._getOb('plugins')
 
-        challengers = plugins.listPlugins( IChallengePlugin )
+        challengers = plugins.listPlugins(IChallengePlugin)
         found = []
 
         for challenger_id, challenger in challengers:
@@ -147,10 +147,7 @@ class ChallengeProtocolChooser( BasePlugin ):
         for label in request_types:
             settings = []
             select_any = False
-            info.append(
-                {'label': label,
-                 'settings': settings
-                 })
+            info.append({'label': label, 'settings': settings})
             protocols = self._map.get(label, None)
             if not protocols:
                 select_any = True
@@ -160,13 +157,11 @@ class ChallengeProtocolChooser( BasePlugin ):
                     selected = True
                 settings.append({'label': protocol,
                                  'selected': selected,
-                                 'value': protocol,
-                                 })
+                                 'value': protocol})
 
             settings.insert(0, {'label': '(any)',
                                 'selected': select_any,
-                                'value': '',
-                                })
+                                'value': ''})
         return self.manage_editProtocolMappingForm(info=info, REQUEST=REQUEST)
 
     def manage_updateProtocolMapping(self, mapping, REQUEST=None):
@@ -181,16 +176,14 @@ class ChallengeProtocolChooser( BasePlugin ):
                 self._map[key] = value
 
         if REQUEST is not None:
-            REQUEST['RESPONSE'].redirect(
-                '%s/manage_editProtocolMapping'
-                '?manage_tabs_message='
-                'Protocol+Mappings+Changed.'
-                % self.absolute_url())
+            REQUEST['RESPONSE'].redirect('%s/manage_editProtocolMapping'
+                                         '?manage_tabs_message='
+                                         'Protocol+Mappings+Changed.' %
+                                         self.absolute_url())
 
-classImplements(ChallengeProtocolChooser,
-                IChallengeProtocolChooserPlugin,
-                IChallengeProtocolChooser,
-               )
+
+classImplements(ChallengeProtocolChooser, IChallengeProtocolChooserPlugin,
+                IChallengeProtocolChooser)
 
 InitializeClass(ChallengeProtocolChooser)
 

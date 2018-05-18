@@ -12,9 +12,8 @@
 #
 ##############################################################################
 """ PluggableAuthService unit tests utils
-
-$Id$
 """
+
 
 def _setUpDefaultTraversable():
     from zope.interface import Interface

@@ -13,24 +13,21 @@
 ##############################################################################
 
 from Testing import ZopeTestCase
-
-ZopeTestCase.installProduct('PluginRegistry')
-ZopeTestCase.installProduct('PluggableAuthService')
-ZopeTestCase.installProduct('StandardCacheManagers')
-ZopeTestCase.installProduct('GenericSetup')
-
 from Testing.ZopeTestCase import user_name
 from Testing.ZopeTestCase import user_password
 from Testing.ZopeTestCase import user_role
-
-from base64 import encodestring
 from ZPublisher.utils import basic_auth_encode
-user_auth = basic_auth_encode(user_name, user_password)
 
 from Products.PluggableAuthService.interfaces.plugins import \
     IAuthenticationPlugin, IUserEnumerationPlugin, IRolesPlugin, \
     IRoleEnumerationPlugin, IRoleAssignerPlugin, \
     IChallengePlugin, IExtractionPlugin, IUserAdderPlugin
+
+user_auth = basic_auth_encode(user_name, user_password)
+ZopeTestCase.installProduct('PluginRegistry')
+ZopeTestCase.installProduct('PluggableAuthService')
+ZopeTestCase.installProduct('StandardCacheManagers')
+ZopeTestCase.installProduct('GenericSetup')
 
 
 class PASTestCase(ZopeTestCase.ZopeTestCase):
@@ -61,4 +58,3 @@ class PASTestCase(ZopeTestCase.ZopeTestCase):
         # OMFG, why doesn't PAS support userFolderAddUser?
         uf = self.folder.acl_users
         uf._doAddUser(user_name, user_password, [user_role], [])
-

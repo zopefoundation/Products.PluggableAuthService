@@ -18,6 +18,9 @@ from .PluggableAuthService import MultiPlugins
 from .PluggableAuthService import registerMultiPlugin as rMP
 from zope.configuration.fields import PythonIdentifier
 from zope.interface import Interface
+from zope.testing.cleanup import addCleanUp
+
+_mt_regs = []
 
 
 class IRegisterMultiPlugin(Interface):
@@ -36,12 +39,11 @@ class IRegisterMultiPlugin(Interface):
         required=False)
 
 
-_mt_regs = []
 def registerMultiPlugin(_context, class_=None, meta_type=None):
     """ Add a new meta_type to the registry.
     """
     if not class_ and not meta_type:
-        raise ConfigurationError(
+        raise TypeError(
             "At least one of 'class' or 'meta_type' is required.")
 
     if not meta_type:
@@ -49,11 +51,8 @@ def registerMultiPlugin(_context, class_=None, meta_type=None):
 
     _mt_regs.append(meta_type)
 
-    _context.action(
-        discriminator = ('registerMultiPlugin', meta_type),
-        callable = rMP,
-        args = (meta_type,),
-        )
+    _context.action(discriminator=('registerMultiPlugin', meta_type),
+                    callable=rMP, args=(meta_type,))
 
 
 def cleanUp():
@@ -62,6 +61,6 @@ def cleanUp():
         MultiPlugins.remove(meta_type)
     _mt_regs = []
 
-from zope.testing.cleanup import addCleanUp
+
 addCleanUp(cleanUp)
 del addCleanUp

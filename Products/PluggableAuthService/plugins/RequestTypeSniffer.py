@@ -44,7 +44,9 @@ class IRequestTypeSnifferPlugin(Interface):
     """ Marker interface.
     """
 
+
 _sniffers = ()
+
 
 def registerSniffer(iface, func):
     global _sniffers
@@ -52,24 +54,25 @@ def registerSniffer(iface, func):
     registry.append((iface, func))
     _sniffers = tuple(registry)
 
-manage_addRequestTypeSnifferForm = PageTemplateFile(
-    'www/rtsAdd', globals(), __name__='manage_addRequestTypeSnifferForm' )
 
-def addRequestTypeSnifferPlugin( dispatcher, id, title=None, REQUEST=None ):
+manage_addRequestTypeSnifferForm = PageTemplateFile(
+    'www/rtsAdd', globals(), __name__='manage_addRequestTypeSnifferForm')
+
+
+def addRequestTypeSnifferPlugin(dispatcher, id, title=None, REQUEST=None):
     """ Add a RequestTypeSnifferPlugin to a Pluggable Auth Service. """
 
     rts = RequestTypeSniffer(id, title)
     dispatcher._setObject(rts.getId(), rts)
 
     if REQUEST is not None:
-        REQUEST['RESPONSE'].redirect(
-                                '%s/manage_workspace'
-                                '?manage_tabs_message='
-                                'RequestTypeSniffer+added.'
-                            % dispatcher.absolute_url())
+        REQUEST['RESPONSE'].redirect('%s/manage_workspace'
+                                     '?manage_tabs_message='
+                                     'RequestTypeSniffer+added.' %
+                                     dispatcher.absolute_url())
 
 
-class RequestTypeSniffer( BasePlugin ):
+class RequestTypeSniffer(BasePlugin):
 
     """ PAS plugin for detecting a Request's type
     """
@@ -82,20 +85,20 @@ class RequestTypeSniffer( BasePlugin ):
         self._id = self.id = id
         self.title = title
 
-    security.declarePrivate('sniffRequestType')
+    @security.private
     def sniffRequestType(self, request):
         found = None
         for iface, func in _sniffers:
-            if func( request ):
+            if func(request):
                 found = iface
 
         if found is not None:
             return found
 
-classImplements(RequestTypeSniffer,
-                IRequestTypeSnifferPlugin,
-                IRequestTypeSniffer,
-               )
+
+classImplements(RequestTypeSniffer, IRequestTypeSnifferPlugin,
+                IRequestTypeSniffer)
+
 
 InitializeClass(RequestTypeSniffer)
 
@@ -142,5 +145,6 @@ def browserSniffer(request):
         if sniffer(request):
             return False
     return True
+
 
 registerSniffer(IBrowserRequest, browserSniffer)

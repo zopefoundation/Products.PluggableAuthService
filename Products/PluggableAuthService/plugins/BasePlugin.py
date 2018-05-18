@@ -29,6 +29,7 @@ from Products.PluggableAuthService.utils import classImplements
 from Products.PluggableAuthService.utils import createViewName
 from Products.PluggableAuthService.permissions import ManageUsers
 
+
 def flattenInterfaces(implemented):
     return implemented.flattened()
 
@@ -40,84 +41,80 @@ class BasePlugin(SimpleItem, PropertyManager):
 
     security = ClassSecurityInfo()
 
-    manage_options = ( ( { 'label': 'Activate',
-                           'action': 'manage_activateInterfacesForm', }
-                         ,
-                       )
-                     + SimpleItem.manage_options
-                     + PropertyManager.manage_options
-                     )
+    manage_options = (({'label': 'Activate',
+                        'action': 'manage_activateInterfacesForm'},)
+                      + SimpleItem.manage_options
+                      + PropertyManager.manage_options)
 
     prefix = ''
 
-    _properties = (
-        dict(id='prefix', type='string', mode='w',
-             label='Optional Prefix'),)
+    _properties = (dict(id='prefix', type='string', mode='w',
+                        label='Optional Prefix'),)
 
-    security.declareProtected( ManageUsers, 'manage_activateInterfacesForm' )
+    security.declareProtected(ManageUsers, 'manage_activateInterfacesForm')
     manage_activateInterfacesForm = PageTemplateFile(
         'www/bpActivateInterfaces', globals(),
         __name__='manage_activateInterfacesForm')
 
-    security.declareProtected( ManageUsers, 'listInterfaces' )
-    def listInterfaces( self ):
+    @security.protected(ManageUsers)
+    def listInterfaces(self):
         """ For ZMI update of interfaces. """
 
         results = []
 
-        for iface in flattenInterfaces( providedBy( self ) ):
-            results.append( iface.__name__ )
+        for iface in flattenInterfaces(providedBy(self)):
+            results.append(iface.__name__)
 
         return results
 
-    security.declareProtected( ManageUsers, 'testImplements' )
-    def testImplements( self, interface ):
+    @security.protected(ManageUsers)
+    def testImplements(self, interface):
         """ Can't access Interface.providedBy() directly in ZPT. """
-        return interface.providedBy( self )
+        return interface.providedBy(self)
 
-    security.declareProtected( ManageUsers, 'manage_activateInterfaces' )
-    def manage_activateInterfaces( self, interfaces, RESPONSE=None ):
+    @security.protected(ManageUsers)
+    def manage_activateInterfaces(self, interfaces, RESPONSE=None):
         """ For ZMI update of active interfaces. """
 
         pas_instance = self._getPAS()
-        plugins = pas_instance._getOb( 'plugins' )
+        plugins = pas_instance._getOb('plugins')
 
         active_interfaces = []
 
         for iface_name in interfaces:
-            active_interfaces.append( plugins._getInterfaceFromName(
-                                                iface_name ) )
+            active_interfaces.append(plugins._getInterfaceFromName(
+                                                iface_name))
 
         pt = plugins._plugin_types
         id = self.getId()
 
         for type in pt:
-            ids = plugins.listPluginIds( type )
+            ids = plugins.listPluginIds(type)
             if id not in ids and type in active_interfaces:
-                plugins.activatePlugin( type, id ) # turn us on
+                plugins.activatePlugin(type, id)  # turn us on
             elif id in ids and type not in active_interfaces:
-                plugins.deactivatePlugin( type, id ) # turn us off
+                plugins.deactivatePlugin(type, id)  # turn us off
 
         if RESPONSE is not None:
             RESPONSE.redirect('%s/manage_workspace'
                               '?manage_tabs_message='
-                              'Interface+activations+updated.'
-                            % self.absolute_url())
+                              'Interface+activations+updated.' %
+                              self.absolute_url())
 
-    security.declarePrivate( '_getPAS' )
-    def _getPAS( self ):
+    @security.private
+    def _getPAS(self):
         """ Canonical way to get at the PAS instance from a plugin """
-        return aq_parent( aq_inner( self ) )
+        return aq_parent(aq_inner(self))
 
-    security.declarePrivate( '_invalidatePrincipalCache' )
-    def _invalidatePrincipalCache( self, id ):
+    @security.private
+    def _invalidatePrincipalCache(self, id):
         pas = self._getPAS()
-        if pas is not None and hasattr( aq_base(pas), 'ZCacheable_invalidate'):
+        if pas is not None and hasattr(aq_base(pas), 'ZCacheable_invalidate'):
             view_name = createViewName('_findUser', id)
             pas.ZCacheable_invalidate(view_name)
 
-    security.declarePublic( 'applyTransform' )
-    def applyTransform( self, value ):
+    @security.public
+    def applyTransform(self, value):
         """ Transform for login name.
 
         Possibly transform the login, for example by making it lower

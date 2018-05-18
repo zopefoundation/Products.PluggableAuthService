@@ -1,5 +1,6 @@
 from zope.interface import Attribute, Interface
 
+
 class IPASEvent(Interface):
     """An event related to a PAS principal.
     """
@@ -45,5 +46,3 @@ class IPropertiesUpdatedEvent(IPASEvent):
 class IGroupDeletedEvent(IPASEvent):
     """A group has been removed.
     """
-
-

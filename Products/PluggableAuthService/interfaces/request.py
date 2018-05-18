@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """ Interfaces for PluggableAuthService
-
-$Id$
 """
 # Eventually, those interfaces should be moved to Zope and imported
 # here as aliases for backward compatibility.
@@ -21,35 +19,39 @@ $Id$
 from zope.interface import Interface
 
 
-class IRequest( Interface ):
+class IRequest(Interface):
 
     """ Base Request Interface
 
     XXX Add methods from BaseRequest?
     """
 
-class IHTTPRequest( IRequest ):
+
+class IHTTPRequest(IRequest):
 
     """ HTTP Request
     """
 
-class IBrowserRequest( IHTTPRequest ):
+
+class IBrowserRequest(IHTTPRequest):
 
     """Browser Request
     """
 
-class IWebDAVRequest( IHTTPRequest ):
+
+class IWebDAVRequest(IHTTPRequest):
 
     """ WebDAV Request
     """
 
-class IXMLRPCRequest( IHTTPRequest ):
+
+class IXMLRPCRequest(IHTTPRequest):
 
     """ XML-RPC Request
     """
 
-class IFTPRequest( IRequest ):
+
+class IFTPRequest(IRequest):
 
     """ FTP Request
     """
-

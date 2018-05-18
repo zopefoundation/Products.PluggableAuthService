@@ -47,25 +47,22 @@ class ICookieAuthHelper(Interface):
     """ Marker interface.
     """
 
+
 manage_addCookieAuthHelperForm = PageTemplateFile(
     'www/caAdd', globals(), __name__='manage_addCookieAuthHelperForm')
 
 
-def addCookieAuthHelper( dispatcher
-                       , id
-                       , title=None
-                       , cookie_name=''
-                       , REQUEST=None
-                       ):
+def addCookieAuthHelper(dispatcher, id, title=None, cookie_name='',
+                        REQUEST=None):
     """ Add a Cookie Auth Helper to a Pluggable Auth Service. """
     sp = CookieAuthHelper(id, title, cookie_name)
     dispatcher._setObject(sp.getId(), sp)
 
     if REQUEST is not None:
-        REQUEST['RESPONSE'].redirect( '%s/manage_workspace'
-                                      '?manage_tabs_message='
-                                      'CookieAuthHelper+added.'
-                                    % dispatcher.absolute_url() )
+        REQUEST['RESPONSE'].redirect('%s/manage_workspace'
+                                     '?manage_tabs_message='
+                                     'CookieAuthHelper+added.' %
+                                     dispatcher.absolute_url())
 
 
 def decode_cookie(raw):
@@ -86,6 +83,7 @@ def decode_hex(raw):
         value = value.decode('utf-8')
     return value
 
+
 class CookieAuthHelper(Folder, BasePlugin):
     """ Multi-plugin for managing details of Cookie Authentication. """
 
@@ -94,27 +92,16 @@ class CookieAuthHelper(Folder, BasePlugin):
     login_path = 'login_form'
     security = ClassSecurityInfo()
 
-    _properties = ( { 'id'    : 'title'
-                    , 'label' : 'Title'
-                    , 'type'  : 'string'
-                    , 'mode'  : 'w'
-                    }
-                  , { 'id'    : 'cookie_name'
-                    , 'label' : 'Cookie Name'
-                    , 'type'  : 'string'
-                    , 'mode'  : 'w'
-                    }
-                  , { 'id'    : 'login_path'
-                    , 'label' : 'Login Form'
-                    , 'type'  : 'string'
-                    , 'mode'  : 'w'
-                    }
-                  )
+    _properties = ({'id': 'title', 'label': 'Title',
+                    'type': 'string', 'mode': 'w'},
+                   {'id': 'cookie_name', 'label': 'Cookie Name',
+                    'type': 'string', 'mode': 'w'},
+                   {'id': 'login_path', 'label': 'Login Form',
+                    'type': 'string', 'mode': 'w'})
 
-    manage_options = ( BasePlugin.manage_options[:1]
-                     + Folder.manage_options[:1]
-                     + Folder.manage_options[2:]
-                     )
+    manage_options = (BasePlugin.manage_options[:1]
+                      + Folder.manage_options[:1]
+                      + Folder.manage_options[2:])
 
     def __init__(self, id, title=None, cookie_name=''):
         self._setId(id)
@@ -123,8 +110,7 @@ class CookieAuthHelper(Folder, BasePlugin):
         if cookie_name:
             self.cookie_name = cookie_name
 
-
-    security.declarePrivate('extractCredentials')
+    @security.private
     def extractCredentials(self, request):
         """ Extract credentials from cookie or 'request'. """
         creds = {}
@@ -166,14 +152,12 @@ class CookieAuthHelper(Folder, BasePlugin):
 
         return creds
 
-
-    security.declarePrivate('challenge')
+    @security.private
     def challenge(self, request, response, **kw):
         """ Challenge the user for credentials. """
         return self.unauthorized()
 
-
-    security.declarePrivate('updateCredentials')
+    @security.private
     def updateCredentials(self, request, response, login, new_password):
         """ Respond to change of credentials (NOOP for basic auth). """
         cookie_str = b':'.join([
@@ -183,26 +167,22 @@ class CookieAuthHelper(Folder, BasePlugin):
         cookie_val = cookie_val.rstrip()
         response.setCookie(self.cookie_name, quote(cookie_val), path='/')
 
-
-    security.declarePrivate('resetCredentials')
+    @security.private
     def resetCredentials(self, request, response):
         """ Raise unauthorized to tell browser to clear credentials. """
         response.expireCookie(self.cookie_name, path='/')
 
-
-    security.declarePrivate('manage_afterAdd')
+    @security.private
     def manage_afterAdd(self, item, container):
         """ Setup tasks upon instantiation """
-        if not 'login_form' in self.objectIds():
-            login_form = ZopePageTemplate( id='login_form'
-                                           , text=BASIC_LOGIN_FORM
-                                           )
+        if 'login_form' not in self.objectIds():
+            login_form = ZopePageTemplate(id='login_form',
+                                          text=BASIC_LOGIN_FORM)
             login_form.title = 'Login Form'
             login_form.manage_permission(view, roles=['Anonymous'], acquire=1)
-            self._setObject( 'login_form', login_form, set_owner=0 )
+            self._setObject('login_form', login_form, set_owner=0)
 
-
-    security.declarePrivate('unauthorized')
+    @security.private
     def unauthorized(self):
         req = self.REQUEST
         resp = req['RESPONSE']
@@ -250,8 +230,7 @@ class CookieAuthHelper(Folder, BasePlugin):
         # Could not challenge.
         return 0
 
-
-    security.declarePrivate('getLoginURL')
+    @security.private
     def getLoginURL(self):
         """ Where to send people for logging in """
         if self.login_path.startswith('/') or '://' in self.login_path:
@@ -261,7 +240,7 @@ class CookieAuthHelper(Folder, BasePlugin):
         else:
             return None
 
-    security.declarePublic('login')
+    @security.public
     def login(self):
         """ Set a cookie and redirect to the url that we tried to
         authenticate against originally.
@@ -288,13 +267,10 @@ class CookieAuthHelper(Folder, BasePlugin):
 
         return response.redirect(came_from)
 
-classImplements( CookieAuthHelper
-               , ICookieAuthHelper
-               , ILoginPasswordHostExtractionPlugin
-               , IChallengePlugin
-               , ICredentialsUpdatePlugin
-               , ICredentialsResetPlugin
-               )
+
+classImplements(CookieAuthHelper, ICookieAuthHelper,
+                ILoginPasswordHostExtractionPlugin, IChallengePlugin,
+                ICredentialsUpdatePlugin, ICredentialsResetPlugin)
 
 InitializeClass(CookieAuthHelper)
 
@@ -336,4 +312,3 @@ BASIC_LOGIN_FORM = """<html>
 
 </html>
 """
-

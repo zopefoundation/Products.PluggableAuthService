@@ -12,50 +12,10 @@
 #
 ##############################################################################
 """ Export / import adapters for stock PAS plugins.
-
-TODO:
-
- o Add export / import adapters for all stock plugin types:
-
-   - [X] ChallengeProtocolChooser (ChallengeProtocolChooserExportImport)
-
-   - [X] CookieAuthHelper (CookieAuthHelperExportImport)
-
-   - [X] DelegatingMultiPlugin (DelegatePathExportImport)
-
-   - [X] DomainAuthHelper (DomainAuthHelperExportImport)
-
-   - [X] DynamicGroupsPlugin (DynamicGroupsPluginExportImport)
-
-   - [X] HTTPBasicAuthHelper (TitleOnlyExportImport)
-
-   - [X] InlineAuthHelper (TitleOnlyExportImport)
-
-   - [X] LocalRolePlugin (TitleOnlyExportImport)
-
-   - [X] NotCompetent_byRoles (NotCompetent_byRolesExportImport)
-
-   - [X] RecursiveGroupsPlugin (TitleOnlyExportImport)
-
-   - [X] RequestTypeSniffer (TitleOnlyExportImport)
-
-   - [X] ScriptablePlugin (ScriptablePluginExportImport)
-
-   - [X] SearchPrincipalsPlugin (DelegatePathExportImport)
-
-   - [X] SessionAuthHelper (TitleOnlyExportImport)
-
-   - [X] ZODBGroupsManager (ZODBGroupManagerExportImport)
-
-   - [X] ZODBRolesManager (ZODBRoleManagerExportImport)
-
-   - [X] ZODBUserManager (ZODBUserManagerExportImport)
-
- o Review BasePlugin to ensure we haven't left anything out.
-
-$Id$
 """
-import os, sys
+
+import os
+import sys
 
 import six
 from xml.dom.minidom import parseString
@@ -63,16 +23,12 @@ from xml.dom.minidom import parseString
 from Acquisition import Implicit
 from zope.interface import implementer
 
-from Products.GenericSetup.interfaces import IFilesystemExporter
-from Products.GenericSetup.interfaces import IFilesystemImporter
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+
 from Products.GenericSetup.content import DAVAwareFileAdapter
 from Products.GenericSetup.content import FolderishExporterImporter
-
-try:
-    from Products.GenericSetup.utils import PageTemplateResource
-except ImportError: # BBB
-    from Products.PageTemplates.PageTemplateFile \
-        import PageTemplateFile as PageTemplateResource
+from Products.GenericSetup.interfaces import IFilesystemExporter
+from Products.GenericSetup.interfaces import IFilesystemImporter
 
 
 def getPackagePath(instance):
@@ -106,14 +62,13 @@ class SimpleXMLExportImport(Implicit):
         """ See IFilesystemExporter.
         """
         package_path = getPackagePath(self)
-        template = PageTemplateResource('xml/%s' % self._FILENAME,
-                                        package_path).__of__(self.context)
+        template = PageTemplateFile('xml/%s' % self._FILENAME,
+                                    package_path).__of__(self.context)
         info = self._getExportInfo()
         export_context.writeDataFile('%s.xml' % self.context.getId(),
                                      template(info=info).encode('utf-8'),
                                      'text/xml',
-                                     subdir,
-                                    )
+                                     subdir)
 
     def listExportableItems(self):
         """ See IFilesystemExporter.
@@ -147,7 +102,8 @@ class SimpleXMLExportImport(Implicit):
         if attr is None:
             return default
         value = attr.value
-        if six.PY2 and isinstance(value, six.text_type) and self.encoding is not None:
+        if six.PY2 and isinstance(value, six.text_type) and \
+                self.encoding is not None:
             value = value.encode(self.encoding)
         return value
 
@@ -183,14 +139,11 @@ class ZODBUserManagerExportImport(SimpleXMLExportImport):
 
             info = {'user_id': user_id,
                     'login_name': uinfo['login_name'],
-                    'password_hash': self.context._user_passwords[user_id],
-                   }
+                    'password_hash': self.context._user_passwords[user_id]}
 
             user_info.append(info)
 
-        return {'title': self.context.title,
-                'users': user_info,
-               }
+        return {'title': self.context.title, 'users': user_info}
 
 
 class ZODBGroupManagerExportImport(SimpleXMLExportImport):
@@ -212,7 +165,8 @@ class ZODBGroupManagerExportImport(SimpleXMLExportImport):
             self.context.addGroup(group_id, title, description)
 
             for principal in group.getElementsByTagName('principal'):
-                principal_id = self._getNodeAttr(principal, 'principal_id', None)
+                principal_id = self._getNodeAttr(principal, 'principal_id',
+                                                 None)
                 self.context.addPrincipalToGroup(principal_id, group_id)
 
     def _getExportInfo(self):
@@ -221,13 +175,10 @@ class ZODBGroupManagerExportImport(SimpleXMLExportImport):
             group_id = ginfo['id']
             info = {'group_id': group_id,
                     'title': ginfo['title'],
-                    'description': ginfo['description'],
-                   }
+                    'description': ginfo['description']}
             info['principals'] = self._listGroupPrincipals(group_id)
             group_info.append(info)
-        return {'title': self.context.title,
-                'groups': group_info,
-               }
+        return {'title': self.context.title, 'groups': group_info}
 
     def _listGroupPrincipals(self, group_id):
         """ List the principal IDs of the group's members.
@@ -237,7 +188,6 @@ class ZODBGroupManagerExportImport(SimpleXMLExportImport):
             if group_id in v:
                 result.append(k)
         return tuple(result)
-
 
 
 class ZODBRoleManagerExportImport(SimpleXMLExportImport):
@@ -262,7 +212,8 @@ class ZODBRoleManagerExportImport(SimpleXMLExportImport):
                 pass
 
             for principal in role.getElementsByTagName('principal'):
-                principal_id = self._getNodeAttr(principal, 'principal_id', None)
+                principal_id = self._getNodeAttr(principal, 'principal_id',
+                                                 None)
                 self.context.assignRoleToPrincipal(role_id, principal_id)
 
     def _getExportInfo(self):
@@ -272,14 +223,11 @@ class ZODBRoleManagerExportImport(SimpleXMLExportImport):
             role_id = rinfo['id']
             info = {'role_id': role_id,
                     'title': rinfo['title'],
-                    'description': rinfo['description'],
-                   }
+                    'description': rinfo['description']}
             info['principals'] = self._listRolePrincipals(role_id)
             role_info.append(info)
 
-        return {'title': self.context.title,
-                'roles': role_info,
-               }
+        return {'title': self.context.title, 'roles': role_info}
 
     def _listRolePrincipals(self, role_id):
         """ List the principal IDs of the group's members.
@@ -289,6 +237,7 @@ class ZODBRoleManagerExportImport(SimpleXMLExportImport):
             if role_id in v:
                 result.append(k)
         return tuple(result)
+
 
 class CookieAuthHelperExportImport(SimpleXMLExportImport):
     """ Adapter for dumping / loading CookieAuthHelper to an XML file.
@@ -321,8 +270,8 @@ class CookieAuthHelperExportImport(SimpleXMLExportImport):
     def _getExportInfo(self):
         return {'title': self.context.title,
                 'cookie_name': self.context.cookie_name,
-                'login_path': self.context.login_path,
-               }
+                'login_path': self.context.login_path}
+
 
 class DomainAuthHelperExportImport(SimpleXMLExportImport):
     """ Adapter for dumping / loading DomainAuthHelper to an XML file.
@@ -348,8 +297,7 @@ class DomainAuthHelperExportImport(SimpleXMLExportImport):
                                                match_type=match_type,
                                                match_string=match_string,
                                                username=username,
-                                               roles=roles,
-                                              )
+                                               roles=roles)
 
     def _getExportInfo(self):
         user_map = {}
@@ -360,9 +308,8 @@ class DomainAuthHelperExportImport(SimpleXMLExportImport):
                 match['roles'] = ','.join(match['roles'])
                 matches.append(match)
 
-        return {'title': self.context.title,
-                'map': user_map
-               }
+        return {'title': self.context.title, 'map': user_map}
+
 
 class TitleOnlyExportImport(SimpleXMLExportImport):
     """ Adapter for dumping / loading title-only plugins to an XML file.
@@ -377,8 +324,8 @@ class TitleOnlyExportImport(SimpleXMLExportImport):
         pass
 
     def _getExportInfo(self):
-        return {'title': self.context.title,
-               }
+        return {'title': self.context.title}
+
 
 class DelegatePathExportImport(SimpleXMLExportImport):
     """ Adapter for dumping / loading plugins with 'delegate' via XML.
@@ -401,8 +348,8 @@ class DelegatePathExportImport(SimpleXMLExportImport):
 
     def _getExportInfo(self):
         return {'title': self.context.title,
-                'delegate': self.context.delegate,
-               }
+                'delegate': self.context.delegate}
+
 
 class DynamicGroupsPluginExportImport(SimpleXMLExportImport):
     """ Adapter for dumping / loading DynamicGroupsPlugin to an XML file.
@@ -422,12 +369,9 @@ class DynamicGroupsPluginExportImport(SimpleXMLExportImport):
             description = self._getNodeAttr(group, 'description', None)
             active = self._getNodeAttr(group, 'active', None)
 
-            self.context.addGroup(group_id,
-                                  predicate,
-                                  title,
-                                  description,
-                                  active == 'True',
-                                 )
+            self.context.addGroup(group_id, predicate, title,
+                                  description, active == 'True')
+
     def _getExportInfo(self):
         group_info = []
 
@@ -437,13 +381,11 @@ class DynamicGroupsPluginExportImport(SimpleXMLExportImport):
                     'predicate': ginfo['predicate'],
                     'title': ginfo['title'],
                     'description': ginfo['description'],
-                    'active': ginfo['active'],
-                   }
+                    'active': ginfo['active']}
             group_info.append(info)
 
-        return {'title': self.context.title,
-                'groups': group_info,
-               }
+        return {'title': self.context.title, 'groups': group_info}
+
 
 class ChallengeProtocolChooserExportImport(SimpleXMLExportImport):
     """ Adapter for dumping / loading ChallengeProtocolChooser to an XML file.
@@ -469,12 +411,11 @@ class ChallengeProtocolChooserExportImport(SimpleXMLExportImport):
         for label in sorted(listRequestTypesLabels()):
             protocols = sorted(self.context._map.get(label, []))
             request_type_info.append({'label': label,
-                                      'protocols': protocols,
-                                     })
+                                      'protocols': protocols})
 
         return {'title': self.context.title,
-                'request_types': request_type_info,
-               }
+                'request_types': request_type_info}
+
 
 class ScriptablePluginExportImport(FolderishExporterImporter):
     """ Export / import the Scriptable type plugin.
@@ -489,6 +430,7 @@ class ScriptablePluginExportImport(FolderishExporterImporter):
         """
         FolderishExporterImporter.import_(self, import_context, subdir, root)
 
+
 class PythonScriptFileAdapter(DAVAwareFileAdapter):
     """File-ish for PythonScript.
     """
@@ -496,6 +438,7 @@ class PythonScriptFileAdapter(DAVAwareFileAdapter):
         """ Return the name under which our file data is stored.
         """
         return '%s.py' % self.context.getId()
+
 
 class NotCompetent_byRolesExportImport(SimpleXMLExportImport):
     """ Adapter for dumping / loading NCbR plugin.
@@ -514,6 +457,4 @@ class NotCompetent_byRolesExportImport(SimpleXMLExportImport):
         self.context.roles = tuple(roles)
 
     def _getExportInfo(self):
-        return {'title': self.context.title,
-                'roles': self.context.roles,
-               }
+        return {'title': self.context.title, 'roles': self.context.roles}

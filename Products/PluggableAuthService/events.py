@@ -85,5 +85,4 @@ def PASEventNotify(event):
     """Event subscriber to dispatch PASEvent to interested adapters."""
     adapters = subscribers((event.principal, event), None)
     for adapter_ in adapters:
-        pass # getting them does the work
-
+        pass  # getting them does the work

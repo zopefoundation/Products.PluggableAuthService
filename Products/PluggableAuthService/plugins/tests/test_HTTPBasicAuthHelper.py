@@ -12,23 +12,23 @@
 #
 ##############################################################################
 import unittest
+
 from Products.PluggableAuthService.tests.conformance \
      import ILoginPasswordHostExtractionPlugin_conformance
 from Products.PluggableAuthService.tests.conformance \
      import IChallengePlugin_conformance
 from Products.PluggableAuthService.tests.conformance \
-     import ICredentialsUpdatePlugin_conformance
-from Products.PluggableAuthService.tests.conformance \
      import ICredentialsResetPlugin_conformance
+
 
 class FauxHTTPRequest:
 
-    def __init__( self, name=None, password=None ):
+    def __init__(self, name=None, password=None):
 
         self._name = name
         self._password = password
 
-    def _authUserPW( self ):
+    def _authUserPW(self):
 
         if self._name is None:
             return None
@@ -38,13 +38,14 @@ class FauxHTTPRequest:
     def get(self, name, default=None):
         return getattr(self, name, default)
 
+
 class FauxHTTPResponse:
 
     _unauthorized_called = 0
     realm = 'unit test'
     headers = {}
 
-    def unauthorized( self ):
+    def unauthorized(self):
 
         self._unauthorized_called = 1
 
@@ -67,57 +68,56 @@ class FauxHTTPResponse:
         self.body = body
 
 
-class HTTPBasicAuthHelperTests( unittest.TestCase
-                              , ILoginPasswordHostExtractionPlugin_conformance
-                              , IChallengePlugin_conformance
-                              , ICredentialsResetPlugin_conformance
-                              ):
+class HTTPBasicAuthHelperTests(unittest.TestCase,
+                               ILoginPasswordHostExtractionPlugin_conformance,
+                               IChallengePlugin_conformance,
+                               ICredentialsResetPlugin_conformance):
 
-    def _getTargetClass( self ):
+    def _getTargetClass(self):
 
         from Products.PluggableAuthService.plugins.HTTPBasicAuthHelper \
             import HTTPBasicAuthHelper
 
         return HTTPBasicAuthHelper
 
-    def _makeOne( self, id='test', *args, **kw ):
+    def _makeOne(self, id='test', *args, **kw):
 
-        return self._getTargetClass()( id=id, *args, **kw )
+        return self._getTargetClass()(id=id, *args, **kw)
 
-    def test_extractCredentials_no_creds( self ):
+    def test_extractCredentials_no_creds(self):
 
         helper = self._makeOne()
         request = FauxHTTPRequest()
 
-        self.assertEqual( helper.extractCredentials( request ), {} )
+        self.assertEqual(helper.extractCredentials(request), {})
 
-    def test_extractCredentials_with_creds( self ):
+    def test_extractCredentials_with_creds(self):
 
         helper = self._makeOne()
-        request = FauxHTTPRequest( 'foo', 'bar' )
+        request = FauxHTTPRequest('foo', 'bar')
 
-        self.assertEqual( helper.extractCredentials( request )
-                        , { 'login' : 'foo', 'password' : 'bar',
-                            'remote_host': '', 'remote_address': '' } )
+        self.assertEqual(helper.extractCredentials(request),
+                         {'login': 'foo', 'password': 'bar',
+                          'remote_host': '', 'remote_address': ''})
 
-    def test_challenge( self ):
+    def test_challenge(self):
         helper = self._makeOne()
         request = FauxHTTPRequest()
         response = FauxHTTPResponse()
 
-        self.assertFalse( response._unauthorized_called )
+        self.assertFalse(response._unauthorized_called)
         helper.challenge(request, response)
         self.assertTrue(response.status, 401)
         self.assertTrue(response.headers['WWW-Authenticate'],
-            'basic realm="unit test"')
+                        'basic realm="unit test"')
 
-    def test_multi_challenge( self ):
+    def test_multi_challenge(self):
         # It is possible for HTTP headers to contain multiple auth headers
         helper = self._makeOne()
         request = FauxHTTPRequest()
         response = FauxHTTPResponse()
 
-        self.assertFalse( response._unauthorized_called )
+        self.assertFalse(response._unauthorized_called)
         helper.challenge(request, response)
 
         response.realm = 'second realm'
@@ -125,23 +125,25 @@ class HTTPBasicAuthHelperTests( unittest.TestCase
 
         self.assertTrue(response.status, 401)
         self.assertTrue(response.headers['WWW-Authenticate'],
-            ['basic realm="unit test"', 'basic realm="second realm"'])
+                        ['basic realm="unit test"',
+                         'basic realm="second realm"'])
 
-
-    def test_resetCredentials( self ):
+    def test_resetCredentials(self):
 
         helper = self._makeOne()
         request = FauxHTTPRequest()
         response = FauxHTTPResponse()
 
-        self.assertFalse( response._unauthorized_called )
-        helper.resetCredentials( request, response )
-        self.assertTrue( response._unauthorized_called )
+        self.assertFalse(response._unauthorized_called)
+        helper.resetCredentials(request, response)
+        self.assertTrue(response._unauthorized_called)
+
 
 if __name__ == "__main__":
     unittest.main()
 
+
 def test_suite():
     return unittest.TestSuite((
-        unittest.makeSuite( HTTPBasicAuthHelperTests ),
-        ))
+        unittest.makeSuite(HTTPBasicAuthHelperTests),
+       ))

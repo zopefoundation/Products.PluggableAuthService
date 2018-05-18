@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """ Classes:  PropertiedUser
-
-$Id$
 """
 
 from .interfaces.authservice import IPropertiedUser
@@ -26,11 +24,11 @@ from Products.PluggableAuthService.interfaces.propertysheets \
     import IPropertySheet
 
 
-class PropertiedUser( BasicUser ):
+class PropertiedUser(BasicUser):
 
     """ User objects which manage propertysheets, obtained from decorators.
     """
-    def __init__( self, id, login=None ):
+    def __init__(self, id, login=None):
 
         self._id = id
 
@@ -43,25 +41,24 @@ class PropertiedUser( BasicUser ):
         self._groups = {}
         self._roles = {}
 
-
     #
     #   BasicUser's public interface
     #
-    def getId( self ):
+    def getId(self):
 
         """ -> user ID
         """
         return self._id
 
-    def getUserName( self ):
+    def getUserName(self):
 
         """ -> login name
         """
         return self._login
 
-    def getRoles( self ):
+    def getRoles(self):
 
-        """ -> [ role ]
+        """ -> [role]
 
         o Include only "global" roles.
         """
@@ -74,16 +71,16 @@ class PropertiedUser( BasicUser ):
         """
         return list(self._groups.keys())
 
-    def getDomains( self ):
+    def getDomains(self):
 
-        """ -> [ domain ]
+        """ -> [domain]
 
         o The list represents the only domains from which the user is
           allowed to access the system.
         """
         return ()
 
-    def getRolesInContext( self, object ):
+    def getRolesInContext(self, object):
 
         """ Return the list of roles assigned to the user.
 
@@ -96,49 +93,48 @@ class PropertiedUser( BasicUser ):
           no other extension mechanism. :(
         """
         user_id = self.getId()
-        # [ x.getId() for x in self.getGroups() ]
         group_ids = self.getGroups()
 
-        principal_ids = list( group_ids )
-        principal_ids.insert( 0, user_id )
+        principal_ids = list(group_ids)
+        principal_ids.insert(0, user_id)
 
-        local ={}
-        object = aq_inner( object )
+        local = {}
+        object = aq_inner(object)
 
         while 1:
 
-            local_roles = getattr( object, '__ac_local_roles__', None )
+            local_roles = getattr(object, '__ac_local_roles__', None)
 
             if local_roles:
 
-                if callable( local_roles ):
+                if callable(local_roles):
                     local_roles = local_roles()
 
                 dict = local_roles or {}
 
                 for principal_id in principal_ids:
-                    for role in dict.get( principal_id, [] ):
-                        local[ role ] = 1
+                    for role in dict.get(principal_id, []):
+                        local[role] = 1
 
-            inner = aq_inner( object )
-            parent = aq_parent( inner )
+            inner = aq_inner(object)
+            parent = aq_parent(inner)
 
             if parent is not None:
                 object = parent
                 continue
 
-            new = getattr( object, 'im_self', None )
+            new = getattr(object, 'im_self', None)
 
             if new is not None:
 
-                object = aq_inner( new )
+                object = aq_inner(new)
                 continue
 
             break
 
-        return list( self.getRoles() ) + list(local.keys())
+        return list(self.getRoles()) + list(local.keys())
 
-    def allowed( self, object, object_roles=None ):
+    def allowed(self, object, object_roles=None):
 
         """ Check whether the user has access to object.
 
@@ -159,8 +155,8 @@ class PropertiedUser( BasicUser ):
 
         # Provide short-cut access if object is protected by 'Authenticated'
         # role and user is not nobody
-        if 'Authenticated' in object_roles and (
-            self.getUserName() != 'Anonymous User'):
+        if 'Authenticated' in object_roles and \
+                self.getUserName() != 'Anonymous User':
             return 1
 
         # Check for ancient role data up front, convert if found.
@@ -184,49 +180,49 @@ class PropertiedUser( BasicUser ):
         # Still have not found a match, so check local roles. We do
         # this manually rather than call getRolesInContext so that
         # we can incur only the overhead required to find a match.
-        inner_obj = aq_inner( object )
+        inner_obj = aq_inner(object)
         user_id = self.getId()
-        # [ x.getId() for x in self.getGroups() ]
+        # [x.getId() for x in self.getGroups()]
         group_ids = self.getGroups()
 
-        principal_ids = list( group_ids )
-        principal_ids.insert( 0, user_id )
+        principal_ids = list(group_ids)
+        principal_ids.insert(0, user_id)
 
         while 1:
 
-            local_roles = getattr( inner_obj, '__ac_local_roles__', None )
+            local_roles = getattr(inner_obj, '__ac_local_roles__', None)
 
             if local_roles:
 
-                if callable( local_roles ):
+                if callable(local_roles):
                     local_roles = local_roles()
 
                 dict = local_roles or {}
 
                 for principal_id in principal_ids:
 
-                    local_roles = dict.get( principal_id, [] )
+                    local_roles = dict.get(principal_id, [])
 
                     for role in object_roles:
 
                         if role in local_roles:
 
-                            if self._check_context( object ):
+                            if self._check_context(object):
                                 return 1
 
                             return 0
 
-            inner = aq_inner( inner_obj )
-            parent = aq_parent( inner )
+            inner = aq_inner(inner_obj)
+            parent = aq_parent(inner)
 
             if parent is not None:
                 inner_obj = parent
                 continue
 
-            new = getattr( inner_obj, 'im_self', None )
+            new = getattr(inner_obj, 'im_self', None)
 
             if new is not None:
-                inner_obj = aq_inner( new )
+                inner_obj = aq_inner(new)
                 continue
 
             break
@@ -236,58 +232,56 @@ class PropertiedUser( BasicUser ):
     #
     #   Interfaces to allow user folder plugins to annotate the user.
     #
-    def _addGroups( self, groups=() ):
+    def _addGroups(self, groups=()):
 
         """ Extend our set of groups.
 
         o Don't complain about duplicates.
         """
         for group in groups:
-            self._groups[ group ] = 1
+            self._groups[group] = 1
 
-    def _addRoles( self, roles=() ):
+    def _addRoles(self, roles=()):
 
         """ Extend our set of roles.
 
         o Don't complain about duplicates.
         """
         for role in roles:
-            self._roles[ role ] = 1
-
+            self._roles[role] = 1
 
     #
     #   Propertysheet management
     #
-    def listPropertysheets( self ):
+    def listPropertysheets(self):
 
-        """ -> [ propertysheet_id ]
+        """ -> [propertysheet_id]
         """
         return list(self._propertysheets.keys())
 
-    def getPropertysheet( self, id ):
+    def getPropertysheet(self, id):
 
         """ id -> sheet
 
         o Raise KeyError if no such seet exists.
         """
-        return self._propertysheets[ id ]
+        return self._propertysheets[id]
 
     __getitem__ = getPropertysheet
 
-    def addPropertysheet( self, id, data ):
+    def addPropertysheet(self, id, data):
 
         """ Add a new propertysheet.
 
         o Raise KeyError if a sheet of the given ID already exists.
         """
-        if self._propertysheets.get( id ) is not None:
+        if self._propertysheets.get(id) is not None:
             raise KeyError("Duplicate property sheet: %s" % id)
 
         if IPropertySheet.providedBy(data):
-            self._propertysheets[ id ] = data
+            self._propertysheets[id] = data
         else:
-            self._propertysheets[ id ] = UserPropertySheet( id, **data )
+            self._propertysheets[id] = UserPropertySheet(id, **data)
 
 
-classImplements( PropertiedUser,
-                 IPropertiedUser )
+classImplements(PropertiedUser, IPropertiedUser)

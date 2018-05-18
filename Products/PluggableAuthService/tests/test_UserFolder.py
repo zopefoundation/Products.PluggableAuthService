@@ -12,7 +12,7 @@
 #
 ##############################################################################
 
-import os, sys, base64, unittest
+import unittest
 
 from Products.PluggableAuthService.tests import pastc
 
@@ -21,12 +21,14 @@ from AccessControl.Permissions import view as View
 from AccessControl.Permissions import add_folders as AddFolders
 from ZPublisher.utils import basic_auth_encode
 
-from Products.PluggableAuthService.PluggableAuthService import PluggableAuthService
+from Products.PluggableAuthService.PluggableAuthService import \
+    PluggableAuthService
 
 from zope import event
 from zope.component import adapter
 from zope.component import provideHandler
-from Products.PluggableAuthService.interfaces.events import IPrincipalCreatedEvent
+from Products.PluggableAuthService.interfaces.events import \
+    IPrincipalCreatedEvent
 from Products.PluggableAuthService.events import CredentialsUpdated
 from Products.PluggableAuthService.events import PASEventNotify
 from Products.PluggableAuthService.events import userCredentialsUpdatedHandler
@@ -200,7 +202,6 @@ class UserFolderTests(pastc.PASTestCase):
             def user_names(self):
                 return self.getUsers()
 
-
         tinyFolderOver = Folderish(15, 20)
         tinyFolderUnder = Folderish(15, 10)
 
@@ -216,7 +217,7 @@ class UserFolderTests(pastc.PASTestCase):
             pass
 
         try:
-            list = tinyFolderUnder.get_valid_userids()
+            list = tinyFolderUnder.get_valid_userids()  # noqa
             pass
         except OverflowError:
             assert 0, "Raised overflow error erroneously"
@@ -233,9 +234,7 @@ class UserFolderTests(pastc.PASTestCase):
         self.uf._doAddUser(USER_ID, PASSWORD, [], [])
 
         uid_and_info = self.uf.users.authenticateCredentials(
-                                { 'login': USER_ID
-                                , 'password': PASSWORD
-                                })
+                                {'login': USER_ID, 'password': PASSWORD})
 
         self.assertEqual(uid_and_info, (USER_ID, USER_ID))
 
@@ -251,9 +250,7 @@ class UserFolderTests(pastc.PASTestCase):
         self.uf._doAddUser(USER_ID, ENCRYPTED, [], [])
 
         uid_and_info = self.uf.users.authenticateCredentials(
-                                { 'login': USER_ID
-                                , 'password': PASSWORD
-                                })
+                                {'login': USER_ID, 'password': PASSWORD})
 
         self.assertEqual(uid_and_info, (USER_ID, USER_ID))
 
@@ -326,17 +323,19 @@ class UserEvents(pastc.PASTestCase):
     def testCredentialsEvent(self):
         provideHandler(PASEventNotify)
         provideHandler(userCredentialsUpdatedHandler)
+
         def wrap(self, *args):
             self._data.append(args)
             return self._original(*args)
-        self.uf._data=[]
-        self.uf._original=self.uf.updateCredentials
-        self.uf.updateCredentials=wrap
+
+        self.uf._data = []
+        self.uf._original = self.uf.updateCredentials
+        self.uf.updateCredentials = wrap
         self.assertEqual(len(self.uf._data), 0)
-        event.notify(CredentialsUpdated(self.uf.getUserById("user1"), "testpassword"))
+        event.notify(CredentialsUpdated(self.uf.getUserById("user1"),
+                                        "testpassword"))
         self.assertEqual(self.uf._data[0][2], "user1")
         self.assertEqual(self.uf._data[0][3], "testpassword")
-
 
 
 def test_suite():
@@ -345,6 +344,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(UserTests))
     suite.addTest(unittest.makeSuite(UserEvents))
     return suite
+
 
 if __name__ == '__main__':
     unittest.main(defaultTest='test_suite')

@@ -11,8 +11,6 @@
 #
 ##############################################################################
 """Filesystem exporter / importer adapters.
-
-$Id$
 """
 
 from zope.interface import implementer
@@ -21,9 +19,7 @@ from Products.GenericSetup.interfaces import IContentFactoryName
 from Products.GenericSetup.interfaces import IFilesystemExporter
 from Products.GenericSetup.interfaces import IFilesystemImporter
 
-#
-#   setup_tool handlers
-#
+
 def exportPAS(context):
     IFilesystemExporter(context.getSite()).export(context, 'PAS', True)
 

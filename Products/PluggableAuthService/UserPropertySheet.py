@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """ Represent a group of properties about a user.
-
-$Id$
 """
 
 from DateTime.DateTime import DateTime
@@ -37,7 +35,7 @@ def _guessSchema(kw):
         if isinstance(v, (six.binary_type, six.text_type)):
             ptype = 'string'
 
-        elif six.PY2 and isinstance(v, long):
+        elif six.PY2 and isinstance(v, long):  # noqa
             ptype = 'long'
 
         elif type(v) == int:

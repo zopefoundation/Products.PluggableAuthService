@@ -18,56 +18,57 @@ from OFS.Cache import isCacheable
 
 from Products.StandardCacheManagers.RAMCacheManager import RAMCacheManager
 
+
 class FauxRequest:
 
-    def __init__( self, steps=(), **kw ):
+    def __init__(self, steps=(), **kw):
 
         self.steps = steps
         self._dict = {}
-        self._dict.update( kw )
+        self._dict.update(kw)
 
-    def get( self, key, default=None ):
+    def get(self, key, default=None):
 
-        return self._dict.get( key, default )
+        return self._dict.get(key, default)
 
-    def _authUserPW( self ):
-        form = self.get( 'form' )
-        return ( form.get( 'login' ), form.get( 'password' ) )
+    def _authUserPW(self):
+        form = self.get('form')
+        return (form.get('login'), form.get('password'))
 
-    def __getitem__( self, key ):
+    def __getitem__(self, key):
 
-        return self._dict[ key ]
+        return self._dict[key]
 
-    def __setitem__( self, key, value ):
+    def __setitem__(self, key, value):
 
-        self._dict[ key ] = value
+        self._dict[key] = value
 
-class PluggableAuthServiceCachingTests( unittest.TestCase ):
 
-    def tearDown( self ):
+class PluggableAuthServiceCachingTests(unittest.TestCase):
+
+    def tearDown(self):
         pass
 
-
-    def _getTargetClass( self ):
+    def _getTargetClass(self):
 
         from Products.PluggableAuthService.PluggableAuthService \
             import PluggableAuthService
 
         return PluggableAuthService
 
-    def _makeOne( self, plugins=None, *args, **kw ):
+    def _makeOne(self, plugins=None, *args, **kw):
 
-        zcuf = self._getTargetClass()( *args, **kw )
+        zcuf = self._getTargetClass()(*args, **kw)
 
         if plugins is not None:
-            zcuf._setObject( 'plugins', plugins )
+            zcuf._setObject('plugins', plugins)
 
         rcm = RAMCacheManager('ramcache')
         zcuf._setObject('ramcache', rcm)
 
         return zcuf
 
-    def _makePlugins( self, plugin_type_info=None ):
+    def _makePlugins(self, plugin_type_info=None):
 
         from Products.PluggableAuthService.PluggableAuthService \
             import _PLUGIN_TYPE_INFO
@@ -76,8 +77,8 @@ class PluggableAuthServiceCachingTests( unittest.TestCase ):
         if plugin_type_info is None:
             plugin_type_info = _PLUGIN_TYPE_INFO
 
-        reg = PluginRegistry( plugin_type_info=plugin_type_info )
-        reg._setId( 'plugins' )
+        reg = PluginRegistry(plugin_type_info=plugin_type_info)
+        reg._setId('plugins')
         reg._plugins = {}
 
         return reg
@@ -96,7 +97,7 @@ class PluggableAuthServiceCachingTests( unittest.TestCase ):
 
         return pas_instance
 
-    def test_empty( self ):
+    def test_empty(self):
         zcuf = self._makeOne()
         rcm = getattr(zcuf, 'ramcache')
 
@@ -130,21 +131,16 @@ class PluggableAuthServiceCachingTests( unittest.TestCase ):
         # for roles. Basic scaffolding to be able to store and retrieve users.
         from Products.PluggableAuthService.interfaces import plugins
 
-        plugin_registry.activatePlugin( plugins.IUserEnumerationPlugin
-                                      , user_source.getId()
-                                      )
-        plugin_registry.activatePlugin( plugins.IUserAdderPlugin
-                                      , user_source.getId()
-                                      )
-        plugin_registry.activatePlugin( plugins.IRolesPlugin
-                                      , roles_source.getId()
-                                      )
-        plugin_registry.activatePlugin( plugins.IRoleEnumerationPlugin
-                                      , roles_source.getId()
-                                      )
-        plugin_registry.activatePlugin( plugins.IRoleAssignerPlugin
-                                      , roles_source.getId()
-                                      )
+        plugin_registry.activatePlugin(plugins.IUserEnumerationPlugin,
+                                       user_source.getId())
+        plugin_registry.activatePlugin(plugins.IUserAdderPlugin,
+                                       user_source.getId())
+        plugin_registry.activatePlugin(plugins.IRolesPlugin,
+                                       roles_source.getId())
+        plugin_registry.activatePlugin(plugins.IRoleEnumerationPlugin,
+                                       roles_source.getId())
+        plugin_registry.activatePlugin(plugins.IRoleAssignerPlugin,
+                                       roles_source.getId())
 
         # Now add a user and make sure it's there
         zcuf._doAddUser('testlogin', 'secret', ['Member', 'Anonymous'], [])
@@ -198,7 +194,7 @@ class PluggableAuthServiceCachingTests( unittest.TestCase ):
 if __name__ == "__main__":
     unittest.main()
 
+
 def test_suite():
     return unittest.TestSuite((
-        unittest.makeSuite( PluggableAuthServiceCachingTests ),
-        ))
+        unittest.makeSuite(PluggableAuthServiceCachingTests),))

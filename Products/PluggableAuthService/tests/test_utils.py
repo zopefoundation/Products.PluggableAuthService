@@ -41,7 +41,8 @@ class Test_createViewName(unittest.TestCase):
         self.assertEqual(self._callFUT('foo', u'b\344r'), b'foo-b\xc3\xa4r')
 
     def test_utf8_umlaut_in_handle(self):
-        self.assertEqual(self._callFUT('foo', b'b\303\244r'), b'foo-b\xc3\xa4r')
+        self.assertEqual(self._callFUT('foo', b'b\303\244r'),
+                         b'foo-b\xc3\xa4r')
 
     def test_unicode_umlaut_in_handle(self):
         self.assertEqual(self._callFUT('foo', u'b\344r'), b'foo-b\303\244r')
@@ -87,22 +88,24 @@ class Test_createKeywords(unittest.TestCase):
         _ITEMS = (('foo', 'bar'), ('baz', u'M\344dchen'.encode('utf-16')))
         hashed = _createHashedValue(_ITEMS)
         self.assertEqual(self._callFUT(foo='bar',
-                                        baz=u'M\344dchen'.encode('utf-16')),
+                                       baz=u'M\344dchen'.encode('utf-16')),
                          {'keywords': hashed})
 
     def test_createKeywords_unicode_chinese(self):
         _ITEMS = (('foo', 'bar'), ('baz', u'\u03a4\u03b6'))
         hashed = _createHashedValue(_ITEMS)
         self.assertEqual(self._callFUT(foo='bar', baz=u'\u03a4\u03b6'),
-                {'keywords': hashed})
+                         {'keywords': hashed})
 
 
 def _makeRequestWSession(**session):
     from zope.interface import implementer
     from zope.publisher.interfaces.browser import IBrowserRequest
+
     @implementer(IBrowserRequest)
     class _Request(dict):
         pass
+
     request = _Request()
     request.SESSION = session.copy()
     request.form = {}
@@ -227,9 +230,11 @@ class Test_csrf_only(unittest.TestCase):
 
     def test_w_function_w_positional_REQUEST(self):
         from zExceptions import Forbidden
+
         def w_positional_request(foo, bar, REQUEST):
             "I haz REQUEST as positional arg"
             return 42
+
         wrapped = self._callFUT(w_positional_request)
         self.assertEqual(wrapped.__name__, w_positional_request.__name__)
         self.assertEqual(wrapped.__module__, w_positional_request.__module__)
@@ -242,24 +247,26 @@ class Test_csrf_only(unittest.TestCase):
 
     def test_w_function_w_optional_REQUEST(self):
         from zExceptions import Forbidden
+
         def w_optional_request(foo, bar, REQUEST=None):
             "I haz REQUEST as kw arg"
             return 42
+
         wrapped = self._callFUT(w_optional_request)
         self.assertEqual(wrapped.__name__, w_optional_request.__name__)
         self.assertEqual(wrapped.__module__, w_optional_request.__module__)
         self.assertEqual(wrapped.__doc__, w_optional_request.__doc__)
-        self.assertRaises(Forbidden,
-                         wrapped, foo=None, bar=None,
-                                  REQUEST=_makeRequestWSession())
+        self.assertRaises(Forbidden, wrapped, foo=None, bar=None,
+                          REQUEST=_makeRequestWSession())
         req = _makeRequestWSession(_csrft_='deadbeef')
         req.form['csrf_token'] = 'deadbeef'
         self.assertEqual(wrapped(foo=None, bar=None, REQUEST=req), 42)
 
+
 def _createHashedValue(items):
     try:
         from hashlib import sha1 as sha
-    except:
+    except ImportError:
         from sha import new as sha
 
     hasher = sha()
@@ -273,6 +280,7 @@ def _createHashedValue(items):
             v = v.encode('utf-8')
         hasher.update(v)
     return hasher.hexdigest()
+
 
 def test_suite():
     return unittest.TestSuite((

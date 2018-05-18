@@ -25,7 +25,7 @@ import os
 import six
 
 # BBB import
-from AccessControl.requestmethod import postonly
+from AccessControl.requestmethod import postonly  # noqa
 
 
 def directlyProvides(obj, *interfaces):
@@ -42,49 +42,47 @@ def classImplements(class_, *interfaces):
     return interface.classImplements(class_, *normalized_interfaces)
 
 
-product_dir = package_home( globals() )
+product_dir = package_home(globals())
 product_prefix = os.path.split(product_dir)[0]
+_wwwdir = os.path.join(product_dir, 'www')
 
-_wwwdir = os.path.join( product_dir, 'www' )
 
 #
 #   Most of this module is shamelessly ripped off from Zope3.test
 #
-def remove_stale_bytecode( arg, dirname, names ):
+def remove_stale_bytecode(arg, dirname, names):
     """
         Troll product, removing compiled turds whose source is now gone.
     """
-    names = map( os.path.normcase, names )
+    names = map(os.path.normcase, names)
 
     for name in names:
 
-        if name.endswith( ".pyc" ) or name.endswith( ".pyo" ):
+        if name.endswith(".pyc") or name.endswith(".pyo"):
 
             srcname = name[:-1]
 
             if srcname not in names:
 
-                fullname = os.path.join( dirname, name )
+                fullname = os.path.join(dirname, name)
 
                 if __debug__:
                     print(("Removing stale bytecode file", fullname))
 
-                os.unlink( fullname )
+                os.unlink(fullname)
+
 
 class TestFileFinder:
 
-    def __init__( self ):
+    def __init__(self):
         self.files = []
 
-    def visit( self, prefix, dir, files ):
+    def visit(self, prefix, dir, files):
         """
             Visitor for os.path.walk:  accumulates filenamse of unittests.
         """
-        #if dir[-5:] != "tests":
-        #    return
-
         # ignore tests that aren't in packages
-        if not "__init__.py" in files:
+        if "__init__.py" not in files:
 
             if not files or files == ['CVS']:
                 return
@@ -93,65 +91,69 @@ class TestFileFinder:
 
         for file in files:
 
-            if file.startswith( prefix ) and file.endswith( ".py" ):
+            if file.startswith(prefix) and file.endswith(".py"):
                 path = os.path.join(dir, file)
                 self.files.append(path)
 
-def find_unit_test_files( from_dir=product_dir, test_prefix='test' ):
+
+def find_unit_test_files(from_dir=product_dir, test_prefix='test'):
     """
         Walk the product, return a list of all unittest files.
     """
     finder = TestFileFinder()
-    os.path.walk( from_dir, finder.visit, test_prefix )
+    os.path.walk(from_dir, finder.visit, test_prefix)
     return finder.files
 
-def module_name_from_path( path ):
+
+def module_name_from_path(path):
     """
         Return the dotted module name matching the filesystem path.
     """
-    assert path.endswith( '.py' )
+    assert path.endswith('.py')
     path = path[:-3]
-    path = path[ len(product_prefix) + 1: ] # strip extraneous crap
+    path = path[len(product_prefix) + 1:]  # strip extraneous crap
     dirs = []
     while path:
-        path, end = os.path.split( path )
-        dirs.insert( 0, end )
-    return ".".join( dirs )
+        path, end = os.path.split(path)
+        dirs.insert(0, end)
+    return ".".join(dirs)
 
-def get_suite( file ):
+
+def get_suite(file):
     """
         Retrieve a TestSuite from 'file'.
     """
     import unittest
-    module_name = module_name_from_path( file )
+    module_name = module_name_from_path(file)
     loader = unittest.defaultTestLoader
     try:
-        suite = loader.loadTestsFromName( '%s.test_suite' % module_name )
+        suite = loader.loadTestsFromName('%s.test_suite' % module_name)
     except AttributeError:
 
         try:
-            suite = loader.loadTestsFromName(  module_name )
+            suite = loader.loadTestsFromName(module_name)
         except ImportError as err:
-            print ("Error importing %s\n%s" % (module_name, err))
+            print("Error importing %s\n%s" % (module_name, err))
             raise
     return suite
 
-def allTests( from_dir=product_dir, test_prefix='test' ):
+
+def allTests(from_dir=product_dir, test_prefix='test'):
     """
         Walk the product and build a unittest.TestSuite aggregating tests.
     """
     import unittest
-    os.path.walk( from_dir, remove_stale_bytecode, None )
-    test_files = find_unit_test_files( from_dir, test_prefix )
+    os.path.walk(from_dir, remove_stale_bytecode, None)
+    test_files = find_unit_test_files(from_dir, test_prefix)
     test_files.sort()
 
     suite = unittest.TestSuite()
 
     for test_file in test_files:
 
-        s = get_suite( test_file )
+        s = get_suite(test_file)
         if s is not None:
-            suite.addTest( s )
+            suite.addTest(s)
 
     return suite
 
@@ -267,8 +269,8 @@ def csrf_only(wrapped):
              '    return wrapped(' + ','.join(args) + ')',
              ]
     g = globals().copy()
-    l = locals().copy()
+    l_copy = locals().copy()
     g['wrapped'] = wrapped
-    exec('\n'.join(lines), g, l)
+    exec('\n'.join(lines), g, l_copy)
 
-    return functools.wraps(wrapped)(l['wrapper'])
+    return functools.wraps(wrapped)(l_copy['wrapper'])

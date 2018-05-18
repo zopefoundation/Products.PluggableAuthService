@@ -18,106 +18,110 @@ from OFS.SimpleItem import SimpleItem
 from zope.interface import Interface
 from zope.interface import providedBy
 
-class IFaux( Interface ):
+
+class IFaux(Interface):
 
     def faux_method():
         pass
 
-class IFauxTwo( Interface ):
+
+class IFauxTwo(Interface):
 
     def two_method():
         pass
 
-class DummyPluginRegistry( Folder ):
 
-    def listPluginIds( self, interface ):
+class DummyPluginRegistry(Folder):
+
+    def listPluginIds(self, interface):
         return ()
 
-    def _getInterfaceFromName( self, name ):
+    def _getInterfaceFromName(self, name):
         if name == 'IFaux':
             return IFaux
         if name == 'IFauxTwo':
             return IFauxTwo
 
-class ScriptablePluginTests( unittest.TestCase ):
 
-    def _getTargetClass( self ):
+class ScriptablePluginTests(unittest.TestCase):
+
+    def _getTargetClass(self):
 
         from Products.PluggableAuthService.plugins.ScriptablePlugin \
             import ScriptablePlugin
 
         return ScriptablePlugin
 
-    def _makeOne( self, id='test', *args, **kw ):
+    def _makeOne(self, id='test', *args, **kw):
 
-        return self._getTargetClass()( id=id, *args, **kw )
+        return self._getTargetClass()(id=id, *args, **kw)
 
-    def test_empty( self ):
+    def test_empty(self):
 
         scriptable_plugin = self._makeOne()
-        self.assertFalse( IFaux in providedBy(scriptable_plugin) )
-        self.assertFalse( IFauxTwo in providedBy(scriptable_plugin) )
+        self.assertFalse(IFaux in providedBy(scriptable_plugin))
+        self.assertFalse(IFauxTwo in providedBy(scriptable_plugin))
 
-    def test_withTwo( self ):
+    def test_withTwo(self):
 
         parent = Folder()
-        parent._setObject( 'plugins', DummyPluginRegistry() )
+        parent._setObject('plugins', DummyPluginRegistry())
 
         scriptable_plugin = self._makeOne().__of__(parent)
 
-        faux_method = SimpleItem( 'faux_method' )
-        two_method = SimpleItem( 'two_method' )
+        faux_method = SimpleItem('faux_method')
+        two_method = SimpleItem('two_method')
 
-        scriptable_plugin._setObject( 'faux_method', faux_method )
-        scriptable_plugin._setObject( 'two_method', two_method )
+        scriptable_plugin._setObject('faux_method', faux_method)
+        scriptable_plugin._setObject('two_method', two_method)
 
-        scriptable_plugin.manage_updateInterfaces( ['IFaux', 'IFauxTwo'] )
+        scriptable_plugin.manage_updateInterfaces(['IFaux', 'IFauxTwo'])
 
-        self.assertTrue( IFaux in providedBy(scriptable_plugin) )
-        self.assertTrue( IFauxTwo in providedBy(scriptable_plugin) )
+        self.assertTrue(IFaux in providedBy(scriptable_plugin))
+        self.assertTrue(IFauxTwo in providedBy(scriptable_plugin))
 
-    def test_withTwoOnlyOneWired( self ):
+    def test_withTwoOnlyOneWired(self):
 
         parent = Folder()
-        parent._setObject( 'plugins', DummyPluginRegistry() )
+        parent._setObject('plugins', DummyPluginRegistry())
 
         scriptable_plugin = self._makeOne().__of__(parent)
 
-        faux_method = SimpleItem( 'faux_method' )
-        whatever = SimpleItem( 'whatever' )
+        faux_method = SimpleItem('faux_method')
+        whatever = SimpleItem('whatever')
 
-        scriptable_plugin._setObject( 'faux_method', faux_method )
-        scriptable_plugin._setObject( 'whatever', whatever )
+        scriptable_plugin._setObject('faux_method', faux_method)
+        scriptable_plugin._setObject('whatever', whatever)
 
-        scriptable_plugin.manage_updateInterfaces( ['IFaux',] )
+        scriptable_plugin.manage_updateInterfaces(['IFaux'])
 
-        self.assertTrue( IFaux in providedBy(scriptable_plugin) )
+        self.assertTrue(IFaux in providedBy(scriptable_plugin))
 
-    def test_withTwoMinusOne( self ):
+    def test_withTwoMinusOne(self):
 
         parent = Folder()
-        parent._setObject( 'plugins', DummyPluginRegistry() )
+        parent._setObject('plugins', DummyPluginRegistry())
 
         scriptable_plugin = self._makeOne().__of__(parent)
 
-        faux_method = SimpleItem( 'faux_method' )
-        two_method = SimpleItem( 'two_method' )
+        faux_method = SimpleItem('faux_method')
+        two_method = SimpleItem('two_method')
 
-        scriptable_plugin._setObject( 'faux_method', faux_method )
-        scriptable_plugin._setObject( 'two_method', two_method )
+        scriptable_plugin._setObject('faux_method', faux_method)
+        scriptable_plugin._setObject('two_method', two_method)
 
-        scriptable_plugin.manage_updateInterfaces( ['IFaux', 'IFauxTwo'] )
+        scriptable_plugin.manage_updateInterfaces(['IFaux', 'IFauxTwo'])
 
-        scriptable_plugin._delObject( 'two_method' )
+        scriptable_plugin._delObject('two_method')
 
-        self.assertTrue( IFaux in providedBy(scriptable_plugin) )
-        self.assertFalse( IFauxTwo in providedBy(scriptable_plugin) )
+        self.assertTrue(IFaux in providedBy(scriptable_plugin))
+        self.assertFalse(IFauxTwo in providedBy(scriptable_plugin))
 
 
 if __name__ == '__main__':
     unittest.main()
 
+
 def test_suite():
     return unittest.TestSuite((
-        unittest.makeSuite( ScriptablePluginTests ),
-        ))
+        unittest.makeSuite(ScriptablePluginTests),))

@@ -19,7 +19,7 @@ $Id$
 from zope.interface import Interface
 
 
-class IPropertySheet( Interface ):
+class IPropertySheet(Interface):
 
     """ Interface for queryable property sheets.
 
@@ -32,26 +32,26 @@ class IPropertySheet( Interface ):
         """ Identify the sheet within a collection.
         """
 
-    def hasProperty( id ):
+    def hasProperty(id):
 
         """ Does the sheet have a property corresponding to 'id'?
         """
 
-    def getProperty( id, default=None ):
+    def getProperty(id, default=None):
 
         """ Return the value of the property corresponding to 'id'.
 
         o If no such property exists within the sheet, return 'default'.
         """
 
-    def getPropertyType( id ):
+    def getPropertyType(id):
 
         """ Return the string identifying the type of property, 'id'.
 
         o If no such property exists within the sheet, return None.
         """
 
-    def propertyInfo( id ):
+    def propertyInfo(id):
 
         """ Return a mapping describing property, 'id'.
 
@@ -81,5 +81,5 @@ class IPropertySheet( Interface ):
 
     def propertyItems():
 
-        """ Return a sequence of ( id, value ) tuples, one per property.
+        """ Return a sequence of (id, value) tuples, one per property.
         """

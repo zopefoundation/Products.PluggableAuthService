@@ -13,6 +13,8 @@ Change Log
 
 - Add support for Python 3.
 
+- Reformatted code for PEP-8 compliance.
+
 
 1.11.0 (2016-03-01)
 -------------------

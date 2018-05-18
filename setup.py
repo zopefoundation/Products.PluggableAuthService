@@ -7,9 +7,11 @@ NAME = 'PluggableAuthService'
 here = os.path.abspath(os.path.dirname(__file__))
 package = os.path.join(here, 'Products', NAME)
 
+
 def _package_doc(name):
     f = open(os.path.join(package, name))
     return f.read()
+
 
 _boundary = '\n\n'
 
@@ -19,7 +21,7 @@ with open('README.rst') as f:
 with open('CHANGES.rst') as f:
     CHANGES = f.read()
 
-README = ( README + _boundary + CHANGES)
+README = (README + _boundary + CHANGES)
 
 setup(name='Products.%s' % NAME,
       version=_package_doc('version.txt').strip(),
@@ -36,8 +38,7 @@ setup(name='Products.%s' % NAME,
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Topic :: Software Development",
-        "Topic :: System :: Systems Administration :: "
-                "Authentication/Directory",
+        "Topic :: System :: Systems Administration :: Authentication/Directory",  # noqa
         ],
       keywords='web application server zope',
       author="Zope Foundation and Contributors",
