@@ -142,9 +142,8 @@ class ChallengeProtocolChooser(BasePlugin):
         available_protocols = self._listProtocols()
 
         request_types = listRequestTypesLabels()
-        request_types.sort()
 
-        for label in request_types:
+        for label in sorted(request_types):
             settings = []
             select_any = False
             info.append({'label': label, 'settings': settings})
