@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+1.12.0 (2018-09-25)
+-------------------
+
+- Add new events to be able to notify when a principal is added to
+  or removed from a group.
+
+
 1.11.0 (2016-03-01)
 -------------------
 

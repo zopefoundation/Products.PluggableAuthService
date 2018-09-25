@@ -21,6 +21,10 @@ from Products.PluggableAuthService.interfaces.events \
     import ICredentialsUpdatedEvent
 from Products.PluggableAuthService.interfaces.events import IPASEvent
 from Products.PluggableAuthService.interfaces.events \
+    import IPrincipalAddedToGroupEvent
+from Products.PluggableAuthService.interfaces.events \
+    import IPrincipalRemovedFromGroupEvent
+from Products.PluggableAuthService.interfaces.events \
     import IPrincipalCreatedEvent
 from Products.PluggableAuthService.interfaces.events \
     import IPrincipalDeletedEvent
@@ -36,6 +40,22 @@ class PASEvent(object):
     def __init__(self, principal):
         self.principal = principal
         self.object = principal
+
+
+class PrincipalAddedToGroup(PASEvent):
+    implements(IPrincipalAddedToGroupEvent)
+
+    def __init__(self, principal, group):
+        super(PrincipalAddedToGroup, self).__init__(principal)
+        self.group = group
+
+
+class PrincipalRemovedFromGroup(PASEvent):
+    implements(IPrincipalRemovedFromGroupEvent)
+
+    def __init__(self, principal, group):
+        super(PrincipalRemovedFromGroup, self).__init__(principal)
+        self.group = group
 
 
 class PrincipalCreated(PASEvent):

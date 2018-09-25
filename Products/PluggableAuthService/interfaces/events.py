@@ -1,10 +1,23 @@
 from zope.interface import Attribute, Interface
 
+
 class IPASEvent(Interface):
     """An event related to a PAS principal.
     """
 
     principal = Attribute("The subject of the event.")
+
+
+class IPrincipalAddedToGroupEvent(IPASEvent):
+    """A principal has been added to a group.
+    """
+    group = Attribute("Group to which principal is being added")
+
+
+class IPrincipalRemovedFromGroupEvent(IPASEvent):
+    """A principal has been removed from a group.
+    """
+    group = Attribute("Group from which principal is being removed")
 
 
 class IPrincipalCreatedEvent(IPASEvent):
