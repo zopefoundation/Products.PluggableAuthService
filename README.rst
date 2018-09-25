@@ -35,8 +35,8 @@ Zope.
 Documentation
 -------------
 
-Please see the files under doc/ in the packaged software for more
-information, and consult the interfaces files under interfaces/ in
+Please see the files under `doc/` in the packaged software for more
+information, and consult the interfaces files under `interfaces/ in
 the software package for PluggableAuthService and plugin APIs.
 
 The documentation is also online available at https://productspluggableauthservice.readthedocs.io/.
