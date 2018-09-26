@@ -21,6 +21,7 @@ from AccessControl.requestmethod import postonly
 from App.class_init import InitializeClass
 from BTrees.OOBTree import OOBTree
 
+from zope.event import notify
 from zope.interface import Interface
 
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
@@ -30,6 +31,8 @@ from Products.PluggableAuthService.interfaces.plugins \
 from Products.PluggableAuthService.interfaces.plugins \
     import IGroupsPlugin
 
+from Products.PluggableAuthService.events import PrincipalAddedToGroup
+from Products.PluggableAuthService.events import PrincipalRemovedFromGroup
 from Products.PluggableAuthService.permissions import ManageGroups
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.utils import classImplements
@@ -282,6 +285,17 @@ class ZODBGroupManager( BasePlugin ):
             self._principal_groups[ principal_id ] = new
             self._invalidatePrincipalCache( principal_id )
 
+            # Get PAS instance to lookup principal object to notify event
+            pas = self._getPAS()
+            # As we don't know if principal is user or group at this point
+            # try to get user object first
+            obj = pas.getUserById(principal_id)
+            # Otherwise get group object
+            if not obj:
+                obj = pas.getGroupById(principal_id)
+            # Notify event
+            notify(PrincipalAddedToGroup(obj, pas.getGroupById(group_id)))
+
         return not already
 
     security.declarePrivate( 'removePrincipalFromGroup' )
@@ -306,6 +320,17 @@ class ZODBGroupManager( BasePlugin ):
         if already:
             self._principal_groups[ principal_id ] = new
             self._invalidatePrincipalCache( principal_id )
+
+            # Get PAS instance to lookup principal object to notify event
+            pas = self._getPAS()
+            # As we don't know if principal is user or group at this point
+            # try to get user object first
+            obj = pas.getUserById(principal_id)
+            # Otherwise get group object
+            if not obj:
+                obj = pas.getGroupById(principal_id)
+            # Notify event
+            notify(PrincipalRemovedFromGroup(obj, pas.getGroupById(group_id)))
 
         return already
 

@@ -1,11 +1,12 @@
 Change Log
 ==========
 
-1.12.0 (2018-09-25)
+1.12.0 (unreleased)
 -------------------
 
 - Add new events to be able to notify when a principal is added to
-  or removed from a group.
+  or removed from a group. Notify these events when principals are 
+  added or removed to a group in ZODBGroupManager
 
 
 1.11.0 (2016-03-01)

@@ -15,6 +15,7 @@ from Acquisition import aq_parent
 from zope.component import adapter
 from zope.component import subscribers
 from zope.interface import implements
+from zope.interface import implementer
 
 from Products.PluggableAuthService.interfaces.authservice import IBasicUser
 from Products.PluggableAuthService.interfaces.events \
@@ -42,16 +43,16 @@ class PASEvent(object):
         self.object = principal
 
 
+@implementer(IPrincipalAddedToGroupEvent)
 class PrincipalAddedToGroup(PASEvent):
-    implements(IPrincipalAddedToGroupEvent)
 
     def __init__(self, principal, group):
         super(PrincipalAddedToGroup, self).__init__(principal)
         self.group = group
 
 
+@implementer(IPrincipalRemovedFromGroupEvent)
 class PrincipalRemovedFromGroup(PASEvent):
-    implements(IPrincipalRemovedFromGroupEvent)
 
     def __init__(self, principal, group):
         super(PrincipalRemovedFromGroup, self).__init__(principal)
