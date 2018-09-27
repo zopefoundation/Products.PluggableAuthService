@@ -91,7 +91,6 @@ class PropertiesUpdated(PASEvent):
 def userCredentialsUpdatedHandler(principal, event):
     pas = aq_parent(principal)
     pas.updateCredentials(
-            pas,
             pas.REQUEST,
             pas.REQUEST.RESPONSE,
             principal.getId(),
