@@ -42,6 +42,11 @@ class IPropertiesUpdatedEvent(IPASEvent):
     properties = Attribute('List of modified property ids')
 
 
+class IGroupCreatedEvent(IPASEvent):
+    """A group has been created.
+    """
+
+
 class IGroupDeletedEvent(IPASEvent):
     """A group has been removed.
     """

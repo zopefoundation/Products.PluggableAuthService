@@ -141,6 +141,30 @@ class DummyPrincipal(object):
     pass
 
 
+class GroupCreatedTests(unittest.TestCase, ConformsToIPASEvent):
+
+    def _getTargetClass(self):
+        from Products.PluggableAuthService.events import GroupCreated
+        return GroupCreated
+
+    def _makeOne(self, Group=None):
+        if Group is None:
+            Group = DummyGroup()
+        return self._getTargetClass()(Group)
+
+    def test_class_conforms_to_IGroupCreatedEvent(self):
+        from zope.interface.verify import verifyClass
+        from Products.PluggableAuthService.interfaces.events \
+            import IGroupCreatedEvent
+        verifyClass(IGroupCreatedEvent, self._getTargetClass())
+
+    def test_instance_conforms_to_IGroupCreatedEvent(self):
+        from zope.interface.verify import verifyObject
+        from Products.PluggableAuthService.interfaces.events \
+            import IGroupCreatedEvent
+        verifyObject(IGroupCreatedEvent, self._makeOne())
+
+
 class GroupDeletedTests(unittest.TestCase, ConformsToIPASEvent):
 
     def _getTargetClass(self):

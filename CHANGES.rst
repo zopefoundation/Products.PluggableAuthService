@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+1.11.1 (unreleased)
+-------------------
+
+- Add new event to be able to notify group creation.
+
+
 1.11.0 (2016-03-01)
 -------------------
 
