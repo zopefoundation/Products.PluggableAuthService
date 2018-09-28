@@ -25,11 +25,13 @@ from OFS.Folder import Folder
 from OFS.PropertyManager import PropertyManager
 from OFS.SimpleItem import SimpleItem
 
+from zope.event import notify
 from zope.interface import Interface
 
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from Products.PageTemplates.Expressions import getEngine
 
+from Products.PluggableAuthService.events import GroupCreated
 from Products.PluggableAuthService.interfaces.plugins \
     import IGroupsPlugin
 from Products.PluggableAuthService.interfaces.plugins \
@@ -330,6 +332,8 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
         # This method changes the enumerateGroups return value
         view_name = createViewName('enumerateGroups')
         self.ZCacheable_invalidate(view_name=view_name)
+
+        notify(GroupCreated(group_id))
 
     @security.private
     def updateGroup(self, group_id, predicate, title=None, description=None,
