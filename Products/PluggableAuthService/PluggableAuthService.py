@@ -178,6 +178,7 @@ class PluggableAuthService(Folder, Cacheable):
     security = ClassSecurityInfo()
 
     meta_type = 'Pluggable Auth Service'
+    zmi_icon = 'fa fa-users-cog'
 
     _id = id = 'acl_users'
 
