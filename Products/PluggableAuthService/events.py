@@ -50,6 +50,9 @@ class PrincipalDeleted(PASEvent):
 
 class GroupCreated(PASEvent):
     implements(IGroupCreatedEvent)
+    def __init__(self, group, pas):
+        super(GroupCreated, self).__init__(group)
+        self.pas = pas
 
 
 class GroupDeleted(PASEvent):

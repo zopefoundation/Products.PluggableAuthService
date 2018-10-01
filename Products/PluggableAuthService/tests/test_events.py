@@ -150,7 +150,7 @@ class GroupCreatedTests(unittest.TestCase, ConformsToIPASEvent):
     def _makeOne(self, Group=None):
         if Group is None:
             Group = DummyGroup()
-        return self._getTargetClass()(Group)
+        return self._getTargetClass()(Group, None)
 
     def test_class_conforms_to_IGroupCreatedEvent(self):
         from zope.interface.verify import verifyClass
