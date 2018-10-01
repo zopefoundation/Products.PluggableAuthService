@@ -39,11 +39,11 @@ class DummyGroup:
 
 @adapter(IGroupCreatedEvent)
 def groupCreatedHandler(event):
-    pas = event.pas
-    if not hasattr(pas, 'events'):
-        pas.events = []
+    plugin = event.plugin
+    if not hasattr(plugin, 'events'):
+        plugin.events = []
 
-    pas.events.append(event)
+    plugin.events.append(event)
 
 
 class ZODBGroupManagerTests(unittest.TestCase,
@@ -103,7 +103,7 @@ class ZODBGroupManagerTests(unittest.TestCase,
         self.assertTrue(IGroupCreatedEvent.providedBy(event))
         self.assertEqual(event.principal, 'group')
         self.assertEqual(event.object, 'group')
-        self.assertEqual(event.pas, zgm)
+        self.assertEqual(event.plugin, zgm)
 
     def test_addGroup_exists(self):
         zgm = self._makeOne()

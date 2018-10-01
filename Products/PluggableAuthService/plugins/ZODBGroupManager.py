@@ -183,7 +183,7 @@ class ZODBGroupManager(BasePlugin):
 
         self._groups[group_id] = {'id': group_id, 'title': title,
                                   'description': description}
-        notify(GroupCreated(group_id, pas=self))
+        notify(GroupCreated(group_id, self))
 
     @security.private
     def updateGroup(self, group_id, title=None, description=None):

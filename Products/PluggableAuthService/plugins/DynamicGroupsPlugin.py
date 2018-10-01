@@ -333,7 +333,7 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
         view_name = createViewName('enumerateGroups')
         self.ZCacheable_invalidate(view_name=view_name)
 
-        notify(GroupCreated(group_id, pas=self))
+        notify(GroupCreated(group_id, self))
 
     @security.private
     def updateGroup(self, group_id, predicate, title=None, description=None,
