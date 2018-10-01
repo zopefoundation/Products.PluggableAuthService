@@ -52,7 +52,10 @@ class PrincipalDeleted(PASEvent):
 
 @implementer(IGroupCreatedEvent)
 class GroupCreated(PASEvent):
-    pass
+
+    def __init__(self, group, pas):
+        super(GroupCreated, self).__init__(group)
+        self.pas = pas
 
 
 @implementer(IGroupDeletedEvent)

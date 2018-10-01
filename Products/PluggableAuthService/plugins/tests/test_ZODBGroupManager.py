@@ -14,7 +14,11 @@
 import unittest
 
 from zExceptions import Forbidden
+from zope.component import adapter
+from zope.component import provideHandler
 
+from Products.PluggableAuthService.interfaces.events import \
+    IGroupCreatedEvent
 from Products.PluggableAuthService.tests.conformance \
     import IGroupEnumerationPlugin_conformance
 from Products.PluggableAuthService.tests.conformance \
@@ -31,6 +35,15 @@ class DummyGroup:
 
     def getId(self):
         return self._id
+
+
+@adapter(IGroupCreatedEvent)
+def groupCreatedHandler(event):
+    pas = event.pas
+    if not hasattr(pas, 'events'):
+        pas.events = []
+
+    pas.events.append(event)
 
 
 class ZODBGroupManagerTests(unittest.TestCase,
@@ -77,6 +90,20 @@ class ZODBGroupManagerTests(unittest.TestCase,
         self.assertEqual(len(info_list), 1)
         info = info_list[0]
         self.assertEqual(info['id'], 'group')
+
+    def test_addGroup_CreatedEvent(self):
+        provideHandler(groupCreatedHandler)
+
+        zgm = self._makeOne()
+        req, res = makeRequestAndResponse()
+        zgm.addGroup('group', 'group_title', 'group_desc')
+        self.assertEqual(len(zgm.events), 1)
+
+        event = zgm.events[0]
+        self.assertTrue(IGroupCreatedEvent.providedBy(event))
+        self.assertEqual(event.principal, 'group')
+        self.assertEqual(event.object, 'group')
+        self.assertEqual(event.pas, zgm)
 
     def test_addGroup_exists(self):
         zgm = self._makeOne()
