@@ -15,6 +15,7 @@ import unittest
 
 from zExceptions import Forbidden
 from zope.component import adapter
+from zope.component import globalSiteManager
 from zope.component import provideHandler
 
 from Products.PluggableAuthService.interfaces.events import \
@@ -27,6 +28,7 @@ from Products.PluggableAuthService.tests.conformance \
 from Products.PluggableAuthService.plugins.tests.helpers \
      import FauxPAS, FauxSmartPAS, DummyUser, makeRequestAndResponse
 
+
 class DummyGroup:
 
     def __init__( self, id ):
@@ -35,10 +37,6 @@ class DummyGroup:
     def getId( self ):
         return self._id
 
-class ZODBGroupManagerTests( unittest.TestCase
-                           , IGroupEnumerationPlugin_conformance
-                           , IGroupsPlugin_conformance
-                           ):
 
 @adapter(IGroupCreatedEvent)
 def groupCreatedHandler(event):
@@ -52,6 +50,12 @@ def groupCreatedHandler(event):
 class ZODBGroupManagerTests(unittest.TestCase,
                             IGroupEnumerationPlugin_conformance,
                             IGroupsPlugin_conformance):
+
+    def setUp(self):
+        provideHandler(groupCreatedHandler)
+
+    def tearDown(self):
+        globalSiteManager.unregisterHandler(groupCreatedHandler)
 
     def _getTargetClass(self):
 
@@ -95,7 +99,6 @@ class ZODBGroupManagerTests(unittest.TestCase,
         self.assertEqual( info[ 'id' ], 'group' )
 
     def test_addGroup_CreatedEvent( self ):
-        provideHandler(groupCreatedHandler)
 
         zgm = self._makeOne()
         req, res = makeRequestAndResponse()
