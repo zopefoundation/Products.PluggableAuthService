@@ -48,8 +48,8 @@ def groupCreatedHandler(event):
 
 
 class ZODBGroupManagerTests( unittest.TestCase
-                            , IGroupEnumerationPlugin_conformance
-                            , IGroupsPlugin_conformance
+                           , IGroupEnumerationPlugin_conformance
+                           , IGroupsPlugin_conformance
                            ):
 
     def setUp( self ):
