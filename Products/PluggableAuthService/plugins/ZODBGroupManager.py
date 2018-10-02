@@ -188,7 +188,7 @@ class ZODBGroupManager( BasePlugin ):
                                    , 'title' : title
                                    , 'description' : description
                                    }
-        notify(GroupCreated(group_id))
+        notify(GroupCreated(group_id, self))
 
     security.declarePrivate( 'updateGroup' )
     def updateGroup( self, group_id, title=None, description=None ):
