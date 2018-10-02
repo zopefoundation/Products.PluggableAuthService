@@ -47,17 +47,18 @@ def groupCreatedHandler(event):
     plugin.events.append(event)
 
 
-class ZODBGroupManagerTests(unittest.TestCase,
-                            IGroupEnumerationPlugin_conformance,
-                            IGroupsPlugin_conformance):
+class ZODBGroupManagerTests( unittest.TestCase
+                            , IGroupEnumerationPlugin_conformance
+                            , IGroupsPlugin_conformance
+                           ):
 
-    def setUp(self):
+    def setUp( self ):
         provideHandler(groupCreatedHandler)
 
-    def tearDown(self):
+    def tearDown( self ):
         globalSiteManager.unregisterHandler(groupCreatedHandler)
 
-    def _getTargetClass(self):
+    def _getTargetClass( self ):
 
         from Products.PluggableAuthService.plugins.ZODBGroupManager \
             import ZODBGroupManager
