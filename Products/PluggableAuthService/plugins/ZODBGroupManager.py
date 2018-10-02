@@ -20,9 +20,12 @@ from AccessControl.requestmethod import postonly
 from Acquisition import aq_parent
 from BTrees.OOBTree import OOBTree
 
+from zope.event import notify
 from zope.interface import Interface
 
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+
+from Products.PluggableAuthService.events import GroupCreated
 
 from Products.PluggableAuthService.interfaces.plugins \
     import IGroupEnumerationPlugin
@@ -180,6 +183,7 @@ class ZODBGroupManager(BasePlugin):
 
         self._groups[group_id] = {'id': group_id, 'title': title,
                                   'description': description}
+        notify(GroupCreated(group_id, self))
 
     @security.private
     def updateGroup(self, group_id, title=None, description=None):
