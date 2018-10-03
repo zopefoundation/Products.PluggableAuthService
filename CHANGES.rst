@@ -5,6 +5,8 @@ Change Log
 ------------------
 - Add new event to be able to notify group creation.
 
+- Refactoring to make it easier to override ``updateCredentials``.
+
 
 2.0b1 (2018-05-18)
 ------------------
