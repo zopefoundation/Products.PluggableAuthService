@@ -158,13 +158,18 @@ class CookieAuthHelper(Folder, BasePlugin):
         return self.unauthorized()
 
     @security.private
-    def updateCredentials(self, request, response, login, new_password):
-        """ Respond to change of credentials (NOOP for basic auth). """
+    def get_cookie_value(self, login, new_password):
         cookie_str = b':'.join([
             hexlify(login.encode('utf-8')),
             hexlify(new_password.encode('utf-8'))])
         cookie_val = encodestring(cookie_str)
         cookie_val = cookie_val.rstrip()
+        return cookie_val
+
+    @security.private
+    def updateCredentials(self, request, response, login, new_password):
+        """ Respond to change of credentials (NOOP for basic auth). """
+        cookie_val = self.get_cookie_value(login, new_password)
         response.setCookie(self.cookie_name, quote(cookie_val), path='/')
 
     @security.private
