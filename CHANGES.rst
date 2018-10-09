@@ -3,6 +3,11 @@ Change Log
 
 2.0b2 (unreleased)
 ------------------
+
+- Do not override a previously set response body in
+  ``HTTPBasicAuthHelper.challenge()`` allowing to set the response body via
+  an exception view in Zope >= 4.0b6.
+
 - Add new event to be able to notify group creation.
 
 - Refactoring to make it easier to override ``updateCredentials``.
@@ -393,7 +398,7 @@ Change Log
   but does not return any credentials.
   (http://www.zope.org/Collectors/PAS/46)
 
-- Re-worded parts of the README so they don't point to specific or 
+- Re-worded parts of the README so they don't point to specific or
   non-existing files (http://www.zope.org/Collectors/PAS/6 and
   http://www.zope.org/Collectors/PAS/47)
 
@@ -456,7 +461,7 @@ Change Log
 - Add missing interface for IPropertiedUser and tests
   (http://www.zope.org/Collectors/PAS/16)
 
-- Removed STX links from README.txt which do nothing but return 
+- Removed STX links from README.txt which do nothing but return
   404s when clicked from the README on zope.org.
   (http://www.zope.org/Collectors/PAS/6)
 
@@ -550,11 +555,11 @@ Change Log
   sites running PAS and CC.
 
 - Add a publicly callable "logout" method on the PluggableAuthService
-  instance that will call resetCredentials on all activated 
+  instance that will call resetCredentials on all activated
   ICredentialsRest plugins, thus effecting a logout.
 
 - Enabled the usage of the CookieAuthHelper login screen functionality
-  without actually using the CookieAuthHelper to maintain the 
+  without actually using the CookieAuthHelper to maintain the
   credentials store in its own auth cookie by ensuring that only
   active updateCredentials plugins are informed about a successful
   login so they can store the credentials.
