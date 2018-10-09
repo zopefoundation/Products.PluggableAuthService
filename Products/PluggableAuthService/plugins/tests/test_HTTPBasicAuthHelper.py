@@ -43,7 +43,9 @@ class FauxHTTPResponse:
 
     _unauthorized_called = 0
     realm = 'unit test'
-    headers = {}
+
+    def __init__(self):
+        self.headers = {}
 
     def unauthorized(self):
 
@@ -107,9 +109,9 @@ class HTTPBasicAuthHelperTests(unittest.TestCase,
 
         self.assertFalse(response._unauthorized_called)
         helper.challenge(request, response)
-        self.assertTrue(response.status, 401)
-        self.assertTrue(response.headers['WWW-Authenticate'],
-                        'basic realm="unit test"')
+        self.assertEqual(response.status, 401)
+        self.assertEqual(response.headers['WWW-Authenticate'],
+                         'basic realm="unit test"')
 
     def test_multi_challenge(self):
         # It is possible for HTTP headers to contain multiple auth headers
@@ -123,8 +125,8 @@ class HTTPBasicAuthHelperTests(unittest.TestCase,
         response.realm = 'second realm'
         helper.challenge(request, response)
 
-        self.assertTrue(response.status, 401)
-        self.assertTrue(response.headers['WWW-Authenticate'],
+        self.assertEqual(response.status, 401)
+        self.assertEqual(response.headers['WWW-Authenticate'],
                         ['basic realm="unit test"',
                          'basic realm="second realm"'])
 
