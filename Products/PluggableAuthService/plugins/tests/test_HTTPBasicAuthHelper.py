@@ -127,8 +127,8 @@ class HTTPBasicAuthHelperTests(unittest.TestCase,
 
         self.assertEqual(response.status, 401)
         self.assertEqual(response.headers['WWW-Authenticate'],
-                        ['basic realm="unit test"',
-                         'basic realm="second realm"'])
+                         ['basic realm="unit test"',
+                          'basic realm="second realm"'])
 
     def test_resetCredentials(self):
 
@@ -148,4 +148,4 @@ if __name__ == "__main__":
 def test_suite():
     return unittest.TestSuite((
         unittest.makeSuite(HTTPBasicAuthHelperTests),
-       ))
+    ))
