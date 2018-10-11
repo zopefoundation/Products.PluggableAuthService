@@ -4,6 +4,8 @@ Change Log
 2.0b2 (unreleased)
 ------------------
 
+- Add support for Python 3.7.
+
 - Do not override a previously set response body in
   ``HTTPBasicAuthHelper.challenge()`` allowing to set the response body via
   an exception view in Zope >= 4.0b6.
