@@ -10,9 +10,10 @@ matrix:
     include:
         - python: 2.7
           env: EXTRA=-zserver
+        - python: "3.7"
+          dist: xenial
+          sudo: true
 install:
-    - pip install six==1.10.0 # force to avoid conflict with zc.recipe.testrunner
-    - pip install -U setuptools==33.1.1
     - pip install zc.buildout coverage coveralls
     - buildout bootstrap
     - buildout
