@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-2.0b2 (unreleased)
+2.0b2 (2018-10-16)
 ------------------
 
 - Add support for Python 3.7.
