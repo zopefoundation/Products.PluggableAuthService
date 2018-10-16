@@ -26,9 +26,9 @@ The product can also be installed as a depencency of another distribution.
 
 If you want to install this package manually, without using setuptools,
 simply untar the package file downloaded from the PyPI site and look for
-the folder named "PluggableAuthService" underneath the "Products" folder 
-at the root of the extracted tarball. Copy or link this 
-"PluggableAuthService" folder into your Zope "Products" folder and restart 
+the folder named "PluggableAuthService" underneath the "Products" folder
+at the root of the extracted tarball. Copy or link this
+"PluggableAuthService" folder into your Zope "Products" folder and restart
 Zope.
 
 
@@ -36,7 +36,7 @@ Documentation
 -------------
 
 Please see the files under `doc/` in the packaged software for more
-information, and consult the interfaces files under `interfaces/ in
+information, and consult the interfaces files under `interfaces/` in
 the software package for PluggableAuthService and plugin APIs.
 
 The documentation is also online available at https://productspluggableauthservice.readthedocs.io/.
