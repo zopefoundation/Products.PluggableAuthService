@@ -1,4 +1,20 @@
-recursive-include Products *
-include *
-global-exclude *.pyc
-global-exclude .installed.cfg
+include *.rst
+include *.txt
+include buildout.cfg
+include tox.ini
+
+include bootstrap.py
+exclude bootstrap.py
+
+exclude MANIFEST.in
+
+recursive-include Products *.gif
+recursive-include Products *.objects
+recursive-include Products *.png
+recursive-include Products *.txt
+recursive-include Products *.xml
+recursive-include Products *.zcml
+recursive-include Products *.zpt
+recursive-include docs *.py
+recursive-include docs *.rst
+recursive-include docs Makefile
