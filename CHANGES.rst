@@ -4,7 +4,7 @@ Change Log
 2.0b3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Handle password hashes that were accidentally decoded.
 
 
 2.0b2 (2018-10-16)

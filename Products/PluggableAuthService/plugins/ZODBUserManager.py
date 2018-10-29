@@ -125,6 +125,8 @@ class ZODBUserManager(BasePlugin, Cacheable):
             return None
 
         reference = self._user_passwords.get(userid)
+        if isinstance(reference, six.text_type):
+            reference = reference.encode('utf8')
 
         if reference is None:
             return None
