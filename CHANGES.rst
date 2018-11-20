@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-1.11.1 (unreleased)
+1.11.1 (2018-11-20)
 -------------------
 
 - Fix CSRF defense incompatibility with some session implementations
