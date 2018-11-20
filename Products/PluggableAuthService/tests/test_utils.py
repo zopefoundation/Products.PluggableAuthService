@@ -130,6 +130,18 @@ class Test_getCSRFToken(unittest.TestCase):
         token = self._callFUT(request)
         self.assertEqual(token, 'deadbeef')
 
+    def test_session_fails_truth_test(self):
+        # Some session implementations may not be recognized as
+        # valid sessions because when empty they fail a simple truth test.
+        # Using a dict here as an example.
+        request = _makeRequestWSession()
+        request.SESSION = {}
+        self._callFUT(request)
+
+        # After the call, the returned token must also be in the session
+        # if getCSRFToken has recognized our session as such.
+        self.assertIn('_csrft_', request.SESSION)
+
 
 class Test_checkCSRFToken(unittest.TestCase):
 

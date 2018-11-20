@@ -198,7 +198,7 @@ def createKeywords(**kw):
 
 def getCSRFToken(request):
     session = getattr(request, 'SESSION', None)
-    if session:
+    if session is not None:
         token = session.get('_csrft_', None)
         if token is None:
             token = session['_csrft_'] = binascii.hexlify(os.urandom(20))

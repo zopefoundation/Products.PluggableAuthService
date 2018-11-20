@@ -4,7 +4,7 @@ Change Log
 2.0b3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix CSRF defense incompatibility with some session implementations
 
 
 2.0b2 (2018-10-16)
