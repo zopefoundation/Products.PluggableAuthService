@@ -14,7 +14,12 @@
 import unittest
 
 from zExceptions import Forbidden
+from zope.component import adapter
+from zope.component import globalSiteManager
+from zope.component import provideHandler
 
+from Products.PluggableAuthService.interfaces.events import \
+    IGroupCreatedEvent
 from Products.PluggableAuthService.tests.conformance \
     import IGroupEnumerationPlugin_conformance
 from Products.PluggableAuthService.tests.conformance \
@@ -22,6 +27,7 @@ from Products.PluggableAuthService.tests.conformance \
 
 from Products.PluggableAuthService.plugins.tests.helpers \
      import FauxPAS, FauxSmartPAS, DummyUser, makeRequestAndResponse
+
 
 class DummyGroup:
 
@@ -31,10 +37,26 @@ class DummyGroup:
     def getId( self ):
         return self._id
 
+
+@adapter(IGroupCreatedEvent)
+def groupCreatedHandler(event):
+    plugin = event.plugin
+    if not hasattr(plugin, 'events'):
+        plugin.events = []
+
+    plugin.events.append(event)
+
+
 class ZODBGroupManagerTests( unittest.TestCase
                            , IGroupEnumerationPlugin_conformance
                            , IGroupsPlugin_conformance
                            ):
+
+    def setUp( self ):
+        provideHandler(groupCreatedHandler)
+
+    def tearDown( self ):
+        globalSiteManager.unregisterHandler(groupCreatedHandler)
 
     def _getTargetClass( self ):
 
@@ -76,6 +98,19 @@ class ZODBGroupManagerTests( unittest.TestCase
         self.assertEqual( len( info_list ), 1 )
         info = info_list[ 0 ]
         self.assertEqual( info[ 'id' ], 'group' )
+
+    def test_addGroup_CreatedEvent( self ):
+
+        zgm = self._makeOne()
+        req, res = makeRequestAndResponse()
+        zgm.addGroup('group', 'group_title', 'group_desc')
+        self.assertEqual(len(zgm.events), 1)
+
+        event = zgm.events[0]
+        self.assertTrue(IGroupCreatedEvent.providedBy(event))
+        self.assertEqual(event.principal, 'group')
+        self.assertEqual(event.object, 'group')
+        self.assertEqual(event.plugin, zgm)
 
     def test_addGroup_exists( self ):
         zgm = self._makeOne()

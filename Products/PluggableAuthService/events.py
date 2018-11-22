@@ -25,6 +25,8 @@ from Products.PluggableAuthService.interfaces.events \
 from Products.PluggableAuthService.interfaces.events \
     import IPrincipalDeletedEvent
 from Products.PluggableAuthService.interfaces.events \
+    import IGroupCreatedEvent
+from Products.PluggableAuthService.interfaces.events \
     import IGroupDeletedEvent
 from Products.PluggableAuthService.interfaces.events \
     import IPropertiesUpdatedEvent
@@ -44,6 +46,14 @@ class PrincipalCreated(PASEvent):
 
 class PrincipalDeleted(PASEvent):
     implements(IPrincipalDeletedEvent)
+
+
+class GroupCreated(PASEvent):
+    implements(IGroupCreatedEvent)
+
+    def __init__(self, group, plugin):
+        super(GroupCreated, self).__init__(group)
+        self.plugin = plugin
 
 
 class GroupDeleted(PASEvent):

@@ -4,6 +4,8 @@ Change Log
 1.11.2 (unreleased)
 -------------------
 
+- Add new event to be able to notify group creation.
+
 
 1.11.1 (2018-11-20)
 -------------------
