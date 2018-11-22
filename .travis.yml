@@ -3,11 +3,11 @@ sudo: false
 python:
     - 2.7
 install:
-    - pip install zc.buildout coverage coveralls
+    - pip install zc.buildout
     - buildout bootstrap
     - buildout
 script:
-    - coverage run bin/test --all -cv
+    - bin/test --all -cv
 notifications:
     email: false
 cache:
