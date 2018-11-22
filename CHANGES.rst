@@ -9,6 +9,12 @@ Change Log
   added or removed to a group in ZODBGroupManager
 
 
+1.11.1 (2018-11-20)
+-------------------
+
+- Fix CSRF defense incompatibility with some session implementations
+
+
 1.11.0 (2016-03-01)
 -------------------
 
