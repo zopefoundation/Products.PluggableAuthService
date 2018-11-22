@@ -1,10 +1,16 @@
 Change Log
 ==========
 
-1.11.1 (unreleased)
+1.11.2 (unreleased)
 -------------------
 
 - Add new event to be able to notify group creation.
+
+
+1.11.1 (2018-11-20)
+-------------------
+
+- Fix CSRF defense incompatibility with some session implementations
 
 
 1.11.0 (2016-03-01)
