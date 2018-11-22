@@ -26,6 +26,8 @@ from zope.interface import Interface
 
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
+from Products.PluggableAuthService.events import GroupCreated
+
 from Products.PluggableAuthService.interfaces.plugins \
     import IGroupEnumerationPlugin
 from Products.PluggableAuthService.interfaces.plugins \
@@ -199,6 +201,7 @@ class ZODBGroupManager( BasePlugin ):
                                    , 'title' : title
                                    , 'description' : description
                                    }
+        notify(GroupCreated(group_id, self))
 
     security.declarePrivate( 'updateGroup' )
     def updateGroup( self, group_id, title=None, description=None ):

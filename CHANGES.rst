@@ -8,6 +8,8 @@ Change Log
   or removed from a group. Notify these events when principals are 
   added or removed to a group in ZODBGroupManager
 
+- Add new event to be able to notify group creation.
+
 
 1.11.1 (2018-11-20)
 -------------------
