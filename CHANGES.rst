@@ -4,6 +4,10 @@ Change Log
 2.0b3 (unreleased)
 ------------------
 
+- Specify supported Python versions using ``python_requires`` in setup.py
+
+- Added support for Python 3.8
+
 - Fix CSRF defense incompatibility with some session implementations
 
 
