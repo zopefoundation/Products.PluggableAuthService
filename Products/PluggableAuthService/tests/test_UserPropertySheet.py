@@ -48,6 +48,7 @@ class UserPropertySheetTests(unittest.TestCase, IPropertySheet_conformance):
     _TUPLE_VALUE = ('d', 'e', 'f')
     _BOOL_VALUE = True
     _IMG_VALUE = Image('image', 'Test Image', img_file)
+    img_file.close()
 
     def _getTargetClass(self):
 
