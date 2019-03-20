@@ -10,6 +10,8 @@ Change Log
 
 - Fix CSRF defense incompatibility with some session implementations
 
+- Fix deprecation warnings.
+  (`#32 <https://github.com/zopefoundation/Products.PluggableAuthService/issues/32>`_ )
 
 2.0b2 (2018-10-16)
 ------------------

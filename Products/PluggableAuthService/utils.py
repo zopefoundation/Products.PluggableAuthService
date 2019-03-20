@@ -250,23 +250,35 @@ class CSRFToken(object):
 
 
 def csrf_only(wrapped):
-    args, varargs, kwargs, defaults = inspect.getargspec(wrapped)
-    if 'REQUEST' not in args:
-        raise ValueError("Method doesn't name request")
-    r_index = args.index('REQUEST')
+    if six.PY3:
+        sig = inspect.signature(wrapped)
+        if 'REQUEST' not in sig.parameters:
+            raise ValueError("Method doesn't name request")
 
-    arglen = len(args)
-    if defaults is not None:
-        defaults = list(zip(args[arglen - len(defaults):], defaults))
-        arglen -= len(defaults)
+        argspec = str(sig.replace(parameters=[
+            x.replace(default=inspect.Parameter.empty
+                      if x.default == inspect.Parameter.empty
+                      else None)
+            for x in sig.parameters.values()]))
+        callargs = str(sig.replace(parameters=[
+            x.replace(default=inspect.Parameter.empty)
+            for x in sig.parameters.values()]))
+    else:
+        args, varargs, kwargs, defaults = inspect.getargspec(wrapped)
+        if 'REQUEST' not in args:
+            raise ValueError("Method doesn't name request")
 
-    spec = (args, varargs, kwargs, defaults)
-    argspec = inspect.formatargspec(formatvalue=lambda v: '=None', *spec)
-    callargs = inspect.formatargspec(formatvalue=lambda v: '', *spec)
+        if defaults is not None:
+            defaults = list(zip(args[len(args) - len(defaults):], defaults))
+
+        spec = (args, varargs, kwargs, defaults)
+        argspec = inspect.formatargspec(formatvalue=lambda v: '=None', *spec)
+        callargs = inspect.formatargspec(formatvalue=lambda v: '', *spec)
+
     lines = ['def wrapper' + argspec + ':',
              '    if IBrowserRequest.providedBy(REQUEST):',
              '        checkCSRFToken(REQUEST)',
-             '    return wrapped(' + ','.join(args) + ')',
+             '    return wrapped' + callargs,
              ]
     g = globals().copy()
     l_copy = locals().copy()
