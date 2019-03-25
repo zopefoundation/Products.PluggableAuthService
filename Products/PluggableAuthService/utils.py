@@ -250,7 +250,11 @@ class CSRFToken(object):
 
 
 def csrf_only(wrapped):
-    args, varargs, kwargs, defaults = inspect.getargspec(wrapped)
+    try:
+        wrapped_spec = inspect.getfullargspec(wrapped)
+    except AttributeError:  # Python 2
+        wrapped_spec = inspect.getargspec(wrapped)
+    args, varargs, kwargs, defaults = wrapped_spec[:4]
     if 'REQUEST' not in args:
         raise ValueError("Method doesn't name request")
     r_index = args.index('REQUEST')
@@ -261,8 +265,16 @@ def csrf_only(wrapped):
         arglen -= len(defaults)
 
     spec = (args, varargs, kwargs, defaults)
-    argspec = inspect.formatargspec(formatvalue=lambda v: '=None', *spec)
-    callargs = inspect.formatargspec(formatvalue=lambda v: '', *spec)
+    try:
+        signature = inspect.signature(wrapped)
+        new_parameters = []
+        for param in signature.parameters.values():
+            if param.default is not inspect.Parameter.empty:
+                param = param.replace(default=None)
+            new_parameters.append(param)
+        argspec = str(signature.replace(parameters=new_parameters))
+    except AttributeError:  # Python 2
+        argspec = inspect.formatargspec(formatvalue=lambda v: '=None', *spec)
     lines = ['def wrapper' + argspec + ':',
              '    if IBrowserRequest.providedBy(REQUEST):',
              '        checkCSRFToken(REQUEST)',
