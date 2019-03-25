@@ -21,9 +21,7 @@ from OFS.Image import Image
 
 from .conformance import IPropertySheet_conformance
 
-path = os.path.dirname(__file__)
-path = os.path.join(path, 'image.gif')
-img_file = open(path, 'rb')
+img_path = os.path.join(os.path.dirname(__file__), 'image.gif')
 
 
 class UserPropertySheetTests(unittest.TestCase, IPropertySheet_conformance):
@@ -47,7 +45,8 @@ class UserPropertySheetTests(unittest.TestCase, IPropertySheet_conformance):
     _LIST_VALUE = ['a', 'b', 'c']
     _TUPLE_VALUE = ('d', 'e', 'f')
     _BOOL_VALUE = True
-    _IMG_VALUE = Image('image', 'Test Image', img_file)
+    with open(img_path, 'rb') as img_file:
+        _IMG_VALUE = Image('image', 'Test Image', img_file)
 
     def _getTargetClass(self):
 
