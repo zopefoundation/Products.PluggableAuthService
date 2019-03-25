@@ -14,7 +14,12 @@
 """ Class: CookieAuthHelper
 """
 
-from base64 import encodestring, decodestring
+try:
+    from base64 import decodebytes
+    from base64 import encodebytes
+except ImportError:  # Python < 3.1
+    from base64 import decodestring as decodebytes
+    from base64 import encodestring as encodebytes
 from binascii import Error
 from binascii import hexlify
 import codecs
@@ -69,7 +74,7 @@ def decode_cookie(raw):
     value = unquote(raw)
     if six.PY3:
         value = value.encode('utf8')
-    value = decodestring(value)
+    value = decodebytes(value)
     if six.PY3:
         value = value.decode('utf8')
     return value
@@ -162,7 +167,7 @@ class CookieAuthHelper(Folder, BasePlugin):
         cookie_str = b':'.join([
             hexlify(login.encode('utf-8')),
             hexlify(new_password.encode('utf-8'))])
-        cookie_val = encodestring(cookie_str)
+        cookie_val = encodebytes(cookie_str)
         cookie_val = cookie_val.rstrip()
         return cookie_val
 

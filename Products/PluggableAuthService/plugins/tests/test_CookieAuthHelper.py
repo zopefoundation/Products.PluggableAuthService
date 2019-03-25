@@ -11,6 +11,10 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
+try:
+    from base64 import encodebytes
+except ImportError:  # Python < 3.1
+    from base64 import encodestring as encodebytes
 from six.moves.urllib.parse import quote
 import codecs
 import six
@@ -181,8 +185,6 @@ class CookieAuthHelperTests(unittest.TestCase,
     def test_extractCredentials_from_cookie_with_colon_in_password(self):
         # http://www.zope.org/Collectors/PAS/51
         # Passwords with ":" characters broke authentication
-        from base64 import encodestring
-
         helper = self._makeOne()
         response = FauxCookieResponse()
         request = FauxSettableRequest(RESPONSE=response)
@@ -190,7 +192,7 @@ class CookieAuthHelperTests(unittest.TestCase,
         username = codecs.encode(b'foo', 'hex_codec')
         password = codecs.encode(b'b:ar', 'hex_codec')
         cookie_str = b'%s:%s' % (username, password)
-        cookie_val = encodestring(cookie_str)
+        cookie_val = encodebytes(cookie_str)
         cookie_val = cookie_val.rstrip()
         if six.PY3:
             cookie_val = cookie_val.decode('utf8')
@@ -204,14 +206,12 @@ class CookieAuthHelperTests(unittest.TestCase,
 
     def test_extractCredentials_from_cookie_with_colon_that_is_not_ours(self):
         # http://article.gmane.org/gmane.comp.web.zope.plone.product-developers/5145
-        from base64 import encodestring
-
         helper = self._makeOne()
         response = FauxCookieResponse()
         request = FauxSettableRequest(RESPONSE=response)
 
         cookie_str = b'cookie:from_other_plugin'
-        cookie_val = encodestring(cookie_str)
+        cookie_val = encodebytes(cookie_str)
         cookie_val = cookie_val.rstrip()
         if six.PY3:
             cookie_val = cookie_val.decode('utf8')
