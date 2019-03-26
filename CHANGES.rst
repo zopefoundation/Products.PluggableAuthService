@@ -3,6 +3,9 @@ Change Log
 
 2.0b3 (unreleased)
 ------------------
+- Fixed Dynamic Groups Plugin ZMI view
+  (`#33 <https://github.com/zopefoundation/Products.PluggableAuthService/issues/33>`_)
+
 - Re-enabled XML-RPC support without requiring ZServer
   (`#34 <https://github.com/zopefoundation/Products.PluggableAuthService/issues/34>`_)
 

@@ -38,7 +38,7 @@
     <input type="checkbox" name="group_ids:list" value="GROUP_ID"
            tal:attributes="value info/id" />
   </td>
-  <td class="form-text" width="20%">
+  <td width="20%">
     <a href="foo"
        tal:attributes="href
             string:${here/absolute_url}/${info/id}/manage_workspace"
@@ -47,15 +47,15 @@
     <span tal:condition="info/title"
           tal:content="string:(${info/title})">GROUP_TITLE</span>
   </td>
-  <td class="form-text" width="5%">
+  <td width="5%">
     <span tal:condition="info/active">Yes</span>
     <span tal:condition="not: info/active">No</span>
   </td>
-  <td class="form-text" width="35%"
+  <td width="35%"
        tal:content="info/description"
   >GROUP_DESCRIPTION
   </td>
-  <td class="form-text" width="40%"
+  <td width="40%"
        tal:content="info/predicate"
   >GROUP_PREDICATE
   </td>
