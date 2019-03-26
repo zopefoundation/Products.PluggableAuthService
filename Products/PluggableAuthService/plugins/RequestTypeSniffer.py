@@ -16,6 +16,7 @@
 
 from AccessControl import ClassSecurityInfo
 from AccessControl.class_init import InitializeClass
+from ZPublisher import xmlrpc
 
 from zope.interface import Interface
 
@@ -36,7 +37,6 @@ from Products.PluggableAuthService import HAVE_ZSERVER
 
 if HAVE_ZSERVER:
     from ZServer.FTPRequest import FTPRequest
-    from ZServer.ZPublisher import xmlrpc
     from Products.PluggableAuthService.interfaces.request import IFTPRequest
 
 
@@ -121,15 +121,6 @@ if HAVE_ZSERVER:
 
     registerSniffer(IWebDAVRequest, webdavSniffer)
 
-    def xmlrpcSniffer(request):
-        response = request['RESPONSE']
-        method = request.get('REQUEST_METHOD', 'GET').upper()
-
-        if method in ('GET', 'POST') and isinstance(response, xmlrpc.Response):
-            return True
-
-    registerSniffer(IXMLRPCRequest, xmlrpcSniffer)
-
     def ftpSniffer(request):
         if isinstance(request, FTPRequest):
             return True
@@ -137,13 +128,28 @@ if HAVE_ZSERVER:
     registerSniffer(IFTPRequest, ftpSniffer)
 
 
+def xmlrpcSniffer(request):
+    response = request['RESPONSE']
+    method = request.get('REQUEST_METHOD', 'GET').upper()
+
+    if method in ('GET', 'POST') and isinstance(response, xmlrpc.Response):
+        return True
+
+
+registerSniffer(IXMLRPCRequest, xmlrpcSniffer)
+
+
 def browserSniffer(request):
     # If it's none of the above, it's very likely a browser request.
-    if not HAVE_ZSERVER:
+    if xmlrpcSniffer(request):
+        return False
+    elif not HAVE_ZSERVER:
         return True
-    for sniffer in (webdavSniffer, ftpSniffer, xmlrpcSniffer):
+
+    for sniffer in (webdavSniffer, ftpSniffer):
         if sniffer(request):
             return False
+
     return True
 
 

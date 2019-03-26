@@ -3,6 +3,8 @@ Change Log
 
 2.0b3 (unreleased)
 ------------------
+- Re-enabled XML-RPC support without requiring ZServer
+  (`#34 <https://github.com/zopefoundation/Products.PluggableAuthService/issues/34>`_)
 
 - Specify supported Python versions using ``python_requires`` in setup.py
 

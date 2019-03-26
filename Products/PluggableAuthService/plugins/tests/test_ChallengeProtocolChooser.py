@@ -13,13 +13,37 @@
 ##############################################################################
 """Unit tests for ChallengeProtocolChooser."""
 import io
-import textwrap
 import unittest
+
+import six
 
 from Products.PluggableAuthService import HAVE_ZSERVER
 from Products.PluggableAuthService.tests.conformance \
     import IChallengeProtocolChooser_conformance
 import Testing.ZopeTestCase
+
+
+XMLRPC_CALL = b"""\
+<?xml version="1.0"?>
+<methodCall>
+    <methodName>test_script</methodName>
+</methodCall>"""
+
+if six.PY2:
+    XML_PREAMBLE = b"<?xml version='1.0'?>"
+else:
+    XML_PREAMBLE = b'<?xml version="1.0" encoding="utf-8" ?>'
+
+XMLRPC_ACCESS_GRANTED = b"""\
+%s
+<methodResponse>
+<params>
+<param>
+<value><string>Access Granted</string></value>
+</param>
+</params>
+</methodResponse>
+""" % XML_PREAMBLE
 
 
 class ChallengeProtocolChooser(unittest.TestCase,
@@ -37,12 +61,6 @@ class ChallengeProtocolChooser(unittest.TestCase,
 
 class ChallengeProtocolChooserTestHelper(object):
     """Helper functions for the ChallengeProtocolChooser tests."""
-
-    xmlrpc_call = textwrap.dedent("""\
-        <?xml version="1.0"?>
-        <methodCall>
-            <methodName>test_script</methodName>
-        </methodCall>""")
 
     def setup_user_folder(self):
         # Let's start by setting up a PAS instance inside our existing test
@@ -209,36 +227,25 @@ class ChallengeProtocolChooserBasicAuthTests(
             request_method='GET', basic=self.basic_auth)
         self.assertStatus(response, b'HTTP/1.1 200 OK')
 
-    @unittest.skipIf(not HAVE_ZSERVER, 'XML-RPC requires ZServer')
     def test_XMLRPC_unauthorized(self):
         # And a XML-RPC Request. Again, Anonymous user should be challenged
         # with a 401 response status.
         response = self.publish(
             '/{0.folder_name}'.format(self), request_method='POST',
             env={'CONTENT_TYPE': 'text/xml; charset="utf-8"'},
-            stdin=io.BytesIO(self.xmlrpc_call))
+            stdin=io.BytesIO(XMLRPC_CALL))
         self.assertStatus(response, b'HTTP/1.1 401 Unauthorized')
 
-    @unittest.skipIf(not HAVE_ZSERVER, 'XML-RPC requires ZServer')
     def test_XMLRPC_authorized(self):
         # And with valid credentials the reqeuest should succeed:
         response = self.publish(
             '/{0.folder_name}'.format(self), request_method='POST',
             env={'CONTENT_TYPE': 'text/xml; charset="utf-8"'},
-            stdin=io.BytesIO(self.xmlrpc_call), basic=self.basic_auth)
+            stdin=io.BytesIO(XMLRPC_CALL), basic=self.basic_auth)
         self.assertStatus(response, b'HTTP/1.1 200 OK')
         self.assertEqual(
             response.getHeader('Content-Type'), 'text/xml; charset=utf-8')
-        self.assertEqual(textwrap.dedent("""\
-            <?xml version='1.0'?>
-            <methodResponse>
-            <params>
-            <param>
-            <value><string>Access Granted</string></value>
-            </param>
-            </params>
-            </methodResponse>
-            """), response.getBody())
+        self.assertEqual(XMLRPC_ACCESS_GRANTED, response.getBody())
 
 
 class ChallengeProtocolChooserCookieAuthTests(
@@ -273,13 +280,12 @@ class ChallengeProtocolChooserCookieAuthTests(
             request_method='GET')
         self.assertStatus(response, b'HTTP/1.1 302 Found')
 
-    @unittest.skipIf(not HAVE_ZSERVER, 'XML-RPC requires ZServer')
     def test_XMLRPC_unauthorized(self):
         # And for a XML-RPC request:
         response = self.publish(
             '/{0.folder_name}'.format(self), request_method='POST',
             env={'CONTENT_TYPE': 'text/xml; charset="utf-8"'},
-            stdin=io.BytesIO(self.xmlrpc_call))
+            stdin=io.BytesIO(XMLRPC_CALL))
         self.assertStatus(response, b'HTTP/1.1 302 Found')
 
 
@@ -328,11 +334,10 @@ class ChallengeProtocolChooserCookieAuthTypeSnifferTests(
             request_method='GET')
         self.assertStatus(response, b'HTTP/1.1 401 Unauthorized')
 
-    @unittest.skipIf(not HAVE_ZSERVER, 'XML-RPC requires ZServer')
     def test_XMLRPC_unauthorized(self):
         # And a XML-RPC request should also result in a 401 response status:
         response = self.publish(
             '/{0.folder_name}'.format(self), request_method='POST',
             env={'CONTENT_TYPE': 'text/xml; charset="utf-8"'},
-            stdin=io.BytesIO(self.xmlrpc_call))
+            stdin=io.BytesIO(XMLRPC_CALL))
         self.assertStatus(response, b'HTTP/1.1 401 Unauthorized')
