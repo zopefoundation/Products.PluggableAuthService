@@ -8,10 +8,10 @@ Installation
 ------------
 
 The normal way it install this package is via ``setuptools``, either
-via ``easy_install`` into a virtual environment::
+via ``pip`` into a virtual environment::
 
   $ cd /path/to/virtualenv
-  $ bin/easy_install Products.PluggableAuthService
+  $ bin/pip install Products.PluggableAuthService
 
 or by including the package in the configuration for a ``zc.buildout``-based
 deployment::
@@ -22,15 +22,7 @@ deployment::
   eggs = Products.PluggableAuthService
   ...
 
-The product can also be installed as a depencency of another distribution.
-
-If you want to install this package manually, without using setuptools,
-simply untar the package file downloaded from the PyPI site and look for
-the folder named "PluggableAuthService" underneath the "Products" folder
-at the root of the extracted tarball. Copy or link this
-"PluggableAuthService" folder into your Zope "Products" folder and restart
-Zope.
-
+The product can also be installed as a dependency of another distribution.
 
 Documentation
 -------------
