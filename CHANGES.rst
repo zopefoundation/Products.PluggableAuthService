@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+2.0b4 (unreleased)
+------------------
+
+- Nothing changed yet.
+
+
 2.0b3 (2019-03-29)
 ------------------
 - Fixed Dynamic Groups Plugin ZMI view
