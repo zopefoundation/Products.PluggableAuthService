@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-2.0b3 (unreleased)
+2.0b3 (2019-03-29)
 ------------------
 - Fixed Dynamic Groups Plugin ZMI view
   (`#33 <https://github.com/zopefoundation/Products.PluggableAuthService/issues/33>`_)
