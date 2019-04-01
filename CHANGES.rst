@@ -4,7 +4,7 @@ Change Log
 2.0b4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix ZMI Templates for Users/Groups/Roles
 
 
 2.0b3 (2019-03-29)

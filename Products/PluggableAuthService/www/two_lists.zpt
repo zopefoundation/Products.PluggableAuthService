@@ -38,7 +38,7 @@ by the including template:
  <tal:block metal:define-slot="hidden_vars" />
 
  <tr>
-    <td valign="top">
+    <td>
       <div align="center">
         <span metal:define-slot="left_title">Available</span>
       </div>
@@ -50,18 +50,14 @@ by the including template:
                 tal:content="python: item[1]"/>
       </select>
     </td>
-    <td align="center" valign="middle">
-      <input type="image" src="arrow_right_gif"
-             width="29" height="30" border="0"
-             name="left_to_right:method"
-             tal:attributes="name string:${left_to_right}:method"/>
-      <br/><br/>
-      <input type="image" src="arrow_left_gif"
-             width="29" height="30" border="0"
-             name="right_to_left:method"
-             tal:attributes="name string:${right_to_left}:method"/>
+    <td class="text-center align-middle">
+      <button class="btn btn-sm btn-light" name="left_to_right:method"
+              tal:attributes="name string:${left_to_right}:method"><i class="far fa-arrow-alt-circle-right fa-2x" /></button>
+      <br/>
+      <button class="btn btn-sm btn-light" name="right_to_left:method"
+              tal:attributes="name string:${right_to_left}:method"><i class="far fa-arrow-alt-circle-left fa-2x" /></button>
     </td>
-    <td valign="top">
+    <td>
       <div align="center">
         <span metal:define-slot="right_title">Active</span>
       </div>
@@ -73,9 +69,7 @@ by the including template:
                 tal:content="python: item[1]"/>
       </select>
     </td>
-    <td align="center" valign="middle"
-        tal:condition="right_is_ordered | nothing"
-    >
+    <td tal:condition="right_is_ordered | nothing">
       <input type="image" src="arrow_up_gif"
              width="29" height="30" border="0"
              name="move_up:method"
