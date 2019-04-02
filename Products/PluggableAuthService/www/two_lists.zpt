@@ -31,18 +31,19 @@ by the including template:
 
 </tal:comment>
 
-<table width="100%"
+<table class="table table-sm table-borderless"
        metal:define-macro="two_lists"
 >
 
  <tal:block metal:define-slot="hidden_vars" />
 
- <tr>
-    <td>
+  <tr>
+
+    <td class="col-5">
       <div align="center">
         <span metal:define-slot="left_title">Available</span>
       </div>
-      <select size="10" name="items:list" style="width: 100%;"
+      <select size="10" name="items:list" class="form-control"
               multiple="multiple"
               tal:attributes="name string:${left_name}:list" >
         <option tal:repeat="item left_list"
@@ -50,18 +51,18 @@ by the including template:
                 tal:content="python: item[1]"/>
       </select>
     </td>
-    <td class="text-center align-middle">
+    <td class="text-center align-middle col-1">
       <button class="btn btn-sm btn-light" name="left_to_right:method"
-              tal:attributes="name string:${left_to_right}:method"><i class="far fa-arrow-alt-circle-right fa-2x" /></button>
+              tal:attributes="name string:${left_to_right}:method"><i class="far fa-arrow-alt-circle-right fa-2x"></i></button>
       <br/>
       <button class="btn btn-sm btn-light" name="right_to_left:method"
-              tal:attributes="name string:${right_to_left}:method"><i class="far fa-arrow-alt-circle-left fa-2x" /></button>
+              tal:attributes="name string:${right_to_left}:method"><i class="far fa-arrow-alt-circle-left fa-2x"></i></button>
     </td>
-    <td>
+    <td class="col-5" tal:attributes="class python:right_is_ordered and 'col-4' or 'col-5'">
       <div align="center">
         <span metal:define-slot="right_title">Active</span>
       </div>
-      <select size="10" name="items:list" style="width: 100%;"
+      <select size="10" name="items:list" class="form-control"
               multiple="multiple"
               tal:attributes="name string:${right_name}:list" >
         <option tal:repeat="item right_list"
@@ -69,18 +70,14 @@ by the including template:
                 tal:content="python: item[1]"/>
       </select>
     </td>
-    <td tal:condition="right_is_ordered | nothing">
-      <input type="image" src="arrow_up_gif"
-             width="29" height="30" border="0"
-             name="move_up:method"
-             tal:attributes="name string:${move_up}:method"/>
-      <br/><br/>
-      <input type="image" src="arrow_down_gif"
-             width="29" height="30" border="0"
-             name="move_down:method"
-             tal:attributes="name string:${move_down}:method"/>
+    <td tal:condition="right_is_ordered | nothing" class="col-1">
+      <button class="btn btn-sm btn-light" name="move_up:method"
+              tal:attributes="name string:${move_up}:method"><i class="far fa-arrow-alt-circle-up fa-2x"></i></button>
+      <br/>
+      <button class="btn btn-sm btn-light" name="move_down:method"
+              tal:attributes="name string:${move_down}:method"><i class="far fa-arrow-alt-circle-up fa-2x"></i></button>
     </td>
- </tr>
+  </tr>
 </table>
 </form>
 

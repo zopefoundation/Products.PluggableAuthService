@@ -10,31 +10,31 @@ Pluggable Auth Service functionality.
 
 <form action="addHTTPBasicAuthHelper" method="post"
  enctype="multipart/form-data">
-<table cellspacing="0" cellpadding="2" border="0">
+<table class="table table-sm">
   <tr>
-    <td align="left" valign="top">
+    <td>
     <div class="form-label">
     Id
     </div>
     </td>
-    <td align="left" valign="top">
+    <td>
     <input type="text" name="id" size="40" />
     </td>
   </tr>
   <tr>
-    <td align="left" valign="top">
+    <td>
     <div class="form-optional">
     Title
     </div>
     </td>
-    <td align="left" valign="top">
+    <td>
     <input type="text" name="title" size="40" />
     </td>
   </tr>
   <tr>
-    <td align="left" valign="top">
+    <td>
     </td>
-    <td align="left" valign="top">
+    <td>
     <div class="form-element">
     <input class="form-element" type="submit" name="submit"
      value=" Add " />

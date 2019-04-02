@@ -26,9 +26,9 @@ Choose the functionality this Scriptable Plugin will perform.
     </td>
   </tr>
   <tr>
-    <td align="left" valign="top">
+    <td>
     </td>
-    <td align="left" valign="top">
+    <td>
     <div class="form-element">
     <input class="form-element" type="submit" name="submit"
      value=" Update " />

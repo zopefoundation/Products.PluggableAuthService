@@ -69,7 +69,7 @@
 <div class="form-controls">
   <input type="hidden" name="role_ids:list:default" value="" />
   <input type="submit" name="manage_removeRoles:method" class="btn btn-primary"
-         value=" Remove Role Assignment " />
+         value=" Remove Roles " />
 </div>
 </form>
 
@@ -87,44 +87,40 @@
 <form action="manage_addRole" method="POST">
 <input type="hidden" name="csrf_token"
        tal:attributes="value context/@@csrf_token/token" />
-<table
->
+<table class="table table-sm">
 
- <tr valign="top">
-  <th align="right">
+ <tr>
+  <th>
    <div class="form-label">Role ID:</div>
   </th>
   <td>
-   <input type="text" name="role_id" size="20" />
+   <input type="text" name="role_id" size="20" class="form-control" />
   </td>
  </tr>
 
- <tr valign="top">
-  <th align="right">
+ <tr>
+  <th>
    <div class="form-label">Title</div>
   </th>
   <td>
-   <input type="text" name="title" size="40" />
+   <input type="text" name="title" size="40" class="form-control" />
   </td>
  </tr>
 
- <tr valign="top">
-  <th align="right">
+ <tr>
+  <th>
    <div class="form-label">Description</div>
   </th>
   <td>
-   <textarea name="description" rows="5" cols="65"></textarea>
-  </td>
- </tr>
-
- <tr valign="top">
-  <td />
-  <td>
-   <input type="submit" value=" Add Role " />
+   <textarea name="description" rows="5" cols="65" class="form-control"></textarea>
   </td>
  </tr>
 
 </table>
+
+<div class="form-controls">
+  <input type="submit" value=" Add Role " class="btn btn-primary" />
+</div>
 </form>
 
 </div>
@@ -152,44 +148,41 @@
        tal:attributes="value context/@@csrf_token/token" />
 <input type="hidden" name="role_id" value="ROLE_ID"
        tal:attributes="value role_id" />
-<table>
+<table class="table table-sm">
 
- <tr valign="top">
-  <th align="right" width="20%">
+ <tr>
+  <th>
    <div class="form-label">Role ID:</div>
   </th>
   <td tal:content="role_id">ROLE_ID</td>
  </tr>
 
- <tr valign="top">
-  <th align="right">
+ <tr>
+  <th>
    <div class="form-label">Title</div>
   </th>
   <td>
-   <input type="text" name="title" size="40" value="TITLE"
+   <input type="text" name="title" size="40" value="TITLE" class="form-control"
           tal:attributes="value title"
    />
   </td>
  </tr>
 
- <tr valign="top">
-  <th align="right">
+ <tr>
+  <th>
    <div class="form-label">Description</div>
   </th>
   <td>
-   <textarea name="description" rows="5" cols="65"
+   <textarea name="description" rows="5" cols="65" class="form-control"
              tal:content="description">DESCRIPTION</textarea>
   </td>
  </tr>
 
- <tr valign="top">
-  <td />
-  <td>
-   <input type="submit" value=" Update Role " />
-  </td>
- </tr>
-
 </table>
+
+<div class="form-controls">
+  <input type="submit" value=" Update Role " class="btn btn-primary" />
+</div>
 </form>
 
 </div>
