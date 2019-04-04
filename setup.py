@@ -44,7 +44,6 @@ setup(name='Products.%s' % NAME,
       keywords='web application server zope',
       author="Zope Foundation and Contributors",
       author_email="zope-cmf@zope.org",
-      url="https://github.com/zopefoundation/Products.PluggableAuthService",
       url='https://productspluggableauthservice.readthedocs.io',
       project_urls={
           'Documentation': 'https://productspluggableauthservice.readthedocs.io',
