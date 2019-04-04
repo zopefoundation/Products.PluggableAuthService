@@ -165,6 +165,7 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
       'request' -- the request object.
     """
     meta_type = 'Dynamic Groups Plugin'
+    zmi_icon = 'fas fa-users'
 
     security = ClassSecurityInfo()
 

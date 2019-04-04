@@ -54,6 +54,7 @@ def addInlineAuthHelper(dispatcher, id, title=None, REQUEST=None):
 class InlineAuthHelper(Folder, BasePlugin):
     """ Multi-plugin for managing details of Inline Authentication. """
     meta_type = 'Inline Auth Helper'
+    zmi_icon = 'fas fa-fingerprint'
     security = ClassSecurityInfo()
 
     _properties = ({'id': 'title', 'label': 'Title',

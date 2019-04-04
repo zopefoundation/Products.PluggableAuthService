@@ -85,6 +85,7 @@ class ChallengeProtocolChooser(BasePlugin):
     """ PAS plugin for choosing challenger protocol based on request
     """
     meta_type = 'Challenge Protocol Chooser Plugin'
+    zmi_icon = 'fas fa-broadcast-tower'
 
     security = ClassSecurityInfo()
 

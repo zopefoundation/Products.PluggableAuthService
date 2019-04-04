@@ -58,6 +58,7 @@ class HTTPBasicAuthHelper(BasePlugin):
     """ Multi-plugin for managing details of HTTP Basic Authentication.
     """
     meta_type = 'HTTP Basic Auth Helper'
+    zmi_icon = 'fas fa-fingerprint'
     security = ClassSecurityInfo()
     protocol = "http"  # The PAS challenge 'protocol' we use.
 

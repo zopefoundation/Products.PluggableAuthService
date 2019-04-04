@@ -1,6 +1,8 @@
 <h1 tal:replace="structure here/manage_page_header">Header</h1>
 <h2 tal:replace="structure here/manage_tabs">Form Title</h2>
 
+<main class="container-fluid">
+
 <tal:block tal:define="adding request/adding | nothing;
                        updating python:( not adding
                                      and request.get('group_id')
@@ -219,5 +221,7 @@
 </div>
 
 </tal:block>
+
+</main>
 
 <h1 tal:replace="structure here/manage_page_footer">Footer</h1>

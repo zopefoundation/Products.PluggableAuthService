@@ -3,14 +3,15 @@
 <h2 tal:define="form_title string:ZODB Roles"
     tal:replace="structure here/manage_tabs"> TABS </h2>
 
-<tal:block tal:define="adding request/adding | nothing;
-                       assigning python:not adding and request.get('assign');
-                       updating python:not assigning and request.get('role_id');
-                       browsing python:( not assigning
-                                     and not adding
-                                     and not updating
-                                       );
-                      ">
+<main class="container-fluid"
+      tal:define="adding request/adding | nothing;
+                  assigning python:not adding and request.get('assign');
+                  updating python:not assigning and request.get('role_id');
+                  browsing python:( not assigning
+                                and not adding
+                                and not updating
+                                  );
+                 ">
 
 <div tal:condition="browsing">
 <div>
@@ -22,28 +23,27 @@
   if you do not do the same in the root of the site (at the bottom of
   the Security tab at manage_access).
 </p>
-<table width="100%" cellpadding="2" cellspacing="0">
-
- <tr>
-  <td width="16" />
-  <th align="left" width="25%"> Role </th>
-  <th align="left" width="25%"> Description </th>
-  <th align="left" width="50%"> Assignments </th>
- </tr>
-
  <form action="." method="POST">
  <input type="hidden" name="csrf_token"
         tal:attributes="value context/@@csrf_token/token" />
 
- <tr class="row-hilite"
-     tal:repeat="info here/listRoleInfo"
-     tal:attributes="class python:repeat['info'].odd() and 'row-normal' or default"
-     >
+<table class="table table-sm table-striped table-hover">
+<thead>
+ <tr>
+  <th  style="width:2em" />
+  <th> Role </th>
+  <th> Description </th>
+  <th> Assignments </th>
+ </tr>
+</thead>
+
+<tbody>
+ <tr tal:repeat="info here/listRoleInfo">
   <td>
     <input type="checkbox" name="role_ids:list" value="ROLE_ID"
            tal:attributes="value info/id" />
   </td>
-  <td class="form-text" width="25%">
+  <td >
     <a href="?role_id=foo"
        tal:attributes="href string:?role_id=${info/id}"
        tal:content="info/id"
@@ -51,9 +51,8 @@
     <span tal:condition="info/title"
           tal:content="string:(${info/title})">ROLE_TITLE</span>
   </td>
-  <td class="form-text" width="25%"
-      tal:content="info/description">ROLE DESCRIPTION</td>
-  <td class="form-text" width="50%">
+  <td tal:content="info/description">ROLE DESCRIPTION</td>
+  <td>
     <a href="?role_id=foo&amp;assign=1"
        tal:attributes="href string:?role_id=${info/id}&amp;assign=1"
     >?</a>
@@ -64,18 +63,15 @@
   </td>
  </tr>
 
- <tr>
-  <td />
-  <td colspan="3">
-    <input type="hidden" name="role_ids:list:default" value="" />
-    <input type="submit" name="manage_removeRoles:method"
-           value=" Remove Role Assignment " />
-  </td>
- </tr>
-
- </form>
-
+</tbody>
 </table>
+
+<div class="form-controls">
+  <input type="hidden" name="role_ids:list:default" value="" />
+  <input type="submit" name="manage_removeRoles:method" class="btn btn-primary"
+         value=" Remove Roles " />
+</div>
+</form>
 
 </div>
 </div>
@@ -91,44 +87,40 @@
 <form action="manage_addRole" method="POST">
 <input type="hidden" name="csrf_token"
        tal:attributes="value context/@@csrf_token/token" />
-<table
->
+<table class="table table-sm">
 
- <tr valign="top">
-  <th align="right">
+ <tr>
+  <th>
    <div class="form-label">Role ID:</div>
   </th>
   <td>
-   <input type="text" name="role_id" size="20" />
+   <input type="text" name="role_id" size="20" class="form-control" />
   </td>
  </tr>
 
- <tr valign="top">
-  <th align="right">
+ <tr>
+  <th>
    <div class="form-label">Title</div>
   </th>
   <td>
-   <input type="text" name="title" size="40" />
+   <input type="text" name="title" size="40" class="form-control" />
   </td>
  </tr>
 
- <tr valign="top">
-  <th align="right">
+ <tr>
+  <th>
    <div class="form-label">Description</div>
   </th>
   <td>
-   <textarea name="description" rows="5" cols="65"></textarea>
-  </td>
- </tr>
-
- <tr valign="top">
-  <td />
-  <td>
-   <input type="submit" value=" Add Role " />
+   <textarea name="description" rows="5" cols="65" class="form-control"></textarea>
   </td>
  </tr>
 
 </table>
+
+<div class="form-controls">
+  <input type="submit" value=" Add Role " class="btn btn-primary" />
+</div>
 </form>
 
 </div>
@@ -156,44 +148,41 @@
        tal:attributes="value context/@@csrf_token/token" />
 <input type="hidden" name="role_id" value="ROLE_ID"
        tal:attributes="value role_id" />
-<table>
+<table class="table table-sm">
 
- <tr valign="top">
-  <th align="right" width="20%">
+ <tr>
+  <th>
    <div class="form-label">Role ID:</div>
   </th>
   <td tal:content="role_id">ROLE_ID</td>
  </tr>
 
- <tr valign="top">
-  <th align="right">
+ <tr>
+  <th>
    <div class="form-label">Title</div>
   </th>
   <td>
-   <input type="text" name="title" size="40" value="TITLE"
+   <input type="text" name="title" size="40" value="TITLE" class="form-control"
           tal:attributes="value title"
    />
   </td>
  </tr>
 
- <tr valign="top">
-  <th align="right">
+ <tr>
+  <th>
    <div class="form-label">Description</div>
   </th>
   <td>
-   <textarea name="description" rows="5" cols="65"
+   <textarea name="description" rows="5" cols="65" class="form-control"
              tal:content="description">DESCRIPTION</textarea>
   </td>
  </tr>
 
- <tr valign="top">
-  <td />
-  <td>
-   <input type="submit" value=" Update Role " />
-  </td>
- </tr>
-
 </table>
+
+<div class="form-controls">
+  <input type="submit" value=" Update Role " class="btn btn-primary" />
+</div>
 </form>
 
 </div>
@@ -218,21 +207,18 @@
  <input type="hidden" name="role_id"
         tal:attributes="value role_id" />
  <input type="hidden" name="assign" value="1" />
+ <div class="form-row align-items-center">
+  <div class="col-2">
+    <div class="form-label">Principal ID</div>
+  </div>
+  <div class="col-8">
+    <input type="text" name="search_id" value="" class="form-control"
+          tal:attributes="value search_id" />
+  </div>
+  <div class="col-2">
+    <input type="submit" class="btn btn-primary zmi-patch" value=" Search " />
+  </div>
 <table>
-
- <tr valign="top">
-  <th align="right" width="20%">
-   <div class="form-label">Principal ID</div>
-  </th>
-  <td>
-   <input type="text" name="search_id" value=""
-          tal:attributes="value search_id"
-   />
-   <input type="submit" value=" Search " />
-  </td>
- </tr>
-
-</table>
 </form>
 
 <form action="." method="POST"
@@ -262,6 +248,6 @@
 </div>
 </div>
 
-</tal:block>
+</main>
 
 <h1 tal:replace="structure here/manage_page_footer">Footer</h1>

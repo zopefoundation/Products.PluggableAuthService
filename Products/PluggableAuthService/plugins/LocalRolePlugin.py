@@ -54,6 +54,7 @@ class LocalRolePlugin(BasePlugin):
     """
 
     meta_type = 'Local Role Plugin'
+    zmi_icon = 'fas fa-user-tag'
     security = ClassSecurityInfo()
 
     def __init__(self, id, title=None):

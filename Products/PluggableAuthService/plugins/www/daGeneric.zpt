@@ -1,6 +1,8 @@
 <h1 tal:replace="structure here/manage_page_header">Header</h1>
 <h2 tal:replace="structure here/manage_tabs"> TABS </h2>
 
+<main class="container-fluid">
+
 <p class="form-help">
   Generic mappings are a powerful tool to allow anyone access from
   a matching location.
@@ -14,16 +16,6 @@
 
   <div tal:define="user_map python: here.listMappingsForUser()">
 
-    <table width="98%" cellpadding="2">
-      <tr class="list-header">
-        <td class="list-header">
-          <span class="form-label">
-            Generic Domain mappings
-          </span>
-        </td>
-      </tr>
-    </table>
-
     <p class="form-help"
        tal:condition="not: user_map">
       No generic mappings defined.
@@ -34,46 +26,47 @@
           tal:attributes="action string:${my_url}/manage_removeMappings">
       <input type="hidden" name="user_id" value=""/>
 
-      <table width="98%">
+      <table class="table table-striped table-hover table-sm">
         <tr>
-          <td width="16"> &nbsp; </td>
-          <td class="form-label"> Match Type </td>
-          <td class="form-label"> Match String </td>
-          <td class="form-label"> Assigned Name </td>
-          <td class="form-label"> Roles </td>
+          <th class="zmi-object-check"> &nbsp; </th>
+          <th scope="col" class="zmi-object-id"> Match Type </th>
+          <th scope="col" class="zmi-object-id"> Match String </th>
+          <th scope="col" class="zmi-object-id"> Assigned Name </th>
+          <th scope="col" class="zmi-object-id"> Roles </th>
         </tr>
 
         <tr tal:repeat="match_info python: here.listMappingsForUser()">
-          <td width="16" class="form-element">
+          <td class="zmi-object-check">
             <input type="checkbox" name="match_ids:list" value=""
                    tal:attributes="value match_info/match_id" />
           </td>
-          <td class="form-text"
+          <td class="zmi-object-id"
               tal:content="match_info/match_type">
             type
           </td>
-          <td class="form-text"
+          <td class="zmi-object-id"
               tal:content="match_info/match_string">
             string
           </td>
-          <td class="form-text"
+          <td class="zmi-object-id"
               tal:content="match_info/username">
             Foobar User
           </td>
-          <td class="form-text"
+          <td class="zmi-object-id"
               tal:content="python: ', '.join(match_info.get('roles'))">
             foo, bar
           </td>
         </tr>
 
         <tr>
-          <td width="16">&nbsp;</td>
+          <td class="zmi-object-check">&nbsp;</td>
           <td colspan="4" class="form-element">
-            <input type="submit" value=" Delete " />
+            <input class="btn btn-primary" type="submit" value=" Delete " />
           </td>
         </tr>
       </table>
 
+    <hr/>
     </form>
 
     <table width="98%" cellpadding="2">
@@ -127,7 +120,7 @@
         </tr>
         <tr>
           <td colspan="2" class="form-element">
-            <input type="submit" value=" Add " />
+            <input class="btn btn-primary" type="submit" value=" Add " />
           </td>
         </tr>
       </table>
@@ -136,6 +129,8 @@
   </div>
 
 </div>
+
+</main>
 
 <h1 tal:replace="structure here/manage_page_footer">Footer</h1>
 

@@ -79,6 +79,7 @@ class ZODBUserManager(BasePlugin, Cacheable):
     """
 
     meta_type = 'ZODB User Manager'
+    zmi_icon = 'fas fa-user'
 
     security = ClassSecurityInfo()
 

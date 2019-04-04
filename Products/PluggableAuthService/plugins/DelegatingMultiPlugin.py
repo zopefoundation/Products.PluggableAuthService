@@ -73,6 +73,7 @@ class DelegatingMultiPlugin(Folder, BasePlugin):
     """
     security = ClassSecurityInfo()
     meta_type = 'Delegating Multi Plugin'
+    zmi_icon = 'fas fa-external-link-alt'
 
     manage_options = BasePlugin.manage_options[:1] + Folder.manage_options
 
