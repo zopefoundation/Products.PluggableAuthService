@@ -45,6 +45,14 @@ setup(name='Products.%s' % NAME,
       author="Zope Foundation and Contributors",
       author_email="zope-cmf@zope.org",
       url="https://github.com/zopefoundation/Products.PluggableAuthService",
+      url='https://productspluggableauthservice.readthedocs.io',
+      project_urls={
+          'Documentation': 'https://productspluggableauthservice.readthedocs.io',
+          'Issue Tracker': ('https://github.com/zopefoundation'
+                            '/Products.PluggableAuthService/issues'),
+          'Sources': ('https://github.com/zopefoundation/'
+                      'Products.PluggableAuthService'),
+      },
       license="ZPL 2.1 (http://www.zope.org/Resources/License/ZPL-2.1)",
       packages=find_packages(),
       include_package_data=True,
