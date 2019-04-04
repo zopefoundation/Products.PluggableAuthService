@@ -15,65 +15,64 @@
 """
 import logging
 
+import six
+
 from AccessControl import ClassSecurityInfo
 from AccessControl import ModuleSecurityInfo
 from AccessControl.class_init import InitializeClass
 from AccessControl.Permissions import manage_users as ManageUsers
-from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import getSecurityManager
+from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import noSecurityManager
-from AccessControl.User import nobody
-from AccessControl.SpecialUsers import emergency_user
-from Acquisition import aq_parent
+from AccessControl.users import emergency_user
+from AccessControl.users import nobody
+from Acquisition import Implicit
 from Acquisition import aq_base
 from Acquisition import aq_inner
-from Acquisition import Implicit
+from Acquisition import aq_parent
 from App.ImageFile import ImageFile
 from OFS.Cache import Cacheable
 from OFS.Folder import Folder
 from OFS.interfaces import IObjectManager
 from OFS.interfaces import IPropertyManager
-from Products.StandardCacheManagers.RAMCacheManager import RAMCacheManager
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from Products.PluginRegistry.PluginRegistry import PluginRegistry
+from Products.StandardCacheManagers.RAMCacheManager import RAMCacheManager
 from zExceptions import Unauthorized
+from zope.event import notify
 from ZPublisher import BeforeTraverse
 from ZTUtils import Batch
-from zope.event import notify
-
-from Products.PluginRegistry.PluginRegistry import PluginRegistry
 
 from .events import PrincipalCreated
 from .interfaces.authservice import IPluggableAuthService
 from .interfaces.authservice import _noroles
-from .interfaces.plugins import IExtractionPlugin
-from .interfaces.plugins import ILoginPasswordHostExtractionPlugin
+from .interfaces.plugins import IAnonymousUserFactoryPlugin
 from .interfaces.plugins import IAuthenticationPlugin
 from .interfaces.plugins import IChallengePlugin
-from .interfaces.plugins import ICredentialsUpdatePlugin
+from .interfaces.plugins import IChallengeProtocolChooser
 from .interfaces.plugins import ICredentialsResetPlugin
-from .interfaces.plugins import IUserFactoryPlugin
-from .interfaces.plugins import IAnonymousUserFactoryPlugin
-from .interfaces.plugins import IPropertiesPlugin
+from .interfaces.plugins import ICredentialsUpdatePlugin
+from .interfaces.plugins import IExtractionPlugin
+from .interfaces.plugins import IGroupEnumerationPlugin
 from .interfaces.plugins import IGroupsPlugin
+from .interfaces.plugins import ILoginPasswordHostExtractionPlugin
+from .interfaces.plugins import INotCompetentPlugin
+from .interfaces.plugins import IPropertiesPlugin
+from .interfaces.plugins import IRequestTypeSniffer
+from .interfaces.plugins import IRoleAssignerPlugin
+from .interfaces.plugins import IRoleEnumerationPlugin
 from .interfaces.plugins import IRolesPlugin
 from .interfaces.plugins import IUpdatePlugin
-from .interfaces.plugins import IValidationPlugin
-from .interfaces.plugins import IUserEnumerationPlugin
 from .interfaces.plugins import IUserAdderPlugin
-from .interfaces.plugins import IGroupEnumerationPlugin
-from .interfaces.plugins import IRoleEnumerationPlugin
-from .interfaces.plugins import IRoleAssignerPlugin
-from .interfaces.plugins import INotCompetentPlugin
-from .interfaces.plugins import IChallengeProtocolChooser
-from .interfaces.plugins import IRequestTypeSniffer
+from .interfaces.plugins import IUserEnumerationPlugin
+from .interfaces.plugins import IUserFactoryPlugin
+from .interfaces.plugins import IValidationPlugin
 from .permissions import SearchPrincipals
 from .PropertiedUser import PropertiedUser
 from .utils import _wwwdir
-from .utils import createViewName
-from .utils import createKeywords
 from .utils import classImplements
-
-import six
+from .utils import createKeywords
+from .utils import createViewName
 
 
 security = ModuleSecurityInfo(
