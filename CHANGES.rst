@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+2.0 (unreleased)
+----------------
+
+
 2.0b4 (2019-04-04)
 ------------------
 - simplified Travis CI test configuration
