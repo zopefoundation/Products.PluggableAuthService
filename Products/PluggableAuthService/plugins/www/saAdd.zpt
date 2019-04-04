@@ -1,5 +1,7 @@
 <h1 tal:replace="structure here/manage_page_header">Header</h1>
 
+<main class="container-fluid">
+
 <h2 tal:define="form_title string:Add Session Auth Helper"
     tal:replace="structure here/manage_form_title">Form Title</h2>
 
@@ -43,6 +45,8 @@ Pluggable Auth Service functionality.
   </tr>
 </table>
 </form>
+
+</main>
 
 <h1 tal:replace="structure here/manage_page_footer">Footer</h1>
 

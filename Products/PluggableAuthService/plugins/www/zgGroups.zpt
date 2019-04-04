@@ -86,7 +86,7 @@
 
  <tr valign="top">
   <th align="right">
-   <div class="form-label">Group ID:</div>
+   <div class="form-label">Group ID</div>
   </th>
   <td>
    <input type="text" name="group_id" size="20" class="form-control" />

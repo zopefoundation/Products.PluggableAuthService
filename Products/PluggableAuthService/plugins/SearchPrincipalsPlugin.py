@@ -57,6 +57,7 @@ class SearchPrincipalsPlugin(BasePlugin):
     """
     security = ClassSecurityInfo()
     meta_type = 'Search Principals Plugin'
+    zmi_icon = 'fas fa-search'
 
     _properties = ({'id': 'delegate', 'label': ' Delegate Path',
                     'type': 'string', 'mode': 'w'},)

@@ -71,6 +71,7 @@ class ZODBRoleManager(BasePlugin):
     """ PAS plugin for managing roles in the ZODB.
     """
     meta_type = 'ZODB Role Manager'
+    zmi_icon = 'fas fa-user-tag'
 
     security = ClassSecurityInfo()
 

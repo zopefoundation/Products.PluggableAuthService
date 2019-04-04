@@ -66,6 +66,7 @@ class ScriptablePlugin(Folder, BasePlugin):
     security = ClassSecurityInfo()
 
     meta_type = 'Scriptable Plugin'
+    zmi_icon = 'fas fa-cogs'
 
     manage_options = ((Folder.manage_options[0],)
                       + ({'label': 'Interfaces',

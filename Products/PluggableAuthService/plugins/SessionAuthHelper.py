@@ -55,6 +55,7 @@ def manage_addSessionAuthHelper(dispatcher, id, title=None, REQUEST=None):
 class SessionAuthHelper(BasePlugin):
     """ Multi-plugin for managing details of Session Authentication. """
     meta_type = 'Session Auth Helper'
+    zmi_icon = 'fas fa-fingerprint'
     security = ClassSecurityInfo()
 
     def __init__(self, id, title=None):

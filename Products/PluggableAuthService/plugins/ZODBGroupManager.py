@@ -68,6 +68,7 @@ class ZODBGroupManager(BasePlugin):
     """ PAS plugin for managing groups, and groups of groups in the ZODB
     """
     meta_type = 'ZODB Group Manager'
+    zmi_icon = 'fas fa-users'
 
     security = ClassSecurityInfo()
 

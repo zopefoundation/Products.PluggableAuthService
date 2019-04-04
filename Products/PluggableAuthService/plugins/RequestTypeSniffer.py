@@ -77,6 +77,7 @@ class RequestTypeSniffer(BasePlugin):
     """ PAS plugin for detecting a Request's type
     """
     meta_type = 'Request Type Sniffer Plugin'
+    zmi_icon = 'fas fa-broadcast-tower'
 
     security = ClassSecurityInfo()
 

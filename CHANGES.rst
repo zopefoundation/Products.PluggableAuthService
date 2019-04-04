@@ -4,7 +4,8 @@ Change Log
 2.0b4 (unreleased)
 ------------------
 
-- Fix ZMI Templates for Users/Groups/Roles
+- Fix ZMI Templates and add ZMI icons for Zope 4
+  (`#36 <https://github.com/zopefoundation/Products.PluggableAuthService/pull/36>`_)
 
 
 2.0b3 (2019-03-29)

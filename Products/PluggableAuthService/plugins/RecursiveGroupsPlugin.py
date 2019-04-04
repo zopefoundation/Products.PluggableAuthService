@@ -71,6 +71,7 @@ class RecursiveGroupsPlugin(BasePlugin):
     """ PAS plugin for recursively flattening a collection of groups
     """
     meta_type = 'Recursive Groups Plugin'
+    zmi_icon = 'fas fa-users'
 
     security = ClassSecurityInfo()
 

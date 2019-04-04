@@ -38,6 +38,7 @@ class BasePlugin(SimpleItem, PropertyManager):
 
     """ Base class for all PluggableAuthService Plugins
     """
+    zmi_icon = 'fas fa-puzzle-piece'
 
     security = ClassSecurityInfo()
 

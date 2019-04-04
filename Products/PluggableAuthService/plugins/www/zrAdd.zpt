@@ -1,5 +1,7 @@
 <h1 tal:replace="structure here/manage_page_header">Header</h1>
 
+<main class="container-fluid">
+
 <h2 tal:define="form_title string:Add ZODB Role Manager"
     tal:replace="structure here/manage_form_title">Form Title</h2>
 
@@ -41,5 +43,7 @@ ZODB Role Managers manage lists of roles, and the users who have them.
   </tr>
 </table>
 </form>
+
+</main>
 
 <h1 tal:replace="structure here/manage_page_footer">Footer</h1>

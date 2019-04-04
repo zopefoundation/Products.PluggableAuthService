@@ -122,6 +122,7 @@ class DomainAuthHelper(BasePlugin):
     """ Domain Authentication plugin for the PluggableAuthService """
     security = ClassSecurityInfo()
     meta_type = 'Domain Authentication Plugin'
+    zmi_icon = 'fas fa-fingerprint'
 
     security.declareProtected(manage_users, 'manage_map')
     manage_map = PageTemplateFile('www/daMatches', globals())
