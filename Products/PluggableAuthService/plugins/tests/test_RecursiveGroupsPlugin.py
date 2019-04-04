@@ -14,11 +14,11 @@
 import unittest
 
 from OFS.SimpleItem import SimpleItem
-from Products.PluggableAuthService.tests.conformance \
-    import IGroupsPlugin_conformance
 
-from Products.PluggableAuthService.tests.test_PluggableAuthService \
-    import FauxContainer
+from Products.PluggableAuthService.tests.conformance import \
+    IGroupsPlugin_conformance
+from Products.PluggableAuthService.tests.test_PluggableAuthService import \
+    FauxContainer
 
 
 class FauxPAS(FauxContainer):

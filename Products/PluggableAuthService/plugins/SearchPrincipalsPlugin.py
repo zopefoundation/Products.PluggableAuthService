@@ -19,15 +19,13 @@
 from AccessControl import ClassSecurityInfo
 from AccessControl.class_init import InitializeClass
 from Acquisition import aq_base
-
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from zope.interface import Interface
 
-from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-
 from Products.PluggableAuthService.interfaces.plugins import \
-     IUserEnumerationPlugin
+    IGroupEnumerationPlugin
 from Products.PluggableAuthService.interfaces.plugins import \
-     IGroupEnumerationPlugin
+    IUserEnumerationPlugin
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.utils import classImplements
 

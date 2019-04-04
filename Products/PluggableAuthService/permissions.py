@@ -17,6 +17,7 @@ from AccessControl import ModuleSecurityInfo
 from AccessControl import Permissions
 from AccessControl.Permission import addPermission
 
+
 security = ModuleSecurityInfo('Products.PluggableAuthService.permissions')
 
 security.declarePublic('ManageUsers')

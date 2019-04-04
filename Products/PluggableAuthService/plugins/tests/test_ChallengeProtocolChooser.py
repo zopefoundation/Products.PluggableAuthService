@@ -17,10 +17,11 @@ import unittest
 
 import six
 
-from Products.PluggableAuthService import HAVE_ZSERVER
-from Products.PluggableAuthService.tests.conformance \
-    import IChallengeProtocolChooser_conformance
 import Testing.ZopeTestCase
+
+from Products.PluggableAuthService import HAVE_ZSERVER
+from Products.PluggableAuthService.tests.conformance import \
+    IChallengeProtocolChooser_conformance
 
 
 XMLRPC_CALL = b"""\

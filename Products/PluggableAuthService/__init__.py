@@ -21,6 +21,13 @@ except ImportError:
 else:
     HAVE_ZSERVER = True
 
+from AccessControl.Permissions import manage_users as ManageUsers
+from App.Management import Navigation
+from Products.GenericSetup import BASE
+from Products.GenericSetup import profile_registry
+from Products.GenericSetup.tool import SetupTool
+from zExceptions import Unauthorized
+
 from . import PluggableAuthService
 from .interfaces.authservice import IPluggableAuthService
 from .permissions import ManageGroups
@@ -43,14 +50,6 @@ from .plugins import ZODBGroupManager
 from .plugins import ZODBRoleManager
 from .plugins import ZODBUserManager
 from .utils import allTests  # noqa
-
-from AccessControl.Permissions import manage_users as ManageUsers
-from App.Management import Navigation
-from zExceptions import Unauthorized
-
-from Products.GenericSetup import profile_registry
-from Products.GenericSetup import BASE
-from Products.GenericSetup.tool import SetupTool
 
 
 registerMultiPlugin(HBAH.HTTPBasicAuthHelper.meta_type)

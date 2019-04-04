@@ -1,4 +1,5 @@
-from zope.interface import Attribute, Interface
+from zope.interface import Attribute
+from zope.interface import Interface
 
 
 class IPASEvent(Interface):

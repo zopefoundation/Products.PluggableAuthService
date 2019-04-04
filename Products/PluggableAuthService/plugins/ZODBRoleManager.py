@@ -19,23 +19,22 @@ import logging
 from AccessControl import ClassSecurityInfo
 from AccessControl.class_init import InitializeClass
 from AccessControl.requestmethod import postonly
-from Acquisition import aq_parent, aq_inner
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from BTrees.OOBTree import OOBTree
-
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from zope.interface import Interface
 
-from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-
-from Products.PluggableAuthService.interfaces.plugins \
-    import IRolesPlugin
-from Products.PluggableAuthService.interfaces.plugins \
-    import IRoleEnumerationPlugin
-from Products.PluggableAuthService.interfaces.plugins \
-    import IRoleAssignerPlugin
+from Products.PluggableAuthService.interfaces.plugins import \
+    IRoleAssignerPlugin
+from Products.PluggableAuthService.interfaces.plugins import \
+    IRoleEnumerationPlugin
+from Products.PluggableAuthService.interfaces.plugins import IRolesPlugin
 from Products.PluggableAuthService.permissions import ManageUsers
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.utils import classImplements
 from Products.PluggableAuthService.utils import csrf_only
+
 
 LOG = logging.getLogger('PluggableAuthService')
 

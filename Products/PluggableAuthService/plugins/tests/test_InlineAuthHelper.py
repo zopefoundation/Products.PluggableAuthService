@@ -13,13 +13,20 @@
 ##############################################################################
 import unittest
 
-from Products.PluggableAuthService.tests.conformance \
-     import ILoginPasswordHostExtractionPlugin_conformance
-from Products.PluggableAuthService.tests.conformance \
-     import IChallengePlugin_conformance
-
-from Products.PluggableAuthService.tests.test_PluggableAuthService \
-     import FauxRequest, FauxResponse, FauxObject, FauxRoot, FauxContainer
+from Products.PluggableAuthService.tests.conformance import \
+    IChallengePlugin_conformance
+from Products.PluggableAuthService.tests.conformance import \
+    ILoginPasswordHostExtractionPlugin_conformance
+from Products.PluggableAuthService.tests.test_PluggableAuthService import \
+    FauxContainer
+from Products.PluggableAuthService.tests.test_PluggableAuthService import \
+    FauxObject
+from Products.PluggableAuthService.tests.test_PluggableAuthService import \
+    FauxRequest
+from Products.PluggableAuthService.tests.test_PluggableAuthService import \
+    FauxResponse
+from Products.PluggableAuthService.tests.test_PluggableAuthService import \
+    FauxRoot
 
 
 class FauxSettableRequest(FauxRequest):

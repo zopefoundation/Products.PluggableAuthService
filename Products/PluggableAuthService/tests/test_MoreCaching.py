@@ -16,8 +16,8 @@ import unittest
 
 from AccessControl.Permissions import view as View
 
-from Products.PluggableAuthService.tests import pastc
 from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin
+from Products.PluggableAuthService.tests import pastc
 
 
 class CachingTests(pastc.PASTestCase):

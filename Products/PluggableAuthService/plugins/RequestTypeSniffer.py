@@ -16,24 +16,19 @@
 
 from AccessControl import ClassSecurityInfo
 from AccessControl.class_init import InitializeClass
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from zope.interface import Interface
 from ZPublisher import xmlrpc
 
-from zope.interface import Interface
-
-from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-
-from Products.PluggableAuthService.interfaces.plugins \
-    import IRequestTypeSniffer
-from Products.PluggableAuthService.interfaces.request \
-    import IBrowserRequest
-from Products.PluggableAuthService.interfaces.request \
-    import IWebDAVRequest
-from Products.PluggableAuthService.interfaces.request \
-    import IXMLRPCRequest
+from Products.PluggableAuthService import HAVE_ZSERVER
+from Products.PluggableAuthService.interfaces.plugins import \
+    IRequestTypeSniffer
+from Products.PluggableAuthService.interfaces.request import IBrowserRequest
+from Products.PluggableAuthService.interfaces.request import IWebDAVRequest
+from Products.PluggableAuthService.interfaces.request import IXMLRPCRequest
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.utils import classImplements
 
-from Products.PluggableAuthService import HAVE_ZSERVER
 
 if HAVE_ZSERVER:
     from ZServer.FTPRequest import FTPRequest

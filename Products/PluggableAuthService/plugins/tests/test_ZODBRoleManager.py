@@ -15,15 +15,17 @@ import unittest
 
 from zExceptions import Forbidden
 
-from Products.PluggableAuthService.tests.conformance \
-    import IRolesPlugin_conformance
-from Products.PluggableAuthService.tests.conformance \
-    import IRoleEnumerationPlugin_conformance
-from Products.PluggableAuthService.tests.conformance \
-    import IRoleAssignerPlugin_conformance
-
-from Products.PluggableAuthService.plugins.tests.helpers \
-     import FauxPAS, FauxSmartPAS, DummyUser, makeRequestAndResponse
+from Products.PluggableAuthService.plugins.tests.helpers import DummyUser
+from Products.PluggableAuthService.plugins.tests.helpers import FauxPAS
+from Products.PluggableAuthService.plugins.tests.helpers import FauxSmartPAS
+from Products.PluggableAuthService.plugins.tests.helpers import \
+    makeRequestAndResponse
+from Products.PluggableAuthService.tests.conformance import \
+    IRoleAssignerPlugin_conformance
+from Products.PluggableAuthService.tests.conformance import \
+    IRoleEnumerationPlugin_conformance
+from Products.PluggableAuthService.tests.conformance import \
+    IRolesPlugin_conformance
 
 
 class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance,

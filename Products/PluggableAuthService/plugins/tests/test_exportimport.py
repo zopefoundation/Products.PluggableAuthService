@@ -16,14 +16,13 @@
 
 import unittest
 
-from Products.GenericSetup.tests.conformance \
-        import ConformsToIFilesystemExporter
-from Products.GenericSetup.tests.conformance \
-        import ConformsToIFilesystemImporter
-
 from Products.GenericSetup.tests.common import BaseRegistryTests
 from Products.GenericSetup.tests.common import DummyExportContext
 from Products.GenericSetup.tests.common import DummyImportContext
+from Products.GenericSetup.tests.conformance import \
+    ConformsToIFilesystemExporter
+from Products.GenericSetup.tests.conformance import \
+    ConformsToIFilesystemImporter
 
 from Products.PluggableAuthService.tests.utils import _setUpDefaultTraversable
 

@@ -14,11 +14,13 @@
 
 $Id$
 """
-from .PluggableAuthService import MultiPlugins
-from .PluggableAuthService import registerMultiPlugin as rMP
 from zope.configuration.fields import PythonIdentifier
 from zope.interface import Interface
 from zope.testing.cleanup import addCleanUp
+
+from .PluggableAuthService import MultiPlugins
+from .PluggableAuthService import registerMultiPlugin as rMP
+
 
 _mt_regs = []
 

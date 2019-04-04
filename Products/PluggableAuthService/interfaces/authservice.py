@@ -14,8 +14,8 @@
 """ Interfaces:  IUser, IUserFolder, IMutableUserFolder, IEnumerableUserFolder
 """
 
-from zope.interface import Interface
 from AccessControl.ZopeSecurityPolicy import _noroles
+from zope.interface import Interface
 
 
 class IBasicUser(Interface):

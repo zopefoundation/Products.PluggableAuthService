@@ -13,17 +13,19 @@
 ##############################################################################
 import unittest
 
+from Products.PluggableAuthService.tests.conformance import \
+    IAuthenticationPlugin_conformance
+from Products.PluggableAuthService.tests.conformance import \
+    IExtractionPlugin_conformance
+from Products.PluggableAuthService.tests.conformance import \
+    IRolesPlugin_conformance
+
+
 try:
     from IPy import IP
 except ImportError:
     IP = None
 
-from Products.PluggableAuthService.tests.conformance \
-     import IExtractionPlugin_conformance
-from Products.PluggableAuthService.tests.conformance \
-     import IAuthenticationPlugin_conformance
-from Products.PluggableAuthService.tests.conformance \
-     import IRolesPlugin_conformance
 
 
 class FauxRequest:

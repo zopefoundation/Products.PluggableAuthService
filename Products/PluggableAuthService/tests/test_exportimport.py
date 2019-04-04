@@ -15,11 +15,12 @@
 """
 import unittest
 from csv import reader
+
 from six import StringIO
 
+from Products.GenericSetup.tests.common import BaseRegistryTests
 from zope.component.testing import PlacelessSetup
 
-from Products.GenericSetup.tests.common import BaseRegistryTests
 from Products.PluggableAuthService.tests.utils import _setUpDefaultTraversable
 
 

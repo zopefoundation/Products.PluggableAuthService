@@ -17,15 +17,12 @@
 from AccessControl import ClassSecurityInfo
 from AccessControl.class_init import InitializeClass
 from Acquisition import aq_parent
-
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from zope.interface import Interface
 
-from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-
-from Products.PluggableAuthService.interfaces.plugins \
-    import IGroupsPlugin
-from Products.PluggableAuthService.PropertiedUser import PropertiedUser
+from Products.PluggableAuthService.interfaces.plugins import IGroupsPlugin
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
+from Products.PluggableAuthService.PropertiedUser import PropertiedUser
 from Products.PluggableAuthService.utils import classImplements
 
 

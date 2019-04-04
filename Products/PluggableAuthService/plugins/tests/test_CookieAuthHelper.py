@@ -15,20 +15,28 @@ try:
     from base64 import encodebytes
 except ImportError:  # Python < 3.1
     from base64 import encodestring as encodebytes
-from six.moves.urllib.parse import quote
 import codecs
-import six
 import unittest
 
-from Products.PluggableAuthService.tests.conformance \
-     import ILoginPasswordHostExtractionPlugin_conformance
-from Products.PluggableAuthService.tests.conformance \
-     import IChallengePlugin_conformance
-from Products.PluggableAuthService.tests.conformance \
-     import ICredentialsResetPlugin_conformance
+import six
+from six.moves.urllib.parse import quote
 
-from Products.PluggableAuthService.tests.test_PluggableAuthService \
-     import FauxRequest, FauxResponse, FauxObject, FauxRoot, FauxContainer
+from Products.PluggableAuthService.tests.conformance import \
+    IChallengePlugin_conformance
+from Products.PluggableAuthService.tests.conformance import \
+    ICredentialsResetPlugin_conformance
+from Products.PluggableAuthService.tests.conformance import \
+    ILoginPasswordHostExtractionPlugin_conformance
+from Products.PluggableAuthService.tests.test_PluggableAuthService import \
+    FauxContainer
+from Products.PluggableAuthService.tests.test_PluggableAuthService import \
+    FauxObject
+from Products.PluggableAuthService.tests.test_PluggableAuthService import \
+    FauxRequest
+from Products.PluggableAuthService.tests.test_PluggableAuthService import \
+    FauxResponse
+from Products.PluggableAuthService.tests.test_PluggableAuthService import \
+    FauxRoot
 
 
 class FauxSettableRequest(FauxRequest):

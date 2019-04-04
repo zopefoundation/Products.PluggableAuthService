@@ -12,19 +12,23 @@
 #
 ##############################################################################
 
-from ..interfaces.plugins import INotCompetentPlugin
+import unittest
+
+import six
+
 from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import noSecurityManager
 from AccessControl.SecurityManager import setSecurityPolicy
-from Acquisition import Implicit, aq_base
-from .conformance import IUserFolder_conformance
+from Acquisition import Implicit
+from Acquisition import aq_base
 from OFS.ObjectManager import ObjectManager
-from Products.PluggableAuthService.utils import directlyProvides
 from zExceptions import Unauthorized
 from zope.interface import implementer
 
-import unittest
-import six
+from Products.PluggableAuthService.utils import directlyProvides
+
+from ..interfaces.plugins import INotCompetentPlugin
+from .conformance import IUserFolder_conformance
 
 
 class DummyPlugin(Implicit):

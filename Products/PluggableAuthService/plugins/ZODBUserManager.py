@@ -15,29 +15,24 @@
 """
 import copy
 import logging
-try:
-    from hashlib import sha1 as sha
-except ImportError:
-    from sha import sha
 
+import six
+
+from AccessControl import AuthEncoding
+from AccessControl import ClassSecurityInfo
 from AccessControl.class_init import InitializeClass
-from AccessControl import ClassSecurityInfo, AuthEncoding
 from AccessControl.requestmethod import postonly
 from AccessControl.SecurityManagement import getSecurityManager
 from BTrees.OOBTree import OOBTree
 from OFS.Cache import Cacheable
-
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from zope.interface import Interface
 
-from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-
-from Products.PluggableAuthService.interfaces.plugins \
-    import IAuthenticationPlugin
-from Products.PluggableAuthService.interfaces.plugins \
-    import IUserEnumerationPlugin
-from Products.PluggableAuthService.interfaces.plugins \
-    import IUserAdderPlugin
-
+from Products.PluggableAuthService.interfaces.plugins import \
+    IAuthenticationPlugin
+from Products.PluggableAuthService.interfaces.plugins import IUserAdderPlugin
+from Products.PluggableAuthService.interfaces.plugins import \
+    IUserEnumerationPlugin
 from Products.PluggableAuthService.permissions import ManageUsers
 from Products.PluggableAuthService.permissions import SetOwnPassword
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
@@ -45,7 +40,17 @@ from Products.PluggableAuthService.utils import classImplements
 from Products.PluggableAuthService.utils import createViewName
 from Products.PluggableAuthService.utils import csrf_only
 
-import six
+
+try:
+    from hashlib import sha1 as sha
+except ImportError:
+    from sha import sha
+
+
+
+
+
+
 
 
 logger = logging.getLogger('PluggableAuthService')

@@ -18,15 +18,16 @@ from zope.component import adapter
 from zope.component import globalSiteManager
 from zope.component import provideHandler
 
-from Products.PluggableAuthService.interfaces.events import \
-    IGroupCreatedEvent
-from Products.PluggableAuthService.tests.conformance \
-    import IGroupEnumerationPlugin_conformance
-from Products.PluggableAuthService.tests.conformance \
-    import IGroupsPlugin_conformance
-
-from Products.PluggableAuthService.plugins.tests.helpers \
-     import FauxPAS, FauxSmartPAS, DummyUser, makeRequestAndResponse
+from Products.PluggableAuthService.interfaces.events import IGroupCreatedEvent
+from Products.PluggableAuthService.plugins.tests.helpers import DummyUser
+from Products.PluggableAuthService.plugins.tests.helpers import FauxPAS
+from Products.PluggableAuthService.plugins.tests.helpers import FauxSmartPAS
+from Products.PluggableAuthService.plugins.tests.helpers import \
+    makeRequestAndResponse
+from Products.PluggableAuthService.tests.conformance import \
+    IGroupEnumerationPlugin_conformance
+from Products.PluggableAuthService.tests.conformance import \
+    IGroupsPlugin_conformance
 
 
 class DummyGroup:

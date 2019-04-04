@@ -11,15 +11,17 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-import unittest
 import os.path
-import six
 import sys
+import unittest
+
+import six
 
 from DateTime.DateTime import DateTime
 from OFS.Image import Image
 
 from .conformance import IPropertySheet_conformance
+
 
 img_path = os.path.join(os.path.dirname(__file__), 'image.gif')
 

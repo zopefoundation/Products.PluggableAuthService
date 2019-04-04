@@ -14,13 +14,15 @@
 """ Represent a group of properties about a user.
 """
 
+import six
+
 from DateTime.DateTime import DateTime
 from OFS.Image import Image
-from Products.PluggableAuthService.utils import classImplements
-from Products.PluggableAuthService.interfaces.propertysheets \
-    import IPropertySheet
 
-import six
+from Products.PluggableAuthService.interfaces.propertysheets import \
+    IPropertySheet
+from Products.PluggableAuthService.utils import classImplements
+
 
 StringTypes = (str, six.text_type)
 

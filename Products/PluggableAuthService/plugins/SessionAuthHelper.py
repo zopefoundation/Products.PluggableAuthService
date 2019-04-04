@@ -16,17 +16,15 @@
 
 from AccessControl.class_init import InitializeClass
 from AccessControl.SecurityInfo import ClassSecurityInfo
-
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from zope.interface import Interface
 
-from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-
 from Products.PluggableAuthService.interfaces.plugins import \
-        ILoginPasswordHostExtractionPlugin
+    ICredentialsResetPlugin
 from Products.PluggableAuthService.interfaces.plugins import \
-        ICredentialsUpdatePlugin
+    ICredentialsUpdatePlugin
 from Products.PluggableAuthService.interfaces.plugins import \
-        ICredentialsResetPlugin
+    ILoginPasswordHostExtractionPlugin
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.utils import classImplements
 

@@ -16,15 +16,14 @@ import unittest
 from AccessControl.AuthEncoding import pw_encrypt
 from zExceptions import Forbidden
 
-from Products.PluggableAuthService.tests.conformance \
-    import IAuthenticationPlugin_conformance
-from Products.PluggableAuthService.tests.conformance \
-    import IUserEnumerationPlugin_conformance
-from Products.PluggableAuthService.tests.conformance \
-    import IUserAdderPlugin_conformance
-
-from Products.PluggableAuthService.plugins.tests.helpers \
-     import makeRequestAndResponse
+from Products.PluggableAuthService.plugins.tests.helpers import \
+    makeRequestAndResponse
+from Products.PluggableAuthService.tests.conformance import \
+    IAuthenticationPlugin_conformance
+from Products.PluggableAuthService.tests.conformance import \
+    IUserAdderPlugin_conformance
+from Products.PluggableAuthService.tests.conformance import \
+    IUserEnumerationPlugin_conformance
 
 
 class DummyUser:

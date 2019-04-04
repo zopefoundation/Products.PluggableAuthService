@@ -15,10 +15,10 @@
 """
 import unittest
 
-from Products.PluggableAuthService.tests.conformance \
-    import IGroupsPlugin_conformance
-from Products.PluggableAuthService.tests.conformance \
-    import IGroupEnumerationPlugin_conformance
+from Products.PluggableAuthService.tests.conformance import \
+    IGroupEnumerationPlugin_conformance
+from Products.PluggableAuthService.tests.conformance import \
+    IGroupsPlugin_conformance
 from Products.PluggableAuthService.tests.utils import _setUpDefaultTraversable
 
 

@@ -14,17 +14,15 @@
 """ Class: ScriptablePlugin
 """
 
+import Products
 from AccessControl import ClassSecurityInfo
 from AccessControl.class_init import InitializeClass
 from AccessControl.Permissions import manage_users as ManageUsers
 from OFS.Folder import Folder
-import Products
-
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from zope.interface import Interface
 from zope.interface import implementedBy
 from zope.interface import providedBy
-
-from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.utils import classImplements

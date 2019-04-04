@@ -15,10 +15,10 @@ import unittest
 
 from ZPublisher.BaseRequest import UNSPECIFIED_ROLES
 
-from Products.PluggableAuthService.tests.conformance \
-     import INotCompetentPlugin_conformance
-from Products.PluggableAuthService.tests.test_PluggableAuthService \
-     import PluggableAuthServiceTests
+from Products.PluggableAuthService.tests.conformance import \
+    INotCompetentPlugin_conformance
+from Products.PluggableAuthService.tests.test_PluggableAuthService import \
+    PluggableAuthServiceTests
 
 
 class _WrapPluggableAuthServiceTests(PluggableAuthServiceTests):

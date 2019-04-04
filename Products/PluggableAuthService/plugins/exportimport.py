@@ -16,19 +16,17 @@
 
 import os
 import sys
-
-import six
 from xml.dom.minidom import parseString
 
+import six
+
 from Acquisition import Implicit
-from zope.interface import implementer
-
-from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-
 from Products.GenericSetup.content import DAVAwareFileAdapter
 from Products.GenericSetup.content import FolderishExporterImporter
 from Products.GenericSetup.interfaces import IFilesystemExporter
 from Products.GenericSetup.interfaces import IFilesystemImporter
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from zope.interface import implementer
 
 
 def getPackagePath(instance):

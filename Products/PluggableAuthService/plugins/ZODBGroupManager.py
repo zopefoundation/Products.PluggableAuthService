@@ -14,31 +14,25 @@
 """ Classes: ZODBGroupManager
 """
 
+import six
+
 from AccessControl import ClassSecurityInfo
 from AccessControl.class_init import InitializeClass
 from AccessControl.requestmethod import postonly
 from Acquisition import aq_parent
 from BTrees.OOBTree import OOBTree
-
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from zope.event import notify
 from zope.interface import Interface
 
-from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-
 from Products.PluggableAuthService.events import GroupCreated
-
-from Products.PluggableAuthService.interfaces.plugins \
-    import IGroupEnumerationPlugin
-from Products.PluggableAuthService.interfaces.plugins \
-    import IGroupsPlugin
-
+from Products.PluggableAuthService.interfaces.plugins import \
+    IGroupEnumerationPlugin
+from Products.PluggableAuthService.interfaces.plugins import IGroupsPlugin
 from Products.PluggableAuthService.permissions import ManageGroups
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.utils import classImplements
 from Products.PluggableAuthService.utils import csrf_only
-
-
-import six
 
 
 class IZODBGroupManager(Interface):

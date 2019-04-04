@@ -17,28 +17,30 @@
 import re
 import socket
 import time
-try:
-    from IPy import IP
-except ImportError:
-    IP = None
 
 from AccessControl import ClassSecurityInfo
 from AccessControl.class_init import InitializeClass
 from AccessControl.Permissions import manage_users
 from BTrees.OOBTree import OOBTree
-
-from zope.interface import Interface
-
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from zope.interface import Interface
 
 from Products.PluggableAuthService.interfaces.plugins import \
     IAuthenticationPlugin
-from Products.PluggableAuthService.interfaces.plugins import \
-    IExtractionPlugin
-from Products.PluggableAuthService.interfaces.plugins import \
-    IRolesPlugin
+from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin
+from Products.PluggableAuthService.interfaces.plugins import IRolesPlugin
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.utils import classImplements
+
+
+try:
+    from IPy import IP
+except ImportError:
+    IP = None
+
+
+
+
 
 
 class IDomainAuthHelper(Interface):

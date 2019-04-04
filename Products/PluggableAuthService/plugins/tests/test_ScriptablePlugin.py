@@ -12,9 +12,9 @@
 #
 ##############################################################################
 import unittest
+
 from OFS.Folder import Folder
 from OFS.SimpleItem import SimpleItem
-
 from zope.interface import Interface
 from zope.interface import providedBy
 

@@ -19,9 +19,18 @@ from Testing.ZopeTestCase import user_role
 from ZPublisher.utils import basic_auth_encode
 
 from Products.PluggableAuthService.interfaces.plugins import \
-    IAuthenticationPlugin, IUserEnumerationPlugin, IRolesPlugin, \
-    IRoleEnumerationPlugin, IRoleAssignerPlugin, \
-    IChallengePlugin, IExtractionPlugin, IUserAdderPlugin
+    IAuthenticationPlugin
+from Products.PluggableAuthService.interfaces.plugins import IChallengePlugin
+from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin
+from Products.PluggableAuthService.interfaces.plugins import \
+    IRoleAssignerPlugin
+from Products.PluggableAuthService.interfaces.plugins import \
+    IRoleEnumerationPlugin
+from Products.PluggableAuthService.interfaces.plugins import IRolesPlugin
+from Products.PluggableAuthService.interfaces.plugins import IUserAdderPlugin
+from Products.PluggableAuthService.interfaces.plugins import \
+    IUserEnumerationPlugin
+
 
 user_auth = basic_auth_encode(user_name, user_password)
 ZopeTestCase.installProduct('PluginRegistry')

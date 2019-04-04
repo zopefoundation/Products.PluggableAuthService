@@ -14,20 +14,20 @@
 """ Class: BasePlugin
 """
 
-from AccessControl.class_init import InitializeClass
 from AccessControl import ClassSecurityInfo
-from Acquisition import aq_base, aq_parent, aq_inner
+from AccessControl.class_init import InitializeClass
+from Acquisition import aq_base
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from OFS.PropertyManager import PropertyManager
 from OFS.SimpleItem import SimpleItem
-
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from zope.interface import implementedBy
 from zope.interface import providedBy
 
-from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-
+from Products.PluggableAuthService.permissions import ManageUsers
 from Products.PluggableAuthService.utils import classImplements
 from Products.PluggableAuthService.utils import createViewName
-from Products.PluggableAuthService.permissions import ManageUsers
 
 
 def flattenInterfaces(implemented):

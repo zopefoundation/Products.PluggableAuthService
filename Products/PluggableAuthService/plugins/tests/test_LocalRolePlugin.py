@@ -16,8 +16,8 @@ import unittest
 from Acquisition import Implicit
 from OFS.ObjectManager import ObjectManager
 
-from Products.PluggableAuthService.tests.conformance \
-    import IRolesPlugin_conformance
+from Products.PluggableAuthService.tests.conformance import \
+    IRolesPlugin_conformance
 
 
 class FauxObject(Implicit):

@@ -11,8 +11,8 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-from Products.PluggableAuthService.tests.test_PluggableAuthService \
-    import FauxContainer
+from Products.PluggableAuthService.tests.test_PluggableAuthService import \
+    FauxContainer
 
 
 class FauxPAS(FauxContainer):

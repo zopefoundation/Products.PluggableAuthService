@@ -20,30 +20,29 @@ try:
 except ImportError:  # Python < 3.1
     from base64 import decodestring as decodebytes
     from base64 import encodestring as encodebytes
+import codecs
 from binascii import Error
 from binascii import hexlify
-import codecs
+
 import six
-from six.moves.urllib.parse import quote, unquote
+from six.moves.urllib.parse import quote
+from six.moves.urllib.parse import unquote
 
 from AccessControl.class_init import InitializeClass
 from AccessControl.Permissions import view
 from AccessControl.SecurityInfo import ClassSecurityInfo
 from OFS.Folder import Folder
-
-from zope.interface import Interface
-
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from Products.PageTemplates.ZopePageTemplate import ZopePageTemplate
+from zope.interface import Interface
 
+from Products.PluggableAuthService.interfaces.plugins import IChallengePlugin
 from Products.PluggableAuthService.interfaces.plugins import \
-        ILoginPasswordHostExtractionPlugin
+    ICredentialsResetPlugin
 from Products.PluggableAuthService.interfaces.plugins import \
-        IChallengePlugin
+    ICredentialsUpdatePlugin
 from Products.PluggableAuthService.interfaces.plugins import \
-        ICredentialsUpdatePlugin
-from Products.PluggableAuthService.interfaces.plugins import \
-        ICredentialsResetPlugin
+    ILoginPasswordHostExtractionPlugin
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.utils import classImplements
 

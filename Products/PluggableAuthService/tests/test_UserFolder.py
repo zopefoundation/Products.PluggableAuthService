@@ -14,26 +14,24 @@
 
 import unittest
 
-from Products.PluggableAuthService.tests import pastc
+from six.moves import range
 
 from AccessControl import Unauthorized
-from AccessControl.Permissions import view as View
 from AccessControl.Permissions import add_folders as AddFolders
-from ZPublisher.utils import basic_auth_encode
-
-from Products.PluggableAuthService.PluggableAuthService import \
-    PluggableAuthService
-
+from AccessControl.Permissions import view as View
 from zope import event
 from zope.component import adapter
 from zope.component import provideHandler
-from Products.PluggableAuthService.interfaces.events import \
-    IPrincipalCreatedEvent
+from ZPublisher.utils import basic_auth_encode
+
 from Products.PluggableAuthService.events import CredentialsUpdated
 from Products.PluggableAuthService.events import PASEventNotify
 from Products.PluggableAuthService.events import userCredentialsUpdatedHandler
-
-from six.moves import range
+from Products.PluggableAuthService.interfaces.events import \
+    IPrincipalCreatedEvent
+from Products.PluggableAuthService.PluggableAuthService import \
+    PluggableAuthService
+from Products.PluggableAuthService.tests import pastc
 
 
 @adapter(IPrincipalCreatedEvent)

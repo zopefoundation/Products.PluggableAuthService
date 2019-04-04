@@ -11,21 +11,21 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-from AccessControl import ClassSecurityInfo
-from App.Common import package_home
-from hashlib import sha1
-from zExceptions import Forbidden
-from zope import interface
-from zope.publisher.interfaces.browser import IBrowserRequest  # noqa
-
 import binascii
 import functools
 import inspect
 import os
+from hashlib import sha1
+
 import six
 
+from AccessControl import ClassSecurityInfo
 # BBB import
 from AccessControl.requestmethod import postonly  # noqa
+from App.Common import package_home
+from zExceptions import Forbidden
+from zope import interface
+from zope.publisher.interfaces.browser import IBrowserRequest  # noqa
 
 
 def directlyProvides(obj, *interfaces):

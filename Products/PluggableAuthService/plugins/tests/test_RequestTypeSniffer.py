@@ -15,8 +15,8 @@
 """
 import unittest
 
-from Products.PluggableAuthService.tests.conformance \
-    import IRequestTypeSniffer_conformance
+from Products.PluggableAuthService.tests.conformance import \
+    IRequestTypeSniffer_conformance
 
 
 class RequestTypeSniffer(unittest.TestCase, IRequestTypeSniffer_conformance):
