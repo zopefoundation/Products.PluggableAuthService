@@ -61,7 +61,7 @@ manage_addZODBUserManagerForm = PageTemplateFile(
 
 
 def addZODBUserManager(dispatcher, id, title=None, REQUEST=None):
-    """ Add a ZODBUserManagern to a Pluggable Auth Service. """
+    """ Add a ZODBUserManager to a Pluggable Auth Service. """
 
     zum = ZODBUserManager(id, title)
     dispatcher._setObject(zum.getId(), zum)
