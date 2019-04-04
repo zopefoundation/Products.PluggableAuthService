@@ -23,7 +23,7 @@ class IRequest(Interface):
 
     """ Base Request Interface
 
-    XXX Add methods from BaseRequest?
+    ??? Add methods from BaseRequest?
     """
 
 

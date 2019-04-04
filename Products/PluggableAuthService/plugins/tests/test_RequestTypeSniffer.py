@@ -33,7 +33,7 @@ class RequestTypeSniffer(unittest.TestCase, IRequestTypeSniffer_conformance):
         return self._getTargetClass()(id, *args, **kw)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()
 
 

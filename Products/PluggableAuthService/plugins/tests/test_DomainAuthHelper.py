@@ -27,7 +27,6 @@ except ImportError:
     IP = None
 
 
-
 class FauxRequest:
 
     def __init__(self, **kw):
@@ -150,7 +149,7 @@ class DomainAuthHelperTests(unittest.TestCase, IExtractionPlugin_conformance,
 
         self.assertEqual(helper.authenticateCredentials(creds), ('foo', 'foo'))
 
-    # TODO  add tests for getRolesForPrincipal, etc.
+    # ???  add tests for getRolesForPrincipal, etc.
 
 
 class EqualsFilterTests(unittest.TestCase):
@@ -276,7 +275,7 @@ class IPFilterTests(unittest.TestCase):
         self.assertFalse(filter('192.168.0.13'))
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()
 
 

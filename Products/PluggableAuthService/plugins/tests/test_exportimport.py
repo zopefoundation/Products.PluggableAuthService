@@ -927,7 +927,7 @@ class DelegatePathExportImportTests(_TestBase):
         filename, text, content_type = context._wrote[0]
         self.assertEqual(filename, 'plugins/default.xml')
         self._compareDOM(text.decode('UTF-8'),
-                         _DELEGATE_PATH_TEMPLATE_NO_TITLE % "")
+                         _DELEGATE_PATH_TEMPLATE_NO_TITLE % '')
         self.assertEqual(content_type, 'text/xml')
 
     def test__getExportInfo_explicitly_set(self):

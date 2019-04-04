@@ -13,11 +13,11 @@
 ##############################################################################
 """ NotCompetentHelper   `INotCompetent` plugin utilities
 
-`INotCompetent` plugins are usually used to prevent shaddowing of users
+`INotCompetent` plugins are usually used to prevent shadowing of users
 authenticated by higher level user folders. This module provides
 an `INotCompetent` plugin base class which can check for authentications
 by higher level user folders and the class `NotCompetent_byRoles`
-to prevent shaddowing of higher level authentications with
+to prevent shadowing of higher level authentications with
 specified roles.
 """
 
@@ -49,15 +49,15 @@ class HigherLevelUserFolderAccessMixin(object):
             folder = aq_parent(aq_inner(folder))
             if folder is None:
                 return
-            uf = getattr(folder, "__allow_groups__", None)
-            validate = getattr(aq_base(uf), "validate", None)
+            uf = getattr(folder, '__allow_groups__', None)
+            validate = getattr(aq_base(uf), 'validate', None)
             if validate is not None:
                 yield uf
 
     def _getHigherLevelUser(self, request, roles=None):
         if roles:
             accessed = self._getPAS()._getObjectContext(
-                request["PUBLISHED"], request)[1]
+                request['PUBLISHED'], request)[1]
         req_roles = request.roles
         auth = request._auth
         # save response and install new one to prevent side effects
@@ -105,15 +105,15 @@ classImplements(NotCompetentBase, INotCompetentPlugin)
 
 
 class NotCompetent_byRoles(NotCompetentBase):
-    """`INotCompetentPlugin` to prevent authentication shaddowing by roles.
+    """`INotCompetentPlugin` to prevent authentication shadowing by roles.
     """
 
-    meta_type = "prevent authentication shaddowing by roles"
+    meta_type = 'prevent authentication shaddowing by roles'
 
     _properties = (
         PropertyManager._properties +
-        (dict(id="roles", label="roles (empty means all roles)",
-              type="lines", mode="rw",),))
+        (dict(id='roles', label='roles (empty means all roles)',
+              type='lines', mode='rw'),))
     roles = ()
 
     manage_options = (

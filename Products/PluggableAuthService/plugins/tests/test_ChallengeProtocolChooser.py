@@ -146,7 +146,7 @@ class ChallengeProtocolChooserTestHelper(object):
         self.assertIsNone(pas.getUserById('test_user_'))
 
         username, password = 'test_user_', 'test_user_pw'
-        self.basic_auth = "{}:{}".format(username, password)
+        self.basic_auth = '%s:%s' % (username, password)
         user = pas._doAddUser(username, password, ['Manager'], [])
         self.assertIsInstance(user, PropertiedUser)
         self.assertIsNotNone(pas.getUserById('test_user_'))

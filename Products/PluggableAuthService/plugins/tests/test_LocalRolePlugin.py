@@ -129,7 +129,7 @@ class LocalRolePluginTestCase(unittest.TestCase, IRolesPlugin_conformance):
         self.assertEqual(lrp.getRolesForPrincipal(user), ['Manager'])
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()
 
 

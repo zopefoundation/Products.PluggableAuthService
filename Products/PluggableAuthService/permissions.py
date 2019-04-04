@@ -20,11 +20,11 @@ from AccessControl.Permission import addPermission
 
 security = ModuleSecurityInfo('Products.PluggableAuthService.permissions')
 
-security.declarePublic('ManageUsers')
+security.declarePublic('ManageUsers')  # NOQA: D001
 ManageUsers = Permissions.manage_users
 
-security.declarePublic('ManageGroups')
-ManageGroups = "Manage Groups"
+security.declarePublic('ManageGroups')  # NOQA: D001
+ManageGroups = 'Manage Groups'
 
 
 @security.private
@@ -34,10 +34,10 @@ def setDefaultRoles(permission, roles):
     addPermission(permission, roles)
 
 
-security.declarePublic('SearchPrincipals')
+security.declarePublic('SearchPrincipals')  # NOQA: D001
 SearchPrincipals = 'Search for principals'
 setDefaultRoles(SearchPrincipals, ('Manager',))
 
-security.declarePublic('SetOwnPassword')
+security.declarePublic('SetOwnPassword')  # NOQA: D001
 SetOwnPassword = 'Set own password'
 setDefaultRoles(SetOwnPassword, ('Authenticated',))

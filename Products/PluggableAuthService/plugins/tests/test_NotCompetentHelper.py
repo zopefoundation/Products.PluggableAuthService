@@ -51,13 +51,13 @@ class NotCompetentHelperTests(unittest.TestCase,
         request.roles = UNSPECIFIED_ROLES
         request._auth = None
         request.response = None
-        root = request["PARENTS"][-1]
+        root = request['PARENTS'][-1]
         root._setObject(root_pas.getId(), root_pas)
         test_pas = past._makeOne(past._makePlugins())
-        folder = request["PARENTS"][-2]
+        folder = request['PARENTS'][-2]
         folder._setObject(test_pas.getId(), test_pas)
         test_pas = folder._getOb(test_pas.getId())  # ac wrap
-        nc = self._getTargetClass()("nc")
+        nc = self._getTargetClass()('nc')
         test_pas._setObject(nc.getId(), nc)
         self.plugin, self.request = test_pas._getOb(nc.getId()), request
 
@@ -69,27 +69,27 @@ class NotCompetentHelperTests(unittest.TestCase,
     def test__getHigherLevelUser(self):
         plugin, request = self.plugin, self.request
         hlu = plugin._getHigherLevelUser(request)
-        self.assertEqual(hlu.getUserName(), "olivier")
+        self.assertEqual(hlu.getUserName(), 'olivier')
 
     def test__getHigherLevelUser_asHamlet(self):
         plugin, request = self.plugin, self.request
-        hlu = plugin._getHigherLevelUser(request, ("Hamlet",))
-        self.assertEqual(hlu.getUserName(), "olivier")
+        hlu = plugin._getHigherLevelUser(request, ('Hamlet',))
+        self.assertEqual(hlu.getUserName(), 'olivier')
 
     def test__getHigherLevelUser_asManager(self):
         plugin, request = self.plugin, self.request
-        hlu = plugin._getHigherLevelUser(request, ("Manager",))
+        hlu = plugin._getHigherLevelUser(request, ('Manager',))
         self.assertEqual(hlu, None)
 
     def test__getHigherLevelUser_requiresHamlet(self):
         plugin, request = self.plugin, self.request
-        request.roles = ("Hamlet",)
+        request.roles = ('Hamlet',)
         hlu = plugin._getHigherLevelUser(request)
-        self.assertEqual(hlu.getUserName(), "olivier")
+        self.assertEqual(hlu.getUserName(), 'olivier')
 
     def test__getHigherLevelUser_requiresManager(self):
         plugin, request = self.plugin, self.request
-        request.roles = ("Manager",)
+        request.roles = ('Manager',)
         hlu = plugin._getHigherLevelUser(request)
         self.assertEqual(hlu, None)
 
@@ -99,16 +99,16 @@ class NotCompetentHelperTests(unittest.TestCase,
 
     def test_isNotCompetent_Hamlet(self):
         plugin, request = self.plugin, self.request
-        plugin.manage_changeProperties(roles=("Hamlet",))
+        plugin.manage_changeProperties(roles=('Hamlet',))
         self.assertEqual(plugin.isNotCompetentToAuthenticate(request), True)
 
     def test_isNotCompetent_Manager(self):
         plugin, request = self.plugin, self.request
-        plugin.manage_changeProperties(roles=("Manager",))
+        plugin.manage_changeProperties(roles=('Manager',))
         self.assertEqual(plugin.isNotCompetentToAuthenticate(request), False)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()
 
 

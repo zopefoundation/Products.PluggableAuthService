@@ -237,14 +237,14 @@ class Test_csrf_only(unittest.TestCase):
 
     def test_w_function_no_REQUEST(self):
         def no_request(foo, bar, **kw):
-            "I haz no REQUEST"
+            """I haz no REQUEST"""
         self.assertRaises(ValueError, self._callFUT, no_request)
 
     def test_w_function_w_positional_REQUEST(self):
         from zExceptions import Forbidden
 
         def w_positional_request(foo, bar, REQUEST):
-            "I haz REQUEST as positional arg"
+            """I haz REQUEST as positional arg"""
             return 42
 
         wrapped = self._callFUT(w_positional_request)
@@ -261,7 +261,7 @@ class Test_csrf_only(unittest.TestCase):
         from zExceptions import Forbidden
 
         def w_optional_request(foo, bar, REQUEST=None):
-            "I haz REQUEST as kw arg"
+            """I haz REQUEST as kw arg"""
             return 42
 
         wrapped = self._callFUT(w_optional_request)

@@ -185,7 +185,7 @@ class RecursiveGroupsPluginTests(unittest.TestCase, IGroupsPlugin_conformance):
         self.assertTrue('other_dummy:group2' in groups)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()
 
 

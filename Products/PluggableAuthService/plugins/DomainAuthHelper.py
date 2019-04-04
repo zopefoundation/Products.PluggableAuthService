@@ -39,10 +39,6 @@ except ImportError:
     IP = None
 
 
-
-
-
-
 class IDomainAuthHelper(Interface):
     """ Marker interface.
     """
@@ -126,10 +122,10 @@ class DomainAuthHelper(BasePlugin):
     meta_type = 'Domain Authentication Plugin'
     zmi_icon = 'fas fa-fingerprint'
 
-    security.declareProtected(manage_users, 'manage_map')
+    security.declareProtected(manage_users, 'manage_map')  # NOQA: D001
     manage_map = PageTemplateFile('www/daMatches', globals())
 
-    security.declareProtected(manage_users, 'manage_genericmap')
+    security.declareProtected(manage_users, 'manage_genericmap')  # NOQA: D001
     manage_genericmap = PageTemplateFile('www/daGeneric', globals())
 
     manage_options = (BasePlugin.manage_options[:1]

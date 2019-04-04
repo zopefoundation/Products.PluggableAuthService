@@ -114,7 +114,7 @@ def initialize(context):
     context.registerClass(HBAH.HTTPBasicAuthHelper,
                           permission=ManageUsers,
                           constructors=(HBAH.manage_addHTTPBasicAuthHelperForm,
-                                        HBAH.addHTTPBasicAuthHelper,),
+                                        HBAH.addHTTPBasicAuthHelper),
                           visibility=None,
                           icon='plugins/www/HTTPBasicAuthHelper.png')
 

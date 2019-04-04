@@ -276,9 +276,9 @@ class ZODBRoleManager(BasePlugin):
                 info = parent.searchPrincipals(id=k, exact_match=True)
 
                 if len(info) > 1:
-                    message = ("Multiple groups or users exist with the "
-                               "name '%s'. Remove one of the duplicate groups "
-                               "or users." % (k))
+                    message = ('Multiple groups or users exist with the '
+                               'name "%s". Remove one of the duplicate groups '
+                               'or users.' % (k))
                     LOG.error(message)
                     raise MultiplePrincipalError(message)
 
@@ -343,11 +343,11 @@ class ZODBRoleManager(BasePlugin):
     manage_options = (({'label': 'Roles', 'action': 'manage_roles'},)
                       + BasePlugin.manage_options)
 
-    security.declareProtected(ManageUsers, 'manage_roles')
+    security.declareProtected(ManageUsers, 'manage_roles')  # NOQA: D001
     manage_roles = PageTemplateFile('www/zrRoles', globals(),
                                     __name__='manage_roles')
 
-    security.declareProtected(ManageUsers, 'manage_twoLists')
+    security.declareProtected(ManageUsers, 'manage_twoLists')  # NOQA: D001
     manage_twoLists = PageTemplateFile('../www/two_lists', globals(),
                                        __name__='manage_twoLists')
 
@@ -475,7 +475,7 @@ class _ZODBRoleFilter:
             key = 'id'
 
         else:
-            return 1  # TODO:  try using 'kw'
+            return 1  # ???:  try using 'kw'
 
         value = role_info.get(key)
 

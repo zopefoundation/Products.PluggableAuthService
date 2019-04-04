@@ -32,14 +32,16 @@ def directlyProvides(obj, *interfaces):
     normalized_interfaces = []
     for i in interfaces:
         normalized_interfaces.append(i)
-    return interface.directlyProvides(obj, *normalized_interfaces)
+    return interface.directlyProvides(obj,  # NOQA: D001
+                                      *normalized_interfaces)
 
 
 def classImplements(class_, *interfaces):
     normalized_interfaces = []
     for i in interfaces:
         normalized_interfaces.append(i)
-    return interface.classImplements(class_, *normalized_interfaces)
+    return interface.classImplements(class_,  # NOQA: D001
+                                     *normalized_interfaces)
 
 
 product_dir = package_home(globals())
@@ -58,7 +60,7 @@ def remove_stale_bytecode(arg, dirname, names):
 
     for name in names:
 
-        if name.endswith(".pyc") or name.endswith(".pyo"):
+        if name.endswith('.pyc') or name.endswith('.pyo'):
 
             srcname = name[:-1]
 
@@ -67,7 +69,7 @@ def remove_stale_bytecode(arg, dirname, names):
                 fullname = os.path.join(dirname, name)
 
                 if __debug__:
-                    print(("Removing stale bytecode file", fullname))
+                    print(('Removing stale bytecode file', fullname))
 
                 os.unlink(fullname)
 
@@ -82,7 +84,7 @@ class TestFileFinder:
             Visitor for os.path.walk:  accumulates filenamse of unittests.
         """
         # ignore tests that aren't in packages
-        if "__init__.py" not in files:
+        if '__init__.py' not in files:
 
             if not files or files == ['CVS']:
                 return
@@ -91,7 +93,7 @@ class TestFileFinder:
 
         for file in files:
 
-            if file.startswith(prefix) and file.endswith(".py"):
+            if file.startswith(prefix) and file.endswith('.py'):
                 path = os.path.join(dir, file)
                 self.files.append(path)
 
@@ -116,7 +118,7 @@ def module_name_from_path(path):
     while path:
         path, end = os.path.split(path)
         dirs.insert(0, end)
-    return ".".join(dirs)
+    return '.'.join(dirs)
 
 
 def get_suite(file):
@@ -133,7 +135,7 @@ def get_suite(file):
         try:
             suite = loader.loadTestsFromName(module_name)
         except ImportError as err:
-            print("Error importing %s\n%s" % (module_name, err))
+            print('Error importing %s\n%s' % (module_name, err))
             raise
     return suite
 

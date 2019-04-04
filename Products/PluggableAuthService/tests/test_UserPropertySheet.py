@@ -209,7 +209,7 @@ class UserPropertySheetTests(unittest.TestCase, IPropertySheet_conformance):
         self._checkStockSchema(ups, values_are_none=True)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()
 
 

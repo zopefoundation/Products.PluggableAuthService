@@ -38,7 +38,7 @@ class FauxSettableRequest(FauxRequest):
 class FauxInlineResponse(FauxResponse):
 
     def __init__(self):
-        self.setBody("Should never see this.")
+        self.setBody('Should never see this.')
         self.status = '200'
         self.headers = {}
 
@@ -102,14 +102,14 @@ class InlineAuthHelperTests(unittest.TestCase,
         root.REQUEST = request
 
         helper = self._makeOne().__of__(root)
-        helper.body = "Overridden"
+        helper.body = 'Overridden'
 
-        self.assertEqual(response.body, "Should never see this.")
+        self.assertEqual(response.body, 'Should never see this.')
         helper.challenge(request, response)
-        self.assertEqual(response.body, "Overridden")
+        self.assertEqual(response.body, 'Overridden')
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()
 
 

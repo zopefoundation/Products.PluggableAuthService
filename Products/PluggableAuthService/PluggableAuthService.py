@@ -30,7 +30,6 @@ from Acquisition import Implicit
 from Acquisition import aq_base
 from Acquisition import aq_inner
 from Acquisition import aq_parent
-from App.ImageFile import ImageFile
 from OFS.Cache import Cacheable
 from OFS.Folder import Folder
 from OFS.interfaces import IObjectManager
@@ -367,7 +366,7 @@ class PluggableAuthService(Folder, Cacheable):
                     info['groupid'] = info['id']
                     info['principal_type'] = 'group'
                     if 'title' not in info:
-                        info['title'] = "(Group) %s" % info['groupid']
+                        info['title'] = '(Group) %s' % info['groupid']
                     result.append(info)
             except _SWALLOWABLE_PLUGIN_EXCEPTIONS:
                 reraise(enum)
@@ -448,7 +447,7 @@ class PluggableAuthService(Folder, Cacheable):
     #
     # ZMI stuff
     #
-    security.declareProtected(ManageUsers, 'manage_search')
+    security.declareProtected(ManageUsers, 'manage_search')  # NOQA: D001
     manage_search = PageTemplateFile('www/pasSearch', globals())
 
     manage_options = (Folder.manage_options[:1]
@@ -571,11 +570,11 @@ class PluggableAuthService(Folder, Cacheable):
             if credentials:
 
                 try:
-                    credentials['extractor'] = extractor_id  # XXX: in key?
+                    credentials['extractor'] = extractor_id  # ??? in key?
                     # Test if ObjectCacheEntries.aggregateIndex would work
                     items = sorted(credentials.items())  # noqa
                 except _SWALLOWABLE_PLUGIN_EXCEPTIONS:
-                    # XXX: would reraise be good here, and which plugin to ask
+                    # ???: would reraise be good here, and which plugin to ask
                     # whether not to swallow the exception - the extractor?
                     logger.debug('Credentials error: %s' % credentials,
                                  exc_info=True)
@@ -860,7 +859,7 @@ class PluggableAuthService(Folder, Cacheable):
 
         o 'v' is the object (value) we're validating access to
 
-        o XXX:  Lifted from AccessControl.User.BasicUserFolder._getobcontext
+        o ???:  Lifted from AccessControl.User.BasicUserFolder._getobcontext
         """
         if len(request.steps) == 0:  # someone deleted root index_html
 
@@ -919,13 +918,13 @@ class PluggableAuthService(Folder, Cacheable):
         login = self.applyTransform(login)
 
         if not (useradders and roleassigners):
-            raise NotImplementedError("There are no plugins"
-                                      " that can create"
-                                      " users and assign roles to them.")
+            raise NotImplementedError('There are no plugins'
+                                      ' that can create'
+                                      ' users and assign roles to them.')
 
         for useradder_id, useradder in useradders:
             if useradder.doAddUser(login, password):
-                # XXX: Adds user to cache, but without roles...
+                # ???: Adds user to cache, but without roles...
                 user = self.getUser(login)
                 break
 
@@ -1021,7 +1020,7 @@ class PluggableAuthService(Folder, Cacheable):
             return
         transform = getattr(self, login_transform.strip(), None)
         if transform is None:
-            logger.debug("Transform method %r not found in plugin %r.",
+            logger.debug('Transform method %r not found in plugin %r.',
                          self.login_transform, self)
             return
         return transform
@@ -1032,8 +1031,8 @@ class PluggableAuthService(Folder, Cacheable):
             orig_value = getattr(self, id)
         super(PluggableAuthService, self)._setPropValue(id, value)
         if id == 'login_transform' and value and value != orig_value:
-            logger.debug("login_transform changed from %r to %r. "
-                         "Updating existing login names.", orig_value, value)
+            logger.debug('login_transform changed from %r to %r. '
+                         'Updating existing login names.', orig_value, value)
             self.updateAllLoginNames()
 
     @security.public
@@ -1184,7 +1183,7 @@ class PluggableAuthService(Folder, Cacheable):
     def updateLoginName(self, user_id, login_name):
         """Update login name of user.
         """
-        logger.debug("Called updateLoginName, user_id=%r, login_name=%r",
+        logger.debug('Called updateLoginName, user_id=%r, login_name=%r',
                      user_id, login_name)
         login_name = self.applyTransform(login_name)
         # Note: we do not call self.getUserById(user_id) here to see
@@ -1200,7 +1199,7 @@ class PluggableAuthService(Folder, Cacheable):
     def updateOwnLoginName(self, login_name):
         """Update own login name of authenticated user.
         """
-        logger.debug("Called updateOwnLoginName, login_name=%r", login_name)
+        logger.debug('Called updateOwnLoginName, login_name=%r', login_name)
         login_name = self.applyTransform(login_name)
         user = getSecurityManager().getUser()
         if aq_base(user) is nobody:
@@ -1225,8 +1224,8 @@ class PluggableAuthService(Folder, Cacheable):
             if not hasattr(updater, 'updateUser'):
                 # This was a later addition to the interface, so we
                 # are forgiving.
-                logger.warn("%s plugin lacks updateUser method of "
-                            "IUserEnumerationPlugin.", updater_id)
+                logger.warn('%s plugin lacks updateUser method of '
+                            'IUserEnumerationPlugin.', updater_id)
                 continue
             try:
                 result = updater.updateUser(user_id, login_name)
@@ -1237,11 +1236,11 @@ class PluggableAuthService(Folder, Cacheable):
             else:
                 if result:
                     success = True
-                    logger.debug("login name changed to: %r", login_name)
+                    logger.debug('login name changed to: %r', login_name)
 
         if not success:
-            raise ValueError("Cannot update login name of user %r to %r. "
-                             "Possibly duplicate." % (user_id, login_name))
+            raise ValueError('Cannot update login name of user %r to %r. '
+                             'Possibly duplicate.' % (user_id, login_name))
 
     @security.protected(ManageUsers)
     def updateAllLoginNames(self, quit_on_first_error=True):
@@ -1260,8 +1259,8 @@ class PluggableAuthService(Folder, Cacheable):
             if not hasattr(updater, 'updateEveryLoginName'):
                 # This was a later addition to the interface, so we
                 # are forgiving.
-                logger.warn("%s plugin lacks updateEveryLoginName method of "
-                            "IUserEnumerationPlugin.", updater_id)
+                logger.warn('%s plugin lacks updateEveryLoginName method of '
+                            'IUserEnumerationPlugin.', updater_id)
                 continue
             # Note: do not swallow any exceptions here.
             updater.updateEveryLoginName(
@@ -1306,59 +1305,59 @@ class ResponseCleanup:
 
 _PLUGIN_TYPE_INFO = (
     (IExtractionPlugin, 'IExtractionPlugin', 'extraction',
-     "Extraction plugins are responsible for extracting credentials "
-     "from the request."),
+     'Extraction plugins are responsible for extracting credentials '
+     'from the request.'),
     (IAuthenticationPlugin, 'IAuthenticationPlugin', 'authentication',
-     "Authentication plugins are responsible for validating credentials "
-     "generated by the Extraction Plugin."),
+     'Authentication plugins are responsible for validating credentials '
+     'generated by the Extraction Plugin.'),
     (IChallengePlugin, 'IChallengePlugin', 'challenge',
-     "Challenge plugins initiate a challenge to the user to provide "
-     "credentials."),
+     'Challenge plugins initiate a challenge to the user to provide '
+     'credentials.'),
     (ICredentialsUpdatePlugin, 'ICredentialsUpdatePlugin',
      'update credentials',
-     "Credential update plugins respond to the user changing "
-     "credentials."),
+     'Credential update plugins respond to the user changing '
+     'credentials.'),
     (ICredentialsResetPlugin, 'ICredentialsResetPlugin', 'reset credentials',
-     "Credential clear plugins respond to a user logging out."),
-    (IUserFactoryPlugin, 'IUserFactoryPlugin', 'userfactory', "Create users."),
+     'Credential clear plugins respond to a user logging out.'),
+    (IUserFactoryPlugin, 'IUserFactoryPlugin', 'userfactory', 'Create users.'),
     (IAnonymousUserFactoryPlugin, 'IAnonymousUserFactoryPlugin',
-     'anonymoususerfactory', "Create anonymous users."),
+     'anonymoususerfactory', 'Create anonymous users.'),
     (IPropertiesPlugin, 'IPropertiesPlugin', 'properties',
-     "Properties plugins generate property sheets for users."),
+     'Properties plugins generate property sheets for users.'),
     (IGroupsPlugin, 'IGroupsPlugin', 'groups',
-     "Groups plugins determine the groups to which a user belongs."),
+     'Groups plugins determine the groups to which a user belongs.'),
     (IRolesPlugin, 'IRolesPlugin', 'roles',
-     "Roles plugins determine the global roles which a user has."),
+     'Roles plugins determine the global roles which a user has.'),
     (IUpdatePlugin, 'IUpdatePlugin', 'update',
-     "Update plugins allow the user or the application to update "
-     "the user's properties."),
+     'Update plugins allow the user or the application to update '
+     'the user\'s properties.'),
     (IValidationPlugin, 'IValidationPlugin', 'validation',
-     "Validation plugins specify allowable values for user properties "
-     "(e.g., minimum password length, allowed characters, etc.)"),
+     'Validation plugins specify allowable values for user properties '
+     '(e.g., minimum password length, allowed characters, etc.)'),
     (IUserEnumerationPlugin, 'IUserEnumerationPlugin', 'user_enumeration',
-     "Enumeration plugins allow querying users by ID, and searching for "
-     "users who match particular criteria."),
+     'Enumeration plugins allow querying users by ID, and searching for '
+     'users who match particular criteria.'),
     (IUserAdderPlugin, 'IUserAdderPlugin', 'user_adder',
-     "User Adder plugins allow the Pluggable Auth Service to create users."),
+     'User Adder plugins allow the Pluggable Auth Service to create users.'),
     (IGroupEnumerationPlugin, 'IGroupEnumerationPlugin', 'group_enumeration',
-     "Enumeration plugins allow querying groups by ID."),
+     'Enumeration plugins allow querying groups by ID.'),
     (IRoleEnumerationPlugin, 'IRoleEnumerationPlugin', 'role_enumeration',
-     "Enumeration plugins allow querying roles by ID."),
+     'Enumeration plugins allow querying roles by ID.'),
     (IRoleAssignerPlugin, 'IRoleAssignerPlugin', 'role_assigner',
-     "Role Assigner plugins allow the Pluggable Auth Service to assign"
-     " roles to principals."),
+     'Role Assigner plugins allow the Pluggable Auth Service to assign'
+     ' roles to principals.'),
     (IChallengeProtocolChooser, 'IChallengeProtocolChooser',
      'challenge_protocol_chooser',
-     "Challenge Protocol Chooser plugins decide what authorization"
-     "protocol to use for a given request type."),
+     'Challenge Protocol Chooser plugins decide what authorization'
+     'protocol to use for a given request type.'),
     (IRequestTypeSniffer, 'IRequestTypeSniffer', 'request_type_sniffer',
-     "Request Type Sniffer plugins detect the type of an incoming request."),
+     'Request Type Sniffer plugins detect the type of an incoming request.'),
     (INotCompetentPlugin, 'INotCompetentPlugin', 'notcompetent',
-     "Not-Competent plugins check whether this user folder should not "
-     "authenticate the current request. "
-     "These plugins are not used for a top level user folder. "
-     "They are typically used to prevent shaddowing of authentications by "
-     "higher level user folders."))
+     'Not-Competent plugins check whether this user folder should not '
+     'authenticate the current request. '
+     'These plugins are not used for a top level user folder. '
+     'They are typically used to prevent shaddowing of authentications by '
+     'higher level user folders.'))
 
 
 def addPluggableAuthService(dispatcher, base_profile=None,

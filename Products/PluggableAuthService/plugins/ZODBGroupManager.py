@@ -151,7 +151,7 @@ class ZODBGroupManager(BasePlugin):
     @security.protected(ManageGroups)
     def listGroupInfo(self):
 
-        """ -> ({}, ...{})
+        """ -> (dict, ...dict)
 
         o Return one mapping per group, with the following keys:
 
@@ -162,7 +162,7 @@ class ZODBGroupManager(BasePlugin):
     @security.protected(ManageGroups)
     def getGroupInfo(self, group_id):
 
-        """ group_id -> {}
+        """ group_id -> dict
         """
         return self._groups[group_id]
 
@@ -309,15 +309,15 @@ class ZODBGroupManager(BasePlugin):
     manage_options = (({'label': 'Groups', 'action': 'manage_groups'},)
                       + BasePlugin.manage_options)
 
-    security.declarePublic('manage_widgets')
+    security.declarePublic('manage_widgets')  # NOQA: D001
     manage_widgets = PageTemplateFile('www/zuWidgets', globals(),
                                       __name__='manage_widgets')
 
-    security.declareProtected(ManageGroups, 'manage_groups')
+    security.declareProtected(ManageGroups, 'manage_groups')  # NOQA: D001
     manage_groups = PageTemplateFile('www/zgGroups', globals(),
                                      __name__='manage_groups')
 
-    security.declareProtected(ManageGroups, 'manage_twoLists')
+    security.declareProtected(ManageGroups, 'manage_twoLists')  # NOQA: D001
     manage_twoLists = PageTemplateFile('../www/two_lists', globals(),
                                        __name__='manage_twoLists')
 
@@ -443,7 +443,7 @@ class _ZODBGroupFilter:
             to_test = self._filter_titles
 
         else:
-            return 1  # TODO:  try using 'kw'
+            return 1  # ???:  try using 'kw'
 
         value = group_info.get(key)
 

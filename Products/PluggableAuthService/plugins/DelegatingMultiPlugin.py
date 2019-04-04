@@ -142,7 +142,7 @@ class DelegatingMultiPlugin(Folder, BasePlugin):
         if user is None:
             return {}
 
-        # XXX WAAA
+        # WAAA
         return copy.deepcopy(user.__dict__)
 
     @security.private
@@ -186,7 +186,7 @@ class DelegatingMultiPlugin(Folder, BasePlugin):
                                'pluginid': plugin_id,
                                'editurl': '%s' % edit_url})
         else:
-            # XXX WAAAAA!!!!
+            # WAAAAA!!!!
             all_users = acl.getUsers()
 
             for user in all_users:

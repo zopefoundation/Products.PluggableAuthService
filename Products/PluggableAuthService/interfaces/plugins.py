@@ -41,7 +41,7 @@ class ILoginPasswordExtractionPlugin(IExtractionPlugin):
     def extractCredentials(request):
 
         """ request -> {'login': login, 'password': password,
-                         k1: v1, ... , kN: vN} | {}
+                         k1: v1, ... , kN: vN} | empty dict
 
         o If credentials are found, the returned mapping will contain at
           least 'login' and 'password' keys, with the password in plaintext.
@@ -65,7 +65,7 @@ class ILoginPasswordHostExtractionPlugin(ILoginPasswordExtractionPlugin):
                        , k1 : v1
                        ,   ...
                        , kN : vN
-                       } | {}
+                       } | empty dict
 
         o If credentials are found, the returned mapping will contain at
           least 'login', 'password', 'remote_host' and 'remote_addr' keys,
@@ -220,7 +220,7 @@ class IPropertiesPlugin(Interface):
 
     def getPropertiesForUser(user, request=None):
 
-        """ user -> {}
+        """ user -> empty dict
 
         o User will implement IPropertiedUser.
 
@@ -303,7 +303,7 @@ class IUserEnumerationPlugin(Interface):
 
     """ Allow querying users by ID, and searching for users.
 
-    o XXX:  can these be done by a single plugin?
+    o ???:  can these be done by a single plugin?
     """
 
     def enumerateUsers(id=None, login=None, exact_match=False, sort_by=None,
@@ -377,7 +377,7 @@ class IGroupEnumerationPlugin(Interface):
 
     """ Allow querying groups by ID, and searching for groups.
 
-    o XXX:  can these be done by a single plugin?
+    o ???:  can these be done by a single plugin?
     """
 
     def enumerateGroups(id=None, exact_match=False, sort_by=None,
@@ -499,7 +499,7 @@ class IChallengeProtocolChooser(Interface):
             protocol will be executed.
         """
 #
-#   XXX:  Do we need a LocalRoleAlgorithm plugin type?  E.g., base_cms
+#   ???:  Do we need a LocalRoleAlgorithm plugin type?  E.g., base_cms
 #         has two different algorithms, based on whether or not the
 #         context object implements IPlacelessSecurity.
 #

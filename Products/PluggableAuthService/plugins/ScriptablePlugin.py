@@ -68,10 +68,11 @@ class ScriptablePlugin(Folder, BasePlugin):
 
     manage_options = ((Folder.manage_options[0],)
                       + ({'label': 'Interfaces',
-                          'action': 'manage_editInterfacesForm', },)
+                          'action': 'manage_editInterfacesForm'},)
                       + BasePlugin.manage_options)
 
-    security.declareProtected(ManageUsers, 'manage_editInterfacesForm')
+    security.declareProtected(ManageUsers,  # NOQA: D001
+                              'manage_editInterfacesForm')
     manage_editInterfacesForm = PageTemplateFile(
         'www/spEditInterfaces', globals(),
         __name__='manage_editInterfacesForm')

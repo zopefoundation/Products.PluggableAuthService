@@ -473,7 +473,7 @@ class _DynamicGroupFilter:
             key = 'id'
 
         else:
-            return 1  # TODO:  try using 'kw'
+            return 1  # ???:  try using 'kw'
 
         value = group_info.get(key)
 

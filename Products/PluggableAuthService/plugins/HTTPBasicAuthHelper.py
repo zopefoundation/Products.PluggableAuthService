@@ -58,7 +58,7 @@ class HTTPBasicAuthHelper(BasePlugin):
     meta_type = 'HTTP Basic Auth Helper'
     zmi_icon = 'fas fa-fingerprint'
     security = ClassSecurityInfo()
-    protocol = "http"  # The PAS challenge 'protocol' we use.
+    protocol = 'http'  # The PAS challenge 'protocol' we use.
 
     def __init__(self, id, title=None):
         self._setId(id)
@@ -94,7 +94,7 @@ class HTTPBasicAuthHelper(BasePlugin):
         realm = response.realm
         if realm:
             response.addHeader('WWW-Authenticate', 'basic realm="%s"' % realm)
-        m = "<strong>You are not authorized to access this resource.</strong>"
+        m = '<strong>You are not authorized to access this resource.</strong>'
 
         if not response.body:
             response.setBody(m, is_error=1)
@@ -106,7 +106,7 @@ class HTTPBasicAuthHelper(BasePlugin):
 
         """ Raise unauthorized to tell browser to clear credentials.
         """
-        # XXX:  Does this need to check whether we have an HTTP response?
+        # ???:  Does this need to check whether we have an HTTP response?
         response.unauthorized()
 
 

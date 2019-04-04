@@ -38,7 +38,7 @@ class DummyPlugin(Implicit):
 class FaultyRolesPlugin(DummyPlugin):
 
     def getRolesForPrincipal(self, principal, request=None):
-        raise KeyError("intentional KeyError from FaultyRolesPlugin")
+        raise KeyError('intentional KeyError from FaultyRolesPlugin')
 
 
 class DummyUserEnumerator(DummyPlugin):
@@ -58,7 +58,7 @@ class DummyUserEnumerator(DummyPlugin):
         _id = self._user_id
 
         if self.identifier is not None:
-            _id = "%s%s" % (self.identifier, self._user_id)
+            _id = '%s%s' % (self.identifier, self._user_id)
 
         result = [{'id': _id, 'login': self._login,
                    'pluginid': self.PLUGINID}]
@@ -148,7 +148,7 @@ class DummyGroupEnumerator(DummyPlugin):
         _id = self._group_id
 
         if self.identifier is not None:
-            _id = "%s%s" % (self.identifier, self._group_id)
+            _id = '%s%s' % (self.identifier, self._group_id)
 
         result = [{'id': _id, 'pluginid': self.PLUGINID}]
 
@@ -253,8 +253,8 @@ class DummyNotCompetentPlugin(DummyPlugin):
 
     def isNotCompetentToAuthenticate(self, request):
         if self.type is None:
-            raise KeyError("purposeful `KeyError` by "
-                           "`isNotCompetentToAuthenticate`")
+            raise KeyError('purposeful `KeyError` by '
+                           '`isNotCompetentToAuthenticate`')
         return self.type
 
 
@@ -314,7 +314,7 @@ class FauxResponse:
 
     def exception(self):
         self._unauthorized()
-        return "An error has occurred."
+        return 'An error has occurred.'
 
     def redirect(self, *ignore, **ignored):
         pass
@@ -1047,10 +1047,10 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
-        plugins = zcuf._getOb("plugins")  # acquisition wrap
+        plugins = zcuf._getOb('plugins')  # acquisition wrap
 
         for i, decision in enumerate(decisions):
-            pid = "nc_%d" % i
+            pid = 'nc_%d' % i
             p = DummyNotCompetentPlugin(pid, decision)
             zcuf._setObject(pid, p)
             plugins.activatePlugin(INotCompetentPlugin, pid)
@@ -1700,7 +1700,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
         self.assertEqual(zcuf.getUser('zope'), None)
 
     def test_getUser_with_plugins(self):
-        # XXX: This will produce insane results when uniquifiers not present
+        # !!! This will produce insane results when uniquifiers not present
 
         from Products.PluggableAuthService.interfaces.plugins \
              import IUserEnumerationPlugin
@@ -2111,7 +2111,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
     def _NotCompetent_validate_check(self, is_top):
 
         zcuf, request = self._setup_for_authentication()
-        folder, root = request["PARENTS"][-2:]
+        folder, root = request['PARENTS'][-2:]
 
         wrapped = zcuf.__of__(is_top and root or folder)
 
@@ -2595,16 +2595,16 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
         zcuf = self._makeOne(plugins)
 
         dasher = self._makeChallengePlugin('dasher', DummyReindeerChallenger)
-        dasher.protocol = "Reindeer Games Participant"
+        dasher.protocol = 'Reindeer Games Participant'
         zcuf._setObject('dasher', dasher)
 
         dancer = self._makeChallengePlugin('dancer', DummyReindeerChallenger)
-        dancer.protocol = "Reindeer Games Participant"
+        dancer.protocol = 'Reindeer Games Participant'
         zcuf._setObject('dancer', dancer)
 
         rudolph = self._makeChallengePlugin('rudolph', DummyReindeerChallenger)
-        rudolph.protocol = ("They never let poor Rudolph..."
-                            " join in any Reindeer Games")
+        rudolph.protocol = ('They never let poor Rudolph...'
+                            ' join in any Reindeer Games')
         zcuf._setObject('rudolph', rudolph)
 
         plugins = zcuf._getOb('plugins')
@@ -2733,7 +2733,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
         self.assertEqual(zcuf._get_login_transform_method(), None)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()
 
 

@@ -277,7 +277,7 @@ class PropertiedUserTests(unittest.TestCase, IBasicUser_conformance,
         self.assertTrue(user.allowed(faux_method, ('Manager',)))
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()
 
 

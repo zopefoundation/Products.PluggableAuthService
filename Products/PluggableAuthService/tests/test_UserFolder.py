@@ -135,14 +135,14 @@ class UserFolderTests(pastc.PASTestCase):
         self.assertTrue(user.authenticate('secret', self.app.REQUEST))
 
     def testValidate(self):
-        # XXX: PAS validate ignores auth argument
+        # ???: PAS validate ignores auth argument
         self.app.REQUEST._auth = self.basic
         user = self.uf.validate(self.app.REQUEST, self.basic, ['role1'])
         self.assertNotEqual(user, None)
         self.assertEqual(user.getUserName(), 'user1')
 
     def testNotValidateWithoutAuth(self):
-        # XXX: PAS validate ignores auth argument
+        # ???: PAS validate ignores auth argument
         user = self.uf.validate(self.app.REQUEST, '', ['role1'])
         self.assertEqual(user, None)
 
@@ -154,19 +154,19 @@ class UserFolderTests(pastc.PASTestCase):
         # really should have expected success, since the user and the
         # object being checked both have the role 'role1', even though no
         # roles are passed explicitly to the userfolder validate method.
-        # XXX: PAS validate ignores auth argument
+        # ???: PAS validate ignores auth argument
         self.app.REQUEST._auth = self.basic
         user = self.uf.validate(self.app.REQUEST, self.basic)
         self.assertEqual(user.getUserName(), 'user1')
 
     def testNotValidateWithEmptyRoles(self):
-        # XXX: PAS validate ignores auth argument
+        # ???: PAS validate ignores auth argument
         self.app.REQUEST._auth = self.basic
         user = self.uf.validate(self.app.REQUEST, self.basic, [])
         self.assertEqual(user, None)
 
     def testNotValidateWithWrongRoles(self):
-        # XXX: PAS validate ignores auth argument
+        # ???: PAS validate ignores auth argument
         self.app.REQUEST._auth = self.basic
         user = self.uf.validate(self.app.REQUEST, self.basic, ['role2'])
         self.assertEqual(user, None)
@@ -192,7 +192,7 @@ class UserFolderTests(pastc.PASTestCase):
                 self.acl_users = self
                 self.__allow_groups__ = self
                 for i in range(count):
-                    self.users.append("Nobody")
+                    self.users.append('Nobody')
 
             def getUsers(self):
                 return self.users
@@ -210,7 +210,7 @@ class UserFolderTests(pastc.PASTestCase):
 
         try:
             list = tinyFolderOver.get_valid_userids()
-            assert 0, "Did not raise overflow error"
+            assert 0, 'Did not raise overflow error'
         except OverflowError:
             pass
 
@@ -218,7 +218,7 @@ class UserFolderTests(pastc.PASTestCase):
             list = tinyFolderUnder.get_valid_userids()  # noqa
             pass
         except OverflowError:
-            assert 0, "Raised overflow error erroneously"
+            assert 0, 'Raised overflow error erroneously'
 
     def test__doAddUser_with_not_yet_encrypted_passwords(self):
         # See collector #1869 && #1926
@@ -330,10 +330,10 @@ class UserEvents(pastc.PASTestCase):
         self.uf._original = self.uf.updateCredentials
         self.uf.updateCredentials = wrap
         self.assertEqual(len(self.uf._data), 0)
-        event.notify(CredentialsUpdated(self.uf.getUserById("user1"),
-                                        "testpassword"))
-        self.assertEqual(self.uf._data[0][2], "user1")
-        self.assertEqual(self.uf._data[0][3], "testpassword")
+        event.notify(CredentialsUpdated(self.uf.getUserById('user1'),
+                                        'testpassword'))
+        self.assertEqual(self.uf._data[0][2], 'user1')
+        self.assertEqual(self.uf._data[0][3], 'testpassword')
 
 
 def test_suite():

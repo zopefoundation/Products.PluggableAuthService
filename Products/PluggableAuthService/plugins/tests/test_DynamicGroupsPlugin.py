@@ -485,7 +485,7 @@ class DynamicGroupsPlugin(unittest.TestCase, IGroupsPlugin_conformance,
         self.assertTrue('ggp_effable' in groups)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()
 
 

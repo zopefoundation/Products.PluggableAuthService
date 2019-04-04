@@ -1,6 +1,8 @@
 import os
-from setuptools import setup
+
 from setuptools import find_packages
+from setuptools import setup
+
 
 NAME = 'PluggableAuthService'
 
@@ -27,32 +29,34 @@ setup(name='Products.%s' % NAME,
       description='Pluggable Zope authentication / authorization framework',
       long_description=README,
       classifiers=[
-        "Development Status :: 5 - Production/Stable",
-        "Framework :: Plone",
-        "Framework :: Zope :: 4",
-        "Intended Audience :: Developers",
-        "License :: OSI Approved :: Zope Public License",
-        "Programming Language :: Python",
-        "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 3.5",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
-        "Topic :: Software Development",
-        "Topic :: System :: Systems Administration :: Authentication/Directory",  # noqa
+        'Development Status :: 5 - Production/Stable',
+        'Framework :: Plone',
+        'Framework :: Zope :: 4',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: Zope Public License',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Topic :: Software Development',
+        'Topic :: System :: Systems Administration :: '
+        'Authentication/Directory',
         ],
       keywords='web application server zope',
-      author="Zope Foundation and Contributors",
-      author_email="zope-cmf@zope.org",
+      author='Zope Foundation and Contributors',
+      author_email='zope-cmf@zope.org',
       url='https://productspluggableauthservice.readthedocs.io',
       project_urls={
-          'Documentation': 'https://productspluggableauthservice.readthedocs.io',
+          'Documentation': ('https://productspluggableauthservice.'
+                            'readthedocs.io'),
           'Issue Tracker': ('https://github.com/zopefoundation'
                             '/Products.PluggableAuthService/issues'),
           'Sources': ('https://github.com/zopefoundation/'
                       'Products.PluggableAuthService'),
       },
-      license="ZPL 2.1 (http://www.zope.org/Resources/License/ZPL-2.1)",
+      license='ZPL 2.1 (http://www.zope.org/Resources/License/ZPL-2.1)',
       packages=find_packages(),
       include_package_data=True,
       namespace_packages=['Products'],

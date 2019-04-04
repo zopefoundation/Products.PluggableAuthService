@@ -190,7 +190,7 @@ class PluggableAuthServiceCachingTests(unittest.TestCase):
         self.assertFalse(report_item.get('entries') != firstpass_entries)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()
 
 

@@ -47,12 +47,6 @@ except ImportError:
     from sha import sha
 
 
-
-
-
-
-
-
 logger = logging.getLogger('PluggableAuthService')
 
 
@@ -253,7 +247,7 @@ class ZODBUserManager(BasePlugin, Cacheable):
     @security.protected(ManageUsers)
     def getUserInfo(self, user_id):
 
-        """ user_id -> {}
+        """ user_id -> dict
         """
         return {'user_id': user_id,
                 'login_name': self._userid_to_login[user_id],
@@ -262,7 +256,7 @@ class ZODBUserManager(BasePlugin, Cacheable):
     @security.protected(ManageUsers)
     def listUserInfo(self):
 
-        """ -> ({}, ...{})
+        """ -> (dict, ...dict)
 
         o Return one mapping per user, with the following keys:
 
@@ -334,8 +328,8 @@ class ZODBUserManager(BasePlugin, Cacheable):
         pas = self._getPAS()
         transform = pas._get_login_transform_method()
         if not transform:
-            logger.warning("PAS has a non-existing, empty or wrong "
-                           "login_transform property.")
+            logger.warning('PAS has a non-existing, empty or wrong '
+                           'login_transform property.')
             return
 
         # Make a fresh mapping, as we do not want to add or remove
@@ -346,7 +340,7 @@ class ZODBUserManager(BasePlugin, Cacheable):
         for old_login_name, user_id in self._login_to_userid.items():
             new_login_name = transform(old_login_name)
             if new_login_name in new_login_to_userid:
-                logger.error("User id %s: login name %r already taken.",
+                logger.error('User id %s: login name %r already taken.',
                              user_id, new_login_name)
                 errors.append(new_login_name)
                 if quit_on_first_error:
@@ -357,17 +351,17 @@ class ZODBUserManager(BasePlugin, Cacheable):
                 # Also, remove from the cache
                 view_name = createViewName('enumerateUsers', user_id)
                 self.ZCacheable_invalidate(view_name=view_name)
-                logger.debug("User id %s: changed login name from %r to %r.",
+                logger.debug('User id %s: changed login name from %r to %r.',
                              user_id, old_login_name, new_login_name)
 
         # If there were errors, we do not want to save any changes.
         if errors:
-            logger.error("There were %d errors when updating login names. "
-                         "quit_on_first_error was %r", len(errors),
+            logger.error('There were %d errors when updating login names. '
+                         'quit_on_first_error was %r', len(errors),
                          quit_on_first_error)
             # Make sure the exception we raise is not swallowed.
             self._dont_swallow_my_exceptions = True
-            raise ValueError("Transformed login names are not unique: %s." %
+            raise ValueError('Transformed login names are not unique: %s.' %
                              ', '.join(errors))
 
         # Make sure we did not lose any users.
@@ -424,11 +418,11 @@ class ZODBUserManager(BasePlugin, Cacheable):
                       + BasePlugin.manage_options
                       + Cacheable.manage_options)
 
-    security.declarePublic('manage_widgets')
+    security.declarePublic('manage_widgets')  # NOQA: D001
     manage_widgets = PageTemplateFile('www/zuWidgets', globals(),
                                       __name__='manage_widgets')
 
-    security.declareProtected(ManageUsers, 'manage_users')
+    security.declareProtected(ManageUsers, 'manage_users')  # NOQA: D001
     manage_users = PageTemplateFile('www/zuUsers', globals(),
                                     __name__='manage_users')
 
@@ -447,7 +441,7 @@ class ZODBUserManager(BasePlugin, Cacheable):
             if not login_name:
                 login_name = user_id
 
-            # XXX:  validate 'user_id', 'login_name' against policies?
+            # ???:  validate 'user_id', 'login_name' against policies?
 
             self.addUser(user_id, login_name, password)
 
@@ -487,7 +481,7 @@ class ZODBUserManager(BasePlugin, Cacheable):
         if not login_name:
             login_name = user_id
 
-        # XXX:  validate 'user_id', 'login_name' against policies?
+        # ???:  validate 'user_id', 'login_name' against policies?
 
         self.updateUser(user_id, login_name)
 
@@ -531,7 +525,8 @@ class ZODBUserManager(BasePlugin, Cacheable):
 
         return self.getUserInfo(user_id)
 
-    security.declareProtected(SetOwnPassword, 'manage_updatePasswordForm')
+    security.declareProtected(SetOwnPassword,  # NOQA: D001
+                              'manage_updatePasswordForm')
     manage_updatePasswordForm = PageTemplateFile(
                                     'www/zuPasswd',
                                     globals(),
@@ -553,7 +548,7 @@ class ZODBUserManager(BasePlugin, Cacheable):
             if not login_name:
                 login_name = user_id
 
-            # XXX:  validate 'user_id', 'login_name' against policies?
+            # ???:  validate 'user_id', 'login_name' against policies?
             self.updateUser(user_id, login_name)
             self.updateUserPassword(user_id, password)
 
@@ -592,7 +587,7 @@ class _ZODBUserFilter:
             to_test = self._filter_logins
 
         elif self._filter_keywords:
-            return 0    # TODO:  try using 'kw'
+            return 0    # ???:  try using 'kw'
 
         else:
             return 1    # the search is done without any criteria

@@ -52,7 +52,8 @@ class BasePlugin(SimpleItem, PropertyManager):
     _properties = (dict(id='prefix', type='string', mode='w',
                         label='Optional Prefix'),)
 
-    security.declareProtected(ManageUsers, 'manage_activateInterfacesForm')
+    security.declareProtected(ManageUsers,  # NOQA: D001
+                              'manage_activateInterfacesForm')
     manage_activateInterfacesForm = PageTemplateFile(
         'www/bpActivateInterfaces', globals(),
         __name__='manage_activateInterfacesForm')

@@ -6,7 +6,7 @@ class IPASEvent(Interface):
     """An event related to a PAS principal.
     """
 
-    principal = Attribute("The subject of the event.")
+    principal = Attribute('The subject of the event.')
 
 
 class IPrincipalCreatedEvent(IPASEvent):
