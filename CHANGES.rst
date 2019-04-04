@@ -3,6 +3,10 @@ Change Log
 
 2.0b4 (2019-04-04)
 ------------------
+- simplified Travis CI test configuration
+
+- added stricter linting configuration
+
 - added ``project_urls`` to the setup so PyPI shows more relevant links
 
 - added project badges to the README, which will show on the GitHub front page
