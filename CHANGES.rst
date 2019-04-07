@@ -3,6 +3,7 @@ Change Log
 
 2.0 (unreleased)
 ----------------
+- added the indirect dependency ``Products.Sessions`` for the CSRF-support
 
 
 2.0b4 (2019-04-04)

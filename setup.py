@@ -69,6 +69,7 @@ setup(name='Products.%s' % NAME,
           'AccessControl >= 4.0a1',
           'Products.PluginRegistry >= 1.6',
           'Products.GenericSetup >= 2.0b1',
+          'Products.Sessions',
           'Products.StandardCacheManagers',
           ],
       extras_require={
