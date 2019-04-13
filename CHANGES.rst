@@ -1,8 +1,8 @@
 Change Log
 ==========
 
-2.0 (unreleased)
-----------------
+2.0b5 (2019-04-13)
+------------------
 - fixed the "Configured PAS" factory
   (`#39 <https://github.com/zopefoundation/Products.PluggableAuthService/issues/39>`_)
 
