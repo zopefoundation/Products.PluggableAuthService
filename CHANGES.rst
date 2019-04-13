@@ -3,6 +3,9 @@ Change Log
 
 2.0 (unreleased)
 ----------------
+- fixed the "Configured PAS" factory
+  (`#39 <https://github.com/zopefoundation/Products.PluggableAuthService/issues/39>`_)
+
 - styled "Configured PAS" add dialog for the Zope 4 ZMI
   (`#38 <https://github.com/zopefoundation/Products.PluggableAuthService/issues/38>`_)
 

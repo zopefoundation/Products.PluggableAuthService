@@ -1420,14 +1420,10 @@ def addConfiguredPAS(dispatcher, base_profile, extension_profiles=(),
     pas._setObject(tool.getId(), tool)
 
     tool = pas._getOb(tool.getId())       # wrapped
-    tool.setImportContext('profile-%s' % base_profile)
-    tool.runAllImportSteps()
+    tool.runAllImportStepsFromProfile('profile-%s' % base_profile)
 
     for extension_profile in extension_profiles:
-        tool.setImportContext('profile-%s' % extension_profile)
-        tool.runAllImportSteps()
-
-    tool.setImportContext('profile-%s' % base_profile)
+        tool.runAllImportStepsFromProfile('profile-%s' % extension_profile)
 
     if create_snapshot:
         tool.createSnapshot('initial_configuration')
