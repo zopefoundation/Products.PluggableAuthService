@@ -3,6 +3,9 @@ Change Log
 
 2.0 (unreleased)
 ----------------
+- styled "Configured PAS" add dialog for the Zope 4 ZMI
+  (`#38 <https://github.com/zopefoundation/Products.PluggableAuthService/issues/38>`_)
+
 - prevent the ZMI add dialog showing in the Zope 4 ZMI
   (`#37 <https://github.com/zopefoundation/Products.PluggableAuthService/issues/37>`_)
 
