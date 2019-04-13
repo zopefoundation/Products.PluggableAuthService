@@ -3,6 +3,9 @@ Change Log
 
 2.0 (unreleased)
 ----------------
+- prevent the ZMI add dialog showing in the Zope 4 ZMI
+  (`#37 <https://github.com/zopefoundation/Products.PluggableAuthService/issues/37>`_)
+
 - added the indirect dependency ``Products.Sessions`` for the CSRF-support
 
 

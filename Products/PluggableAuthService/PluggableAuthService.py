@@ -177,6 +177,7 @@ class PluggableAuthService(Folder, Cacheable):
 
     meta_type = 'Pluggable Auth Service'
     zmi_icon = 'fa fa-users-cog'
+    zmi_show_add_dialog = False
 
     _id = id = 'acl_users'
 
