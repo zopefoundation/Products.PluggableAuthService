@@ -19,12 +19,12 @@ from .conformance import IBasicUser_conformance
 from .conformance import IPropertiedUser_conformance
 
 
-class FauxMethod:
+def faux_method(self, x):
+    """Just a faux function object with local roles defined later."""
+    return None
 
-    def __init__(self, im_self, local_roles=()):
 
-        self.im_self = im_self
-        self.__ac_local_roles__ = local_roles
+faux_method.__ac_local_roles__ = {'Group C': ('Manager', 'Owner')}
 
 
 class FauxProtected(Implicit):
@@ -183,10 +183,10 @@ class PropertiedUserTests(unittest.TestCase, IBasicUser_conformance,
         user = self._makeOne()
         user._addGroups(groups)
 
+        FauxProtected.method = faux_method
         faux_self = FauxProtected({'Group A': ('Manager',)})
-        faux_method = FauxMethod(faux_self, {'Group C': ('Manager', 'Owner')})
 
-        local_roles = user.getRolesInContext(faux_method)
+        local_roles = user.getRolesInContext(faux_self.method)
         self.assertEqual(len(local_roles), 1)
         self.assertTrue('Manager' in local_roles)
 
@@ -271,10 +271,10 @@ class PropertiedUserTests(unittest.TestCase, IBasicUser_conformance,
         user = self._makeOne()
         user._addGroups(groups)
 
+        FauxProtected.method = faux_method
         faux_self = FauxProtected({'Group A': ('Manager',)})
-        faux_method = FauxMethod(faux_self, {'Group C': ('Manager', 'Owner')})
 
-        self.assertTrue(user.allowed(faux_method, ('Manager',)))
+        self.assertTrue(user.allowed(faux_self.method, ('Manager',)))
 
 
 if __name__ == '__main__':
