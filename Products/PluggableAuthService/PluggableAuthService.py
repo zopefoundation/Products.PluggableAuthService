@@ -1330,8 +1330,8 @@ _PLUGIN_TYPE_INFO = (
     (IRolesPlugin, 'IRolesPlugin', 'roles',
      'Roles plugins determine the global roles which a user has.'),
     (IUpdatePlugin, 'IUpdatePlugin', 'update',
-     'Update plugins allow the user or the application to update '
-     'the user\'s properties.'),
+     "Update plugins allow the user or the application to update "
+     "the user's properties."),
     (IValidationPlugin, 'IValidationPlugin', 'validation',
      'Validation plugins specify allowable values for user properties '
      '(e.g., minimum password length, allowed characters, etc.)'),
