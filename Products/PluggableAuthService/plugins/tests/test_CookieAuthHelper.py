@@ -26,6 +26,8 @@ from Products.PluggableAuthService.tests.conformance import \
 from Products.PluggableAuthService.tests.conformance import \
     ICredentialsResetPlugin_conformance
 from Products.PluggableAuthService.tests.conformance import \
+    ICredentialsUpdatePlugin_conformance
+from Products.PluggableAuthService.tests.conformance import \
     ILoginPasswordHostExtractionPlugin_conformance
 from Products.PluggableAuthService.tests.test_PluggableAuthService import \
     FauxContainer
@@ -71,7 +73,8 @@ class FauxCookieResponse(FauxResponse):
 class CookieAuthHelperTests(unittest.TestCase,
                             ILoginPasswordHostExtractionPlugin_conformance,
                             IChallengePlugin_conformance,
-                            ICredentialsResetPlugin_conformance):
+                            ICredentialsResetPlugin_conformance,
+                            ICredentialsUpdatePlugin_conformance):
 
     def _getTargetClass(self):
 

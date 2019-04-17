@@ -22,13 +22,13 @@ from zope.interface import providedBy
 class IFaux(Interface):
 
     def faux_method():
-        pass
+        """faux_method"""
 
 
 class IFauxTwo(Interface):
 
     def two_method():
-        pass
+        """two_method"""
 
 
 class DummyPluginRegistry(Folder):
@@ -39,8 +39,8 @@ class DummyPluginRegistry(Folder):
     def _getInterfaceFromName(self, name):
         if name == 'IFaux':
             return IFaux
-        if name == 'IFauxTwo':
-            return IFauxTwo
+        assert name == 'IFauxTwo'
+        return IFauxTwo
 
 
 class ScriptablePluginTests(unittest.TestCase):
