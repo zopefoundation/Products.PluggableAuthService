@@ -26,22 +26,10 @@ from Products.PluggableAuthService.tests.conformance import \
     IUserEnumerationPlugin_conformance
 
 
-class DummyUser:
-
-    def __init__(self, id):
-        self._id = id
-
-    def getId(self):
-        return self._id
-
-
 class FakePAS(object):
 
     def _get_login_transform_method(self):
         return None
-
-    def applyTransform(self, value):
-        return value
 
 
 class FakeLowerCasePAS(object):
@@ -50,9 +38,6 @@ class FakeLowerCasePAS(object):
         return self.lower
 
     def lower(self, value):
-        return value.lower()
-
-    def applyTransform(self, value):
         return value.lower()
 
 

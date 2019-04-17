@@ -30,15 +30,6 @@ from Products.PluggableAuthService.tests.conformance import \
     IGroupsPlugin_conformance
 
 
-class DummyGroup:
-
-    def __init__(self, id):
-        self._id = id
-
-    def getId(self):
-        return self._id
-
-
 @adapter(IGroupCreatedEvent)
 def groupCreatedHandler(event):
     plugin = event.plugin

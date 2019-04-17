@@ -27,20 +27,7 @@ class FauxRequest:
         self._dict.update(kw)
 
     def get(self, key, default=None):
-
         return self._dict.get(key, default)
-
-    def _authUserPW(self):
-        form = self.get('form')
-        return (form.get('login'), form.get('password'))
-
-    def __getitem__(self, key):
-
-        return self._dict[key]
-
-    def __setitem__(self, key, value):
-
-        self._dict[key] = value
 
 
 class PluggableAuthServiceCachingTests(unittest.TestCase):

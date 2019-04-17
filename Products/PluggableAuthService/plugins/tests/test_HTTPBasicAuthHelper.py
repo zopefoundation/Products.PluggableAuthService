@@ -49,16 +49,10 @@ class FauxHTTPResponse:
         self.headers = {}
 
     def unauthorized(self):
-
         self._unauthorized_called = 1
 
     def setStatus(self, status, reason=None):
-
         self.status = status
-
-    def setHeader(self, name, value, literal=0):
-
-        self.headers[name] = value
 
     def addHeader(self, name, value):
         previous = self.headers.get(name)
