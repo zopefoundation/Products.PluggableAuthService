@@ -884,10 +884,10 @@ class PluggableAuthService(Folder, Cacheable):
             # this is not a method, we needn't treat it specially
             c = innerparent
 
-        elif hasattr(v, 'im_self'):
+        elif hasattr(v, '__self__'):
 
             # this is a method, we need to treat it specially
-            c = v.im_self
+            c = v.__self__
             c = aq_inner(v)
 
         # if pub's aq_parent or container is the request container, it

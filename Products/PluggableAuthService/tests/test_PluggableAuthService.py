@@ -1107,6 +1107,32 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
         self.assertEqual(n, 'index_html')
         self.assertEqual(v, published)
 
+    def test__getObjectContext_method(self):
+        """It also works with a method on the object."""
+        zcuf = self._makeOne()
+
+        rc, root, folder, object = self._makeTree()
+
+        def faux_method(self):
+            pass
+
+        FauxObject.meth = faux_method
+        local_index = FauxObject('index_html').__of__(object)
+
+        request = self._makeRequest(
+            ('folder', 'object', 'index_html', 'meth'),
+            RESPONSE=FauxResponse(),
+            PARENTS=[local_index, object, folder, root])
+
+        published = local_index.meth
+
+        a, c, n, v = zcuf._getObjectContext(published, request)
+
+        self.assertEqual(a, local_index)
+        self.assertEqual(c, published)
+        self.assertEqual(n, 'meth')
+        self.assertEqual(v, published)
+
     def test__getObjectContext_acquired_from_folder(self):
 
         zcuf = self._makeOne()
