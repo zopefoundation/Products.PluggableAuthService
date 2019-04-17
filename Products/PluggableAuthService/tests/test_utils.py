@@ -292,14 +292,3 @@ def _createHashedValue(items):
             v = v.encode('utf-8')
         hasher.update(v)
     return hasher.hexdigest()
-
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(Test_createViewName),
-        unittest.makeSuite(Test_createKeywords),
-        unittest.makeSuite(Test_getCSRFToken),
-        unittest.makeSuite(Test_checkCSRFToken),
-        unittest.makeSuite(CSRFTokenTests),
-        unittest.makeSuite(Test_csrf_only),
-    ))

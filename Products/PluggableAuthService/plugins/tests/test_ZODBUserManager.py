@@ -750,9 +750,3 @@ class ZODBUserManagerTests(unittest.TestCase,
         req.form['csrf_token'] = 'deadbeef'
         req.SESSION['_csrft_'] = 'deadbeef'
         zum.manage_removeUsers([USER_ID], REQUEST=req)
-
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(ZODBUserManagerTests),
-       ))

@@ -188,12 +188,3 @@ class PluggableAuthServiceCachingTests(unittest.TestCase):
         self.assertFalse(report_item.get('misses') != firstpass_misses)
         self.assertTrue(report_item.get('hits') > firstpass_hits)
         self.assertFalse(report_item.get('entries') != firstpass_entries)
-
-
-if __name__ == '__main__':
-    unittest.main()
-
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(PluggableAuthServiceCachingTests),))

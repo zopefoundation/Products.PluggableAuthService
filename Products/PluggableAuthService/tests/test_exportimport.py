@@ -310,10 +310,3 @@ _EMPTY_PLUGINREGISTRY_EXPORT = """\
 <plugin-registry>
 </plugin-registry>
 """
-
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(Test_exportPAS),
-        unittest.makeSuite(Test_importPAS),
-        ))

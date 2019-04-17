@@ -334,15 +334,3 @@ class UserEvents(pastc.PASTestCase):
                                         'testpassword'))
         self.assertEqual(self.uf._data[0][2], 'user1')
         self.assertEqual(self.uf._data[0][3], 'testpassword')
-
-
-def test_suite():
-    suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(UserFolderTests))
-    suite.addTest(unittest.makeSuite(UserTests))
-    suite.addTest(unittest.makeSuite(UserEvents))
-    return suite
-
-
-if __name__ == '__main__':
-    unittest.main(defaultTest='test_suite')

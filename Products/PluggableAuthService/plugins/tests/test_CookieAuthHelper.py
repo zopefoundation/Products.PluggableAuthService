@@ -237,13 +237,3 @@ class CookieAuthHelperTests(unittest.TestCase,
         request.set(helper.cookie_name, cookie_val)
 
         self.assertEqual(helper.extractCredentials(request), {})
-
-
-if __name__ == '__main__':
-    unittest.main()
-
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(CookieAuthHelperTests),
-       ))

@@ -127,13 +127,3 @@ class LocalRolePluginTestCase(unittest.TestCase, IRolesPlugin_conformance):
         user = FauxUser('some_manager').__of__(root)
 
         self.assertEqual(lrp.getRolesForPrincipal(user), ['Manager'])
-
-
-if __name__ == '__main__':
-    unittest.main()
-
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(LocalRolePluginTestCase),
-       ))

@@ -116,12 +116,3 @@ class ScriptablePluginTests(unittest.TestCase):
 
         self.assertTrue(IFaux in providedBy(scriptable_plugin))
         self.assertFalse(IFauxTwo in providedBy(scriptable_plugin))
-
-
-if __name__ == '__main__':
-    unittest.main()
-
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(ScriptablePluginTests),))

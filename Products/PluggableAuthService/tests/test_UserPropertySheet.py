@@ -207,13 +207,3 @@ class UserPropertySheetTests(unittest.TestCase, IPropertySheet_conformance):
         ups = self._makeOne('w_schema', self._SCHEMA)
 
         self._checkStockSchema(ups, values_are_none=True)
-
-
-if __name__ == '__main__':
-    unittest.main()
-
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(UserPropertySheetTests),
-       ))

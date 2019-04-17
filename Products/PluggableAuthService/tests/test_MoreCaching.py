@@ -309,12 +309,3 @@ class CachingTests(pastc.PASTestCase):
 
         groups.removePrincipalFromGroup(user_id, group_id)
         self.assertCacheStats(0, 0, 0)
-
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(CachingTests),))
-
-
-if __name__ == '__main__':
-    unittest.main(defaultTest='test_suite')

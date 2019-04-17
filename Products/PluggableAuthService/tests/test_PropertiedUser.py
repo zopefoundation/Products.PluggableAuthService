@@ -275,13 +275,3 @@ class PropertiedUserTests(unittest.TestCase, IBasicUser_conformance,
         faux_self = FauxProtected({'Group A': ('Manager',)})
 
         self.assertTrue(user.allowed(faux_self.method, ('Manager',)))
-
-
-if __name__ == '__main__':
-    unittest.main()
-
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(PropertiedUserTests),
-       ))

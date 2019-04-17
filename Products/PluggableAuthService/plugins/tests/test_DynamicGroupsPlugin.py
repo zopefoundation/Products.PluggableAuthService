@@ -483,13 +483,3 @@ class DynamicGroupsPlugin(unittest.TestCase, IGroupsPlugin_conformance,
         groups = dpg.getGroupsForPrincipal(principal, {})
         self.assertEqual(len(groups), 1)
         self.assertTrue('ggp_effable' in groups)
-
-
-if __name__ == '__main__':
-    unittest.main()
-
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(DynamicGroupsPlugin),
-       ))
