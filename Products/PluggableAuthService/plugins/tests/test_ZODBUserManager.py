@@ -377,11 +377,7 @@ class ZODBUserManagerTests(unittest.TestCase,
             self.assertTrue(info['login'] in SUBSET_LOGINS)
 
     def test_authenticateWithOldPasswords(self):
-
-        try:
-            from hashlib import sha1 as sha
-        except ImportError:
-            from sha import sha
+        from hashlib import sha1 as sha
 
         zum = self._makeOne()
 

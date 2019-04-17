@@ -276,10 +276,7 @@ class Test_csrf_only(unittest.TestCase):
 
 
 def _createHashedValue(items):
-    try:
-        from hashlib import sha1 as sha
-    except ImportError:
-        from sha import new as sha
+    from hashlib import sha1 as sha
 
     hasher = sha()
     items = list(items)
