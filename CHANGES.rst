@@ -4,6 +4,9 @@ Change Log
 2.0 (unreleased)
 ----------------
 
+- fixed usage of deprecated ``im_self``
+  (`#40 <https://github.com/zopefoundation/Products.PluggableAuthService/pull/40>`_
+
 
 2.0b5 (2019-04-13)
 ------------------
