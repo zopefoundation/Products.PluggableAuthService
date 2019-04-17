@@ -10,6 +10,7 @@ Change Log
 
 2.0b5 (2019-04-13)
 ------------------
+
 - fixed the "Configured PAS" factory
   (`#39 <https://github.com/zopefoundation/Products.PluggableAuthService/issues/39>`_)
 
@@ -24,6 +25,7 @@ Change Log
 
 2.0b4 (2019-04-04)
 ------------------
+
 - simplified Travis CI test configuration
 
 - added stricter linting configuration
@@ -38,6 +40,7 @@ Change Log
 
 2.0b3 (2019-03-29)
 ------------------
+
 - Fixed Dynamic Groups Plugin ZMI view
   (`#33 <https://github.com/zopefoundation/Products.PluggableAuthService/issues/33>`_)
 
