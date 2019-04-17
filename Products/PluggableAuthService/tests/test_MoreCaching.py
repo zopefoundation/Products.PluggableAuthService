@@ -12,8 +12,6 @@
 #
 ##############################################################################
 
-import unittest
-
 from AccessControl.Permissions import view as View
 
 from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin

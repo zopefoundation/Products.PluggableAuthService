@@ -13,7 +13,6 @@
 ##############################################################################
 """ Unit tests for GenericSetup-based export / import of PAS.
 """
-import unittest
 from csv import reader
 
 from six import StringIO
