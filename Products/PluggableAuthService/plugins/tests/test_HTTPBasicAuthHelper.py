@@ -49,16 +49,10 @@ class FauxHTTPResponse:
         self.headers = {}
 
     def unauthorized(self):
-
         self._unauthorized_called = 1
 
     def setStatus(self, status, reason=None):
-
         self.status = status
-
-    def setHeader(self, name, value, literal=0):
-
-        self.headers[name] = value
 
     def addHeader(self, name, value):
         previous = self.headers.get(name)
@@ -152,13 +146,3 @@ class HTTPBasicAuthHelperTests(unittest.TestCase,
         self.assertFalse(response._unauthorized_called)
         helper.resetCredentials(request, response)
         self.assertTrue(response._unauthorized_called)
-
-
-if __name__ == '__main__':
-    unittest.main()
-
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(HTTPBasicAuthHelperTests),
-    ))

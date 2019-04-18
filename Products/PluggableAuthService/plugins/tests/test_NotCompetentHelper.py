@@ -21,12 +21,6 @@ from Products.PluggableAuthService.tests.test_PluggableAuthService import \
     PluggableAuthServiceTests
 
 
-class _WrapPluggableAuthServiceTests(PluggableAuthServiceTests):
-    """auxiliary wrapper class to allow for instantiation."""
-
-    def __init__(self, *args, **kw): pass
-
-
 class NotCompetentHelperTests(unittest.TestCase,
                               INotCompetentPlugin_conformance):
 
@@ -46,6 +40,13 @@ class NotCompetentHelperTests(unittest.TestCase,
         #  with two pas instances: one at the root set up for
         #  authentications, the other further down with a
         #  `NotCompetent_byRoles` plugin.
+
+        class _WrapPluggableAuthServiceTests(PluggableAuthServiceTests):
+            """auxiliary wrapper class to allow for instantiation."""
+
+            def __init__(self, *args, **kw):
+                pass
+
         past = _WrapPluggableAuthServiceTests()
         root_pas, request = past._setup_for_authentication()
         request.roles = UNSPECIFIED_ROLES
@@ -106,12 +107,3 @@ class NotCompetentHelperTests(unittest.TestCase,
         plugin, request = self.plugin, self.request
         plugin.manage_changeProperties(roles=('Manager',))
         self.assertEqual(plugin.isNotCompetentToAuthenticate(request), False)
-
-
-if __name__ == '__main__':
-    unittest.main()
-
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(NotCompetentHelperTests),))

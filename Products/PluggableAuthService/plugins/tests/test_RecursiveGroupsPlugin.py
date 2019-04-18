@@ -183,12 +183,3 @@ class RecursiveGroupsPluginTests(unittest.TestCase, IGroupsPlugin_conformance):
         self.assertEqual(len(groups), 2)
         self.assertTrue('dummy:group1' in groups)
         self.assertTrue('other_dummy:group2' in groups)
-
-
-if __name__ == '__main__':
-    unittest.main()
-
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(RecursiveGroupsPluginTests),))

@@ -13,7 +13,6 @@
 ##############################################################################
 """ Unit tests for GenericSetup-based export / import of PAS.
 """
-import unittest
 from csv import reader
 
 from six import StringIO
@@ -310,10 +309,3 @@ _EMPTY_PLUGINREGISTRY_EXPORT = """\
 <plugin-registry>
 </plugin-registry>
 """
-
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(Test_exportPAS),
-        unittest.makeSuite(Test_importPAS),
-        ))

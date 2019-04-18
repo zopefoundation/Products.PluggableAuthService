@@ -4,7 +4,7 @@ Change Log
 2.0b7 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Drop unused ``.utils.allTests`` method.
 
 
 2.0b6 (2019-04-17)

@@ -26,22 +26,10 @@ from Products.PluggableAuthService.tests.conformance import \
     IUserEnumerationPlugin_conformance
 
 
-class DummyUser:
-
-    def __init__(self, id):
-        self._id = id
-
-    def getId(self):
-        return self._id
-
-
 class FakePAS(object):
 
     def _get_login_transform_method(self):
         return None
-
-    def applyTransform(self, value):
-        return value
 
 
 class FakeLowerCasePAS(object):
@@ -50,9 +38,6 @@ class FakeLowerCasePAS(object):
         return self.lower
 
     def lower(self, value):
-        return value.lower()
-
-    def applyTransform(self, value):
         return value.lower()
 
 
@@ -392,11 +377,7 @@ class ZODBUserManagerTests(unittest.TestCase,
             self.assertTrue(info['login'] in SUBSET_LOGINS)
 
     def test_authenticateWithOldPasswords(self):
-
-        try:
-            from hashlib import sha1 as sha
-        except ImportError:
-            from sha import sha
+        from hashlib import sha1 as sha
 
         zum = self._makeOne()
 
@@ -750,9 +731,3 @@ class ZODBUserManagerTests(unittest.TestCase,
         req.form['csrf_token'] = 'deadbeef'
         req.SESSION['_csrft_'] = 'deadbeef'
         zum.manage_removeUsers([USER_ID], REQUEST=req)
-
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(ZODBUserManagerTests),
-       ))

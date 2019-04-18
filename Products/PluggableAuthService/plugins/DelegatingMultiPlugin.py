@@ -34,8 +34,6 @@ from Products.PluggableAuthService.interfaces.plugins import \
     ICredentialsUpdatePlugin
 from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin
 from Products.PluggableAuthService.interfaces.plugins import IRolesPlugin
-from Products.PluggableAuthService.interfaces.plugins import \
-    IUserEnumerationPlugin
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.utils import classImplements
 
@@ -215,7 +213,7 @@ class DelegatingMultiPlugin(Folder, BasePlugin):
 
 
 classImplements(DelegatingMultiPlugin, IDelegatingMultiPlugin,
-                IAuthenticationPlugin, IUserEnumerationPlugin, IRolesPlugin,
+                IAuthenticationPlugin, IRolesPlugin,
                 ICredentialsUpdatePlugin, ICredentialsResetPlugin,
                 IPropertiesPlugin)
 

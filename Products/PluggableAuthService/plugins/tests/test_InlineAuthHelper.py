@@ -107,12 +107,3 @@ class InlineAuthHelperTests(unittest.TestCase,
         self.assertEqual(response.body, 'Should never see this.')
         helper.challenge(request, response)
         self.assertEqual(response.body, 'Overridden')
-
-
-if __name__ == '__main__':
-    unittest.main()
-
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(InlineAuthHelperTests),))

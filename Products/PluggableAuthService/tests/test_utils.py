@@ -276,10 +276,7 @@ class Test_csrf_only(unittest.TestCase):
 
 
 def _createHashedValue(items):
-    try:
-        from hashlib import sha1 as sha
-    except ImportError:
-        from sha import new as sha
+    from hashlib import sha1 as sha
 
     hasher = sha()
     items = list(items)
@@ -292,14 +289,3 @@ def _createHashedValue(items):
             v = v.encode('utf-8')
         hasher.update(v)
     return hasher.hexdigest()
-
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(Test_createViewName),
-        unittest.makeSuite(Test_createKeywords),
-        unittest.makeSuite(Test_getCSRFToken),
-        unittest.makeSuite(Test_checkCSRFToken),
-        unittest.makeSuite(CSRFTokenTests),
-        unittest.makeSuite(Test_csrf_only),
-    ))

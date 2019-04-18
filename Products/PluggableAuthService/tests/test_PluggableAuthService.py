@@ -2757,13 +2757,3 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
         self.assertEqual(zcuf._get_login_transform_method(), None)
         zcuf.login_transform = 'nonexisting'
         self.assertEqual(zcuf._get_login_transform_method(), None)
-
-
-if __name__ == '__main__':
-    unittest.main()
-
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(PluggableAuthServiceTests),
-       ))

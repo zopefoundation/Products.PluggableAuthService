@@ -35,24 +35,6 @@ class IExtractionPlugin_conformance:
         self.assertTrue(IExtractionPlugin.__name__ in listed)
 
 
-class ILoginPasswordExtractionPlugin_conformance:
-
-    def test_ILoginPasswordExtractionPlugin_conformance(self):
-
-        from Products.PluggableAuthService.interfaces.plugins \
-            import ILoginPasswordExtractionPlugin
-
-        verifyClass(ILoginPasswordExtractionPlugin, self._getTargetClass())
-
-    def test_ILoginPasswordExtractionPlugin_listInterfaces(self):
-
-        from Products.PluggableAuthService.interfaces.plugins \
-            import ILoginPasswordExtractionPlugin
-
-        listed = self._makeOne().listInterfaces()
-        self.assertTrue(ILoginPasswordExtractionPlugin.__name__ in listed)
-
-
 class ILoginPasswordHostExtractionPlugin_conformance:
 
     def test_ILoginPasswordHostExtractionPlugin_conformance(self):

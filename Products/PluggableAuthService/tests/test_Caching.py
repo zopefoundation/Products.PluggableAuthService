@@ -27,20 +27,7 @@ class FauxRequest:
         self._dict.update(kw)
 
     def get(self, key, default=None):
-
         return self._dict.get(key, default)
-
-    def _authUserPW(self):
-        form = self.get('form')
-        return (form.get('login'), form.get('password'))
-
-    def __getitem__(self, key):
-
-        return self._dict[key]
-
-    def __setitem__(self, key, value):
-
-        self._dict[key] = value
 
 
 class PluggableAuthServiceCachingTests(unittest.TestCase):
@@ -143,7 +130,7 @@ class PluggableAuthServiceCachingTests(unittest.TestCase):
 
         # Now add a user and make sure it's there
         zcuf._doAddUser('testlogin', 'secret', ['Member', 'Anonymous'], [])
-        self.assertFalse(zcuf.getUser('testlogin') is None)
+        self.assertIsNotNone(zcuf.getUser('testlogin'))
 
         # Then we activate caching for the PAS instance itself
         zcuf.ZCacheable_setManagerId(rcm.getId())
@@ -160,7 +147,7 @@ class PluggableAuthServiceCachingTests(unittest.TestCase):
 
         # First check: The cache must be empty
         report = rcm.getCacheReport()
-        self.assertTrue(len(report) == 0)
+        self.assertEqual(len(report), 0)
 
         # The user is being requested once. At this point there must be one
         # entry for the PAS instance. The number of "misses" must be >0 because
@@ -168,13 +155,13 @@ class PluggableAuthServiceCachingTests(unittest.TestCase):
         # be zero.
         zcuf.getUser('testlogin')
         report = rcm.getCacheReport()
-        self.assertTrue(len(report) == 1)
+        self.assertEqual(len(report), 1)
         report_item = report[0]
         firstpass_misses = report_item.get('misses')
         firstpass_hits = report_item.get('hits')
         firstpass_entries = report_item.get('entries')
-        self.assertTrue(firstpass_misses > 0)
-        self.assertTrue(firstpass_hits == 0)
+        self.assertGreater(firstpass_misses, 0)
+        self.assertEqual(firstpass_hits, 0)
 
         # The user is requested again. This request should produce a cache hit,
         # so the number of "misses" must have stayed the same as after the
@@ -185,15 +172,6 @@ class PluggableAuthServiceCachingTests(unittest.TestCase):
         report = rcm.getCacheReport()
         self.assertTrue(len(report) == 1)
         report_item = report[0]
-        self.assertFalse(report_item.get('misses') != firstpass_misses)
-        self.assertTrue(report_item.get('hits') > firstpass_hits)
-        self.assertFalse(report_item.get('entries') != firstpass_entries)
-
-
-if __name__ == '__main__':
-    unittest.main()
-
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(PluggableAuthServiceCachingTests),))
+        self.assertEqual(report_item.get('misses'), firstpass_misses)
+        self.assertGreater(report_item.get('hits'), firstpass_hits)
+        self.assertEqual(report_item.get('entries'), firstpass_entries)

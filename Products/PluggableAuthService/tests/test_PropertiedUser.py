@@ -21,7 +21,6 @@ from .conformance import IPropertiedUser_conformance
 
 def faux_method(self, x):
     """Just a faux function object with local roles defined later."""
-    return None
 
 
 faux_method.__ac_local_roles__ = {'Group C': ('Manager', 'Owner')}
@@ -275,13 +274,3 @@ class PropertiedUserTests(unittest.TestCase, IBasicUser_conformance,
         faux_self = FauxProtected({'Group A': ('Manager',)})
 
         self.assertTrue(user.allowed(faux_self.method, ('Manager',)))
-
-
-if __name__ == '__main__':
-    unittest.main()
-
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(PropertiedUserTests),
-       ))

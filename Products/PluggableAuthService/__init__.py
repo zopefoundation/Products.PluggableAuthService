@@ -49,7 +49,6 @@ from .plugins import SessionAuthHelper as SAH
 from .plugins import ZODBGroupManager
 from .plugins import ZODBRoleManager
 from .plugins import ZODBUserManager
-from .utils import allTests  # noqa
 
 
 registerMultiPlugin(HBAH.HTTPBasicAuthHelper.meta_type)

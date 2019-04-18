@@ -79,17 +79,23 @@ class UserFolderTests(pastc.PASTestCase):
     def testGetBadUserById(self):
         self.assertEqual(self.uf.getUserById('user2'), None)
 
-    def NOTIMPLEMENTED_testGetUsers(self):
+    @unittest.expectedFailure
+    def testGetUsers(self):
+        # Fails because of NotImplementedError
         users = self.uf.getUsers()
         self.assertTrue(users)
         self.assertEqual(users[0].getUserName(), 'user1')
 
-    def NOTIMPLEMENTED_testGetUserNames(self):
+    @unittest.expectedFailure
+    def testGetUserNames(self):
+        # Fails because of NotImplementedError
         names = self.uf.getUserNames()
         self.assertTrue(names)
         self.assertEqual(names[0], 'user1')
 
-    def NOTIMPLEMENTED_testIdentify(self):
+    @unittest.expectedFailure
+    def testIdentify(self):
+        # Fails because of NotImplementedError
         name, password = self.uf.identify(self.basic)
         self.assertEqual(name, 'user1')
         self.assertEqual(password, 'secret')
@@ -130,7 +136,9 @@ class UserFolderTests(pastc.PASTestCase):
         self.folder.manage_addLocalRoles('user1', ['role2'])
         self.assertTrue(user.has_permission(AddFolders, self.folder))
 
-    def NOTIMPLEMENTED_testAuthenticate(self):
+    @unittest.expectedFailure
+    def testAuthenticate(self):
+        # Fails because of NotImplementedError
         user = self.uf.getUser('user1')
         self.assertTrue(user.authenticate('secret', self.app.REQUEST))
 
@@ -208,17 +216,13 @@ class UserFolderTests(pastc.PASTestCase):
         assert len(tinyFolderOver.user_names()) == 20
         assert len(tinyFolderUnder.user_names()) == 10
 
-        try:
-            list = tinyFolderOver.get_valid_userids()
-            assert 0, 'Did not raise overflow error'
-        except OverflowError:
-            pass
+        with self.assertRaises(OverflowError):
+            tinyFolderOver.get_valid_userids()
 
         try:
-            list = tinyFolderUnder.get_valid_userids()  # noqa
-            pass
+            tinyFolderUnder.get_valid_userids()
         except OverflowError:
-            assert 0, 'Raised overflow error erroneously'
+            self.fail('Raised overflow error erroneously')
 
     def test__doAddUser_with_not_yet_encrypted_passwords(self):
         # See collector #1869 && #1926
@@ -282,7 +286,9 @@ class UserTests(pastc.PASTestCase):
         f = self.user
         self.assertEqual(f.getId(), f.getUserName())
 
-    def NOTIMPLEMENTED_testGetPassword(self):
+    @unittest.expectedFailure
+    def testGetPassword(self):
+        # fails because of NotImplementedError
         f = self.user
         self.assertEqual(f._getPassword(), '123')
 
@@ -334,15 +340,3 @@ class UserEvents(pastc.PASTestCase):
                                         'testpassword'))
         self.assertEqual(self.uf._data[0][2], 'user1')
         self.assertEqual(self.uf._data[0][3], 'testpassword')
-
-
-def test_suite():
-    suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(UserFolderTests))
-    suite.addTest(unittest.makeSuite(UserTests))
-    suite.addTest(unittest.makeSuite(UserEvents))
-    return suite
-
-
-if __name__ == '__main__':
-    unittest.main(defaultTest='test_suite')

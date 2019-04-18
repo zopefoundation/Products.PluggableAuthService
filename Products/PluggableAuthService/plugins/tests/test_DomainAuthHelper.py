@@ -275,10 +275,6 @@ class IPFilterTests(unittest.TestCase):
         self.assertFalse(filter('192.168.0.13'))
 
 
-if __name__ == '__main__':
-    unittest.main()
-
-
 def test_suite():
     tests = (unittest.makeSuite(DomainAuthHelperTests),
              unittest.makeSuite(EqualsFilterTests),
