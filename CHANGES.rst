@@ -1,7 +1,13 @@
 Change Log
 ==========
 
-1.12.0 (unreleased)
+1.11.3 (unreleased)
+-------------------
+
+- Nothing changed yet.
+
+
+1.11.2 (2018-11-23)
 -------------------
 
 - Add new events to be able to notify when a principal is added to
