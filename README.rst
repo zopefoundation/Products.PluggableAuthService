@@ -2,22 +2,22 @@ Products.PluggableAuthService
 =============================
 
 .. image:: https://api.travis-ci.org/zopefoundation/Products.PluggableAuthService.svg?branch=master
-   :target: https://travis-ci.org/zopefoundation/Products.PluggableAuthService
+        :target: https://travis-ci.org/zopefoundation/Products.PluggableAuthService
 
 .. image:: https://coveralls.io/repos/github/zopefoundation/Products.PluggableAuthService/badge.svg
-   :target: https://coveralls.io/github/zopefoundation/Products.PluggableAuthService
+        :target: https://coveralls.io/github/zopefoundation/Products.PluggableAuthService
 
 .. image:: https://readthedocs.org/projects/productspluggableauthservice/badge/?version=latest
-   :target: https://productspluggableauthservice.readthedocs.io/
-   :alt: Documentation Status
+        :target: https://productspluggableauthservice.readthedocs.io/
+        :alt: Documentation Status
 
 .. image:: https://img.shields.io/pypi/v/Products.PluggableAuthService.svg
-   :target: https://pypi.org/project/Products.PluggableAuthService/
-   :alt: Latest stable release on PyPI
+        :target: https://pypi.org/project/Products.PluggableAuthService/
+        :alt: Latest stable release on PyPI
 
 .. image:: https://img.shields.io/pypi/pyversions/Products.PluggableAuthService.svg
-   :target: https://pypi.org/project/Products.PluggableAuthService/
-   :alt: Stable release supported Python versions`
+        :target: https://pypi.org/project/Products.PluggableAuthService/
+        :alt: Stable release supported Python versions`
 
 This product defines a fully-pluggable user folder, intended for
 use in all Zope sites.
