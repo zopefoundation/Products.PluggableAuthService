@@ -9,6 +9,7 @@
 bin/
 build/
 coverage.xml
+default.profraw
 develop-eggs/
 develop/
 dist/
