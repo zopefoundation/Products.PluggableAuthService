@@ -85,7 +85,7 @@ class ZODBGroupManager( BasePlugin ):
         try:
             principal = pas.getUserById(principal_id)
         except AttributeError:
-			# Otherwise get group object
+	    # Otherwise get group object
             principal = pas.getGroupById(principal_id)
         return principal
 
