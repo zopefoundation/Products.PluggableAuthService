@@ -82,9 +82,10 @@ class ZODBGroupManager( BasePlugin ):
         pas = self._getPAS()
         # As we don't know if principal is user or group at this point
         # try to get user object first
-        principal = pas.getUserById(principal_id)
-        # Otherwise get group object
-        if not principal:
+        try:
+            principal = pas.getUserById(principal_id)
+        except AttributeError:
+			# Otherwise get group object
             principal = pas.getGroupById(principal_id)
         return principal
 
