@@ -32,6 +32,8 @@ from Products.PluggableAuthService.interfaces.plugins \
     import IGroupEnumerationPlugin
 from Products.PluggableAuthService.interfaces.plugins \
     import IGroupsPlugin
+from Products.PluggableAuthService.interfaces.plugins \
+    import IUserEnumerationPlugin
 
 from Products.PluggableAuthService.events import PrincipalAddedToGroup
 from Products.PluggableAuthService.events import PrincipalRemovedFromGroup
@@ -77,17 +79,20 @@ class ZODBGroupManager( BasePlugin ):
         self._principal_groups = OOBTree()
 
     def _get_principal(self, principal_id):
-        """ Get principal object from id"""
-        # Get PAS instance
+        """ Get principal object from id where possible"""
         pas = self._getPAS()
-        # As we don't know if principal is user or group at this point
-        # try to get user object first
-        try:
-            principal = pas.getUserById(principal_id)
-        except AttributeError:
-	    # Otherwise get group object
-            principal = pas.getGroupById(principal_id)
-        return principal
+        if IUserEnumerationPlugin.providedBy(pas):
+            return pas.getUserById(principal_id)
+        else:
+            return principal_id
+
+    def _get_group(self, group_id):
+        """ Get group object from id where possible"""
+        pas = self._getPAS()
+        if IGroupEnumerationPlugin.providedBy(pas):
+            return pas.getGroupById(group_id)
+        else:
+            return group_id
 
     #
     #   IGroupEnumerationPlugin implementation
@@ -298,11 +303,9 @@ class ZODBGroupManager( BasePlugin ):
         if not already:
             new = current + ( group_id, )
             self._principal_groups[ principal_id ] = new
-            self._invalidatePrincipalCache( principal_id )
-
-            # Notify event
             notify(PrincipalAddedToGroup(self._get_principal(principal_id),
-                   self._getPAS().getGroupById(group_id)))
+                   self._get_group(group_id)))
+            self._invalidatePrincipalCache( principal_id )
 
         return not already
 
@@ -327,11 +330,9 @@ class ZODBGroupManager( BasePlugin ):
 
         if already:
             self._principal_groups[ principal_id ] = new
-            self._invalidatePrincipalCache( principal_id )
-
-            # Notify event
             notify(PrincipalRemovedFromGroup(self._get_principal(principal_id),
-                   self._getPAS().getGroupById(group_id)))
+                   self._get_group(group_id)))
+            self._invalidatePrincipalCache( principal_id )
 
         return already
 
