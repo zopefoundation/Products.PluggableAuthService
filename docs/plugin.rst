@@ -6,11 +6,11 @@ Plugin Types
 PluggableAuthService defines the following plugin types:
 
   - Authentication plugins identify the user based on data in the request.
-    
-    o Each PluggableAuthService must contain at least one authentication
+  
+    - Each PluggableAuthService must contain at least one authentication
       plugin.
 
-    o The PluggableAuthService defines an ordered set of authentication
+    - The PluggableAuthService defines an ordered set of authentication
       plugins, and queries them in order for each request.  The first plugin
       to recognize a user returns the user, or raises an exception
       (e.g., for password mismatches).  If no plugin returns a user,
@@ -25,10 +25,10 @@ PluggableAuthService defines the following plugin types:
   - Decorator plugins add propertysheets to a user, based on request
     data or on other data sources.
 
-    o These sources might include application data from the ZODB or
+    - These sources might include application data from the ZODB or
       from SQL, etc.
 
-    o They might also pull in user data from LDAP, ActiveDirectory,
+    - They might also pull in user data from LDAP, ActiveDirectory,
       passwd files, etc.
 
   - Group plugins add groups to the list of groups to which the user

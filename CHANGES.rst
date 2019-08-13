@@ -4,6 +4,8 @@ Change Log
 2.1b1 (unreleased)
 ------------------
 
+- Fix formatting in "Plugin Types" documentation.
+
 
 2.0 (2019-05-10)
 ----------------
