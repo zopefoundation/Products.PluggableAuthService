@@ -6,7 +6,7 @@
     tal:replace="structure here/manage_form_title">Form Title</h2>
 
 <p class="form-help">
-The plugin prevents this user folder to shaddow higher level authentications with given roles.
+The plugin prevents this user folder to shadow higher level authentications with given roles.
 </p>
 
 <form action="manage_addNotCompetent_byRoles" method="post"
