@@ -108,7 +108,7 @@ class NotCompetent_byRoles(NotCompetentBase):
     """`INotCompetentPlugin` to prevent authentication shadowing by roles.
     """
 
-    meta_type = 'prevent authentication shaddowing by roles'
+    meta_type = 'prevent authentication shadowing by roles'
 
     _properties = (
         PropertyManager._properties +

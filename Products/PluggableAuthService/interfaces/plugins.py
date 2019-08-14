@@ -510,7 +510,7 @@ class INotCompetentPlugin(Interface):
     """check whether this user folder is not competent to authenticate.
 
     Never used for a top level user folder;
-    primarily used to prevent shaddowing of authentications by higher level
+    primarily used to prevent shadowing of authentications by higher level
     user folders.
     """
 

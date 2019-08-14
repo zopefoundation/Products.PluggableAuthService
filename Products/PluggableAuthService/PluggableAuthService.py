@@ -1357,7 +1357,7 @@ _PLUGIN_TYPE_INFO = (
      'Not-Competent plugins check whether this user folder should not '
      'authenticate the current request. '
      'These plugins are not used for a top level user folder. '
-     'They are typically used to prevent shaddowing of authentications by '
+     'They are typically used to prevent shadowing of authentications by '
      'higher level user folders.'))
 
 
