@@ -41,6 +41,19 @@ PluggableAuthService defines the following plugin types:
     properties (particularly on login ID and password).
 
 
+.. note::
+
+  When using more than one plugin for authentication, only one
+  challenge can be sent to the user - the one from the plugin at the
+  top position of active **Challenge Plugins** configuration screen in
+  the ZMI.
+
+  Nevertheless, you can instantiate the **Challenge Protocol Chooser
+  Plugin**. Then you can assign, for instance, **Cookie Auth** for
+  requests from the browser, and **HTTP Basic Auth** for requests via
+  XML-RPC.
+
+
 Plugin Registration
 -------------------
 PluggableAuthService plugins are configured via the ZMI, or alternatively
