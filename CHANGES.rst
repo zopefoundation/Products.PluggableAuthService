@@ -6,6 +6,10 @@ Change Log
 
 - Fix formatting in "Plugin Types" documentation.
 
+- Fixed error assigning roles in ``manage_roles`` page in ZMI.
+  See issues `#43 <https://github.com/zopefoundation/Products.PluggableAuthService/issues/43>`_
+  and `#51 <https://github.com/zopefoundation/Products.PluggableAuthService/issues/51>`_.
+
 
 2.0 (2019-05-10)
 ----------------
