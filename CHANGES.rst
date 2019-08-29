@@ -1,8 +1,8 @@
 Change Log
 ==========
 
-2.1b1 (unreleased)
-------------------
+2.1 (2019-08-29)
+----------------
 
 - Fix formatting in "Plugin Types" documentation.
 
