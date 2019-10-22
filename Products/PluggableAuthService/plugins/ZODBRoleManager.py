@@ -106,7 +106,7 @@ class ZODBRoleManager(BasePlugin):
         """
         result = list(self._principal_roles.get(principal.getId(), ()))
 
-        getGroups = getattr(principal, 'getGroups', lambda x: ())
+        getGroups = getattr(principal, 'getGroups', lambda: ())
         for group_id in getGroups():
             result.extend(self._principal_roles.get(group_id, ()))
 
