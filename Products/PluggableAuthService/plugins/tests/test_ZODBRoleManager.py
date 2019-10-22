@@ -13,6 +13,7 @@
 ##############################################################################
 import unittest
 
+from AccessControl.users import SpecialUser
 from zExceptions import Forbidden
 
 from Products.PluggableAuthService.plugins.tests.helpers import DummyUser
@@ -51,6 +52,21 @@ class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance,
         self.assertEqual(len(zrm.enumerateRoles()), 0)
 
         user = DummyUser('userid')
+        roles = zrm.getRolesForPrincipal(user)
+        self.assertEqual(len(roles), 0)
+
+    def test_zope_user(self):
+        """It does not break `getRolesForPrincipal` in case of a zope user
+
+        which has no `getGroups`.
+        """
+        zrm = self._makeOne()
+
+        self.assertEqual(len(zrm.listRoleIds()), 0)
+        self.assertEqual(len(zrm.enumerateRoles()), 0)
+
+        # This user has no `getGroups()` as the typical PAS user.
+        user = SpecialUser('admin', 'admin', ['Manager'], None)
         roles = zrm.getRolesForPrincipal(user)
         self.assertEqual(len(roles), 0)
 
