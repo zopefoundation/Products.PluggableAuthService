@@ -1,8 +1,8 @@
 Change Log
 ==========
 
-2.2 (unreleased)
-----------------
+2.1.1 (2019-10-23)
+------------------
 
 - Fix bug in ``getRolesForPrincipal`` for non PAS user.
 
