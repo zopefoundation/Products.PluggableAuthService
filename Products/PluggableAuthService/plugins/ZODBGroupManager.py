@@ -32,8 +32,6 @@ from Products.PluggableAuthService.interfaces.plugins \
     import IGroupEnumerationPlugin
 from Products.PluggableAuthService.interfaces.plugins \
     import IGroupsPlugin
-from Products.PluggableAuthService.interfaces.plugins \
-    import IUserEnumerationPlugin
 
 from Products.PluggableAuthService.events import PrincipalAddedToGroup
 from Products.PluggableAuthService.events import PrincipalRemovedFromGroup
@@ -78,21 +76,6 @@ class ZODBGroupManager( BasePlugin ):
         self._groups = OOBTree()
         self._principal_groups = OOBTree()
 
-    def _get_principal(self, principal_id):
-        """ Get principal object from id where possible"""
-        pas = self._getPAS()
-        if IUserEnumerationPlugin.providedBy(pas):
-            return pas.getUserById(principal_id)
-        else:
-            return principal_id
-
-    def _get_group(self, group_id):
-        """ Get group object from id where possible"""
-        pas = self._getPAS()
-        if IGroupEnumerationPlugin.providedBy(pas):
-            return pas.getGroupById(group_id)
-        else:
-            return group_id
 
     #
     #   IGroupEnumerationPlugin implementation
@@ -303,8 +286,7 @@ class ZODBGroupManager( BasePlugin ):
         if not already:
             new = current + ( group_id, )
             self._principal_groups[ principal_id ] = new
-            notify(PrincipalAddedToGroup(self._get_principal(principal_id),
-                   self._get_group(group_id)))
+            notify(PrincipalAddedToGroup(principal_id, group_id))
             self._invalidatePrincipalCache( principal_id )
 
         return not already
@@ -330,8 +312,7 @@ class ZODBGroupManager( BasePlugin ):
 
         if already:
             self._principal_groups[ principal_id ] = new
-            notify(PrincipalRemovedFromGroup(self._get_principal(principal_id),
-                   self._get_group(group_id)))
+            notify(PrincipalRemovedFromGroup(principal_id, group_id))
             self._invalidatePrincipalCache( principal_id )
 
         return already
