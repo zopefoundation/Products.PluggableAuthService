@@ -33,6 +33,8 @@ from Products.PluggableAuthService.interfaces.plugins \
 from Products.PluggableAuthService.interfaces.plugins \
     import IGroupsPlugin
 
+from Products.PluggableAuthService.events import PrincipalAddedToGroup
+from Products.PluggableAuthService.events import PrincipalRemovedFromGroup
 from Products.PluggableAuthService.permissions import ManageGroups
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.utils import classImplements
@@ -284,6 +286,7 @@ class ZODBGroupManager( BasePlugin ):
         if not already:
             new = current + ( group_id, )
             self._principal_groups[ principal_id ] = new
+            notify(PrincipalAddedToGroup(principal_id, group_id))
             self._invalidatePrincipalCache( principal_id )
 
         return not already
@@ -309,6 +312,7 @@ class ZODBGroupManager( BasePlugin ):
 
         if already:
             self._principal_groups[ principal_id ] = new
+            notify(PrincipalRemovedFromGroup(principal_id, group_id))
             self._invalidatePrincipalCache( principal_id )
 
         return already
