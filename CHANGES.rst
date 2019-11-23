@@ -4,8 +4,10 @@ Change Log
 2.2 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
+- Add new events to be able to notify when a principal is added to
+  or removed from a group. Notify these events when principals are 
+  added or removed to a group in ZODBGroupManager
+  (`#17 <https://github.com/zopefoundation/Products.PluggableAuthService/issues/17>`_)
 
 2.1.1 (2019-10-23)
 ------------------

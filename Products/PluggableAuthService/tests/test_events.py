@@ -189,5 +189,66 @@ class GroupDeletedTests(unittest.TestCase, ConformsToIPASEvent):
         verifyObject(IGroupDeletedEvent, self._makeOne())
 
 
+class PrincipalAddedToGroupTests(unittest.TestCase, ConformsToIPASEvent):
+
+    def _getTargetClass(self):
+        from Products.PluggableAuthService.events import PrincipalAddedToGroup
+        return PrincipalAddedToGroup
+
+    def _makeOne(self, principal=None, group_id=None):
+        if principal is None:
+            principal = DummyPrincipal()
+        if group_id is None:
+            group_id = 'testgroup'
+        return self._getTargetClass()(principal, group_id)
+
+    def test_class_conforms_to_IPrincipalAddedToGroupEvent(self):
+        from zope.interface.verify import verifyClass
+        from Products.PluggableAuthService.interfaces.events \
+            import IPrincipalAddedToGroupEvent
+        verifyClass(IPrincipalAddedToGroupEvent, self._getTargetClass())
+
+    def test_instance_conforms_to_IPrincipalAddedToGroupEvent(self):
+        from zope.interface.verify import verifyObject
+        from Products.PluggableAuthService.interfaces.events \
+            import IPrincipalAddedToGroupEvent
+        verifyObject(IPrincipalAddedToGroupEvent, self._makeOne())
+
+    def test_instantiation(self):
+        evt = self._makeOne(group_id='foo')
+        self.assertEqual(evt.group_id, 'foo')
+
+
+class PrincipalRemovedFromGroupTests(unittest.TestCase, ConformsToIPASEvent):
+
+    def _getTargetClass(self):
+        from Products.PluggableAuthService.events import \
+            PrincipalRemovedFromGroup
+        return PrincipalRemovedFromGroup
+
+    def _makeOne(self, principal=None, group_id=None):
+        if principal is None:
+            principal = DummyPrincipal()
+        if group_id is None:
+            group_id = 'testgroup'
+        return self._getTargetClass()(principal, group_id)
+
+    def test_class_conforms_to_IPrincipalRemovedFromGroupEvent(self):
+        from zope.interface.verify import verifyClass
+        from Products.PluggableAuthService.interfaces.events \
+            import IPrincipalRemovedFromGroupEvent
+        verifyClass(IPrincipalRemovedFromGroupEvent, self._getTargetClass())
+
+    def test_instance_conforms_to_IPrincipalRemovedFromGroupEvent(self):
+        from zope.interface.verify import verifyObject
+        from Products.PluggableAuthService.interfaces.events \
+            import IPrincipalRemovedFromGroupEvent
+        verifyObject(IPrincipalRemovedFromGroupEvent, self._makeOne())
+
+    def test_instantiation(self):
+        evt = self._makeOne(group_id='foo')
+        self.assertEqual(evt.group_id, 'foo')
+
+
 class DummyGroup(object):
     pass
