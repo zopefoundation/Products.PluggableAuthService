@@ -11,13 +11,13 @@ class IPASEvent(Interface):
 class IPrincipalAddedToGroupEvent(IPASEvent):
     """A principal has been added to a group.
     """
-    group = Attribute("Group to which principal is being added")
+    group_id = Attribute("Group ID to which principal is being added")
 
 
 class IPrincipalRemovedFromGroupEvent(IPASEvent):
     """A principal has been removed from a group.
     """
-    group = Attribute("Group from which principal is being removed")
+    group_id = Attribute("Group ID from which principal is being removed")
 
 
 class IPrincipalCreatedEvent(IPASEvent):

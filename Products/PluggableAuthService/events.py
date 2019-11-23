@@ -48,17 +48,17 @@ class PASEvent(object):
 @implementer(IPrincipalAddedToGroupEvent)
 class PrincipalAddedToGroup(PASEvent):
 
-    def __init__(self, principal, group):
-        super(PrincipalAddedToGroup, self).__init__(principal)
-        self.group = group
+    def __init__(self, principal_id, group_id):
+        super(PrincipalAddedToGroup, self).__init__(principal_id)
+        self.group_id = group_id
 
 
 @implementer(IPrincipalRemovedFromGroupEvent)
 class PrincipalRemovedFromGroup(PASEvent):
 
-    def __init__(self, principal, group):
-        super(PrincipalRemovedFromGroup, self).__init__(principal)
-        self.group = group
+    def __init__(self, principal_id, group_id):
+        super(PrincipalRemovedFromGroup, self).__init__(principal_id)
+        self.group_id = group_id
 
 
 class PrincipalCreated(PASEvent):
