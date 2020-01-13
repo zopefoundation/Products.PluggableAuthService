@@ -1,8 +1,8 @@
 Change Log
 ==========
 
-2.3 (unreleased)
-----------------
+2.2.1 (2020-01-13)
+------------------
 
 - Fix broken ICredentialsUpdatedEvent event handler call to updateCredentials.
   (`#59 <https://github.com/zopefoundation/Products.PluggableAuthService/issues/59>`_)
