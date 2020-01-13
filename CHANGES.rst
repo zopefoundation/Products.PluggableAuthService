@@ -5,7 +5,7 @@ Change Log
 ----------------
 
 - Fix broken ICredentialsUpdatedEvent event handler call to updateCredentials.
-  (`#17 <https://github.com/zopefoundation/Products.PluggableAuthService/issues/59>`_)
+  (`#59 <https://github.com/zopefoundation/Products.PluggableAuthService/issues/59>`_)
 
 
 2.2 (2019-11-23)
