@@ -119,7 +119,7 @@ class Test_exportPAS(_TestBase):
         filename, text, content_type = context._wrote[1]
         self.assertEqual(filename, 'PAS/.properties')
         self.assertEqual(content_type, 'text/plain')
-        lines = filter(None, [x.strip() for x in text.splitlines()])
+        lines = [_f for _f in [x.strip() for x in text.splitlines()] if _f]
         lines = sorted(lines)
         self.assertEqual(len(lines), 3)
         self.assertEqual(lines[0], '[DEFAULT]')
@@ -166,7 +166,7 @@ class Test_exportPAS(_TestBase):
         filename, text, content_type = context._wrote[1]
         self.assertEqual(filename, 'PAS/.properties')
         self.assertEqual(content_type, 'text/plain')
-        lines = filter(None, [x.strip() for x in text.splitlines()])
+        lines = [_f for _f in [x.strip() for x in text.splitlines()] if _f]
         lines = sorted(lines)
         self.assertEqual(len(lines), 3)
         self.assertEqual(lines[0], '[DEFAULT]')

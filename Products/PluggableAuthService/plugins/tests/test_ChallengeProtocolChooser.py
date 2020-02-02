@@ -170,6 +170,29 @@ class ChallengeProtocolChooserTestHelper(object):
         self.assertEqual(status, response.getOutput().split(b'\r\n')[0])
 
 
+class ChallengeProtocolChooserFunctionalTests(
+        Testing.ZopeTestCase.Functional,
+        Testing.ZopeTestCase.ZopeTestCase,
+        ChallengeProtocolChooserTestHelper):
+    """ Test basic functionality """
+
+    def setUp(self):
+        super(ChallengeProtocolChooserFunctionalTests, self).setUp()
+        self.setup_user_folder()
+        self.setup_cookie_auth()
+        self.setup_http_auth()
+        self.setup_sniffer()
+
+    def test_manage_updateProtocolMapping(self):
+        # Make sure the mapped request types contain
+        # valid data under Python 2 and Python 3
+        pas = self.app.test_folder_1_.acl_users
+        plugin = pas.chooser
+
+        for key, value in plugin._map.items():
+            self.assertTrue(isinstance(value, (list, tuple, set)))
+
+
 class ChallengeProtocolChooserBasicAuthTests(
         Testing.ZopeTestCase.Functional,
         Testing.ZopeTestCase.ZopeTestCase,

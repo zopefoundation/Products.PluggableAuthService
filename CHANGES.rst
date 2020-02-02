@@ -4,7 +4,8 @@ Change Log
 2.3 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Replace all ``filter(None...)`` expressions which break under Python 3
+  (`#63 <https://github.com/zopefoundation/Products.PluggableAuthService/issues/63>`_)
 
 
 2.2.1 (2020-01-13)

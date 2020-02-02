@@ -436,7 +436,7 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
     def manage_removeGroups(self, group_ids, RESPONSE=None, REQUEST=None):
         """ Remove one or more groups via the ZMI.
         """
-        group_ids = filter(None, group_ids)
+        group_ids = [_f for _f in group_ids if _f]
 
         if not group_ids:
             message = 'no+groups+selected'

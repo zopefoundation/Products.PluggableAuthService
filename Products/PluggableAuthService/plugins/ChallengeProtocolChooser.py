@@ -160,7 +160,7 @@ class ChallengeProtocolChooser(BasePlugin):
         """ Update mapping of Request Type to Protocols
         """
         for key, value in mapping.items():
-            value = filter(None, value)
+            value = [_f for _f in value if _f]
             if not value:
                 if key in self._map:
                     del self._map[key]

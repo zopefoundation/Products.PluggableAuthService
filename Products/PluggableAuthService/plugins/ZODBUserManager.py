@@ -497,7 +497,7 @@ class ZODBUserManager(BasePlugin, Cacheable):
     def manage_removeUsers(self, user_ids, RESPONSE=None, REQUEST=None):
         """ Remove one or more users via the ZMI.
         """
-        user_ids = filter(None, user_ids)
+        user_ids = [_f for _f in user_ids if _f]
 
         if not user_ids:
             message = 'no+users+selected'

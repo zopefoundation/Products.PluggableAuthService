@@ -392,7 +392,7 @@ class ZODBRoleManager(BasePlugin):
         remove it from the roles in the root of the site (at the
         bottom of the Security tab at manage_access).
         """
-        role_ids = filter(None, role_ids)
+        role_ids = [_f for _f in role_ids if _f]
 
         if not role_ids:
             message = 'no+roles+selected'

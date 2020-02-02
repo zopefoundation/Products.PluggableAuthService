@@ -398,7 +398,7 @@ class ChallengeProtocolChooserExportImport(SimpleXMLExportImport):
         for mapping in root.getElementsByTagName('mapping'):
             label = self._getNodeAttr(mapping, 'label', None)
             protocols = self._getNodeAttr(mapping, 'protocols', '').split(',')
-            self.context._map[label] = tuple(filter(None, protocols))
+            self.context._map[label] = tuple([_f for _f in protocols if _f])
 
     def _getExportInfo(self):
         from Products.PluggableAuthService.plugins.ChallengeProtocolChooser \
