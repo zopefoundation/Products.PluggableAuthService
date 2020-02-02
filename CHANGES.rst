@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-2.3 (unreleased)
+2.3 (2020-02-02)
 ----------------
 
 - Replace all ``filter(None...)`` expressions which break under Python 3
