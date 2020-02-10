@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-2.4 (unreleased)
+2.4 (2020-02-09)
 ----------------
 
 - no longer rely on ``ZServer`` for any WebDAV-related functionality.
