@@ -19,7 +19,6 @@ import six
 
 import Testing.ZopeTestCase
 
-from Products.PluggableAuthService import HAVE_ZSERVER
 from Products.PluggableAuthService.tests.conformance import \
     IChallengeProtocolChooser_conformance
 
@@ -225,7 +224,6 @@ class ChallengeProtocolChooserBasicAuthTests(
         self.assertStatus(response, b'HTTP/1.1 200 OK')
         self.assertIn('Access Granted', str(response))
 
-    @unittest.skipIf(not HAVE_ZSERVER, 'WebDAV requires ZServer')
     def test_WebDAV_unauthorized(self):
         # Now a PROPFIND request, simulating a WebDAV client. Anonymous user
         # should be challenged with a 401 response status:
@@ -238,7 +236,6 @@ class ChallengeProtocolChooserBasicAuthTests(
             request_method='GET')
         self.assertStatus(response, b'HTTP/1.1 401 Unauthorized')
 
-    @unittest.skipIf(not HAVE_ZSERVER, 'WebDAV requires ZServer')
     def test_WebDAV_authorized(self):
         # And with the right credentials the request should succeed:
         response = self.publish('/{0.folder_name}/test_script'.format(self),
@@ -292,7 +289,6 @@ class ChallengeProtocolChooserCookieAuthTests(
         response = self.publish('/{0.folder_name}/test_script'.format(self))
         self.assertStatus(response, b'HTTP/1.1 302 Found')
 
-    @unittest.skipIf(not HAVE_ZSERVER, 'WebDAV requires ZServer')
     def test_WebDAV_unauthorized(self):
         # And the same for a WebDAV request:
         response = self.publish('/{0.folder_name}/test_script'.format(self),
@@ -346,7 +342,6 @@ class ChallengeProtocolChooserCookieAuthTypeSnifferTests(
         response = self.publish('/{0.folder_name}/test_script'.format(self))
         self.assertStatus(response, b'HTTP/1.1 302 Found')
 
-    @unittest.skipIf(not HAVE_ZSERVER, 'WebDAV requires ZServer')
     def test_WebDAV_unauthorized(self):
         # A WebDAV request should result in a 401 response status:
         response = self.publish('/{0.folder_name}/test_script'.format(self),

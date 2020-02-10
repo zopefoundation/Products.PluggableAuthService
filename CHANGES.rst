@@ -4,6 +4,9 @@ Change Log
 2.4 (unreleased)
 ----------------
 
+- no longer rely on ``ZServer`` for any WebDAV-related functionality.
+  (`#64 <https://github.com/zopefoundation/Products.PluggableAuthService/issues/64>`_)
+
 
 2.3 (2020-02-02)
 ----------------

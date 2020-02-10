@@ -98,30 +98,25 @@ classImplements(RequestTypeSniffer, IRequestTypeSnifferPlugin,
 
 InitializeClass(RequestTypeSniffer)
 
-if HAVE_ZSERVER:
-    # Most of the sniffing code below has been inspired by
-    # similar tests found in BaseRequest, HTTPRequest and ZServer
-    def webdavSniffer(request):
-        dav_src = request.get('WEBDAV_SOURCE_PORT', None)
-        method = request.get('REQUEST_METHOD', 'GET').upper()
-        path_info = request.get('PATH_INFO', '')
 
-        if dav_src:
-            return True
+# Most of the sniffing code below has been inspired by
+# similar tests found in BaseRequest, HTTPRequest and ZServer
+def webdavSniffer(request):
+    dav_src = request.get('WEBDAV_SOURCE_PORT', None)
+    method = request.get('REQUEST_METHOD', 'GET').upper()
+    path_info = request.get('PATH_INFO', '')
 
-        if method not in ('GET', 'POST'):
-            return True
+    if dav_src:
+        return True
 
-        if method in ('GET',) and path_info.endswith('manage_DAVget'):
-            return True
+    if request.maybe_webdav_client and method not in ('GET', 'POST'):
+        return True
 
-    registerSniffer(IWebDAVRequest, webdavSniffer)
+    if method in ('GET',) and path_info.endswith('manage_DAVget'):
+        return True
 
-    def ftpSniffer(request):
-        if isinstance(request, FTPRequest):
-            return True
 
-    registerSniffer(IFTPRequest, ftpSniffer)
+registerSniffer(IWebDAVRequest, webdavSniffer)
 
 
 def xmlrpcSniffer(request):
@@ -135,15 +130,20 @@ def xmlrpcSniffer(request):
 registerSniffer(IXMLRPCRequest, xmlrpcSniffer)
 
 
+if HAVE_ZSERVER:
+    def ftpSniffer(request):
+        if isinstance(request, FTPRequest):
+            return True
+
+    registerSniffer(IFTPRequest, ftpSniffer)
+else:
+    ftpSniffer = None
+
+
 def browserSniffer(request):
     # If it's none of the above, it's very likely a browser request.
-    if xmlrpcSniffer(request):
-        return False
-    elif not HAVE_ZSERVER:
-        return True
-
-    for sniffer in (webdavSniffer, ftpSniffer):
-        if sniffer(request):
+    for sniffer in (xmlrpcSniffer, webdavSniffer, ftpSniffer):
+        if sniffer is not None and sniffer(request):
             return False
 
     return True
