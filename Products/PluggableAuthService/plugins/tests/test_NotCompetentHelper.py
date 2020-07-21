@@ -15,8 +15,8 @@ import unittest
 
 from ZPublisher.BaseRequest import UNSPECIFIED_ROLES
 
-from Products.PluggableAuthService.tests.conformance import INotCompetentPlugin_conformance  # NOQA
-from Products.PluggableAuthService.tests.test_PluggableAuthService import PluggableAuthServiceTests  # NOQA
+from ...tests.conformance import INotCompetentPlugin_conformance
+from ...tests.test_PluggableAuthService import PluggableAuthServiceTests
 
 
 class NotCompetentHelperTests(unittest.TestCase,
@@ -24,7 +24,7 @@ class NotCompetentHelperTests(unittest.TestCase,
 
     def _getTargetClass(self):
 
-        from Products.PluggableAuthService.plugins.NotCompetentHelper import NotCompetent_byRoles  # NOQA
+        from ...plugins.NotCompetentHelper import NotCompetent_byRoles
 
         return NotCompetent_byRoles
 

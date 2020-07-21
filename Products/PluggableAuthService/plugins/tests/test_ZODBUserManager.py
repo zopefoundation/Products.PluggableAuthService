@@ -16,10 +16,10 @@ import unittest
 from AccessControl.AuthEncoding import pw_encrypt
 from zExceptions import Forbidden
 
-from Products.PluggableAuthService.plugins.tests.helpers import makeRequestAndResponse  # NOQA
-from Products.PluggableAuthService.tests.conformance import IAuthenticationPlugin_conformance  # NOQA
-from Products.PluggableAuthService.tests.conformance import IUserAdderPlugin_conformance  # NOQA
-from Products.PluggableAuthService.tests.conformance import IUserEnumerationPlugin_conformance  # NOQA
+from ...plugins.tests.helpers import makeRequestAndResponse
+from ...tests.conformance import IAuthenticationPlugin_conformance
+from ...tests.conformance import IUserAdderPlugin_conformance
+from ...tests.conformance import IUserEnumerationPlugin_conformance
 
 
 class FakePAS(object):
@@ -44,7 +44,7 @@ class ZODBUserManagerTests(unittest.TestCase,
 
     def _getTargetClass(self):
 
-        from Products.PluggableAuthService.plugins.ZODBUserManager import ZODBUserManager  # NOQA
+        from ...plugins.ZODBUserManager import ZODBUserManager
 
         return ZODBUserManager
 
@@ -158,7 +158,7 @@ class ZODBUserManagerTests(unittest.TestCase,
 
     def test_enumerateUsers_no_criteria(self):
 
-        from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
+        from ...tests.test_PluggableAuthService import FauxRoot
 
         root = FauxRoot()
         zum = self._makeOne(id='no_crit').__of__(root)
@@ -187,7 +187,7 @@ class ZODBUserManagerTests(unittest.TestCase,
 
     def test_enumerateUsers_exact(self):
 
-        from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
+        from ...tests.test_PluggableAuthService import FauxRoot
 
         root = FauxRoot()
         zum = self._makeOne(id='exact').__of__(root)
@@ -210,7 +210,7 @@ class ZODBUserManagerTests(unittest.TestCase,
 
     def test_enumerateUsers_partial(self):
 
-        from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
+        from ...tests.test_PluggableAuthService import FauxRoot
 
         root = FauxRoot()
         zum = self._makeOne(id='partial').__of__(root)
@@ -255,7 +255,7 @@ class ZODBUserManagerTests(unittest.TestCase,
 
     def test_enumerateUsers_other_criteria(self):
 
-        from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
+        from ...tests.test_PluggableAuthService import FauxRoot
 
         root = FauxRoot()
         zum = self._makeOne(id='partial').__of__(root)
@@ -272,7 +272,7 @@ class ZODBUserManagerTests(unittest.TestCase,
 
     def test_enumerateUsers_unicode(self):
 
-        from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
+        from ...tests.test_PluggableAuthService import FauxRoot
 
         root = FauxRoot()
         zum = self._makeOne(id='partial').__of__(root)
@@ -288,7 +288,7 @@ class ZODBUserManagerTests(unittest.TestCase,
 
     def test_enumerateUsers_exact_nonesuch(self):
 
-        from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
+        from ...tests.test_PluggableAuthService import FauxRoot
 
         root = FauxRoot()
         zum = self._makeOne(id='exact_nonesuch').__of__(root)
@@ -303,7 +303,7 @@ class ZODBUserManagerTests(unittest.TestCase,
 
     def test_enumerateUsers_multiple_ids(self):
 
-        from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
+        from ...tests.test_PluggableAuthService import FauxRoot
 
         root = FauxRoot()
         zum = self._makeOne(id='partial').__of__(root)
@@ -332,7 +332,7 @@ class ZODBUserManagerTests(unittest.TestCase,
 
     def test_enumerateUsers_multiple_logins(self):
 
-        from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
+        from ...tests.test_PluggableAuthService import FauxRoot
 
         root = FauxRoot()
         zum = self._makeOne(id='partial').__of__(root)

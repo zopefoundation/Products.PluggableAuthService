@@ -30,14 +30,14 @@ from zope.interface import Interface
 
 from Products.PageTemplates.Expressions import getEngine
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-from Products.PluggableAuthService.events import GroupCreated
-from Products.PluggableAuthService.interfaces.plugins import IGroupEnumerationPlugin  # NOQA
-from Products.PluggableAuthService.interfaces.plugins import IGroupsPlugin
-from Products.PluggableAuthService.permissions import ManageGroups
-from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PluggableAuthService.utils import classImplements
-from Products.PluggableAuthService.utils import createViewName
-from Products.PluggableAuthService.utils import csrf_only
+from ..events import GroupCreated
+from ..interfaces.plugins import IGroupEnumerationPlugin
+from ..interfaces.plugins import IGroupsPlugin
+from ..permissions import ManageGroups
+from ..plugins.BasePlugin import BasePlugin
+from ..utils import classImplements
+from ..utils import createViewName
+from ..utils import csrf_only
 
 
 class IDynamicGroupsPlugin(Interface):

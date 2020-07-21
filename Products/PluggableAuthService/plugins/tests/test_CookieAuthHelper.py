@@ -22,15 +22,15 @@ import unittest
 import six
 from six.moves.urllib.parse import quote
 
-from Products.PluggableAuthService.tests.conformance import IChallengePlugin_conformance  # NOQA
-from Products.PluggableAuthService.tests.conformance import ICredentialsResetPlugin_conformance  # NOQA
-from Products.PluggableAuthService.tests.conformance import ICredentialsUpdatePlugin_conformance  # NOQA
-from Products.PluggableAuthService.tests.conformance import ILoginPasswordHostExtractionPlugin_conformance  # NOQA
-from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxContainer  # NOQA
-from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxObject  # NOQA
-from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRequest  # NOQA
-from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxResponse  # NOQA
-from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
+from ...tests.conformance import IChallengePlugin_conformance
+from ...tests.conformance import ICredentialsResetPlugin_conformance
+from ...tests.conformance import ICredentialsUpdatePlugin_conformance
+from ...tests.conformance import ILoginPasswordHostExtractionPlugin_conformance
+from ...tests.test_PluggableAuthService import FauxContainer
+from ...tests.test_PluggableAuthService import FauxObject  
+from ...tests.test_PluggableAuthService import FauxRequest 
+from ...tests.test_PluggableAuthService import FauxResponse
+from ...tests.test_PluggableAuthService import FauxRoot
 
 
 class FauxSettableRequest(FauxRequest):
@@ -70,7 +70,7 @@ class CookieAuthHelperTests(unittest.TestCase,
 
     def _getTargetClass(self):
 
-        from Products.PluggableAuthService.plugins.CookieAuthHelper import CookieAuthHelper  # NOQA
+        from ...plugins.CookieAuthHelper import CookieAuthHelper
 
         return CookieAuthHelper
 

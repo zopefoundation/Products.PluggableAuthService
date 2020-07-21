@@ -15,9 +15,9 @@
 """
 import unittest
 
-from Products.PluggableAuthService.tests.conformance import IGroupEnumerationPlugin_conformance  # NOQA
-from Products.PluggableAuthService.tests.conformance import IGroupsPlugin_conformance  # NOQA
-from Products.PluggableAuthService.tests.utils import _setUpDefaultTraversable
+from ...tests.conformance import IGroupEnumerationPlugin_conformance
+from ...tests.conformance import IGroupsPlugin_conformance
+from ...tests.utils import _setUpDefaultTraversable
 
 
 class FauxScript:
@@ -48,7 +48,7 @@ class DynamicGroupsPlugin(unittest.TestCase, IGroupsPlugin_conformance,
 
     def _getTargetClass(self):
 
-        from Products.PluggableAuthService.plugins.DynamicGroupsPlugin import DynamicGroupsPlugin  # NOQA
+        from ...plugins.DynamicGroupsPlugin import DynamicGroupsPlugin
 
         return DynamicGroupsPlugin
 
@@ -214,7 +214,7 @@ class DynamicGroupsPlugin(unittest.TestCase, IGroupsPlugin_conformance,
 
     def test_enumerateGroups_all(self):
 
-        from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
+        from ...tests.test_PluggableAuthService import FauxRoot
 
         root = FauxRoot()
         dpg = self._makeOne('enumerating').__of__(root)
@@ -235,7 +235,7 @@ class DynamicGroupsPlugin(unittest.TestCase, IGroupsPlugin_conformance,
 
     def test_enumerateGroups_exact_list(self):
 
-        from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
+        from ...tests.test_PluggableAuthService import FauxRoot
 
         root = FauxRoot()
         dpg = self._makeOne('enumerating').__of__(root)
@@ -257,7 +257,7 @@ class DynamicGroupsPlugin(unittest.TestCase, IGroupsPlugin_conformance,
 
     def test_enumerateGroups_exact_one(self):
 
-        from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
+        from ...tests.test_PluggableAuthService import FauxRoot
 
         root = FauxRoot()
         dpg = self._makeOne('enumerating').__of__(root)
@@ -289,7 +289,7 @@ class DynamicGroupsPlugin(unittest.TestCase, IGroupsPlugin_conformance,
     def test_enumerateGroups_exact_miss(self):
         # See https://bugs.launchpad.net/zope-pas/+bug/585365
 
-        from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
+        from ...tests.test_PluggableAuthService import FauxRoot
 
         root = FauxRoot()
         dpg = self._makeOne('enumerating').__of__(root)
@@ -304,7 +304,7 @@ class DynamicGroupsPlugin(unittest.TestCase, IGroupsPlugin_conformance,
 
     def test_enumerateGroups_skip_inactive(self):
 
-        from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
+        from ...tests.test_PluggableAuthService import FauxRoot
 
         root = FauxRoot()
         dpg = self._makeOne('enumerating').__of__(root)
@@ -417,7 +417,7 @@ class DynamicGroupsPlugin(unittest.TestCase, IGroupsPlugin_conformance,
 
     def test_enumerateGroups_matching_with_optional_prefix(self):
 
-        from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
+        from ...tests.test_PluggableAuthService import FauxRoot
 
         root = FauxRoot()
         dpg = self._makeOne('enumerating').__of__(root)
@@ -440,7 +440,7 @@ class DynamicGroupsPlugin(unittest.TestCase, IGroupsPlugin_conformance,
 
     def test_enumerateGroups_enumerating_with_optional_prefix(self):
 
-        from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
+        from ...tests.test_PluggableAuthService import FauxRoot
 
         root = FauxRoot()
         dpg = self._makeOne('enumerating').__of__(root)

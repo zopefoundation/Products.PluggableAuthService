@@ -13,9 +13,9 @@
 ##############################################################################
 import unittest
 
-from Products.PluggableAuthService.tests.conformance import IChallengePlugin_conformance  # NOQA
-from Products.PluggableAuthService.tests.conformance import ICredentialsResetPlugin_conformance  # NOQA
-from Products.PluggableAuthService.tests.conformance import ILoginPasswordHostExtractionPlugin_conformance  # NOQA
+from ...tests.conformance import IChallengePlugin_conformance
+from ...tests.conformance import ICredentialsResetPlugin_conformance
+from ...tests.conformance import ILoginPasswordHostExtractionPlugin_conformance
 
 
 class FauxHTTPRequest:
@@ -69,7 +69,7 @@ class HTTPBasicAuthHelperTests(unittest.TestCase,
 
     def _getTargetClass(self):
 
-        from Products.PluggableAuthService.plugins.HTTPBasicAuthHelper import HTTPBasicAuthHelper  # NOQA
+        from ...plugins.HTTPBasicAuthHelper import HTTPBasicAuthHelper
 
         return HTTPBasicAuthHelper
 

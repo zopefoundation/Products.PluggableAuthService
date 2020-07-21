@@ -38,7 +38,7 @@ class PluggableAuthServiceCachingTests(unittest.TestCase):
 
     def _getTargetClass(self):
 
-        from Products.PluggableAuthService.PluggableAuthService import PluggableAuthService  # NOQA
+        from ..PluggableAuthService import PluggableAuthService
 
         return PluggableAuthService
 
@@ -56,7 +56,7 @@ class PluggableAuthServiceCachingTests(unittest.TestCase):
 
     def _makePlugins(self, plugin_type_info=None):
 
-        from Products.PluggableAuthService.PluggableAuthService import _PLUGIN_TYPE_INFO  # NOQA
+        from ..PluggableAuthService import _PLUGIN_TYPE_INFO
         from Products.PluginRegistry.PluginRegistry import PluginRegistry
 
         if plugin_type_info is None:

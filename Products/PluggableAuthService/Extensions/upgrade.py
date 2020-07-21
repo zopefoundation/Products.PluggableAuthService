@@ -48,14 +48,14 @@ def _replaceUserFolder(self, RESPONSE=None):
     """
     from Acquisition import aq_base
 
-    from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin  # NOQA
-    from Products.PluggableAuthService.interfaces.plugins import IRoleAssignerPlugin  # NOQA
-    from Products.PluggableAuthService.interfaces.plugins import IRoleEnumerationPlugin  # NOQA
-    from Products.PluggableAuthService.interfaces.plugins import IRolesPlugin
-    from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # NOQA
-    from Products.PluggableAuthService.PluggableAuthService import PluggableAuthService  # NOQA
-    from Products.PluggableAuthService.plugins.ZODBRoleManager import ZODBRoleManager  # NOQA
-    from Products.PluggableAuthService.plugins.ZODBUserManager import ZODBUserManager  # NOQA
+    from .interfaces.plugins import IAuthenticationPlugin
+    from .interfaces.plugins import IRoleAssignerPlugin
+    from .interfaces.plugins import IRoleEnumerationPlugin
+    from .interfaces.plugins import IRolesPlugin
+    from .interfaces.plugins import IUserEnumerationPlugin
+    from .PluggableAuthService import PluggableAuthService
+    from .plugins.ZODBRoleManager import ZODBRoleManager
+    from .plugins.ZODBUserManager import ZODBUserManager
 
     if getattr(aq_base(self), '__allow_groups__', None):
         if self.__allow_groups__.__class__ is PluggableAuthService:

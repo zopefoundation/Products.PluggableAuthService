@@ -19,11 +19,11 @@ from AccessControl.SecurityInfo import ClassSecurityInfo
 from zope.interface import Interface
 
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-from Products.PluggableAuthService.interfaces.plugins import IChallengePlugin
-from Products.PluggableAuthService.interfaces.plugins import ICredentialsResetPlugin  # NOQA
-from Products.PluggableAuthService.interfaces.plugins import ILoginPasswordHostExtractionPlugin  # NOQA
-from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PluggableAuthService.utils import classImplements
+from ..interfaces.plugins import IChallengePlugin
+from ..interfaces.plugins import ICredentialsResetPlugin
+from ..interfaces.plugins import ILoginPasswordHostExtractionPlugin
+from ..plugins.BasePlugin import BasePlugin
+from ..utils import classImplements
 
 
 manage_addHTTPBasicAuthHelperForm = PageTemplateFile(

@@ -11,7 +11,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxContainer  # NOQA
+from ...tests.test_PluggableAuthService import FauxContainer
 
 
 class FauxPAS(FauxContainer):

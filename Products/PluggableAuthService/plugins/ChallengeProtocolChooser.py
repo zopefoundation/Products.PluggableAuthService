@@ -20,15 +20,15 @@ from BTrees.OOBTree import OOBTree
 from zope.interface import Interface
 
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-from Products.PluggableAuthService.interfaces.plugins import IChallengePlugin
-from Products.PluggableAuthService.interfaces.plugins import IChallengeProtocolChooser  # NOQA
-from Products.PluggableAuthService.interfaces.plugins import IRequestTypeSniffer  # NOQA
-from Products.PluggableAuthService.interfaces.request import IBrowserRequest
-from Products.PluggableAuthService.interfaces.request import IFTPRequest
-from Products.PluggableAuthService.interfaces.request import IWebDAVRequest
-from Products.PluggableAuthService.interfaces.request import IXMLRPCRequest
-from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PluggableAuthService.utils import classImplements
+from ..interfaces.plugins import IChallengePlugin
+from ..interfaces.plugins import IChallengeProtocolChooser
+from ..interfaces.plugins import IRequestTypeSniffer
+from ..interfaces.request import IBrowserRequest
+from ..interfaces.request import IFTPRequest
+from ..interfaces.request import IWebDAVRequest
+from ..interfaces.request import IXMLRPCRequest
+from ..plugins.BasePlugin import BasePlugin
+from ..utils import classImplements
 
 
 class IChallengeProtocolChooserPlugin(Interface):

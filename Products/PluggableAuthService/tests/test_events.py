@@ -55,13 +55,13 @@ class PrincipalCreatedTests(unittest.TestCase, ConformsToIPASEvent):
     def test_class_conforms_to_IPrincipalCreatedEvent(self):
         from zope.interface.verify import verifyClass
 
-        from Products.PluggableAuthService.interfaces.events import IPrincipalCreatedEvent  # NOQA
+        from ..interfaces.events import IPrincipalCreatedEvent
         verifyClass(IPrincipalCreatedEvent, self._getTargetClass())
 
     def test_instance_conforms_to_IPrincipalCreatedEvent(self):
         from zope.interface.verify import verifyObject
 
-        from Products.PluggableAuthService.interfaces.events import IPrincipalCreatedEvent  # NOQA
+        from ..interfaces.events import IPrincipalCreatedEvent
         verifyObject(IPrincipalCreatedEvent, self._makeOne())
 
 
@@ -79,13 +79,13 @@ class PrincipalDeletedTests(unittest.TestCase, ConformsToIPASEvent):
     def test_class_conforms_to_IPrincipalDeletedEvent(self):
         from zope.interface.verify import verifyClass
 
-        from Products.PluggableAuthService.interfaces.events import IPrincipalDeletedEvent  # NOQA
+        from ..interfaces.events import IPrincipalDeletedEvent
         verifyClass(IPrincipalDeletedEvent, self._getTargetClass())
 
     def test_instance_conforms_to_IPrincipalDeletedEvent(self):
         from zope.interface.verify import verifyObject
 
-        from Products.PluggableAuthService.interfaces.events import IPrincipalDeletedEvent  # NOQA
+        from ..interfaces.events import IPrincipalDeletedEvent
         verifyObject(IPrincipalDeletedEvent, self._makeOne())
 
 
@@ -103,13 +103,13 @@ class CredentialsUpdatedTests(unittest.TestCase, ConformsToIPASEvent):
     def test_class_conforms_to_ICredentialsUpdatedEvent(self):
         from zope.interface.verify import verifyClass
 
-        from Products.PluggableAuthService.interfaces.events import ICredentialsUpdatedEvent  # NOQA
+        from ..interfaces.events import ICredentialsUpdatedEvent
         verifyClass(ICredentialsUpdatedEvent, self._getTargetClass())
 
     def test_instance_conforms_to_ICredentialsUpdatedEvent(self):
         from zope.interface.verify import verifyObject
 
-        from Products.PluggableAuthService.interfaces.events import ICredentialsUpdatedEvent  # NOQA
+        from ..interfaces.events import ICredentialsUpdatedEvent
         verifyObject(ICredentialsUpdatedEvent, self._makeOne())
 
 
@@ -129,13 +129,13 @@ class PropertiesUpdatedTests(unittest.TestCase, ConformsToIPASEvent):
     def test_class_conforms_to_IPropertiesUpdatedEvent(self):
         from zope.interface.verify import verifyClass
 
-        from Products.PluggableAuthService.interfaces.events import IPropertiesUpdatedEvent  # NOQA
+        from ..interfaces.events import IPropertiesUpdatedEvent
         verifyClass(IPropertiesUpdatedEvent, self._getTargetClass())
 
     def test_instance_conforms_to_IPropertiesUpdatedEvent(self):
         from zope.interface.verify import verifyObject
 
-        from Products.PluggableAuthService.interfaces.events import IPropertiesUpdatedEvent  # NOQA
+        from ..interfaces.events import IPropertiesUpdatedEvent
         verifyObject(IPropertiesUpdatedEvent, self._makeOne())
 
 
@@ -157,13 +157,13 @@ class GroupCreatedTests(unittest.TestCase, ConformsToIPASEvent):
     def test_class_conforms_to_IGroupCreatedEvent(self):
         from zope.interface.verify import verifyClass
 
-        from Products.PluggableAuthService.interfaces.events import IGroupCreatedEvent  # NOQA
+        from ..interfaces.events import IGroupCreatedEvent
         verifyClass(IGroupCreatedEvent, self._getTargetClass())
 
     def test_instance_conforms_to_IGroupCreatedEvent(self):
         from zope.interface.verify import verifyObject
 
-        from Products.PluggableAuthService.interfaces.events import IGroupCreatedEvent  # NOQA
+        from ..interfaces.events import IGroupCreatedEvent
         verifyObject(IGroupCreatedEvent, self._makeOne())
 
 
@@ -181,13 +181,13 @@ class GroupDeletedTests(unittest.TestCase, ConformsToIPASEvent):
     def test_class_conforms_to_IGroupDeletedEvent(self):
         from zope.interface.verify import verifyClass
 
-        from Products.PluggableAuthService.interfaces.events import IGroupDeletedEvent  # NOQA
+        from ..interfaces.events import IGroupDeletedEvent
         verifyClass(IGroupDeletedEvent, self._getTargetClass())
 
     def test_instance_conforms_to_IGroupDeletedEvent(self):
         from zope.interface.verify import verifyObject
 
-        from Products.PluggableAuthService.interfaces.events import IGroupDeletedEvent  # NOQA
+        from ..interfaces.events import IGroupDeletedEvent
         verifyObject(IGroupDeletedEvent, self._makeOne())
 
 
@@ -207,13 +207,13 @@ class PrincipalAddedToGroupTests(unittest.TestCase, ConformsToIPASEvent):
     def test_class_conforms_to_IPrincipalAddedToGroupEvent(self):
         from zope.interface.verify import verifyClass
 
-        from Products.PluggableAuthService.interfaces.events import IPrincipalAddedToGroupEvent  # NOQA
+        from ..interfaces.events import IPrincipalAddedToGroupEvent
         verifyClass(IPrincipalAddedToGroupEvent, self._getTargetClass())
 
     def test_instance_conforms_to_IPrincipalAddedToGroupEvent(self):
         from zope.interface.verify import verifyObject
 
-        from Products.PluggableAuthService.interfaces.events import IPrincipalAddedToGroupEvent  # NOQA
+        from ..interfaces.events import IPrincipalAddedToGroupEvent
         verifyObject(IPrincipalAddedToGroupEvent, self._makeOne())
 
     def test_instantiation(self):
@@ -224,7 +224,7 @@ class PrincipalAddedToGroupTests(unittest.TestCase, ConformsToIPASEvent):
 class PrincipalRemovedFromGroupTests(unittest.TestCase, ConformsToIPASEvent):
 
     def _getTargetClass(self):
-        from Products.PluggableAuthService.events import PrincipalRemovedFromGroup  # NOQA
+        from ..events import PrincipalRemovedFromGroup
         return PrincipalRemovedFromGroup
 
     def _makeOne(self, principal=None, group_id=None):
@@ -237,13 +237,13 @@ class PrincipalRemovedFromGroupTests(unittest.TestCase, ConformsToIPASEvent):
     def test_class_conforms_to_IPrincipalRemovedFromGroupEvent(self):
         from zope.interface.verify import verifyClass
 
-        from Products.PluggableAuthService.interfaces.events import IPrincipalRemovedFromGroupEvent  # NOQA
+        from ..interfaces.events import IPrincipalRemovedFromGroupEvent
         verifyClass(IPrincipalRemovedFromGroupEvent, self._getTargetClass())
 
     def test_instance_conforms_to_IPrincipalRemovedFromGroupEvent(self):
         from zope.interface.verify import verifyObject
 
-        from Products.PluggableAuthService.interfaces.events import IPrincipalRemovedFromGroupEvent  # NOQA
+        from ..interfaces.events import IPrincipalRemovedFromGroupEvent
         verifyObject(IPrincipalRemovedFromGroupEvent, self._makeOne())
 
     def test_instantiation(self):

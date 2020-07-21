@@ -25,11 +25,11 @@ from BTrees.OOBTree import OOBTree
 from zope.interface import Interface
 
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin  # NOQA
-from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin
-from Products.PluggableAuthService.interfaces.plugins import IRolesPlugin
-from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PluggableAuthService.utils import classImplements
+from ..interfaces.plugins import IAuthenticationPlugin
+from ..interfaces.plugins import IExtractionPlugin
+from ..interfaces.plugins import IRolesPlugin
+from ..plugins.BasePlugin import BasePlugin
+from ..utils import classImplements
 
 
 try:

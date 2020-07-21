@@ -28,7 +28,7 @@ class _TestBase(PlacelessSetup, BaseRegistryTests):
     def _initPAS(self, plugin_type_info=(), plugins={}):
         from OFS.Folder import Folder
 
-        from Products.PluggableAuthService.PluggableAuthService import addPluggableAuthService  # NOQA
+        from ..PluggableAuthService import addPluggableAuthService
 
         app = Folder()
         app.getPhysicalPath = lambda: ()
@@ -189,8 +189,8 @@ class Test_importPAS(_TestBase):
         from Products.GenericSetup.interfaces import IDAVAware
         from Products.GenericSetup.interfaces import IFilesystemImporter
         from Products.GenericSetup.interfaces import IINIAware
-        from Products.PluggableAuthService.exportimport import PAS_PR_ContentFactory  # NOQA
-        from Products.PluggableAuthService.interfaces.authservice import IPluggableAuthService  # NOQA
+        from ..exportimport import PAS_PR_ContentFactory
+        from ..interfaces.authservice import IPluggableAuthService
         from Products.PluginRegistry.exportimport import PluginRegistryFileExportImportAdapter  # NOQA
         from Products.PluginRegistry.interfaces import IPluginRegistry
 

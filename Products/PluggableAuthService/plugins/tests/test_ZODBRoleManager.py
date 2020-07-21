@@ -16,13 +16,13 @@ import unittest
 from AccessControl.users import SpecialUser
 from zExceptions import Forbidden
 
-from Products.PluggableAuthService.plugins.tests.helpers import DummyUser
-from Products.PluggableAuthService.plugins.tests.helpers import FauxPAS
-from Products.PluggableAuthService.plugins.tests.helpers import FauxSmartPAS
-from Products.PluggableAuthService.plugins.tests.helpers import makeRequestAndResponse  # NOQA
-from Products.PluggableAuthService.tests.conformance import IRoleAssignerPlugin_conformance  # NOQA
-from Products.PluggableAuthService.tests.conformance import IRoleEnumerationPlugin_conformance  # NOQA
-from Products.PluggableAuthService.tests.conformance import IRolesPlugin_conformance  # NOQA
+from ...plugins.tests.helpers import DummyUser
+from ...plugins.tests.helpers import FauxPAS
+from ...plugins.tests.helpers import FauxSmartPAS
+from ...plugins.tests.helpers import makeRequestAndResponse
+from ...tests.conformance import IRoleAssignerPlugin_conformance
+from ...tests.conformance import IRoleEnumerationPlugin_conformance
+from ...tests.conformance import IRolesPlugin_conformance
 
 
 class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance,
@@ -31,7 +31,7 @@ class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance,
 
     def _getTargetClass(self):
 
-        from Products.PluggableAuthService.plugins.ZODBRoleManager import ZODBRoleManager  # NOQA
+        from ...plugins.ZODBRoleManager import ZODBRoleManager
 
         return ZODBRoleManager
 
@@ -67,7 +67,7 @@ class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance,
 
     def test_addRole(self):
 
-        from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
+        from ...tests.test_PluggableAuthService import FauxRoot
 
         root = FauxRoot()
         zrm = self._makeOne().__of__(root)
@@ -100,7 +100,7 @@ class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance,
 
     def test_removeRole_valid_id(self):
 
-        from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
+        from ...tests.test_PluggableAuthService import FauxRoot
 
         root = FauxRoot()
         zrm = self._makeOne().__of__(root)
@@ -117,7 +117,7 @@ class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance,
 
     def test_enumerateRoles_no_criteria(self):
 
-        from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
+        from ...tests.test_PluggableAuthService import FauxRoot
 
         root = FauxRoot()
         zrm = self._makeOne(id='no_crit').__of__(root)
@@ -147,7 +147,7 @@ class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance,
 
     def test_enumerateRoles_exact(self):
 
-        from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
+        from ...tests.test_PluggableAuthService import FauxRoot
 
         root = FauxRoot()
         zrm = self._makeOne(id='exact').__of__(root)
@@ -174,7 +174,7 @@ class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance,
 
     def test_enumerateRoles_partial(self):
 
-        from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
+        from ...tests.test_PluggableAuthService import FauxRoot
 
         root = FauxRoot()
         zrm = self._makeOne(id='partial').__of__(root)
@@ -207,7 +207,7 @@ class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance,
 
     def test_enumerateRoles_multiple(self):
 
-        from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
+        from ...tests.test_PluggableAuthService import FauxRoot
 
         root = FauxRoot()
         zrm = self._makeOne(id='partial').__of__(root)
@@ -236,7 +236,7 @@ class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance,
 
     def test_enumerateRoles_exact_nonesuch(self):
 
-        from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
+        from ...tests.test_PluggableAuthService import FauxRoot
 
         root = FauxRoot()
         zgm = self._makeOne(id='exact_nonesuch').__of__(root)
@@ -251,7 +251,7 @@ class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance,
 
     def test_assignRoleToPrincipal_nonesuch(self):
 
-        from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
+        from ...tests.test_PluggableAuthService import FauxRoot
 
         root = FauxRoot()
         zrm = self._makeOne(id='assign_nonesuch').__of__(root)
@@ -260,7 +260,7 @@ class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance,
 
     def test_assignRoleToPrincipal_user(self):
 
-        from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
+        from ...tests.test_PluggableAuthService import FauxRoot
 
         root = FauxRoot()
         zrm = self._makeOne(id='assign_user').__of__(root)
@@ -286,7 +286,7 @@ class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance,
 
     def test_assignRoleToPrincipal_group(self):
 
-        from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
+        from ...tests.test_PluggableAuthService import FauxRoot
 
         root = FauxRoot()
         zrm = self._makeOne(id='assign_user').__of__(root)
@@ -365,7 +365,7 @@ class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance,
 
     def test_removeRoleFromPrincipal_nonesuch(self):
 
-        from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
+        from ...tests.test_PluggableAuthService import FauxRoot
 
         root = FauxRoot()
         zrm = self._makeOne(id='remove_nonesuch').__of__(root)
@@ -420,7 +420,7 @@ class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance,
         self.assertFalse(removed)
 
     def test_listAssignedPrincipals_duplicate_principals(self):
-        from Products.PluggableAuthService.plugins.ZODBRoleManager import MultiplePrincipalError  # NOQA
+        from ...plugins.ZODBRoleManager import MultiplePrincipalError
 
         class FauxDuplicatePAS(FauxSmartPAS):
             """Returns duplicate user ids when searched."""
@@ -440,7 +440,7 @@ class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance,
 
     def test_updateRole_nonesuch(self):
 
-        from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
+        from ...tests.test_PluggableAuthService import FauxRoot
 
         root = FauxRoot()
         zrm = self._makeOne(id='update_nonesuch').__of__(root)
@@ -450,7 +450,7 @@ class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance,
 
     def test_updateRole_normal(self):
 
-        from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
+        from ...tests.test_PluggableAuthService import FauxRoot
 
         root = FauxRoot()
         zrm = self._makeOne(id='update_normal').__of__(root)
@@ -471,7 +471,7 @@ class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance,
 
     def test_removeRole_then_addRole(self):
 
-        from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
+        from ...tests.test_PluggableAuthService import FauxRoot
 
         root = FauxRoot()
         zrm = self._makeOne(id='remove_then_add').__of__(root)

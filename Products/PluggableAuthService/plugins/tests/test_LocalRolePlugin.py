@@ -16,7 +16,7 @@ import unittest
 from Acquisition import Implicit
 from OFS.ObjectManager import ObjectManager
 
-from Products.PluggableAuthService.tests.conformance import IRolesPlugin_conformance  # NOQA
+from ...tests.conformance import IRolesPlugin_conformance
 
 
 class FauxObject(Implicit):
@@ -51,7 +51,7 @@ class FauxUser(Implicit):
 class LocalRolePluginTestCase(unittest.TestCase, IRolesPlugin_conformance):
 
     def _getTargetClass(self):
-        from Products.PluggableAuthService.plugins.LocalRolePlugin import LocalRolePlugin  # NOQA
+        from ...plugins.LocalRolePlugin import LocalRolePlugin
 
         return LocalRolePlugin
 

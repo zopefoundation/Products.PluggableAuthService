@@ -402,7 +402,7 @@ class ChallengeProtocolChooserExportImport(SimpleXMLExportImport):
             self.context._map[label] = tuple([_f for _f in protocols if _f])
 
     def _getExportInfo(self):
-        from Products.PluggableAuthService.plugins.ChallengeProtocolChooser import listRequestTypesLabels  # NOQA
+        from .ChallengeProtocolChooser import listRequestTypesLabels
 
         request_type_info = []
 

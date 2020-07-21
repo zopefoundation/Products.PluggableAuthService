@@ -13,9 +13,9 @@
 ##############################################################################
 import unittest
 
-from Products.PluggableAuthService.tests.conformance import IAuthenticationPlugin_conformance  # NOQA
-from Products.PluggableAuthService.tests.conformance import IExtractionPlugin_conformance  # NOQA
-from Products.PluggableAuthService.tests.conformance import IRolesPlugin_conformance  # NOQA
+from ...tests.conformance import IAuthenticationPlugin_conformance
+from ...tests.conformance import IExtractionPlugin_conformance
+from ...tests.conformance import IRolesPlugin_conformance
 
 
 try:
@@ -45,7 +45,7 @@ class DomainAuthHelperTests(unittest.TestCase, IExtractionPlugin_conformance,
 
     def _getTargetClass(self):
 
-        from Products.PluggableAuthService.plugins.DomainAuthHelper import DomainAuthHelper  # NOQA
+        from ...plugins.DomainAuthHelper import DomainAuthHelper
 
         return DomainAuthHelper
 
@@ -151,7 +151,7 @@ class DomainAuthHelperTests(unittest.TestCase, IExtractionPlugin_conformance,
 class EqualsFilterTests(unittest.TestCase):
 
     def _getTargetClass(self):
-        from Products.PluggableAuthService.plugins.DomainAuthHelper import EqualsFilter  # NOQA
+        from ...plugins.DomainAuthHelper import EqualsFilter
         return EqualsFilter
 
     def _makeOne(self, matchstring):
@@ -169,7 +169,7 @@ class EqualsFilterTests(unittest.TestCase):
 class StartsWithFilterTests(unittest.TestCase):
 
     def _getTargetClass(self):
-        from Products.PluggableAuthService.plugins.DomainAuthHelper import StartsWithFilter  # NOQA
+        from ...plugins.DomainAuthHelper import StartsWithFilter
         return StartsWithFilter
 
     def _makeOne(self, matchstring):
@@ -191,7 +191,7 @@ class StartsWithFilterTests(unittest.TestCase):
 class EndsWithFilterTests(unittest.TestCase):
 
     def _getTargetClass(self):
-        from Products.PluggableAuthService.plugins.DomainAuthHelper import EndsWithFilter  # NOQA
+        from ...plugins.DomainAuthHelper import EndsWithFilter
         return EndsWithFilter
 
     def _makeOne(self, matchstring):
@@ -213,7 +213,7 @@ class EndsWithFilterTests(unittest.TestCase):
 class RegexFilterTests(unittest.TestCase):
 
     def _getTargetClass(self):
-        from Products.PluggableAuthService.plugins.DomainAuthHelper import RegexFilter  # NOQA
+        from ...plugins.DomainAuthHelper import RegexFilter
         return RegexFilter
 
     def _makeOne(self, matchstring):
@@ -235,7 +235,7 @@ class RegexFilterTests(unittest.TestCase):
 class IPFilterTests(unittest.TestCase):
 
     def _getTargetClass(self):
-        from Products.PluggableAuthService.plugins.DomainAuthHelper import IPFilter  # NOQA
+        from ...plugins.DomainAuthHelper import IPFilter
         return IPFilter
 
     def _makeOne(self, matchstring):

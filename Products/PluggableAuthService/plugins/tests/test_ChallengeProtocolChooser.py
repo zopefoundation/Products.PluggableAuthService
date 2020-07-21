@@ -19,7 +19,7 @@ import six
 
 import Testing.ZopeTestCase
 
-from Products.PluggableAuthService.tests.conformance import IChallengeProtocolChooser_conformance  # NOQA
+from ...tests.conformance import IChallengeProtocolChooser_conformance
 
 
 XMLRPC_CALL = b"""\
@@ -49,7 +49,7 @@ class ChallengeProtocolChooser(unittest.TestCase,
                                IChallengeProtocolChooser_conformance):
 
     def _getTargetClass(self):
-        from Products.PluggableAuthService.plugins.ChallengeProtocolChooser import ChallengeProtocolChooser  # NOQA
+        from ...plugins.ChallengeProtocolChooser import ChallengeProtocolChooser
 
         return ChallengeProtocolChooser
 
@@ -85,12 +85,12 @@ class ChallengeProtocolChooserTestHelper(object):
 
         plugins = pas.plugins
 
-        from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin  # NOQA
-        from Products.PluggableAuthService.interfaces.plugins import IRoleAssignerPlugin  # NOQA
-        from Products.PluggableAuthService.interfaces.plugins import IRoleEnumerationPlugin  # NOQA
-        from Products.PluggableAuthService.interfaces.plugins import IRolesPlugin  # NOQA
-        from Products.PluggableAuthService.interfaces.plugins import IUserAdderPlugin  # NOQA
-        from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # NOQA
+        from ...interfaces.plugins import IAuthenticationPlugin
+        from ...interfaces.plugins import IRoleAssignerPlugin
+        from ...interfaces.plugins import IRoleEnumerationPlugin
+        from ...interfaces.plugins import IRolesPlugin
+        from ...interfaces.plugins import IUserAdderPlugin
+        from ...interfaces.plugins import IUserEnumerationPlugin
 
         plugins.activatePlugin(IUserAdderPlugin, 'users')
         plugins.activatePlugin(IAuthenticationPlugin, 'users')
@@ -100,8 +100,8 @@ class ChallengeProtocolChooserTestHelper(object):
         plugins.activatePlugin(IRoleAssignerPlugin, 'roles')
 
     def setup_http_auth(self):
-        from Products.PluggableAuthService.interfaces.plugins import IChallengePlugin  # NOQA
-        from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin  # NOQA
+        from ...interfaces.plugins import IChallengePlugin
+        from ...interfaces.plugins import IExtractionPlugin
 
         plugins = self.folder.acl_users.plugins
         plugins.activatePlugin(IExtractionPlugin, 'http_auth')
@@ -110,8 +110,8 @@ class ChallengeProtocolChooserTestHelper(object):
     def setup_cookie_auth(self):
         # Adding a Cookie Auth Helper to test the correct behaviour of the
         # Challenge Protocol Helper.
-        from Products.PluggableAuthService.interfaces.plugins import IChallengePlugin  # NOQA
-        from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin  # NOQA
+        from ...interfaces.plugins import IChallengePlugin
+        from ...interfaces.plugins import IExtractionPlugin
         dispatcher = self.folder.acl_users.manage_addProduct[
             'PluggableAuthService']
         dispatcher.addCookieAuthHelper('cookie_auth', cookie_name='__ac')
@@ -121,8 +121,8 @@ class ChallengeProtocolChooserTestHelper(object):
         plugins.activatePlugin(IChallengePlugin, 'cookie_auth')
 
     def setup_sniffer(self):
-        from Products.PluggableAuthService.interfaces.plugins import IChallengeProtocolChooser  # NOQA
-        from Products.PluggableAuthService.interfaces.plugins import IRequestTypeSniffer  # NOQA
+        from ...interfaces.plugins import IChallengeProtocolChooser
+        from ...interfaces.plugins import IRequestTypeSniffer
 
         dispatcher = self.folder.acl_users.manage_addProduct[
             'PluggableAuthService']

@@ -25,13 +25,13 @@ from BTrees.OOBTree import OOBTree
 from zope.interface import Interface
 
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-from Products.PluggableAuthService.interfaces.plugins import IRoleAssignerPlugin  # NOQA
-from Products.PluggableAuthService.interfaces.plugins import IRoleEnumerationPlugin  # NOQA
-from Products.PluggableAuthService.interfaces.plugins import IRolesPlugin
-from Products.PluggableAuthService.permissions import ManageUsers
-from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PluggableAuthService.utils import classImplements
-from Products.PluggableAuthService.utils import csrf_only
+from ..interfaces.plugins import IRoleAssignerPlugin
+from ..interfaces.plugins import IRoleEnumerationPlugin
+from ..interfaces.plugins import IRolesPlugin
+from ..permissions import ManageUsers
+from ..plugins.BasePlugin import BasePlugin
+from ..utils import classImplements
+from ..utils import csrf_only
 
 
 LOG = logging.getLogger('PluggableAuthService')
