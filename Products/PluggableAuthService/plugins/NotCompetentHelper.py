@@ -32,6 +32,7 @@ from ZPublisher.BaseRequest import UNSPECIFIED_ROLES
 from ZPublisher.HTTPResponse import HTTPResponse as Response
 
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+
 from ..interfaces.plugins import INotCompetentPlugin
 from ..plugins.BasePlugin import BasePlugin
 from ..utils import classImplements

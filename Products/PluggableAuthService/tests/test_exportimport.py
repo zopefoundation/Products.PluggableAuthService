@@ -189,10 +189,11 @@ class Test_importPAS(_TestBase):
         from Products.GenericSetup.interfaces import IDAVAware
         from Products.GenericSetup.interfaces import IFilesystemImporter
         from Products.GenericSetup.interfaces import IINIAware
-        from ..exportimport import PAS_PR_ContentFactory
-        from ..interfaces.authservice import IPluggableAuthService
         from Products.PluginRegistry.exportimport import PluginRegistryFileExportImportAdapter  # NOQA
         from Products.PluginRegistry.interfaces import IPluginRegistry
+
+        from ..exportimport import PAS_PR_ContentFactory
+        from ..interfaces.authservice import IPluggableAuthService
 
         provideAdapter(FolderishExporterImporter,
                        (IObjectManager, ),

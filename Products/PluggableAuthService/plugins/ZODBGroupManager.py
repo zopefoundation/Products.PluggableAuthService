@@ -25,6 +25,7 @@ from zope.event import notify
 from zope.interface import Interface
 
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+
 from ..events import GroupCreated
 from ..events import PrincipalAddedToGroup
 from ..events import PrincipalRemovedFromGroup

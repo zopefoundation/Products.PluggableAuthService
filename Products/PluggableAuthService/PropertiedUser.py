@@ -19,9 +19,8 @@ from AccessControl.User import BasicUser
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 
-from .interfaces.propertysheets import IPropertySheet
-
 from .interfaces.authservice import IPropertiedUser
+from .interfaces.propertysheets import IPropertySheet
 from .UserPropertySheet import UserPropertySheet
 from .utils import classImplements
 

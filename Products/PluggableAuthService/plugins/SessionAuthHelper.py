@@ -19,6 +19,7 @@ from AccessControl.SecurityInfo import ClassSecurityInfo
 from zope.interface import Interface
 
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+
 from ..interfaces.plugins import ICredentialsResetPlugin
 from ..interfaces.plugins import ICredentialsUpdatePlugin
 from ..interfaces.plugins import ILoginPasswordHostExtractionPlugin

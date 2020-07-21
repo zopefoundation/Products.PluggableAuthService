@@ -20,6 +20,7 @@ from OFS.Folder import Folder
 from zope.interface import Interface
 
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+
 from ..interfaces.plugins import IChallengePlugin
 from ..interfaces.plugins import ILoginPasswordHostExtractionPlugin
 from ..plugins.BasePlugin import BasePlugin

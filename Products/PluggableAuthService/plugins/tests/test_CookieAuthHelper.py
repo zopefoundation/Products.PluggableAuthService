@@ -27,8 +27,8 @@ from ...tests.conformance import ICredentialsResetPlugin_conformance
 from ...tests.conformance import ICredentialsUpdatePlugin_conformance
 from ...tests.conformance import ILoginPasswordHostExtractionPlugin_conformance
 from ...tests.test_PluggableAuthService import FauxContainer
-from ...tests.test_PluggableAuthService import FauxObject  
-from ...tests.test_PluggableAuthService import FauxRequest 
+from ...tests.test_PluggableAuthService import FauxObject
+from ...tests.test_PluggableAuthService import FauxRequest
 from ...tests.test_PluggableAuthService import FauxResponse
 from ...tests.test_PluggableAuthService import FauxRoot
 

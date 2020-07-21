@@ -22,6 +22,7 @@ from Acquisition import aq_base
 from zope.interface import Interface
 
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+
 from ..interfaces.plugins import IGroupEnumerationPlugin
 from ..interfaces.plugins import IUserEnumerationPlugin
 from ..plugins.BasePlugin import BasePlugin

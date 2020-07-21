@@ -25,6 +25,7 @@ from BTrees.OOBTree import OOBTree
 from zope.interface import Interface
 
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+
 from ..interfaces.plugins import IRoleAssignerPlugin
 from ..interfaces.plugins import IRoleEnumerationPlugin
 from ..interfaces.plugins import IRolesPlugin

@@ -37,6 +37,7 @@ from zope.interface import Interface
 
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from Products.PageTemplates.ZopePageTemplate import ZopePageTemplate
+
 from ..interfaces.plugins import IChallengePlugin
 from ..interfaces.plugins import ICredentialsResetPlugin
 from ..interfaces.plugins import ICredentialsUpdatePlugin

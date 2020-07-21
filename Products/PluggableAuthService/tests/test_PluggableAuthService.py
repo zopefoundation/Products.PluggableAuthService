@@ -470,8 +470,9 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def _makePlugins(self, plugin_type_info=None):
 
-        from ..PluggableAuthService import _PLUGIN_TYPE_INFO
         from Products.PluginRegistry.PluginRegistry import PluginRegistry
+
+        from ..PluggableAuthService import _PLUGIN_TYPE_INFO
 
         if plugin_type_info is None:
             plugin_type_info = _PLUGIN_TYPE_INFO
@@ -756,6 +757,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
         from AccessControl.users import UnrestrictedUser
 
         from Products.PluggableAuthService import PluggableAuthService
+
         from ..interfaces.plugins import IExtractionPlugin
 
         old_eu = PluggableAuthService.emergency_user
@@ -861,6 +863,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
         from AccessControl.users import UnrestrictedUser
 
         from Products.PluggableAuthService import PluggableAuthService
+
         from ..interfaces.plugins import IAuthenticationPlugin
         from ..interfaces.plugins import IExtractionPlugin
 
@@ -911,6 +914,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
         from AccessControl.users import UnrestrictedUser
 
         from Products.PluggableAuthService import PluggableAuthService
+
         from ..interfaces.plugins import IAuthenticationPlugin
         from ..interfaces.plugins import IExtractionPlugin
 
@@ -984,6 +988,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
         from AccessControl.users import UnrestrictedUser
 
         from Products.PluggableAuthService import PluggableAuthService
+
         from ..interfaces.plugins import IAuthenticationPlugin
         from ..interfaces.plugins import IExtractionPlugin
 

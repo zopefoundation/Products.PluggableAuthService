@@ -26,6 +26,7 @@ from OFS.Folder import Folder
 from zope.interface import Interface
 
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+
 from ..interfaces.plugins import IAuthenticationPlugin
 from ..interfaces.plugins import ICredentialsResetPlugin
 from ..interfaces.plugins import ICredentialsUpdatePlugin

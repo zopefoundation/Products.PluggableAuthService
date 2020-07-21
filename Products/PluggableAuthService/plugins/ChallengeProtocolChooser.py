@@ -20,6 +20,7 @@ from BTrees.OOBTree import OOBTree
 from zope.interface import Interface
 
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+
 from ..interfaces.plugins import IChallengePlugin
 from ..interfaces.plugins import IChallengeProtocolChooser
 from ..interfaces.plugins import IRequestTypeSniffer

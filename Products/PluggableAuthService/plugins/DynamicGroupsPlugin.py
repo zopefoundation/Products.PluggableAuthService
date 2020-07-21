@@ -30,6 +30,7 @@ from zope.interface import Interface
 
 from Products.PageTemplates.Expressions import getEngine
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+
 from ..events import GroupCreated
 from ..interfaces.plugins import IGroupEnumerationPlugin
 from ..interfaces.plugins import IGroupsPlugin

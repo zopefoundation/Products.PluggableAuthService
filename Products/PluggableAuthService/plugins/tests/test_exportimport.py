@@ -1121,11 +1121,11 @@ class DynamicGroupsPluginExportImportTests(_TestBase):
 class ChallengeProtocolChooserExportImportTests(_TestBase):
 
     def _getTargetClass(self):
-        from ...plugins.exportimport import ChallengeProtocolChooserExportImport
+        from ...plugins.exportimport import ChallengeProtocolChooserExportImport  # NOQA
         return ChallengeProtocolChooserExportImport
 
     def _makePlugin(self, id, *args, **kw):
-        from ...plugins.ChallengeProtocolChooser import ChallengeProtocolChooser
+        from ...plugins.ChallengeProtocolChooser import ChallengeProtocolChooser  # NOQA
 
         return ChallengeProtocolChooser(id, *args, **kw)
 

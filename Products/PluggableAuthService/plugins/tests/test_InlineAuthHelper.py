@@ -13,8 +13,9 @@
 ##############################################################################
 import unittest
 
-from Products.PluggableAuthService.tests.conformance import IChallengePlugin_conformance
-from Products.PluggableAuthService.tests.conformance import ILoginPasswordHostExtractionPlugin_conformance
+from Products.PluggableAuthService.tests.conformance import IChallengePlugin_conformance  # NOQA
+from Products.PluggableAuthService.tests.conformance import ILoginPasswordHostExtractionPlugin_conformance  # NOQA
+
 from ...tests.test_PluggableAuthService import FauxContainer
 from ...tests.test_PluggableAuthService import FauxObject
 from ...tests.test_PluggableAuthService import FauxRequest
