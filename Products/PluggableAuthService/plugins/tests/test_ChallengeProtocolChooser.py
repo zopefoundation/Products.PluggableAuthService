@@ -49,7 +49,8 @@ class ChallengeProtocolChooser(unittest.TestCase,
                                IChallengeProtocolChooser_conformance):
 
     def _getTargetClass(self):
-        from ...plugins.ChallengeProtocolChooser import ChallengeProtocolChooser  # NOQA
+        from ...plugins.ChallengeProtocolChooser import \
+            ChallengeProtocolChooser
 
         return ChallengeProtocolChooser
 

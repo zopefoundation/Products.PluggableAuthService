@@ -19,8 +19,10 @@ import unittest
 from Products.GenericSetup.tests.common import BaseRegistryTests
 from Products.GenericSetup.tests.common import DummyExportContext
 from Products.GenericSetup.tests.common import DummyImportContext
-from Products.GenericSetup.tests.conformance import ConformsToIFilesystemExporter  # NOQA
-from Products.GenericSetup.tests.conformance import ConformsToIFilesystemImporter  # NOQA
+from Products.GenericSetup.tests.conformance import \
+    ConformsToIFilesystemExporter
+from Products.GenericSetup.tests.conformance import \
+    ConformsToIFilesystemImporter
 from Products.PluggableAuthService.tests.utils import _setUpDefaultTraversable
 
 
@@ -1121,11 +1123,13 @@ class DynamicGroupsPluginExportImportTests(_TestBase):
 class ChallengeProtocolChooserExportImportTests(_TestBase):
 
     def _getTargetClass(self):
-        from ...plugins.exportimport import ChallengeProtocolChooserExportImport  # NOQA
+        from ...plugins.exportimport import \
+            ChallengeProtocolChooserExportImport
         return ChallengeProtocolChooserExportImport
 
     def _makePlugin(self, id, *args, **kw):
-        from ...plugins.ChallengeProtocolChooser import ChallengeProtocolChooser  # NOQA
+        from ...plugins.ChallengeProtocolChooser import \
+            ChallengeProtocolChooser
 
         return ChallengeProtocolChooser(id, *args, **kw)
 

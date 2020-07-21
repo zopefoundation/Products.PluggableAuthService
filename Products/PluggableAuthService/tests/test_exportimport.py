@@ -58,7 +58,8 @@ class Test_exportPAS(_TestBase):
         from Products.GenericSetup.interfaces import IFilesystemExporter
         from Products.GenericSetup.interfaces import IINIAware
         from Products.PluggableAuthService.exportimport import PAS_CF_Namer
-        from Products.PluginRegistry.exportimport import PluginRegistryFileExportImportAdapter  # NOQA
+        from Products.PluginRegistry.exportimport import \
+            PluginRegistryFileExportImportAdapter
         from Products.PluginRegistry.interfaces import IPluginRegistry
 
         provideAdapter(FolderishExporterImporter,
@@ -189,7 +190,8 @@ class Test_importPAS(_TestBase):
         from Products.GenericSetup.interfaces import IDAVAware
         from Products.GenericSetup.interfaces import IFilesystemImporter
         from Products.GenericSetup.interfaces import IINIAware
-        from Products.PluginRegistry.exportimport import PluginRegistryFileExportImportAdapter  # NOQA
+        from Products.PluginRegistry.exportimport import \
+            PluginRegistryFileExportImportAdapter
         from Products.PluginRegistry.interfaces import IPluginRegistry
 
         from ..exportimport import PAS_PR_ContentFactory
