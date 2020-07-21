@@ -25,11 +25,10 @@ from OFS.Cache import Cacheable
 from OFS.Folder import Folder
 from OFS.PropertyManager import PropertyManager
 from OFS.SimpleItem import SimpleItem
-from zope.event import notify
-from zope.interface import Interface
-
 from Products.PageTemplates.Expressions import getEngine
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from zope.event import notify
+from zope.interface import Interface
 
 from ..events import GroupCreated
 from ..interfaces.plugins import IGroupEnumerationPlugin

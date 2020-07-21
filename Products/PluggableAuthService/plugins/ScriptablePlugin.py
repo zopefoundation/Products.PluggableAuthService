@@ -18,12 +18,12 @@ from AccessControl import ClassSecurityInfo
 from AccessControl.class_init import InitializeClass
 from AccessControl.Permissions import manage_users as ManageUsers
 from OFS.Folder import Folder
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from zope.interface import Interface
 from zope.interface import implementedBy
 from zope.interface import providedBy
 
 import Products
-from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.utils import classImplements
 from Products.PluggableAuthService.utils import directlyProvides

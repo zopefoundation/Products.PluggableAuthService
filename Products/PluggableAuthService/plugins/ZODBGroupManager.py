@@ -21,10 +21,9 @@ from AccessControl.class_init import InitializeClass
 from AccessControl.requestmethod import postonly
 from Acquisition import aq_parent
 from BTrees.OOBTree import OOBTree
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from zope.event import notify
 from zope.interface import Interface
-
-from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
 from ..events import GroupCreated
 from ..events import PrincipalAddedToGroup

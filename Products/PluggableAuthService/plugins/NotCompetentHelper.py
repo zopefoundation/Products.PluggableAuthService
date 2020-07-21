@@ -28,10 +28,9 @@ from Acquisition import aq_base
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from OFS.PropertyManager import PropertyManager
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from ZPublisher.BaseRequest import UNSPECIFIED_ROLES
 from ZPublisher.HTTPResponse import HTTPResponse as Response
-
-from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
 from ..interfaces.plugins import INotCompetentPlugin
 from ..plugins.BasePlugin import BasePlugin

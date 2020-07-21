@@ -25,9 +25,8 @@ from AccessControl.requestmethod import postonly
 from AccessControl.SecurityManagement import getSecurityManager
 from BTrees.OOBTree import OOBTree
 from OFS.Cache import Cacheable
-from zope.interface import Interface
-
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from zope.interface import Interface
 
 from ..interfaces.plugins import IAuthenticationPlugin
 from ..interfaces.plugins import IUserAdderPlugin

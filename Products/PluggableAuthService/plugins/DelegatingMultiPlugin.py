@@ -23,9 +23,8 @@ from AccessControl.class_init import InitializeClass
 from AccessControl.SpecialUsers import emergency_user
 from Acquisition import aq_base
 from OFS.Folder import Folder
-from zope.interface import Interface
-
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from zope.interface import Interface
 
 from ..interfaces.plugins import IAuthenticationPlugin
 from ..interfaces.plugins import ICredentialsResetPlugin

@@ -19,9 +19,8 @@
 from AccessControl import ClassSecurityInfo
 from AccessControl.class_init import InitializeClass
 from Acquisition import aq_base
-from zope.interface import Interface
-
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from zope.interface import Interface
 
 from ..interfaces.plugins import IGroupEnumerationPlugin
 from ..interfaces.plugins import IUserEnumerationPlugin

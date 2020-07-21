@@ -17,9 +17,8 @@
 from AccessControl.class_init import InitializeClass
 from AccessControl.SecurityInfo import ClassSecurityInfo
 from OFS.Folder import Folder
-from zope.interface import Interface
-
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from zope.interface import Interface
 
 from ..interfaces.plugins import IChallengePlugin
 from ..interfaces.plugins import ILoginPasswordHostExtractionPlugin

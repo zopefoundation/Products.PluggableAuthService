@@ -17,9 +17,8 @@
 from AccessControl import ClassSecurityInfo
 from AccessControl.class_init import InitializeClass
 from BTrees.OOBTree import OOBTree
-from zope.interface import Interface
-
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from zope.interface import Interface
 
 from ..interfaces.plugins import IChallengePlugin
 from ..interfaces.plugins import IChallengeProtocolChooser
