@@ -23,15 +23,12 @@ from AccessControl.class_init import InitializeClass
 from AccessControl.SpecialUsers import emergency_user
 from Acquisition import aq_base
 from OFS.Folder import Folder
-from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from zope.interface import Interface
 
-from Products.PluggableAuthService.interfaces.plugins import \
-    IAuthenticationPlugin
-from Products.PluggableAuthService.interfaces.plugins import \
-    ICredentialsResetPlugin
-from Products.PluggableAuthService.interfaces.plugins import \
-    ICredentialsUpdatePlugin
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin  # NOQA
+from Products.PluggableAuthService.interfaces.plugins import ICredentialsResetPlugin  # NOQA
+from Products.PluggableAuthService.interfaces.plugins import ICredentialsUpdatePlugin  # NOQA
 from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin
 from Products.PluggableAuthService.interfaces.plugins import IRolesPlugin
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin

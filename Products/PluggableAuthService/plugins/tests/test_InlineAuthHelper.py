@@ -13,20 +13,13 @@
 ##############################################################################
 import unittest
 
-from Products.PluggableAuthService.tests.conformance import \
-    IChallengePlugin_conformance
-from Products.PluggableAuthService.tests.conformance import \
-    ILoginPasswordHostExtractionPlugin_conformance
-from Products.PluggableAuthService.tests.test_PluggableAuthService import \
-    FauxContainer
-from Products.PluggableAuthService.tests.test_PluggableAuthService import \
-    FauxObject
-from Products.PluggableAuthService.tests.test_PluggableAuthService import \
-    FauxRequest
-from Products.PluggableAuthService.tests.test_PluggableAuthService import \
-    FauxResponse
-from Products.PluggableAuthService.tests.test_PluggableAuthService import \
-    FauxRoot
+from Products.PluggableAuthService.tests.conformance import IChallengePlugin_conformance  # NOQA
+from Products.PluggableAuthService.tests.conformance import ILoginPasswordHostExtractionPlugin_conformance  # NOQA
+from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxContainer  # NOQA
+from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxObject  # NOQA
+from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRequest  # NOQA
+from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxResponse  # NOQA
+from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
 
 
 class FauxSettableRequest(FauxRequest):
@@ -55,8 +48,7 @@ class InlineAuthHelperTests(unittest.TestCase,
 
     def _getTargetClass(self):
 
-        from Products.PluggableAuthService.plugins.InlineAuthHelper \
-            import InlineAuthHelper
+        from Products.PluggableAuthService.plugins.InlineAuthHelper import InlineAuthHelper  # NOQA
 
         return InlineAuthHelper
 

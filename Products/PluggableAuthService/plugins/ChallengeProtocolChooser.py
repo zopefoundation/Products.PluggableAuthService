@@ -17,14 +17,12 @@
 from AccessControl import ClassSecurityInfo
 from AccessControl.class_init import InitializeClass
 from BTrees.OOBTree import OOBTree
-from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from zope.interface import Interface
 
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from Products.PluggableAuthService.interfaces.plugins import IChallengePlugin
-from Products.PluggableAuthService.interfaces.plugins import \
-    IChallengeProtocolChooser
-from Products.PluggableAuthService.interfaces.plugins import \
-    IRequestTypeSniffer
+from Products.PluggableAuthService.interfaces.plugins import IChallengeProtocolChooser  # NOQA
+from Products.PluggableAuthService.interfaces.plugins import IRequestTypeSniffer  # NOQA
 from Products.PluggableAuthService.interfaces.request import IBrowserRequest
 from Products.PluggableAuthService.interfaces.request import IFTPRequest
 from Products.PluggableAuthService.interfaces.request import IWebDAVRequest

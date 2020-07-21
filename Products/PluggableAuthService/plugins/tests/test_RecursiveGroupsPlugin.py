@@ -15,10 +15,8 @@ import unittest
 
 from OFS.SimpleItem import SimpleItem
 
-from Products.PluggableAuthService.tests.conformance import \
-    IGroupsPlugin_conformance
-from Products.PluggableAuthService.tests.test_PluggableAuthService import \
-    FauxContainer
+from Products.PluggableAuthService.tests.conformance import IGroupsPlugin_conformance  # NOQA
+from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxContainer  # NOQA
 
 
 class FauxPAS(FauxContainer):
@@ -84,8 +82,7 @@ class RecursiveGroupsPluginTests(unittest.TestCase, IGroupsPlugin_conformance):
 
     def _getTargetClass(self):
 
-        from Products.PluggableAuthService.plugins.RecursiveGroupsPlugin \
-            import RecursiveGroupsPlugin
+        from Products.PluggableAuthService.plugins.RecursiveGroupsPlugin import RecursiveGroupsPlugin  # NOQA
 
         return RecursiveGroupsPlugin
 

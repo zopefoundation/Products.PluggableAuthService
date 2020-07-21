@@ -18,18 +18,14 @@ from Testing.ZopeTestCase import user_password
 from Testing.ZopeTestCase import user_role
 from ZPublisher.utils import basic_auth_encode
 
-from Products.PluggableAuthService.interfaces.plugins import \
-    IAuthenticationPlugin
+from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin  # NOQA
 from Products.PluggableAuthService.interfaces.plugins import IChallengePlugin
 from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin
-from Products.PluggableAuthService.interfaces.plugins import \
-    IRoleAssignerPlugin
-from Products.PluggableAuthService.interfaces.plugins import \
-    IRoleEnumerationPlugin
+from Products.PluggableAuthService.interfaces.plugins import IRoleAssignerPlugin  # NOQA
+from Products.PluggableAuthService.interfaces.plugins import IRoleEnumerationPlugin  # NOQA
 from Products.PluggableAuthService.interfaces.plugins import IRolesPlugin
 from Products.PluggableAuthService.interfaces.plugins import IUserAdderPlugin
-from Products.PluggableAuthService.interfaces.plugins import \
-    IUserEnumerationPlugin
+from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # NOQA
 
 
 user_auth = basic_auth_encode(user_name, user_password)

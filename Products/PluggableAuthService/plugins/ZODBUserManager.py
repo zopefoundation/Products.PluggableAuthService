@@ -25,14 +25,12 @@ from AccessControl.requestmethod import postonly
 from AccessControl.SecurityManagement import getSecurityManager
 from BTrees.OOBTree import OOBTree
 from OFS.Cache import Cacheable
-from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from zope.interface import Interface
 
-from Products.PluggableAuthService.interfaces.plugins import \
-    IAuthenticationPlugin
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin  # NOQA
 from Products.PluggableAuthService.interfaces.plugins import IUserAdderPlugin
-from Products.PluggableAuthService.interfaces.plugins import \
-    IUserEnumerationPlugin
+from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # NOQA
 from Products.PluggableAuthService.permissions import ManageUsers
 from Products.PluggableAuthService.permissions import SetOwnPassword
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin

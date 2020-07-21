@@ -21,12 +21,13 @@ from xml.dom.minidom import parseString
 import six
 
 from Acquisition import Implicit
+from zope.interface import implementer
+
 from Products.GenericSetup.content import DAVAwareFileAdapter
 from Products.GenericSetup.content import FolderishExporterImporter
 from Products.GenericSetup.interfaces import IFilesystemExporter
 from Products.GenericSetup.interfaces import IFilesystemImporter
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-from zope.interface import implementer
 
 
 def getPackagePath(instance):
@@ -401,8 +402,7 @@ class ChallengeProtocolChooserExportImport(SimpleXMLExportImport):
             self.context._map[label] = tuple([_f for _f in protocols if _f])
 
     def _getExportInfo(self):
-        from Products.PluggableAuthService.plugins.ChallengeProtocolChooser \
-            import listRequestTypesLabels
+        from Products.PluggableAuthService.plugins.ChallengeProtocolChooser import listRequestTypesLabels  # NOQA
 
         request_type_info = []
 

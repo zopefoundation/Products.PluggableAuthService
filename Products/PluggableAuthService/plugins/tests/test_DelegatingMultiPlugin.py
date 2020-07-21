@@ -1,13 +1,9 @@
 import unittest
 
-from Products.PluggableAuthService.tests.conformance import \
-    IAuthenticationPlugin_conformance
-from Products.PluggableAuthService.tests.conformance import \
-    ICredentialsResetPlugin_conformance
-from Products.PluggableAuthService.tests.conformance import \
-    ICredentialsUpdatePlugin_conformance
-from Products.PluggableAuthService.tests.conformance import \
-    IRolesPlugin_conformance
+from Products.PluggableAuthService.tests.conformance import IAuthenticationPlugin_conformance  # NOQA
+from Products.PluggableAuthService.tests.conformance import ICredentialsResetPlugin_conformance  # NOQA
+from Products.PluggableAuthService.tests.conformance import ICredentialsUpdatePlugin_conformance  # NOQA
+from Products.PluggableAuthService.tests.conformance import IRolesPlugin_conformance  # NOQA
 
 
 class DelegatingMultiPluginTests(
@@ -18,8 +14,7 @@ class DelegatingMultiPluginTests(
         ICredentialsUpdatePlugin_conformance):
 
     def _getTargetClass(self):
-        from Products.PluggableAuthService.plugins.DelegatingMultiPlugin \
-            import DelegatingMultiPlugin
+        from Products.PluggableAuthService.plugins.DelegatingMultiPlugin import DelegatingMultiPlugin  # NOQA
 
         return DelegatingMultiPlugin
 

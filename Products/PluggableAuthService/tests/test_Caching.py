@@ -15,6 +15,7 @@ import unittest
 
 from Acquisition import aq_base
 from OFS.Cache import isCacheable
+
 from Products.StandardCacheManagers.RAMCacheManager import RAMCacheManager
 
 
@@ -37,8 +38,7 @@ class PluggableAuthServiceCachingTests(unittest.TestCase):
 
     def _getTargetClass(self):
 
-        from Products.PluggableAuthService.PluggableAuthService \
-            import PluggableAuthService
+        from Products.PluggableAuthService.PluggableAuthService import PluggableAuthService  # NOQA
 
         return PluggableAuthService
 
@@ -56,8 +56,7 @@ class PluggableAuthServiceCachingTests(unittest.TestCase):
 
     def _makePlugins(self, plugin_type_info=None):
 
-        from Products.PluggableAuthService.PluggableAuthService \
-            import _PLUGIN_TYPE_INFO
+        from Products.PluggableAuthService.PluggableAuthService import _PLUGIN_TYPE_INFO  # NOQA
         from Products.PluginRegistry.PluginRegistry import PluginRegistry
 
         if plugin_type_info is None:
@@ -71,8 +70,8 @@ class PluggableAuthServiceCachingTests(unittest.TestCase):
 
     def _makeAndFill(self):
 
-        from Products.PluggableAuthService.plugins import ZODBUserManager
         from Products.PluggableAuthService.plugins import ZODBRoleManager
+        from Products.PluggableAuthService.plugins import ZODBUserManager
 
         plugin_registry = self._makePlugins()
         user_source = ZODBUserManager.ZODBUserManager('zodb_users')

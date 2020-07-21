@@ -28,12 +28,11 @@ from Acquisition import aq_base
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from OFS.PropertyManager import PropertyManager
-from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from ZPublisher.BaseRequest import UNSPECIFIED_ROLES
 from ZPublisher.HTTPResponse import HTTPResponse as Response
 
-from Products.PluggableAuthService.interfaces.plugins import \
-    INotCompetentPlugin
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from Products.PluggableAuthService.interfaces.plugins import INotCompetentPlugin  # NOQA
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.utils import classImplements
 

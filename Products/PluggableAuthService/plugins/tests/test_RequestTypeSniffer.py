@@ -15,15 +15,13 @@
 """
 import unittest
 
-from Products.PluggableAuthService.tests.conformance import \
-    IRequestTypeSniffer_conformance
+from Products.PluggableAuthService.tests.conformance import IRequestTypeSniffer_conformance  # NOQA
 
 
 class RequestTypeSniffer(unittest.TestCase, IRequestTypeSniffer_conformance):
 
     def _getTargetClass(self):
-        from Products.PluggableAuthService.plugins.RequestTypeSniffer \
-            import RequestTypeSniffer
+        from Products.PluggableAuthService.plugins.RequestTypeSniffer import RequestTypeSniffer  # NOQA
 
         return RequestTypeSniffer
 

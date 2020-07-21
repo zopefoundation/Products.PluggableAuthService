@@ -16,8 +16,8 @@
 
 
 def _setUpDefaultTraversable():
-    from zope.interface import Interface
     from zope.component import provideAdapter
-    from zope.traversing.interfaces import ITraversable
+    from zope.interface import Interface
     from zope.traversing.adapters import DefaultTraversable
+    from zope.traversing.interfaces import ITraversable
     provideAdapter(DefaultTraversable, (Interface,), ITraversable)

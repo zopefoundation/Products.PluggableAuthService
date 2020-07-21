@@ -19,11 +19,8 @@ import unittest
 from Products.GenericSetup.tests.common import BaseRegistryTests
 from Products.GenericSetup.tests.common import DummyExportContext
 from Products.GenericSetup.tests.common import DummyImportContext
-from Products.GenericSetup.tests.conformance import \
-    ConformsToIFilesystemExporter
-from Products.GenericSetup.tests.conformance import \
-    ConformsToIFilesystemImporter
-
+from Products.GenericSetup.tests.conformance import ConformsToIFilesystemExporter  # NOQA
+from Products.GenericSetup.tests.conformance import ConformsToIFilesystemImporter  # NOQA
 from Products.PluggableAuthService.tests.utils import _setUpDefaultTraversable
 
 
@@ -37,13 +34,11 @@ class _TestBase(BaseRegistryTests, ConformsToIFilesystemExporter,
 class ZODBUserManagerExportImportTests(_TestBase):
 
     def _getTargetClass(self):
-        from Products.PluggableAuthService.plugins.exportimport \
-            import ZODBUserManagerExportImport
+        from Products.PluggableAuthService.plugins.exportimport import ZODBUserManagerExportImport  # NOQA
         return ZODBUserManagerExportImport
 
     def _makePlugin(self, id='zodbusers', *args, **kw):
-        from Products.PluggableAuthService.plugins.ZODBUserManager \
-            import ZODBUserManager
+        from Products.PluggableAuthService.plugins.ZODBUserManager import ZODBUserManager  # NOQA
         return ZODBUserManager(id, *args, **kw)
 
     def test_listExportableItems(self):
@@ -183,13 +178,11 @@ class ZODBUserManagerExportImportTests(_TestBase):
 class ZODBGroupManagerExportImportTests(_TestBase):
 
     def _getTargetClass(self):
-        from Products.PluggableAuthService.plugins.exportimport \
-            import ZODBGroupManagerExportImport
+        from Products.PluggableAuthService.plugins.exportimport import ZODBGroupManagerExportImport  # NOQA
         return ZODBGroupManagerExportImport
 
     def _makePlugin(self, id, *args, **kw):
-        from Products.PluggableAuthService.plugins.ZODBGroupManager \
-            import ZODBGroupManager
+        from Products.PluggableAuthService.plugins.ZODBGroupManager import ZODBGroupManager  # NOQA
         return ZODBGroupManager(id, *args, **kw)
 
     def test_listExportableItems(self):
@@ -328,13 +321,11 @@ class ZODBGroupManagerExportImportTests(_TestBase):
 class ZODBRoleManagerExportImportTests(_TestBase):
 
     def _getTargetClass(self):
-        from Products.PluggableAuthService.plugins.exportimport \
-            import ZODBRoleManagerExportImport
+        from Products.PluggableAuthService.plugins.exportimport import ZODBRoleManagerExportImport  # NOQA
         return ZODBRoleManagerExportImport
 
     def _makePlugin(self, id, *args, **kw):
-        from Products.PluggableAuthService.plugins.ZODBRoleManager \
-            import ZODBRoleManager
+        from Products.PluggableAuthService.plugins.ZODBRoleManager import ZODBRoleManager  # NOQA
         return ZODBRoleManager(id, *args, **kw)
 
     def test_listExportableItems(self):
@@ -474,13 +465,11 @@ class ZODBRoleManagerExportImportTests(_TestBase):
 class CookieAuthHelperExportImportTests(_TestBase):
 
     def _getTargetClass(self):
-        from Products.PluggableAuthService.plugins.exportimport \
-            import CookieAuthHelperExportImport
+        from Products.PluggableAuthService.plugins.exportimport import CookieAuthHelperExportImport  # NOQA
         return CookieAuthHelperExportImport
 
     def _makePlugin(self, id, *args, **kw):
-        from Products.PluggableAuthService.plugins.CookieAuthHelper \
-            import CookieAuthHelper
+        from Products.PluggableAuthService.plugins.CookieAuthHelper import CookieAuthHelper  # NOQA
         return CookieAuthHelper(id, *args, **kw)
 
     def test_listExportableItems(self):
@@ -493,8 +482,7 @@ class CookieAuthHelperExportImportTests(_TestBase):
         self.assertEqual(len(adapter.listExportableItems()), 0)
 
     def test__getExportInfo_default(self):
-        from Products.PluggableAuthService.plugins.CookieAuthHelper \
-            import CookieAuthHelper
+        from Products.PluggableAuthService.plugins.CookieAuthHelper import CookieAuthHelper  # NOQA
         plugin = self._makePlugin('default').__of__(self.root)
         adapter = self._makeOne(plugin)
 
@@ -506,8 +494,7 @@ class CookieAuthHelperExportImportTests(_TestBase):
     def test_export_default(self):
         _setUpDefaultTraversable()
 
-        from Products.PluggableAuthService.plugins.CookieAuthHelper \
-            import CookieAuthHelper as CAH
+        from Products.PluggableAuthService.plugins.CookieAuthHelper import CookieAuthHelper as CAH  # NOQA
         plugin = self._makePlugin('default').__of__(self.root)
         adapter = self._makeOne(plugin)
 
@@ -600,13 +587,11 @@ class CookieAuthHelperExportImportTests(_TestBase):
 class DomainAuthHelperExportImportTests(_TestBase):
 
     def _getTargetClass(self):
-        from Products.PluggableAuthService.plugins.exportimport \
-            import DomainAuthHelperExportImport
+        from Products.PluggableAuthService.plugins.exportimport import DomainAuthHelperExportImport  # NOQA
         return DomainAuthHelperExportImport
 
     def _makePlugin(self, id, *args, **kw):
-        from Products.PluggableAuthService.plugins.DomainAuthHelper \
-            import DomainAuthHelper
+        from Products.PluggableAuthService.plugins.DomainAuthHelper import DomainAuthHelper  # NOQA
         return DomainAuthHelper(id, *args, **kw)
 
     def test_listExportableItems(self):
@@ -699,8 +684,7 @@ class DomainAuthHelperExportImportTests(_TestBase):
         self.assertEqual(content_type, 'text/xml')
 
     def test_import_empty(self):
-        from Products.PluggableAuthService.plugins.DomainAuthHelper \
-            import EqualsFilter
+        from Products.PluggableAuthService.plugins.DomainAuthHelper import EqualsFilter  # NOQA
         TITLE = 'With Map'
         USER_ID = 'some_user_id'
         DOMAIN = 'host.example.com'
@@ -782,8 +766,7 @@ class DomainAuthHelperExportImportTests(_TestBase):
 class TitleOnlyExportImportTests(_TestBase):
 
     def _getTargetClass(self):
-        from Products.PluggableAuthService.plugins.exportimport \
-            import TitleOnlyExportImport
+        from Products.PluggableAuthService.plugins.exportimport import TitleOnlyExportImport  # NOQA
         return TitleOnlyExportImport
 
     def _makePlugin(self, id, *args, **kw):
@@ -880,8 +863,7 @@ class TitleOnlyExportImportTests(_TestBase):
 class DelegatePathExportImportTests(_TestBase):
 
     def _getTargetClass(self):
-        from Products.PluggableAuthService.plugins.exportimport \
-            import DelegatePathExportImport
+        from Products.PluggableAuthService.plugins.exportimport import DelegatePathExportImport  # NOQA
         return DelegatePathExportImport
 
     def _makePlugin(self, id, *args, **kw):
@@ -996,13 +978,11 @@ class DelegatePathExportImportTests(_TestBase):
 class DynamicGroupsPluginExportImportTests(_TestBase):
 
     def _getTargetClass(self):
-        from Products.PluggableAuthService.plugins.exportimport \
-            import DynamicGroupsPluginExportImport
+        from Products.PluggableAuthService.plugins.exportimport import DynamicGroupsPluginExportImport  # NOQA
         return DynamicGroupsPluginExportImport
 
     def _makePlugin(self, id, *args, **kw):
-        from Products.PluggableAuthService.plugins.DynamicGroupsPlugin \
-            import DynamicGroupsPlugin
+        from Products.PluggableAuthService.plugins.DynamicGroupsPlugin import DynamicGroupsPlugin  # NOQA
 
         return DynamicGroupsPlugin(id, *args, **kw)
 
@@ -1141,13 +1121,11 @@ class DynamicGroupsPluginExportImportTests(_TestBase):
 class ChallengeProtocolChooserExportImportTests(_TestBase):
 
     def _getTargetClass(self):
-        from Products.PluggableAuthService.plugins.exportimport \
-            import ChallengeProtocolChooserExportImport
+        from Products.PluggableAuthService.plugins.exportimport import ChallengeProtocolChooserExportImport  # NOQA
         return ChallengeProtocolChooserExportImport
 
     def _makePlugin(self, id, *args, **kw):
-        from Products.PluggableAuthService.plugins.ChallengeProtocolChooser \
-            import ChallengeProtocolChooser
+        from Products.PluggableAuthService.plugins.ChallengeProtocolChooser import ChallengeProtocolChooser  # NOQA
 
         return ChallengeProtocolChooser(id, *args, **kw)
 
@@ -1159,8 +1137,7 @@ class ChallengeProtocolChooserExportImportTests(_TestBase):
         self.assertEqual(len(adapter.listExportableItems()), 0)
 
     def test__getExportInfo_empty(self):
-        from Products.PluggableAuthService.plugins.ChallengeProtocolChooser \
-            import listRequestTypesLabels
+        from Products.PluggableAuthService.plugins.ChallengeProtocolChooser import listRequestTypesLabels  # NOQA
         labels = sorted(listRequestTypesLabels())
         plugin = self._makePlugin('empty', None).__of__(self.root)
         adapter = self._makeOne(plugin)
@@ -1188,8 +1165,7 @@ class ChallengeProtocolChooserExportImportTests(_TestBase):
         self.assertEqual(content_type, 'text/xml')
 
     def test__getExportInfo_non_empty(self):
-        from Products.PluggableAuthService.plugins.ChallengeProtocolChooser \
-            import listRequestTypesLabels
+        from Products.PluggableAuthService.plugins.ChallengeProtocolChooser import listRequestTypesLabels  # NOQA
         labels = sorted(listRequestTypesLabels())
         plugin = self._makePlugin('non_empty', None).__of__(self.root)
         plugin.title = 'TITLE'
@@ -1228,8 +1204,7 @@ class ChallengeProtocolChooserExportImportTests(_TestBase):
         self.assertEqual(content_type, 'text/xml')
 
     def test_import_empty(self):
-        from Products.PluggableAuthService.plugins.ChallengeProtocolChooser \
-            import listRequestTypesLabels
+        from Products.PluggableAuthService.plugins.ChallengeProtocolChooser import listRequestTypesLabels  # NOQA
         plugin = self._makePlugin('empty', None).__of__(self.root)
         adapter = self._makeOne(plugin)
 
@@ -1244,8 +1219,7 @@ class ChallengeProtocolChooserExportImportTests(_TestBase):
             self.assertEqual(protocols, [])
 
     def test_import_non_empty(self):
-        from Products.PluggableAuthService.plugins.ChallengeProtocolChooser \
-            import listRequestTypesLabels
+        from Products.PluggableAuthService.plugins.ChallengeProtocolChooser import listRequestTypesLabels  # NOQA
         plugin = self._makePlugin('non_empty', None).__of__(self.root)
         adapter = self._makeOne(plugin)
 
@@ -1268,13 +1242,11 @@ class ChallengeProtocolChooserExportImportTests(_TestBase):
 class NotCompetent_byRolesExportImportTests(_TestBase):
 
     def _getTargetClass(self):
-        from Products.PluggableAuthService.plugins.exportimport \
-            import NotCompetent_byRolesExportImport
+        from Products.PluggableAuthService.plugins.exportimport import NotCompetent_byRolesExportImport  # NOQA
         return NotCompetent_byRolesExportImport
 
     def _makePlugin(self, id, *args, **kw):
-        from Products.PluggableAuthService.plugins.NotCompetentHelper \
-            import NotCompetent_byRoles
+        from Products.PluggableAuthService.plugins.NotCompetentHelper import NotCompetent_byRoles  # NOQA
 
         return NotCompetent_byRoles(id, *args, **kw)
 

@@ -47,16 +47,15 @@ def _replaceUserFolder(self, RESPONSE=None):
     preserving users and passwords, if possible
     """
     from Acquisition import aq_base
-    from Products.PluggableAuthService.PluggableAuthService \
-        import PluggableAuthService
-    from Products.PluggableAuthService.plugins.ZODBUserManager \
-        import ZODBUserManager
-    from Products.PluggableAuthService.plugins.ZODBRoleManager \
-        import ZODBRoleManager
-    from Products.PluggableAuthService.interfaces.plugins \
-        import IAuthenticationPlugin, IUserEnumerationPlugin
-    from Products.PluggableAuthService.interfaces.plugins \
-        import IRolesPlugin, IRoleEnumerationPlugin, IRoleAssignerPlugin
+
+    from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin  # NOQA
+    from Products.PluggableAuthService.interfaces.plugins import IRoleAssignerPlugin  # NOQA
+    from Products.PluggableAuthService.interfaces.plugins import IRoleEnumerationPlugin  # NOQA
+    from Products.PluggableAuthService.interfaces.plugins import IRolesPlugin
+    from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # NOQA
+    from Products.PluggableAuthService.PluggableAuthService import PluggableAuthService  # NOQA
+    from Products.PluggableAuthService.plugins.ZODBRoleManager import ZODBRoleManager  # NOQA
+    from Products.PluggableAuthService.plugins.ZODBUserManager import ZODBUserManager  # NOQA
 
     if getattr(aq_base(self), '__allow_groups__', None):
         if self.__allow_groups__.__class__ is PluggableAuthService:

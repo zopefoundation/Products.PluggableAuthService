@@ -15,30 +15,22 @@ try:
     from base64 import encodebytes
 except ImportError:  # Python < 3.1
     from base64 import encodestring as encodebytes
+
 import codecs
 import unittest
 
 import six
 from six.moves.urllib.parse import quote
 
-from Products.PluggableAuthService.tests.conformance import \
-    IChallengePlugin_conformance
-from Products.PluggableAuthService.tests.conformance import \
-    ICredentialsResetPlugin_conformance
-from Products.PluggableAuthService.tests.conformance import \
-    ICredentialsUpdatePlugin_conformance
-from Products.PluggableAuthService.tests.conformance import \
-    ILoginPasswordHostExtractionPlugin_conformance
-from Products.PluggableAuthService.tests.test_PluggableAuthService import \
-    FauxContainer
-from Products.PluggableAuthService.tests.test_PluggableAuthService import \
-    FauxObject
-from Products.PluggableAuthService.tests.test_PluggableAuthService import \
-    FauxRequest
-from Products.PluggableAuthService.tests.test_PluggableAuthService import \
-    FauxResponse
-from Products.PluggableAuthService.tests.test_PluggableAuthService import \
-    FauxRoot
+from Products.PluggableAuthService.tests.conformance import IChallengePlugin_conformance  # NOQA
+from Products.PluggableAuthService.tests.conformance import ICredentialsResetPlugin_conformance  # NOQA
+from Products.PluggableAuthService.tests.conformance import ICredentialsUpdatePlugin_conformance  # NOQA
+from Products.PluggableAuthService.tests.conformance import ILoginPasswordHostExtractionPlugin_conformance  # NOQA
+from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxContainer  # NOQA
+from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxObject  # NOQA
+from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRequest  # NOQA
+from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxResponse  # NOQA
+from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
 
 
 class FauxSettableRequest(FauxRequest):
@@ -78,8 +70,7 @@ class CookieAuthHelperTests(unittest.TestCase,
 
     def _getTargetClass(self):
 
-        from Products.PluggableAuthService.plugins.CookieAuthHelper \
-            import CookieAuthHelper
+        from Products.PluggableAuthService.plugins.CookieAuthHelper import CookieAuthHelper  # NOQA
 
         return CookieAuthHelper
 

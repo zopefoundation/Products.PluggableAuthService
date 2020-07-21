@@ -22,12 +22,9 @@ from Products.PluggableAuthService.interfaces.events import IGroupCreatedEvent
 from Products.PluggableAuthService.plugins.tests.helpers import DummyUser
 from Products.PluggableAuthService.plugins.tests.helpers import FauxPAS
 from Products.PluggableAuthService.plugins.tests.helpers import FauxSmartPAS
-from Products.PluggableAuthService.plugins.tests.helpers import \
-    makeRequestAndResponse
-from Products.PluggableAuthService.tests.conformance import \
-    IGroupEnumerationPlugin_conformance
-from Products.PluggableAuthService.tests.conformance import \
-    IGroupsPlugin_conformance
+from Products.PluggableAuthService.plugins.tests.helpers import makeRequestAndResponse  # NOQA
+from Products.PluggableAuthService.tests.conformance import IGroupEnumerationPlugin_conformance  # NOQA
+from Products.PluggableAuthService.tests.conformance import IGroupsPlugin_conformance  # NOQA
 
 
 @adapter(IGroupCreatedEvent)
@@ -51,8 +48,7 @@ class ZODBGroupManagerTests(unittest.TestCase,
 
     def _getTargetClass(self):
 
-        from Products.PluggableAuthService.plugins.ZODBGroupManager \
-            import ZODBGroupManager
+        from Products.PluggableAuthService.plugins.ZODBGroupManager import ZODBGroupManager  # NOQA
 
         return ZODBGroupManager
 
@@ -73,8 +69,7 @@ class ZODBGroupManagerTests(unittest.TestCase,
 
     def test_addGroup(self):
 
-        from Products.PluggableAuthService.tests.test_PluggableAuthService \
-            import FauxRoot
+        from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
 
         root = FauxRoot()
         zgm = self._makeOne().__of__(root)
@@ -216,8 +211,7 @@ class ZODBGroupManagerTests(unittest.TestCase,
                                       ('userid2', 'userid2')])
 
     def test_enumerateGroups_exact_nonesuch(self):
-        from Products.PluggableAuthService.tests.test_PluggableAuthService \
-            import FauxRoot
+        from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
 
         root = FauxRoot()
         zgm = self._makeOne(id='exact_nonesuch').__of__(root)
@@ -231,8 +225,7 @@ class ZODBGroupManagerTests(unittest.TestCase,
         self.assertEqual(zgm.enumerateGroups(id='qux', exact_match=True), ())
 
     def test_enumerateGroups_exact_string(self):
-        from Products.PluggableAuthService.tests.test_PluggableAuthService \
-            import FauxRoot
+        from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
 
         root = FauxRoot()
         zgm = self._makeOne(id='exact_nonesuch').__of__(root)
@@ -247,8 +240,7 @@ class ZODBGroupManagerTests(unittest.TestCase,
         self.assertEqual(info[0]['id'], 'foo')
 
     def test_enumerateGroups_exact_unicode(self):
-        from Products.PluggableAuthService.tests.test_PluggableAuthService \
-            import FauxRoot
+        from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
 
         root = FauxRoot()
         zgm = self._makeOne(id='exact_nonesuch').__of__(root)
@@ -263,8 +255,7 @@ class ZODBGroupManagerTests(unittest.TestCase,
         self.assertEqual(info[0]['id'], 'foo')
 
     def test_enumerateGroups_multiple(self):
-        from Products.PluggableAuthService.tests.test_PluggableAuthService \
-            import FauxRoot
+        from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
 
         root = FauxRoot()
         zrm = self._makeOne(id='partial').__of__(root)
@@ -291,8 +282,7 @@ class ZODBGroupManagerTests(unittest.TestCase,
             self.assertTrue(info['id'] in SUBSET)
 
     def test_enumerateGroups_prefixed(self):
-        from Products.PluggableAuthService.tests.test_PluggableAuthService \
-            import FauxRoot
+        from Products.PluggableAuthService.tests.test_PluggableAuthService import FauxRoot  # NOQA
 
         root = FauxRoot()
         zrm = self._makeOne(id='prefixed').__of__(root)

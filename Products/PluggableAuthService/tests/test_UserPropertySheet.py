@@ -52,8 +52,7 @@ class UserPropertySheetTests(unittest.TestCase, IPropertySheet_conformance):
 
     def _getTargetClass(self):
 
-        from Products.PluggableAuthService.UserPropertySheet \
-            import UserPropertySheet
+        from Products.PluggableAuthService.UserPropertySheet import UserPropertySheet  # NOQA
 
         return UserPropertySheet
 

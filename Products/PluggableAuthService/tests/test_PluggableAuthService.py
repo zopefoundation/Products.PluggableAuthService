@@ -455,8 +455,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def _getTargetClass(self):
 
-        from Products.PluggableAuthService.PluggableAuthService \
-            import PluggableAuthService
+        from Products.PluggableAuthService.PluggableAuthService import PluggableAuthService  # NOQA
 
         return PluggableAuthService
 
@@ -471,8 +470,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def _makePlugins(self, plugin_type_info=None):
 
-        from Products.PluggableAuthService.PluggableAuthService \
-            import _PLUGIN_TYPE_INFO
+        from Products.PluggableAuthService.PluggableAuthService import _PLUGIN_TYPE_INFO  # NOQA
         from Products.PluginRegistry.PluginRegistry import PluginRegistry
 
         if plugin_type_info is None:
@@ -495,8 +493,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def _makeFaultyRolemaker(self):
 
-        from Products.PluggableAuthService.interfaces.plugins \
-             import IRolesPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IRolesPlugin  # NOQA
 
         rolemaker = FaultyRolesPlugin()
         directlyProvides(rolemaker, IRolesPlugin)
@@ -505,8 +502,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def _makeUserEnumerator(self, user_id, login=None):
 
-        from Products.PluggableAuthService.interfaces.plugins \
-             import IUserEnumerationPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # NOQA
 
         enumerator = DummyUserEnumerator(user_id, login)
         directlyProvides(enumerator, IUserEnumerationPlugin)
@@ -515,8 +511,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def _makeGroupEnumerator(self, group_id):
 
-        from Products.PluggableAuthService.interfaces.plugins \
-             import IGroupEnumerationPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IGroupEnumerationPlugin  # NOQA
 
         enumerator = DummyGroupEnumerator(group_id)
         directlyProvides(enumerator, IGroupEnumerationPlugin)
@@ -525,10 +520,8 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def _makeSuperEnumerator(self, user_id, login, group_id):
 
-        from Products.PluggableAuthService.interfaces.plugins import \
-            IUserEnumerationPlugin
-        from Products.PluggableAuthService.interfaces.plugins import \
-            IGroupEnumerationPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IGroupEnumerationPlugin  # NOQA
+        from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # NOQA
 
         enumerator = DummySuperEnumerator(user_id, login, group_id)
         directlyProvides(enumerator,
@@ -537,16 +530,14 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
         return enumerator
 
     def _makeGroupPlugin(self, id, groups=()):
-        from Products.PluggableAuthService.interfaces.plugins \
-             import IGroupsPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IGroupsPlugin  # NOQA
 
         gp = DummyGroupPlugin(id, groups=groups)
         directlyProvides(gp, IGroupsPlugin)
         return gp
 
     def _makeChallengePlugin(self, id, klass):
-        from Products.PluggableAuthService.interfaces.plugins \
-             import IChallengePlugin
+        from Products.PluggableAuthService.interfaces.plugins import IChallengePlugin  # NOQA
 
         cp = klass(id)
         directlyProvides(cp, IChallengePlugin)
@@ -557,8 +548,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
         # [{'id': 'Foo', 'login': 'foobar'},
         #  {'id': 'Bar', 'login': 'BAR'}]
 
-        from Products.PluggableAuthService.interfaces.plugins \
-             import IUserEnumerationPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # NOQA
 
         enumerator = DummyMultiUserEnumerator('enumerator', *users)
         directlyProvides(enumerator, IUserEnumerationPlugin)
@@ -583,8 +573,8 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test__extractUserIds_simple(self):
 
-        from Products.PluggableAuthService.interfaces.plugins \
-            import IExtractionPlugin, IAuthenticationPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin  # NOQA
+        from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -610,8 +600,8 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test__extractUserIds_one_extractor_two_authenticators(self):
 
-        from Products.PluggableAuthService.interfaces.plugins \
-            import IExtractionPlugin, IAuthenticationPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin  # NOQA
+        from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -647,8 +637,8 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test__extractUserIds_two_extractors_two_authenticators(self):
 
-        from Products.PluggableAuthService.interfaces.plugins \
-            import IExtractionPlugin, IAuthenticationPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin  # NOQA
+        from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -694,8 +684,8 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test__extractUserIds_broken_extractor_before_good_extractor(self):
 
-        from Products.PluggableAuthService.interfaces.plugins \
-            import IExtractionPlugin, IAuthenticationPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin  # NOQA
+        from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -730,8 +720,8 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test__extractUserIds_broken_extractor_after_good_extractor(self):
 
-        from Products.PluggableAuthService.interfaces.plugins \
-            import IExtractionPlugin, IAuthenticationPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin  # NOQA
+        from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -763,12 +753,10 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test__extractUserIds_authenticate_emergency_user_broken_extor(self):
 
-        from Products.PluggableAuthService.interfaces.plugins \
-            import IExtractionPlugin
-
         from AccessControl.users import UnrestrictedUser
 
         from Products.PluggableAuthService import PluggableAuthService
+        from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin  # NOQA
 
         old_eu = PluggableAuthService.emergency_user
 
@@ -803,8 +791,8 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test__extractUserIds_broken_authicator_before_good_authenticator(self):
 
-        from Products.PluggableAuthService.interfaces.plugins \
-            import IExtractionPlugin, IAuthenticationPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin  # NOQA
+        from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -836,8 +824,8 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test__extractUserIds_broken_authicator_after_good_authenticator(self):
 
-        from Products.PluggableAuthService.interfaces.plugins \
-            import IExtractionPlugin, IAuthenticationPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin  # NOQA
+        from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -870,12 +858,11 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test__extractUserIds_authenticate_emrgncy_with_broken_authicator(self):
 
-        from Products.PluggableAuthService.interfaces.plugins \
-            import IExtractionPlugin, IAuthenticationPlugin
-
         from AccessControl.users import UnrestrictedUser
 
         from Products.PluggableAuthService import PluggableAuthService
+        from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin  # NOQA
+        from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin  # NOQA
 
         old_eu = PluggableAuthService.emergency_user
 
@@ -921,12 +908,11 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test__extractUserIds_emergency_user_always_wins(self):
 
-        from Products.PluggableAuthService.interfaces.plugins \
-            import IExtractionPlugin, IAuthenticationPlugin
-
         from AccessControl.users import UnrestrictedUser
 
         from Products.PluggableAuthService import PluggableAuthService
+        from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin  # NOQA
+        from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin  # NOQA
 
         old_eu = PluggableAuthService.emergency_user
 
@@ -965,8 +951,8 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test__extractUserIds_transform(self):
 
-        from Products.PluggableAuthService.interfaces.plugins \
-            import IExtractionPlugin, IAuthenticationPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin  # NOQA
+        from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -995,12 +981,11 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test__extractUserIds_emergency_user_always_wins_in_transform(self):
 
-        from Products.PluggableAuthService.interfaces.plugins \
-            import IExtractionPlugin, IAuthenticationPlugin
-
         from AccessControl.users import UnrestrictedUser
 
         from Products.PluggableAuthService import PluggableAuthService
+        from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin  # NOQA
+        from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin  # NOQA
 
         old_eu = PluggableAuthService.emergency_user
 
@@ -1042,8 +1027,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
             PluggableAuthService.emergency_user = old_eu
 
     def _isNotCompetent_test(self, decisions, result):
-        from Products.PluggableAuthService.interfaces.plugins \
-            import INotCompetentPlugin
+        from Products.PluggableAuthService.interfaces.plugins import INotCompetentPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -1198,8 +1182,8 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test__faultyRolemaker(self):
 
-        from Products.PluggableAuthService.interfaces.plugins \
-             import IUserEnumerationPlugin, IRolesPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IRolesPlugin  # NOQA
+        from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -1229,8 +1213,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test__verifyUser_one_plugin(self):
 
-        from Products.PluggableAuthService.interfaces.plugins \
-             import IUserEnumerationPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -1247,8 +1230,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test__verifyUser_more_plugins(self):
 
-        from Products.PluggableAuthService.interfaces.plugins \
-             import IUserEnumerationPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -1276,8 +1258,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test__verifyUser_login(self):
 
-        from Products.PluggableAuthService.interfaces.plugins \
-             import IUserEnumerationPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -1301,8 +1282,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test__verifyUser_login_userid(self):
 
-        from Products.PluggableAuthService.interfaces.plugins \
-             import IUserEnumerationPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -1325,8 +1305,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test__verifyUser_no_login_or_userid(self):
         # setup cargo-culted from other tests...
-        from Products.PluggableAuthService.interfaces.plugins \
-             import IUserEnumerationPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # NOQA
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
 
@@ -1349,8 +1328,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test__verifyUser_login_transform_lower(self):
 
-        from Products.PluggableAuthService.interfaces.plugins \
-             import IUserEnumerationPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -1381,8 +1359,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test__verifyUser_login_transform_upper(self):
 
-        from Products.PluggableAuthService.interfaces.plugins \
-             import IUserEnumerationPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -1440,8 +1417,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test__findUser_with_userfactory_plugin(self):
 
-        from Products.PluggableAuthService.interfaces.plugins \
-            import IUserFactoryPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IUserFactoryPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -1474,8 +1450,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test__findUser_with_userfactory_plugin_and_transform(self):
 
-        from Products.PluggableAuthService.interfaces.plugins \
-            import IUserFactoryPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IUserFactoryPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -1510,8 +1485,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test__findUser_with_plugins(self):
 
-        from Products.PluggableAuthService.interfaces.plugins \
-            import IPropertiesPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -1545,8 +1519,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test__findUser_with_groups(self):
 
-        from Products.PluggableAuthService.interfaces.plugins \
-            import IGroupsPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IGroupsPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -1570,8 +1543,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test__findUser_with_groups_ignoring_one(self):
 
-        from Products.PluggableAuthService.interfaces.plugins \
-            import IGroupsPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IGroupsPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -1728,8 +1700,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
     def test_getUser_with_plugins(self):
         # !!! This will produce insane results when uniquifiers not present
 
-        from Products.PluggableAuthService.interfaces.plugins \
-             import IUserEnumerationPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -1756,8 +1727,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
         self.assertEqual(user.getId(), 'bar')
 
     def test_getUser_with_uniquifying_plugins(self):
-        from Products.PluggableAuthService.interfaces.plugins \
-             import IUserEnumerationPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -1787,8 +1757,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test_getUser_id_and_name(self):
         # Tests fetching a user by ID versus fetching by username.
-        from Products.PluggableAuthService.interfaces.plugins \
-             import IUserEnumerationPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -1808,8 +1777,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
         self.assertEqual(user2.getUserName(), 'bar@example.com')
 
     def test_getUser_login_transform(self):
-        from Products.PluggableAuthService.interfaces.plugins \
-             import IUserEnumerationPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -1838,8 +1806,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test_simple_getUserGroups_with_Groupplugin(self):
 
-        from Products.PluggableAuthService.interfaces.plugins \
-             import IGroupsPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IGroupsPlugin  # NOQA
 
         default_groups = ('Group A', 'Group B')
         plugins = self._makePlugins()
@@ -1864,8 +1831,9 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test_validate_simple_unauth(self):
 
-        from Products.PluggableAuthService.interfaces.plugins import \
-            IExtractionPlugin, IAuthenticationPlugin, IUserEnumerationPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin  # NOQA
+        from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin  # NOQA
+        from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -1907,8 +1875,9 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
         from AccessControl.SpecialUsers import nobody
 
-        from Products.PluggableAuthService.interfaces.plugins import \
-            IExtractionPlugin, IAuthenticationPlugin, IUserEnumerationPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin  # NOQA
+        from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin  # NOQA
+        from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -1948,9 +1917,10 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test_validate_simple_authenticated(self):
 
-        from Products.PluggableAuthService.interfaces.plugins import \
-            IExtractionPlugin, IAuthenticationPlugin, \
-            IUserEnumerationPlugin, IRolesPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin  # NOQA
+        from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin  # NOQA
+        from Products.PluggableAuthService.interfaces.plugins import IRolesPlugin  # NOQA
+        from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -1995,9 +1965,10 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test_validate_simple_authenticated_transform(self):
 
-        from Products.PluggableAuthService.interfaces.plugins import \
-            IExtractionPlugin, IAuthenticationPlugin, \
-            IUserEnumerationPlugin, IRolesPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin  # NOQA
+        from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin  # NOQA
+        from Products.PluggableAuthService.interfaces.plugins import IRolesPlugin  # NOQA
+        from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -2044,8 +2015,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test_validate_with_anonymous_factory(self):
 
-        from Products.PluggableAuthService.interfaces.plugins \
-            import IAnonymousUserFactoryPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IAnonymousUserFactoryPlugin  # NOQA
 
         def _makeAnon():
             user = FauxUser(None,
@@ -2088,9 +2058,10 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
     def _setup_for_authentication(self):
         """return pas set up for authentication and associated request."""
 
-        from Products.PluggableAuthService.interfaces.plugins import \
-            IExtractionPlugin, IAuthenticationPlugin, \
-            IUserEnumerationPlugin, IRolesPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin  # NOQA
+        from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin  # NOQA
+        from Products.PluggableAuthService.interfaces.plugins import IRolesPlugin  # NOQA
+        from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -2180,8 +2151,9 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test__delOb_unregisters_plugin(self):
 
-        from Products.PluggableAuthService.interfaces.plugins import \
-            IExtractionPlugin, IAuthenticationPlugin, IUserEnumerationPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin  # NOQA
+        from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin  # NOQA
+        from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -2221,8 +2193,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test_searchUsers(self):
 
-        from Products.PluggableAuthService.interfaces.plugins \
-             import IUserEnumerationPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -2255,8 +2226,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test_searchUsers_transform(self):
 
-        from Products.PluggableAuthService.interfaces.plugins \
-             import IUserEnumerationPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -2305,8 +2275,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test_searchGroups(self):
 
-        from Products.PluggableAuthService.interfaces.plugins \
-             import IGroupEnumerationPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IGroupEnumerationPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -2323,10 +2292,8 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test_searchPrincipals(self):
 
-        from Products.PluggableAuthService.interfaces.plugins import \
-            IUserEnumerationPlugin
-        from Products.PluggableAuthService.interfaces.plugins import \
-            IGroupEnumerationPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IGroupEnumerationPlugin  # NOQA
+        from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -2345,10 +2312,8 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test_searchPrincipalsWithSuperEnumerator(self):
 
-        from Products.PluggableAuthService.interfaces.plugins import \
-            IUserEnumerationPlugin
-        from Products.PluggableAuthService.interfaces.plugins import \
-            IGroupEnumerationPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IGroupEnumerationPlugin  # NOQA
+        from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -2366,10 +2331,8 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test_searchPrincipals_transform(self):
 
-        from Products.PluggableAuthService.interfaces.plugins import \
-            IUserEnumerationPlugin
-        from Products.PluggableAuthService.interfaces.plugins import \
-            IGroupEnumerationPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IGroupEnumerationPlugin  # NOQA
+        from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -2404,8 +2367,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test_updateLoginName(self):
 
-        from Products.PluggableAuthService.interfaces.plugins \
-             import IUserEnumerationPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -2446,8 +2408,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test_updateOwnLoginName(self):
 
-        from Products.PluggableAuthService.interfaces.plugins \
-             import IUserEnumerationPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -2491,8 +2452,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
     def test_updateAllLoginNames(self):
 
-        from Products.PluggableAuthService.interfaces.plugins \
-             import IUserEnumerationPlugin
+        from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # NOQA
 
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
@@ -2547,8 +2507,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
         self.assertTrue(isinstance(response.challenger, FauxResponse))
 
     def test_challenge(self):
-        from Products.PluggableAuthService.interfaces.plugins \
-             import IChallengePlugin
+        from Products.PluggableAuthService.interfaces.plugins import IChallengePlugin  # NOQA
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
         challenger = self._makeChallengePlugin('challenger', DummyChallenger)
@@ -2573,8 +2532,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
     def test_daisy_chain_challenge(self):
         # make sure that nested PASes each get a chance to challenge a
         # given response
-        from Products.PluggableAuthService.interfaces.plugins \
-             import IChallengePlugin
+        from Products.PluggableAuthService.interfaces.plugins import IChallengePlugin  # NOQA
         rc, root, folder, object = self._makeTree()
         response = FauxResponse()
         request = self._makeRequest(RESPONSE=response)
@@ -2615,8 +2573,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
         self.assertTrue(isinstance(response.challenger, DummyChallenger))
 
     def test_challenge_multi_protocols(self):
-        from Products.PluggableAuthService.interfaces.plugins \
-             import IChallengePlugin
+        from Products.PluggableAuthService.interfaces.plugins import IChallengePlugin  # NOQA
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
 
@@ -2656,8 +2613,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
         self.assertEqual(response.reindeer_games, ['dasher', 'dancer'])
 
     def test_dont_call_challenge_twice(self):
-        from Products.PluggableAuthService.interfaces.plugins \
-             import IChallengePlugin
+        from Products.PluggableAuthService.interfaces.plugins import IChallengePlugin  # NOQA
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
 
@@ -2678,9 +2634,9 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
         self.assertEqual(counter.count, 1)
 
     def test_logout(self):
-        from Products.PluggableAuthService.interfaces.plugins import \
-            IExtractionPlugin, ICredentialsUpdatePlugin, \
-            ICredentialsResetPlugin
+        from Products.PluggableAuthService.interfaces.plugins import ICredentialsResetPlugin  # NOQA
+        from Products.PluggableAuthService.interfaces.plugins import ICredentialsUpdatePlugin  # NOQA
+        from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin  # NOQA
         plugins = self._makePlugins()
         zcuf = self._makeOne(plugins)
         creds_store = DummyCredentialsStore('creds')

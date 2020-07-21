@@ -47,8 +47,7 @@ class ScriptablePluginTests(unittest.TestCase):
 
     def _getTargetClass(self):
 
-        from Products.PluggableAuthService.plugins.ScriptablePlugin \
-            import ScriptablePlugin
+        from Products.PluggableAuthService.plugins.ScriptablePlugin import ScriptablePlugin  # NOQA
 
         return ScriptablePlugin
 

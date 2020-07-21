@@ -25,14 +25,13 @@ from OFS.Cache import Cacheable
 from OFS.Folder import Folder
 from OFS.PropertyManager import PropertyManager
 from OFS.SimpleItem import SimpleItem
-from Products.PageTemplates.Expressions import getEngine
-from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from zope.event import notify
 from zope.interface import Interface
 
+from Products.PageTemplates.Expressions import getEngine
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from Products.PluggableAuthService.events import GroupCreated
-from Products.PluggableAuthService.interfaces.plugins import \
-    IGroupEnumerationPlugin
+from Products.PluggableAuthService.interfaces.plugins import IGroupEnumerationPlugin  # NOQA
 from Products.PluggableAuthService.interfaces.plugins import IGroupsPlugin
 from Products.PluggableAuthService.permissions import ManageGroups
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin

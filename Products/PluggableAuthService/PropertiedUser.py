@@ -19,8 +19,7 @@ from AccessControl.User import BasicUser
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 
-from Products.PluggableAuthService.interfaces.propertysheets import \
-    IPropertySheet
+from Products.PluggableAuthService.interfaces.propertysheets import IPropertySheet  # NOQA
 
 from .interfaces.authservice import IPropertiedUser
 from .UserPropertySheet import UserPropertySheet
