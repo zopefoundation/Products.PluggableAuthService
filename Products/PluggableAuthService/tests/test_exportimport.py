@@ -17,9 +17,9 @@ from csv import reader
 
 from six import StringIO
 
-from Products.GenericSetup.tests.common import BaseRegistryTests
 from zope.component.testing import PlacelessSetup
 
+from Products.GenericSetup.tests.common import BaseRegistryTests
 from Products.PluggableAuthService.tests.utils import _setUpDefaultTraversable
 
 
@@ -27,8 +27,8 @@ class _TestBase(PlacelessSetup, BaseRegistryTests):
 
     def _initPAS(self, plugin_type_info=(), plugins={}):
         from OFS.Folder import Folder
-        from Products.PluggableAuthService.PluggableAuthService \
-            import addPluggableAuthService
+
+        from ..PluggableAuthService import addPluggableAuthService
 
         app = Folder()
         app.getPhysicalPath = lambda: ()
@@ -43,32 +43,24 @@ class _TestBase(PlacelessSetup, BaseRegistryTests):
 class Test_exportPAS(_TestBase):
 
     def _setUpAdapters(self):
-        from zope.component import provideAdapter
         from OFS.interfaces import IObjectManager
         from OFS.interfaces import IPropertyManager
+        from zope.component import provideAdapter
 
+        from Products.GenericSetup.content import CSVAwareFileAdapter
+        from Products.GenericSetup.content import DAVAwareFileAdapter
+        from Products.GenericSetup.content import FolderishExporterImporter
+        from Products.GenericSetup.content import INIAwareFileAdapter
+        from Products.GenericSetup.content import SimpleINIAware
         from Products.GenericSetup.interfaces import IContentFactoryName
         from Products.GenericSetup.interfaces import ICSVAware
         from Products.GenericSetup.interfaces import IDAVAware
         from Products.GenericSetup.interfaces import IFilesystemExporter
         from Products.GenericSetup.interfaces import IINIAware
-        from Products.GenericSetup.content import \
-            FolderishExporterImporter
-        from Products.GenericSetup.content import \
-            SimpleINIAware
-        from Products.GenericSetup.content import \
-            CSVAwareFileAdapter
-        from Products.GenericSetup.content import \
-            INIAwareFileAdapter
-        from Products.GenericSetup.content import \
-            DAVAwareFileAdapter
-
+        from Products.PluggableAuthService.exportimport import PAS_CF_Namer
+        from Products.PluginRegistry.exportimport import \
+            PluginRegistryFileExportImportAdapter
         from Products.PluginRegistry.interfaces import IPluginRegistry
-        from Products.PluginRegistry.exportimport \
-            import PluginRegistryFileExportImportAdapter
-
-        from Products.PluggableAuthService.exportimport \
-            import PAS_CF_Namer
 
         provideAdapter(FolderishExporterImporter,
                        (IObjectManager,),
@@ -132,8 +124,7 @@ class Test_exportPAS(_TestBase):
 
     def test_with_contents(self):
         from Products.GenericSetup.tests.common import DummyExportContext
-        from Products.GenericSetup.tests.faux_objects \
-            import TestCSVAware
+        from Products.GenericSetup.tests.faux_objects import TestCSVAware
         from Products.GenericSetup.utils import _getDottedName
         from Products.PluggableAuthService.exportimport import exportPAS
 
@@ -185,35 +176,26 @@ class Test_exportPAS(_TestBase):
 class Test_importPAS(_TestBase):
 
     def _setUpAdapters(self):
-        from zope.component import provideAdapter
         from OFS.interfaces import IObjectManager
         from OFS.interfaces import IPropertyManager
+        from zope.component import provideAdapter
 
+        from Products.GenericSetup.content import CSVAwareFileAdapter
+        from Products.GenericSetup.content import DAVAwareFileAdapter
+        from Products.GenericSetup.content import FolderishExporterImporter
+        from Products.GenericSetup.content import INIAwareFileAdapter
+        from Products.GenericSetup.content import SimpleINIAware
         from Products.GenericSetup.interfaces import IContentFactory
         from Products.GenericSetup.interfaces import ICSVAware
         from Products.GenericSetup.interfaces import IDAVAware
         from Products.GenericSetup.interfaces import IFilesystemImporter
         from Products.GenericSetup.interfaces import IINIAware
-
-        from Products.GenericSetup.content import \
-            FolderishExporterImporter
-        from Products.GenericSetup.content import \
-            SimpleINIAware
-        from Products.GenericSetup.content import \
-            CSVAwareFileAdapter
-        from Products.GenericSetup.content import \
-            INIAwareFileAdapter
-        from Products.GenericSetup.content import \
-            DAVAwareFileAdapter
-
+        from Products.PluginRegistry.exportimport import \
+            PluginRegistryFileExportImportAdapter
         from Products.PluginRegistry.interfaces import IPluginRegistry
-        from Products.PluginRegistry.exportimport \
-            import PluginRegistryFileExportImportAdapter
 
-        from Products.PluggableAuthService.interfaces.authservice \
-            import IPluggableAuthService
-        from Products.PluggableAuthService.exportimport \
-            import PAS_PR_ContentFactory
+        from ..exportimport import PAS_PR_ContentFactory
+        from ..interfaces.authservice import IPluggableAuthService
 
         provideAdapter(FolderishExporterImporter,
                        (IObjectManager, ),
@@ -262,8 +244,8 @@ class Test_importPAS(_TestBase):
 
     def test_empty_adding_plugins(self):
         from Products.GenericSetup.tests.common import DummyImportContext
-        from Products.GenericSetup.tests.faux_objects \
-            import TestCSVAware, KNOWN_CSV
+        from Products.GenericSetup.tests.faux_objects import KNOWN_CSV
+        from Products.GenericSetup.tests.faux_objects import TestCSVAware
         from Products.PluggableAuthService.exportimport import importPAS
 
         self._setUpAdapters()

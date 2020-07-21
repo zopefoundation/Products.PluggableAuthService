@@ -32,10 +32,9 @@ from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from ZPublisher.BaseRequest import UNSPECIFIED_ROLES
 from ZPublisher.HTTPResponse import HTTPResponse as Response
 
-from Products.PluggableAuthService.interfaces.plugins import \
-    INotCompetentPlugin
-from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PluggableAuthService.utils import classImplements
+from ..interfaces.plugins import INotCompetentPlugin
+from ..plugins.BasePlugin import BasePlugin
+from ..utils import classImplements
 
 
 class HigherLevelUserFolderAccessMixin(object):

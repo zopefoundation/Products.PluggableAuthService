@@ -28,17 +28,15 @@ from OFS.Cache import Cacheable
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from zope.interface import Interface
 
-from Products.PluggableAuthService.interfaces.plugins import \
-    IAuthenticationPlugin
-from Products.PluggableAuthService.interfaces.plugins import IUserAdderPlugin
-from Products.PluggableAuthService.interfaces.plugins import \
-    IUserEnumerationPlugin
-from Products.PluggableAuthService.permissions import ManageUsers
-from Products.PluggableAuthService.permissions import SetOwnPassword
-from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PluggableAuthService.utils import classImplements
-from Products.PluggableAuthService.utils import createViewName
-from Products.PluggableAuthService.utils import csrf_only
+from ..interfaces.plugins import IAuthenticationPlugin
+from ..interfaces.plugins import IUserAdderPlugin
+from ..interfaces.plugins import IUserEnumerationPlugin
+from ..permissions import ManageUsers
+from ..permissions import SetOwnPassword
+from ..plugins.BasePlugin import BasePlugin
+from ..utils import classImplements
+from ..utils import createViewName
+from ..utils import csrf_only
 
 
 try:

@@ -15,30 +15,22 @@ try:
     from base64 import encodebytes
 except ImportError:  # Python < 3.1
     from base64 import encodestring as encodebytes
+
 import codecs
 import unittest
 
 import six
 from six.moves.urllib.parse import quote
 
-from Products.PluggableAuthService.tests.conformance import \
-    IChallengePlugin_conformance
-from Products.PluggableAuthService.tests.conformance import \
-    ICredentialsResetPlugin_conformance
-from Products.PluggableAuthService.tests.conformance import \
-    ICredentialsUpdatePlugin_conformance
-from Products.PluggableAuthService.tests.conformance import \
-    ILoginPasswordHostExtractionPlugin_conformance
-from Products.PluggableAuthService.tests.test_PluggableAuthService import \
-    FauxContainer
-from Products.PluggableAuthService.tests.test_PluggableAuthService import \
-    FauxObject
-from Products.PluggableAuthService.tests.test_PluggableAuthService import \
-    FauxRequest
-from Products.PluggableAuthService.tests.test_PluggableAuthService import \
-    FauxResponse
-from Products.PluggableAuthService.tests.test_PluggableAuthService import \
-    FauxRoot
+from ...tests.conformance import IChallengePlugin_conformance
+from ...tests.conformance import ICredentialsResetPlugin_conformance
+from ...tests.conformance import ICredentialsUpdatePlugin_conformance
+from ...tests.conformance import ILoginPasswordHostExtractionPlugin_conformance
+from ...tests.test_PluggableAuthService import FauxContainer
+from ...tests.test_PluggableAuthService import FauxObject
+from ...tests.test_PluggableAuthService import FauxRequest
+from ...tests.test_PluggableAuthService import FauxResponse
+from ...tests.test_PluggableAuthService import FauxRoot
 
 
 class FauxSettableRequest(FauxRequest):
@@ -78,8 +70,7 @@ class CookieAuthHelperTests(unittest.TestCase,
 
     def _getTargetClass(self):
 
-        from Products.PluggableAuthService.plugins.CookieAuthHelper \
-            import CookieAuthHelper
+        from ...plugins.CookieAuthHelper import CookieAuthHelper
 
         return CookieAuthHelper
 

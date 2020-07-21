@@ -20,18 +20,18 @@ from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from zope.interface import Interface
 from ZPublisher import xmlrpc
 
-from Products.PluggableAuthService import HAVE_ZSERVER
-from Products.PluggableAuthService.interfaces.plugins import \
-    IRequestTypeSniffer
-from Products.PluggableAuthService.interfaces.request import IBrowserRequest
-from Products.PluggableAuthService.interfaces.request import IWebDAVRequest
-from Products.PluggableAuthService.interfaces.request import IXMLRPCRequest
-from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PluggableAuthService.utils import classImplements
+from .. import HAVE_ZSERVER
+from ..interfaces.plugins import IRequestTypeSniffer
+from ..interfaces.request import IBrowserRequest
+from ..interfaces.request import IWebDAVRequest
+from ..interfaces.request import IXMLRPCRequest
+from ..plugins.BasePlugin import BasePlugin
+from ..utils import classImplements
 
 
 if HAVE_ZSERVER:
     from ZServer.FTPRequest import FTPRequest
+
     from Products.PluggableAuthService.interfaces.request import IFTPRequest
 
 

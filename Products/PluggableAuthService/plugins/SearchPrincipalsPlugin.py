@@ -22,12 +22,10 @@ from Acquisition import aq_base
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from zope.interface import Interface
 
-from Products.PluggableAuthService.interfaces.plugins import \
-    IGroupEnumerationPlugin
-from Products.PluggableAuthService.interfaces.plugins import \
-    IUserEnumerationPlugin
-from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PluggableAuthService.utils import classImplements
+from ..interfaces.plugins import IGroupEnumerationPlugin
+from ..interfaces.plugins import IUserEnumerationPlugin
+from ..plugins.BasePlugin import BasePlugin
+from ..utils import classImplements
 
 
 class ISearchPrincipalsPlugin(Interface):

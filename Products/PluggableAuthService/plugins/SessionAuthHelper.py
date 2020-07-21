@@ -19,14 +19,11 @@ from AccessControl.SecurityInfo import ClassSecurityInfo
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from zope.interface import Interface
 
-from Products.PluggableAuthService.interfaces.plugins import \
-    ICredentialsResetPlugin
-from Products.PluggableAuthService.interfaces.plugins import \
-    ICredentialsUpdatePlugin
-from Products.PluggableAuthService.interfaces.plugins import \
-    ILoginPasswordHostExtractionPlugin
-from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PluggableAuthService.utils import classImplements
+from ..interfaces.plugins import ICredentialsResetPlugin
+from ..interfaces.plugins import ICredentialsUpdatePlugin
+from ..interfaces.plugins import ILoginPasswordHostExtractionPlugin
+from ..plugins.BasePlugin import BasePlugin
+from ..utils import classImplements
 
 
 class ISessionAuthHelper(Interface):

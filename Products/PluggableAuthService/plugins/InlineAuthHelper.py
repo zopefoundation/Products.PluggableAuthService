@@ -20,11 +20,10 @@ from OFS.Folder import Folder
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from zope.interface import Interface
 
-from Products.PluggableAuthService.interfaces.plugins import IChallengePlugin
-from Products.PluggableAuthService.interfaces.plugins import \
-    ILoginPasswordHostExtractionPlugin
-from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PluggableAuthService.utils import classImplements
+from ..interfaces.plugins import IChallengePlugin
+from ..interfaces.plugins import ILoginPasswordHostExtractionPlugin
+from ..plugins.BasePlugin import BasePlugin
+from ..utils import classImplements
 
 
 class IInlineAuthHelper(Interface):

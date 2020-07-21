@@ -26,16 +26,13 @@ from OFS.Folder import Folder
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from zope.interface import Interface
 
-from Products.PluggableAuthService.interfaces.plugins import \
-    IAuthenticationPlugin
-from Products.PluggableAuthService.interfaces.plugins import \
-    ICredentialsResetPlugin
-from Products.PluggableAuthService.interfaces.plugins import \
-    ICredentialsUpdatePlugin
-from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin
-from Products.PluggableAuthService.interfaces.plugins import IRolesPlugin
-from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PluggableAuthService.utils import classImplements
+from ..interfaces.plugins import IAuthenticationPlugin
+from ..interfaces.plugins import ICredentialsResetPlugin
+from ..interfaces.plugins import ICredentialsUpdatePlugin
+from ..interfaces.plugins import IPropertiesPlugin
+from ..interfaces.plugins import IRolesPlugin
+from ..plugins.BasePlugin import BasePlugin
+from ..utils import classImplements
 
 
 class IDelegatingMultiPlugin(Interface):

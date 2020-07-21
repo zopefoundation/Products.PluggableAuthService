@@ -35,12 +35,13 @@ from OFS.Folder import Folder
 from OFS.interfaces import IObjectManager
 from OFS.interfaces import IPropertyManager
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-from Products.PluginRegistry.PluginRegistry import PluginRegistry
-from Products.StandardCacheManagers.RAMCacheManager import RAMCacheManager
 from zExceptions import Unauthorized
 from zope.event import notify
 from ZPublisher import BeforeTraverse
 from ZTUtils import Batch
+
+from Products.PluginRegistry.PluginRegistry import PluginRegistry
+from Products.StandardCacheManagers.RAMCacheManager import RAMCacheManager
 
 from .events import PrincipalCreated
 from .interfaces.authservice import IPluggableAuthService

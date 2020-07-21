@@ -24,14 +24,12 @@ from zope.component import adapter
 from zope.component import provideHandler
 from ZPublisher.utils import basic_auth_encode
 
-from Products.PluggableAuthService.events import CredentialsUpdated
-from Products.PluggableAuthService.events import PASEventNotify
-from Products.PluggableAuthService.events import userCredentialsUpdatedHandler
-from Products.PluggableAuthService.interfaces.events import \
-    IPrincipalCreatedEvent
-from Products.PluggableAuthService.PluggableAuthService import \
-    PluggableAuthService
-from Products.PluggableAuthService.tests import pastc
+from ..events import CredentialsUpdated
+from ..events import PASEventNotify
+from ..events import userCredentialsUpdatedHandler
+from ..interfaces.events import IPrincipalCreatedEvent
+from ..PluggableAuthService import PluggableAuthService
+from ..tests import pastc
 
 
 @adapter(IPrincipalCreatedEvent)

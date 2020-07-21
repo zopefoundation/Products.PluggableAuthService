@@ -20,6 +20,7 @@ try:
 except ImportError:  # Python < 3.1
     from base64 import decodestring as decodebytes
     from base64 import encodestring as encodebytes
+
 import codecs
 from binascii import Error
 from binascii import hexlify
@@ -36,15 +37,12 @@ from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from Products.PageTemplates.ZopePageTemplate import ZopePageTemplate
 from zope.interface import Interface
 
-from Products.PluggableAuthService.interfaces.plugins import IChallengePlugin
-from Products.PluggableAuthService.interfaces.plugins import \
-    ICredentialsResetPlugin
-from Products.PluggableAuthService.interfaces.plugins import \
-    ICredentialsUpdatePlugin
-from Products.PluggableAuthService.interfaces.plugins import \
-    ILoginPasswordHostExtractionPlugin
-from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PluggableAuthService.utils import classImplements
+from ..interfaces.plugins import IChallengePlugin
+from ..interfaces.plugins import ICredentialsResetPlugin
+from ..interfaces.plugins import ICredentialsUpdatePlugin
+from ..interfaces.plugins import ILoginPasswordHostExtractionPlugin
+from ..plugins.BasePlugin import BasePlugin
+from ..utils import classImplements
 
 
 class ICookieAuthHelper(Interface):

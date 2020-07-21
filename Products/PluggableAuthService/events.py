@@ -16,22 +16,16 @@ from zope.component import adapter
 from zope.component import subscribers
 from zope.interface import implementer
 
-from Products.PluggableAuthService.interfaces.authservice import IBasicUser
-from Products.PluggableAuthService.interfaces.events import \
-    ICredentialsUpdatedEvent
-from Products.PluggableAuthService.interfaces.events import IGroupCreatedEvent
-from Products.PluggableAuthService.interfaces.events import IGroupDeletedEvent
-from Products.PluggableAuthService.interfaces.events import IPASEvent
-from Products.PluggableAuthService.interfaces.events import \
-    IPrincipalAddedToGroupEvent
-from Products.PluggableAuthService.interfaces.events import \
-    IPrincipalCreatedEvent
-from Products.PluggableAuthService.interfaces.events import \
-    IPrincipalDeletedEvent
-from Products.PluggableAuthService.interfaces.events import \
-    IPrincipalRemovedFromGroupEvent
-from Products.PluggableAuthService.interfaces.events import \
-    IPropertiesUpdatedEvent
+from .interfaces.authservice import IBasicUser
+from .interfaces.events import ICredentialsUpdatedEvent
+from .interfaces.events import IGroupCreatedEvent
+from .interfaces.events import IGroupDeletedEvent
+from .interfaces.events import IPASEvent
+from .interfaces.events import IPrincipalAddedToGroupEvent
+from .interfaces.events import IPrincipalCreatedEvent
+from .interfaces.events import IPrincipalDeletedEvent
+from .interfaces.events import IPrincipalRemovedFromGroupEvent
+from .interfaces.events import IPropertiesUpdatedEvent
 
 
 @implementer(IPASEvent)

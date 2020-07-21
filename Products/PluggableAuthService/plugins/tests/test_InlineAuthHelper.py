@@ -17,16 +17,12 @@ from Products.PluggableAuthService.tests.conformance import \
     IChallengePlugin_conformance
 from Products.PluggableAuthService.tests.conformance import \
     ILoginPasswordHostExtractionPlugin_conformance
-from Products.PluggableAuthService.tests.test_PluggableAuthService import \
-    FauxContainer
-from Products.PluggableAuthService.tests.test_PluggableAuthService import \
-    FauxObject
-from Products.PluggableAuthService.tests.test_PluggableAuthService import \
-    FauxRequest
-from Products.PluggableAuthService.tests.test_PluggableAuthService import \
-    FauxResponse
-from Products.PluggableAuthService.tests.test_PluggableAuthService import \
-    FauxRoot
+
+from ...tests.test_PluggableAuthService import FauxContainer
+from ...tests.test_PluggableAuthService import FauxObject
+from ...tests.test_PluggableAuthService import FauxRequest
+from ...tests.test_PluggableAuthService import FauxResponse
+from ...tests.test_PluggableAuthService import FauxRoot
 
 
 class FauxSettableRequest(FauxRequest):
@@ -55,8 +51,7 @@ class InlineAuthHelperTests(unittest.TestCase,
 
     def _getTargetClass(self):
 
-        from Products.PluggableAuthService.plugins.InlineAuthHelper \
-            import InlineAuthHelper
+        from ...plugins.InlineAuthHelper import InlineAuthHelper
 
         return InlineAuthHelper
 
