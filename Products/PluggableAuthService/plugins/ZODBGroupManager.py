@@ -274,8 +274,8 @@ class ZODBGroupManager(BasePlugin):
         if not already:
             new = current + (group_id,)
             self._principal_groups[principal_id] = new
-            notify(PrincipalAddedToGroup(principal_id, group_id))
             self._invalidatePrincipalCache(principal_id)
+            notify(PrincipalAddedToGroup(principal_id, group_id))
 
         return not already
 
@@ -301,8 +301,8 @@ class ZODBGroupManager(BasePlugin):
 
         if already:
             self._principal_groups[principal_id] = new
-            notify(PrincipalRemovedFromGroup(principal_id, group_id))
             self._invalidatePrincipalCache(principal_id)
+            notify(PrincipalRemovedFromGroup(principal_id, group_id))
 
         return already
 
