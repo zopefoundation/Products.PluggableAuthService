@@ -329,9 +329,11 @@ class ZODBGroupManager(BasePlugin):
                         RESPONSE=None):
         """ Add a group via the ZMI.
         """
-        self.addGroup(group_id, title, description)
-
-        message = 'Group+added'
+        if not group_id:
+            message = 'Please+provide+a+Group+ID'
+        else:
+            self.addGroup(group_id, title, description)
+            message = 'Group+added'
 
         if RESPONSE is not None:
             RESPONSE.redirect('%s/manage_groups?manage_tabs_message=%s' %

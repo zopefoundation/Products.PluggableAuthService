@@ -4,6 +4,10 @@ Change Log
 2.5 (unreleased)
 ----------------
 
+- Prevent creation of users/groups/roles with empty ID in the ZODB
+  (`#70
+   <https://github.com/zopefoundation/Products.PluggableAuthService/issues/70>`_)
+
 - update configuration for version 5 of ``isort``
 
 

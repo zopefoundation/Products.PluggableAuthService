@@ -434,6 +434,9 @@ class ZODBUserManager(BasePlugin, Cacheable):
         if password != confirm:
             message = 'password+and+confirm+do+not+match'
 
+        elif not user_id:
+            message = 'Please+provide+a+User+ID'
+
         else:
 
             if not login_name:

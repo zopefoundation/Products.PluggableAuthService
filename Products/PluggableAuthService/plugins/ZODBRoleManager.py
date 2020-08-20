@@ -356,9 +356,11 @@ class ZODBRoleManager(BasePlugin):
                        REQUEST=None):
         """ Add a role via the ZMI.
         """
-        self.addRole(role_id, title, description)
-
-        message = 'Role+added'
+        if not role_id:
+            message = 'Please+provide+a+Role+ID'
+        else:
+            self.addRole(role_id, title, description)
+            message = 'Role+added'
 
         if RESPONSE is not None:
             RESPONSE.redirect('%s/manage_roles?manage_tabs_message=%s' %
