@@ -14,6 +14,7 @@
 import binascii
 import functools
 import inspect
+import logging
 import os
 from hashlib import sha1
 
@@ -26,6 +27,9 @@ from App.Common import package_home
 from zExceptions import Forbidden
 from zope import interface
 from zope.publisher.interfaces.browser import IBrowserRequest  # noqa
+
+
+logger = logging.getLogger('PluggableAuthService')
 
 
 def directlyProvides(obj, *interfaces):
@@ -110,6 +114,12 @@ def checkCSRFToken(request, token='csrf_token', raises=True):
 
     If the values match, return True.
     """
+    if getattr(request, 'SESSION', None) is None:
+        # Sessioning is not available at all, just give up
+        logger.warning(
+            'Built-in CSRF check disabled - sessioning not available')
+        return True
+
     if request.form.get(token) != getCSRFToken(request):
         if raises:
             raise Forbidden('incorrect CSRF token')

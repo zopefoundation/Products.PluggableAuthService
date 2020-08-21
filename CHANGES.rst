@@ -4,6 +4,9 @@ Change Log
 2.5 (unreleased)
 ----------------
 
+- Disable ZMI CSRF check and log it if sessioning is not available
+  instead of breaking ZMI interactions
+
 - Clear caches before sending group user added/removed events
   (`#71
    <https://github.com/zopefoundation/Products.PluggableAuthService/issues/71>`_)
