@@ -162,7 +162,7 @@ def _upgradeLocalRoleAssignments(self, RESPONSE=None):
                                (map[key], npid))
                     obj.__ac_local_roles__ = new_map
                     _write(RESPONSE, 'upgradeLocalRoleAssignmentsFromRoot',
-                           ('Local Roles map changed for (%s)\n' %
+                           ('Local Roles map changed for %s\n' %
                             '/'.join(path)))
             if (len(seen) % 100) == 0:
                 transaction.savepoint(True)
@@ -187,6 +187,3 @@ def replace_acl_users(self, RESPONSE=None):
     _replaceUserFolder(self, RESPONSE)
     _upgradeLocalRoleAssignments(self, RESPONSE)
     self._upgraded_acl_users = 1
-    _write(RESPONSE, 'replace_acl_users',
-           'Root acl_users has been replaced,'
-           ' and local role assignments updated.\n')
