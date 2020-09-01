@@ -12,23 +12,8 @@
 #
 ##############################################################################
 
-import unittest
-
 from six import StringIO
-from six.moves import range
 
-from AccessControl import Unauthorized
-from AccessControl.Permissions import add_folders as AddFolders
-from AccessControl.Permissions import view as View
-from zope import event
-from zope.component import adapter
-from zope.component import provideHandler
-from ZPublisher.utils import basic_auth_encode
-
-from ..events import CredentialsUpdated
-from ..events import PASEventNotify
-from ..events import userCredentialsUpdatedHandler
-from ..interfaces.events import IPrincipalCreatedEvent
 from ..PluggableAuthService import PluggableAuthService
 from ..tests import pastc
 
