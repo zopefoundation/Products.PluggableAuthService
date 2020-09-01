@@ -5,7 +5,7 @@
 # This software is subject to the provisions of the Zope Public License,
 # Version 2.1 (ZPL).  A copy of the ZPL should accompany this
 # distribution.
-# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# THIS SOFTWARE IS PROVIDED 'AS IS' AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
 # FOR A PARTICULAR PURPOSE.
@@ -38,7 +38,7 @@ class UpgradeTests(pastc.PASTestCase):
         response.seek(0)
         messages = response.read().splitlines()
         self.assertTrue(messages)
-        self.assertEqual(messages[0], "Already replaced this user folder")
+        self.assertEqual(messages[0], 'Already replaced this user folder')
         self.assertEqual(len(messages), 1)
 
         # Do it again.
@@ -49,14 +49,15 @@ class UpgradeTests(pastc.PASTestCase):
         response.seek(0)
         messages = response.read().splitlines()
         self.assertTrue(messages)
-        self.assertEqual(messages[0], "Already replaced this user folder")
+        self.assertEqual(messages[0], 'Already replaced this user folder')
         self.assertEqual(
-            messages[1], "Local role assignments have already been updated."
+            messages[1], 'Local role assignments have already been updated.',
         )
         self.assertEqual(len(messages), 2)
 
     def test_upgrade_userfolder(self):
-        # Test that upgrading acl_users user folder works, or at least does not fail.
+        # Test that upgrading acl_users user folder works,
+        # or at least does not fail.
         # We had uncaught ImportErrors once.
         from OFS.userfolder import UserFolder
 
@@ -77,13 +78,13 @@ class UpgradeTests(pastc.PASTestCase):
         messages = response.read().splitlines()
         self.assertTrue(messages)
         self.assertEqual(
-            messages[0], "Replaced root acl_users with PluggableAuthService"
+            messages[0], 'Replaced root acl_users with PluggableAuthService',
         )
         # We could test for this message, but does not seem important.
         # self.assertEqual(
-        #     messages[1], "  Ignoring map for unknown principal test_user_1_"
+        #     messages[1], '  Ignoring map for unknown principal test_user_1_'
         # )
-        self.assertIn("Local Roles map changed for /acl_users", messages)
+        self.assertIn('Local Roles map changed for /acl_users', messages)
 
         # Do it again.
         response = StringIO()
@@ -93,8 +94,8 @@ class UpgradeTests(pastc.PASTestCase):
         response.seek(0)
         messages = response.read().splitlines()
         self.assertTrue(messages)
-        self.assertEqual(messages[0], "Already replaced this user folder")
+        self.assertEqual(messages[0], 'Already replaced this user folder')
         self.assertEqual(
-            messages[1], "Local role assignments have already been updated."
+            messages[1], 'Local role assignments have already been updated.',
         )
         self.assertEqual(len(messages), 2)
