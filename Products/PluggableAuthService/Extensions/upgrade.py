@@ -48,14 +48,14 @@ def _replaceUserFolder(self, RESPONSE=None):
     """
     from Acquisition import aq_base
 
-    from .interfaces.plugins import IAuthenticationPlugin
-    from .interfaces.plugins import IRoleAssignerPlugin
-    from .interfaces.plugins import IRoleEnumerationPlugin
-    from .interfaces.plugins import IRolesPlugin
-    from .interfaces.plugins import IUserEnumerationPlugin
-    from .PluggableAuthService import PluggableAuthService
-    from .plugins.ZODBRoleManager import ZODBRoleManager
-    from .plugins.ZODBUserManager import ZODBUserManager
+    from ..interfaces.plugins import IAuthenticationPlugin
+    from ..interfaces.plugins import IRoleAssignerPlugin
+    from ..interfaces.plugins import IRoleEnumerationPlugin
+    from ..interfaces.plugins import IRolesPlugin
+    from ..interfaces.plugins import IUserEnumerationPlugin
+    from ..PluggableAuthService import PluggableAuthService
+    from ..plugins.ZODBRoleManager import ZODBRoleManager
+    from ..plugins.ZODBUserManager import ZODBUserManager
 
     if getattr(aq_base(self), '__allow_groups__', None):
         if self.__allow_groups__.__class__ is PluggableAuthService:
@@ -162,7 +162,7 @@ def _upgradeLocalRoleAssignments(self, RESPONSE=None):
                                (map[key], npid))
                     obj.__ac_local_roles__ = new_map
                     _write(RESPONSE, 'upgradeLocalRoleAssignmentsFromRoot',
-                           ('Local Roles map changed for (%s)\n' %
+                           ('Local Roles map changed for %s\n' %
                             '/'.join(path)))
             if (len(seen) % 100) == 0:
                 transaction.savepoint(True)
@@ -187,6 +187,3 @@ def replace_acl_users(self, RESPONSE=None):
     _replaceUserFolder(self, RESPONSE)
     _upgradeLocalRoleAssignments(self, RESPONSE)
     self._upgraded_acl_users = 1
-    _write(RESPONSE, 'replace_acl_users',
-           'Root acl_users has been replaced,'
-           ' and local role assignments updated.\n')
