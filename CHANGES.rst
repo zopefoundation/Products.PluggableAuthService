@@ -4,6 +4,9 @@ Change Log
 2.5 (unreleased)
 ----------------
 
+- Renamed ``xml`` dir to ``xml_templates``.
+  This avoids an import warning on Python 2.7.
+
 - Disable ZMI CSRF check and log it if sessioning is not available
   instead of breaking ZMI interactions
 
