@@ -61,7 +61,7 @@ class SimpleXMLExportImport(Implicit):
         """ See IFilesystemExporter.
         """
         package_path = getPackagePath(self)
-        template = PageTemplateFile('xml/%s' % self._FILENAME,
+        template = PageTemplateFile('xml_templates/%s' % self._FILENAME,
                                     package_path).__of__(self.context)
         info = self._getExportInfo()
         export_context.writeDataFile('%s.xml' % self.context.getId(),
