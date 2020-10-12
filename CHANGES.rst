@@ -1,7 +1,13 @@
 Change Log
 ==========
 
-2.5 (unreleased)
+2.5.1 (unreleased)
+------------------
+
+- Nothing changed yet.
+
+
+2.5 (2020-10-12)
 ----------------
 
 - Renamed ``xml`` dir to ``xml_templates``.
@@ -11,12 +17,10 @@ Change Log
   instead of breaking ZMI interactions
 
 - Clear caches before sending group user added/removed events
-  (`#71
-   <https://github.com/zopefoundation/Products.PluggableAuthService/issues/71>`_)
+  (`#71 <https://github.com/zopefoundation/Products.PluggableAuthService/issues/71>`_)
 
 - Prevent creation of users/groups/roles with empty ID in the ZODB
-  (`#70
-   <https://github.com/zopefoundation/Products.PluggableAuthService/issues/70>`_)
+  (`#70 <https://github.com/zopefoundation/Products.PluggableAuthService/issues/70>`_)
 
 - update configuration for version 5 of ``isort``
 
