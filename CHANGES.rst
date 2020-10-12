@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-2.5 (unreleased)
+2.5 (2020-10-12)
 ----------------
 
 - Renamed ``xml`` dir to ``xml_templates``.
