@@ -1,8 +1,8 @@
 Products.PluggableAuthService
 =============================
 
-.. image:: https://api.travis-ci.org/zopefoundation/Products.PluggableAuthService.svg?branch=master
-        :target: https://travis-ci.org/zopefoundation/Products.PluggableAuthService
+.. image:: https://api.travis-ci.com/zopefoundation/Products.PluggableAuthService.svg?branch=master
+        :target: https://travis-ci.com/zopefoundation/Products.PluggableAuthService
 
 .. image:: https://coveralls.io/repos/github/zopefoundation/Products.PluggableAuthService/badge.svg
         :target: https://coveralls.io/github/zopefoundation/Products.PluggableAuthService
