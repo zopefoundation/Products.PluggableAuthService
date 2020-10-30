@@ -4,7 +4,7 @@ Change Log
 2.5.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix DeprecationWarnings occurring on Zope 5.
 
 
 2.5 (2020-10-12)
