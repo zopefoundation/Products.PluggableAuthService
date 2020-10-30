@@ -13,12 +13,11 @@
 """Filesystem exporter / importer adapters.
 """
 
-from zope.interface import implementer
-
 from Products.GenericSetup.interfaces import IContentFactory
 from Products.GenericSetup.interfaces import IContentFactoryName
 from Products.GenericSetup.interfaces import IFilesystemExporter
 from Products.GenericSetup.interfaces import IFilesystemImporter
+from zope.interface import implementer
 
 
 def exportPAS(context):
