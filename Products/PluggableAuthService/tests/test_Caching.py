@@ -15,6 +15,7 @@ import unittest
 
 from Acquisition import aq_base
 from OFS.Cache import isCacheable
+
 from Products.StandardCacheManagers.RAMCacheManager import RAMCacheManager
 
 

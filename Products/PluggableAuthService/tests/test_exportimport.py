@@ -17,8 +17,9 @@ from csv import reader
 
 from six import StringIO
 
-from Products.GenericSetup.tests.common import BaseRegistryTests
 from zope.component.testing import PlacelessSetup
+
+from Products.GenericSetup.tests.common import BaseRegistryTests
 
 from Products.PluggableAuthService.tests.utils import _setUpDefaultTraversable
 
@@ -45,6 +46,8 @@ class Test_exportPAS(_TestBase):
     def _setUpAdapters(self):
         from OFS.interfaces import IObjectManager
         from OFS.interfaces import IPropertyManager
+        from zope.component import provideAdapter
+
         from Products.GenericSetup.content import CSVAwareFileAdapter
         from Products.GenericSetup.content import DAVAwareFileAdapter
         from Products.GenericSetup.content import FolderishExporterImporter
@@ -58,7 +61,6 @@ class Test_exportPAS(_TestBase):
         from Products.PluginRegistry.exportimport import \
             PluginRegistryFileExportImportAdapter
         from Products.PluginRegistry.interfaces import IPluginRegistry
-        from zope.component import provideAdapter
 
         from Products.PluggableAuthService.exportimport import PAS_CF_Namer
 
@@ -180,6 +182,8 @@ class Test_importPAS(_TestBase):
     def _setUpAdapters(self):
         from OFS.interfaces import IObjectManager
         from OFS.interfaces import IPropertyManager
+        from zope.component import provideAdapter
+
         from Products.GenericSetup.content import CSVAwareFileAdapter
         from Products.GenericSetup.content import DAVAwareFileAdapter
         from Products.GenericSetup.content import FolderishExporterImporter
@@ -193,7 +197,6 @@ class Test_importPAS(_TestBase):
         from Products.PluginRegistry.exportimport import \
             PluginRegistryFileExportImportAdapter
         from Products.PluginRegistry.interfaces import IPluginRegistry
-        from zope.component import provideAdapter
 
         from ..exportimport import PAS_PR_ContentFactory
         from ..interfaces.authservice import IPluggableAuthService
