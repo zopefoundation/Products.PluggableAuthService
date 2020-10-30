@@ -38,7 +38,7 @@ class PropertiedUserTests(unittest.TestCase, IBasicUser_conformance,
 
     def _getTargetClass(self):
 
-        from Products.PluggableAuthService.PropertiedUser import PropertiedUser
+        from ..PropertiedUser import PropertiedUser
 
         return PropertiedUser
 

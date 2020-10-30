@@ -19,20 +19,20 @@ class ConformsToIPASEvent:
     def test_class_conforms_to_IPASEvent(self):
         from zope.interface.verify import verifyClass
 
-        from Products.PluggableAuthService.interfaces.events import IPASEvent
+        from ..interfaces.events import IPASEvent
         verifyClass(IPASEvent, self._getTargetClass())
 
     def test_instance_conforms_to_IPASEvent(self):
         from zope.interface.verify import verifyObject
 
-        from Products.PluggableAuthService.interfaces.events import IPASEvent
+        from ..interfaces.events import IPASEvent
         verifyObject(IPASEvent, self._makeOne())
 
 
 class PASEventTests(unittest.TestCase, ConformsToIPASEvent):
 
     def _getTargetClass(self):
-        from Products.PluggableAuthService.events import PASEvent
+        from ..events import PASEvent
         return PASEvent
 
     def _makeOne(self, principal=None):
@@ -44,7 +44,7 @@ class PASEventTests(unittest.TestCase, ConformsToIPASEvent):
 class PrincipalCreatedTests(unittest.TestCase, ConformsToIPASEvent):
 
     def _getTargetClass(self):
-        from Products.PluggableAuthService.events import PrincipalCreated
+        from ..events import PrincipalCreated
         return PrincipalCreated
 
     def _makeOne(self, principal=None):
@@ -68,7 +68,7 @@ class PrincipalCreatedTests(unittest.TestCase, ConformsToIPASEvent):
 class PrincipalDeletedTests(unittest.TestCase, ConformsToIPASEvent):
 
     def _getTargetClass(self):
-        from Products.PluggableAuthService.events import PrincipalDeleted
+        from ..events import PrincipalDeleted
         return PrincipalDeleted
 
     def _makeOne(self, principal=None):
@@ -92,7 +92,7 @@ class PrincipalDeletedTests(unittest.TestCase, ConformsToIPASEvent):
 class CredentialsUpdatedTests(unittest.TestCase, ConformsToIPASEvent):
 
     def _getTargetClass(self):
-        from Products.PluggableAuthService.events import CredentialsUpdated
+        from ..events import CredentialsUpdated
         return CredentialsUpdated
 
     def _makeOne(self, principal=None, password='password'):
@@ -116,7 +116,7 @@ class CredentialsUpdatedTests(unittest.TestCase, ConformsToIPASEvent):
 class PropertiesUpdatedTests(unittest.TestCase, ConformsToIPASEvent):
 
     def _getTargetClass(self):
-        from Products.PluggableAuthService.events import PropertiesUpdated
+        from ..events import PropertiesUpdated
         return PropertiesUpdated
 
     def _makeOne(self, principal=None, properties=None):
@@ -146,7 +146,7 @@ class DummyPrincipal(object):
 class GroupCreatedTests(unittest.TestCase, ConformsToIPASEvent):
 
     def _getTargetClass(self):
-        from Products.PluggableAuthService.events import GroupCreated
+        from ..events import GroupCreated
         return GroupCreated
 
     def _makeOne(self, Group=None):
@@ -170,7 +170,7 @@ class GroupCreatedTests(unittest.TestCase, ConformsToIPASEvent):
 class GroupDeletedTests(unittest.TestCase, ConformsToIPASEvent):
 
     def _getTargetClass(self):
-        from Products.PluggableAuthService.events import GroupDeleted
+        from ..events import GroupDeleted
         return GroupDeleted
 
     def _makeOne(self, Group=None):
@@ -194,7 +194,7 @@ class GroupDeletedTests(unittest.TestCase, ConformsToIPASEvent):
 class PrincipalAddedToGroupTests(unittest.TestCase, ConformsToIPASEvent):
 
     def _getTargetClass(self):
-        from Products.PluggableAuthService.events import PrincipalAddedToGroup
+        from ..events import PrincipalAddedToGroup
         return PrincipalAddedToGroup
 
     def _makeOne(self, principal=None, group_id=None):

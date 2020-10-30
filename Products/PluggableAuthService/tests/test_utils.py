@@ -19,7 +19,7 @@ import six
 class Test_createViewName(unittest.TestCase):
 
     def _callFUT(self, *args, **kw):
-        from Products.PluggableAuthService.utils import createViewName
+        from ..utils import createViewName
         return createViewName(*args, **kw)
 
     def test_simple(self):
@@ -51,7 +51,7 @@ class Test_createViewName(unittest.TestCase):
 class Test_createKeywords(unittest.TestCase):
 
     def _callFUT(self, *args, **kw):
-        from Products.PluggableAuthService.utils import createKeywords
+        from ..utils import createKeywords
         return createKeywords(*args, **kw)
 
     def test_simple(self):
@@ -115,7 +115,7 @@ def _makeRequestWSession(**session):
 class Test_getCSRFToken(unittest.TestCase):
 
     def _callFUT(self, *args, **kw):
-        from Products.PluggableAuthService.utils import getCSRFToken
+        from ..utils import getCSRFToken
         return getCSRFToken(*args, **kw)
 
     def test_wo_token_in_request(self):
@@ -146,7 +146,7 @@ class Test_getCSRFToken(unittest.TestCase):
 class Test_checkCSRFToken(unittest.TestCase):
 
     def _callFUT(self, *args, **kw):
-        from Products.PluggableAuthService.utils import checkCSRFToken
+        from ..utils import checkCSRFToken
         return checkCSRFToken(*args, **kw)
 
     def test_wo_token_in_session_or_form_w_raises(self):
@@ -198,7 +198,7 @@ class Test_checkCSRFToken(unittest.TestCase):
 class CSRFTokenTests(unittest.TestCase):
 
     def _getTargetClass(self):
-        from Products.PluggableAuthService.utils import CSRFToken
+        from ..utils import CSRFToken
         return CSRFToken
 
     def _makeOne(self, context=None, request=None):
@@ -232,7 +232,7 @@ class CSRFTokenTests(unittest.TestCase):
 class Test_csrf_only(unittest.TestCase):
 
     def _callFUT(self, *args, **kw):
-        from Products.PluggableAuthService.utils import csrf_only
+        from ..utils import csrf_only
         return csrf_only(*args, **kw)
 
     def test_w_function_no_REQUEST(self):

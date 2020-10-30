@@ -20,7 +20,8 @@ from six import StringIO
 from zope.component.testing import PlacelessSetup
 
 from Products.GenericSetup.tests.common import BaseRegistryTests
-from Products.PluggableAuthService.tests.utils import _setUpDefaultTraversable
+
+from .utils import _setUpDefaultTraversable
 
 
 class _TestBase(PlacelessSetup, BaseRegistryTests):
@@ -57,10 +58,11 @@ class Test_exportPAS(_TestBase):
         from Products.GenericSetup.interfaces import IDAVAware
         from Products.GenericSetup.interfaces import IFilesystemExporter
         from Products.GenericSetup.interfaces import IINIAware
-        from Products.PluggableAuthService.exportimport import PAS_CF_Namer
         from Products.PluginRegistry.exportimport import \
             PluginRegistryFileExportImportAdapter
         from Products.PluginRegistry.interfaces import IPluginRegistry
+
+        from ..exportimport import PAS_CF_Namer
 
         provideAdapter(FolderishExporterImporter,
                        (IObjectManager,),
@@ -92,7 +94,8 @@ class Test_exportPAS(_TestBase):
 
     def test_empty(self):
         from Products.GenericSetup.tests.common import DummyExportContext
-        from Products.PluggableAuthService.exportimport import exportPAS
+
+        from ..exportimport import exportPAS
 
         _setUpDefaultTraversable()
 
@@ -126,7 +129,8 @@ class Test_exportPAS(_TestBase):
         from Products.GenericSetup.tests.common import DummyExportContext
         from Products.GenericSetup.tests.faux_objects import TestCSVAware
         from Products.GenericSetup.utils import _getDottedName
-        from Products.PluggableAuthService.exportimport import exportPAS
+
+        from ..exportimport import exportPAS
 
         _setUpDefaultTraversable()
 
@@ -228,7 +232,8 @@ class Test_importPAS(_TestBase):
 
     def test_empty_modifying_plugin_types(self):
         from Products.GenericSetup.tests.common import DummyImportContext
-        from Products.PluggableAuthService.exportimport import importPAS
+
+        from ..exportimport import importPAS
 
         self._setUpAdapters()
         app, pas = self._initPAS()
@@ -246,7 +251,8 @@ class Test_importPAS(_TestBase):
         from Products.GenericSetup.tests.common import DummyImportContext
         from Products.GenericSetup.tests.faux_objects import KNOWN_CSV
         from Products.GenericSetup.tests.faux_objects import TestCSVAware
-        from Products.PluggableAuthService.exportimport import importPAS
+
+        from ..exportimport import importPAS
 
         self._setUpAdapters()
         app, pas = self._initPAS()

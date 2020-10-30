@@ -25,9 +25,9 @@ from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from zope.interface import implementedBy
 from zope.interface import providedBy
 
-from Products.PluggableAuthService.permissions import ManageUsers
-from Products.PluggableAuthService.utils import classImplements
-from Products.PluggableAuthService.utils import createViewName
+from ..permissions import ManageUsers
+from ..utils import classImplements
+from ..utils import createViewName
 
 
 def flattenInterfaces(implemented):
