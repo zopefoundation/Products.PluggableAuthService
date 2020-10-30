@@ -13,7 +13,7 @@
 ##############################################################################
 import unittest
 
-from AccessControl.AuthEncoding import pw_encrypt
+from AuthEncoding.AuthEncoding import pw_encrypt
 from zExceptions import Forbidden
 
 from ...plugins.tests.helpers import makeRequestAndResponse
@@ -521,7 +521,7 @@ class ZODBUserManagerTests(unittest.TestCase,
 
     def test_addUser_with_not_yet_encrypted_password(self):
         # See collector #1869 && #1926
-        from AccessControl.AuthEncoding import is_encrypted
+        from AuthEncoding.AuthEncoding import is_encrypted
 
         USER_ID = 'not_yet_encrypted'
         PASSWORD = 'password'
@@ -538,7 +538,7 @@ class ZODBUserManagerTests(unittest.TestCase,
 
     def test_addUser_with_preencrypted_password(self):
         # See collector #1869 && #1926
-        from AccessControl.AuthEncoding import pw_encrypt
+        from AuthEncoding.AuthEncoding import pw_encrypt
 
         USER_ID = 'already_encrypted'
         PASSWORD = 'password'
@@ -554,7 +554,7 @@ class ZODBUserManagerTests(unittest.TestCase,
         self.assertEqual(uid_and_info, (USER_ID, USER_ID))
 
     def test_updateUserPassword_with_not_yet_encrypted_password(self):
-        from AccessControl.AuthEncoding import is_encrypted
+        from AuthEncoding.AuthEncoding import is_encrypted
 
         USER_ID = 'not_yet_encrypted'
         PASSWORD = 'password'
