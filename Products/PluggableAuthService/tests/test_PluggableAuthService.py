@@ -25,10 +25,9 @@ from OFS.ObjectManager import ObjectManager
 from zExceptions import Unauthorized
 from zope.interface import implementer
 
-from Products.PluggableAuthService.utils import directlyProvides
-
 from ..interfaces.plugins import INotCompetentPlugin
 from .conformance import IUserFolder_conformance
+from Products.PluggableAuthService.utils import directlyProvides
 
 
 class DummyPlugin(Implicit):
@@ -756,9 +755,8 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
         from AccessControl.users import UnrestrictedUser
 
-        from Products.PluggableAuthService import PluggableAuthService
-
         from ..interfaces.plugins import IExtractionPlugin
+        from Products.PluggableAuthService import PluggableAuthService
 
         old_eu = PluggableAuthService.emergency_user
 
@@ -862,10 +860,9 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
         from AccessControl.users import UnrestrictedUser
 
-        from Products.PluggableAuthService import PluggableAuthService
-
         from ..interfaces.plugins import IAuthenticationPlugin
         from ..interfaces.plugins import IExtractionPlugin
+        from Products.PluggableAuthService import PluggableAuthService
 
         old_eu = PluggableAuthService.emergency_user
 
@@ -913,10 +910,9 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
         from AccessControl.users import UnrestrictedUser
 
-        from Products.PluggableAuthService import PluggableAuthService
-
         from ..interfaces.plugins import IAuthenticationPlugin
         from ..interfaces.plugins import IExtractionPlugin
+        from Products.PluggableAuthService import PluggableAuthService
 
         old_eu = PluggableAuthService.emergency_user
 
@@ -987,10 +983,9 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
         from AccessControl.users import UnrestrictedUser
 
-        from Products.PluggableAuthService import PluggableAuthService
-
         from ..interfaces.plugins import IAuthenticationPlugin
         from ..interfaces.plugins import IExtractionPlugin
+        from Products.PluggableAuthService import PluggableAuthService
 
         old_eu = PluggableAuthService.emergency_user
 

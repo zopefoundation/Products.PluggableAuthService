@@ -24,6 +24,7 @@ from zope.interface import implementedBy
 from zope.interface import providedBy
 
 import Products
+
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.utils import classImplements
 from Products.PluggableAuthService.utils import directlyProvides
