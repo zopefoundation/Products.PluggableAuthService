@@ -18,11 +18,11 @@ import logging
 
 import six
 
-from AccessControl import AuthEncoding
 from AccessControl import ClassSecurityInfo
 from AccessControl.class_init import InitializeClass
 from AccessControl.requestmethod import postonly
 from AccessControl.SecurityManagement import getSecurityManager
+from AuthEncoding import AuthEncoding
 from BTrees.OOBTree import OOBTree
 from OFS.Cache import Cacheable
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile

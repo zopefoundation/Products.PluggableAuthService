@@ -15,7 +15,7 @@
 """
 
 from AccessControl.PermissionRole import _what_not_even_god_should_do
-from AccessControl.User import BasicUser
+from AccessControl.users import BasicUser
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 

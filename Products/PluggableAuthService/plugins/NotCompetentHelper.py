@@ -23,7 +23,7 @@ specified roles.
 
 from AccessControl import ClassSecurityInfo
 from AccessControl.Permissions import manage_users
-from AccessControl.User import nobody
+from AccessControl.users import nobody
 from Acquisition import aq_base
 from Acquisition import aq_inner
 from Acquisition import aq_parent
