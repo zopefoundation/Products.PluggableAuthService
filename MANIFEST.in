@@ -3,11 +3,6 @@ include *.txt
 include buildout.cfg
 include tox.ini
 
-include bootstrap.py
-exclude bootstrap.py
-
-exclude MANIFEST.in
-
 recursive-include Products *.gif
 recursive-include Products *.objects
 recursive-include Products *.png
