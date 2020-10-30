@@ -71,8 +71,8 @@ class PluggableAuthServiceCachingTests(unittest.TestCase):
 
     def _makeAndFill(self):
 
-        from Products.PluggableAuthService.plugins import ZODBRoleManager
-        from Products.PluggableAuthService.plugins import ZODBUserManager
+        from ..plugins import ZODBRoleManager
+        from ..plugins import ZODBUserManager
 
         plugin_registry = self._makePlugins()
         user_source = ZODBUserManager.ZODBUserManager('zodb_users')
@@ -115,7 +115,7 @@ class PluggableAuthServiceCachingTests(unittest.TestCase):
         # First, we register the ZODBUserManager as a plugin suitable
         # for storing and returning user objects and the ZODBRoleManager
         # for roles. Basic scaffolding to be able to store and retrieve users.
-        from Products.PluggableAuthService.interfaces import plugins
+        from ..interfaces import plugins
 
         plugin_registry.activatePlugin(plugins.IUserEnumerationPlugin,
                                        user_source.getId())

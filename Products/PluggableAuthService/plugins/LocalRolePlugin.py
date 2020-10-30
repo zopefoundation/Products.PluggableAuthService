@@ -19,9 +19,9 @@ from AccessControl.class_init import InitializeClass
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from zope.interface import Interface
 
-from Products.PluggableAuthService.interfaces.plugins import IRolesPlugin
-from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PluggableAuthService.utils import classImplements
+from ..interfaces.plugins import IRolesPlugin
+from ..utils import classImplements
+from .BasePlugin import BasePlugin
 
 
 class ILocalRolePlugin(Interface):

@@ -142,7 +142,7 @@ class ChallengeProtocolChooserTestHelper(object):
     def setup_user(self):
         # Create a user for testing:
 
-        from Products.PluggableAuthService.PropertiedUser import PropertiedUser
+        from ...PropertiedUser import PropertiedUser
         pas = self.folder.acl_users
         self.assertIsNone(pas.getUserById('test_user_'))
 

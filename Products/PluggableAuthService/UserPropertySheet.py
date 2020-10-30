@@ -20,7 +20,7 @@ from DateTime.DateTime import DateTime
 from OFS.Image import Image
 
 from .interfaces.propertysheets import IPropertySheet
-from Products.PluggableAuthService.utils import classImplements
+from .utils import classImplements
 
 
 StringTypes = (str, six.text_type)

@@ -26,8 +26,8 @@ from zExceptions import Unauthorized
 from zope.interface import implementer
 
 from ..interfaces.plugins import INotCompetentPlugin
+from ..utils import directlyProvides
 from .conformance import IUserFolder_conformance
-from Products.PluggableAuthService.utils import directlyProvides
 
 
 class DummyPlugin(Implicit):
@@ -755,8 +755,8 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
         from AccessControl.users import UnrestrictedUser
 
+        from .. import PluggableAuthService
         from ..interfaces.plugins import IExtractionPlugin
-        from Products.PluggableAuthService import PluggableAuthService
 
         old_eu = PluggableAuthService.emergency_user
 
@@ -860,9 +860,9 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
         from AccessControl.users import UnrestrictedUser
 
+        from .. import PluggableAuthService
         from ..interfaces.plugins import IAuthenticationPlugin
         from ..interfaces.plugins import IExtractionPlugin
-        from Products.PluggableAuthService import PluggableAuthService
 
         old_eu = PluggableAuthService.emergency_user
 
@@ -910,9 +910,9 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
         from AccessControl.users import UnrestrictedUser
 
+        from .. import PluggableAuthService
         from ..interfaces.plugins import IAuthenticationPlugin
         from ..interfaces.plugins import IExtractionPlugin
-        from Products.PluggableAuthService import PluggableAuthService
 
         old_eu = PluggableAuthService.emergency_user
 
@@ -983,9 +983,9 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
         from AccessControl.users import UnrestrictedUser
 
+        from .. import PluggableAuthService
         from ..interfaces.plugins import IAuthenticationPlugin
         from ..interfaces.plugins import IExtractionPlugin
-        from Products.PluggableAuthService import PluggableAuthService
 
         old_eu = PluggableAuthService.emergency_user
 
@@ -1398,7 +1398,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
         from AccessControl.users import UnrestrictedUser
 
-        from Products.PluggableAuthService import PluggableAuthService
+        from .. import PluggableAuthService
 
         old_eu = PluggableAuthService.emergency_user
 

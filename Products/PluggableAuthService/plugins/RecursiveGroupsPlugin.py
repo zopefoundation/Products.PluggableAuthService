@@ -20,10 +20,10 @@ from Acquisition import aq_parent
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from zope.interface import Interface
 
-from Products.PluggableAuthService.interfaces.plugins import IGroupsPlugin
-from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
-from Products.PluggableAuthService.PropertiedUser import PropertiedUser
-from Products.PluggableAuthService.utils import classImplements
+from ..interfaces.plugins import IGroupsPlugin
+from ..PropertiedUser import PropertiedUser
+from ..utils import classImplements
+from .BasePlugin import BasePlugin
 
 
 class IRecursiveGroupsPlugin(Interface):

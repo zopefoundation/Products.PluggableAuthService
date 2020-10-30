@@ -13,15 +13,13 @@
 ##############################################################################
 import unittest
 
+from ...tests.conformance import IChallengePlugin_conformance
+from ...tests.conformance import ILoginPasswordHostExtractionPlugin_conformance
 from ...tests.test_PluggableAuthService import FauxContainer
 from ...tests.test_PluggableAuthService import FauxObject
 from ...tests.test_PluggableAuthService import FauxRequest
 from ...tests.test_PluggableAuthService import FauxResponse
 from ...tests.test_PluggableAuthService import FauxRoot
-from Products.PluggableAuthService.tests.conformance import \
-    IChallengePlugin_conformance
-from Products.PluggableAuthService.tests.conformance import \
-    ILoginPasswordHostExtractionPlugin_conformance
 
 
 class FauxSettableRequest(FauxRequest):

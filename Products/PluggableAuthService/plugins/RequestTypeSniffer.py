@@ -32,7 +32,7 @@ from ..utils import classImplements
 if HAVE_ZSERVER:
     from ZServer.FTPRequest import FTPRequest
 
-    from Products.PluggableAuthService.interfaces.request import IFTPRequest
+    from ..interfaces.request import IFTPRequest
 
 
 class IRequestTypeSnifferPlugin(Interface):

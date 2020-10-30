@@ -24,7 +24,7 @@ from Products.GenericSetup.tests.conformance import \
 from Products.GenericSetup.tests.conformance import \
     ConformsToIFilesystemImporter
 
-from Products.PluggableAuthService.tests.utils import _setUpDefaultTraversable
+from ...tests.utils import _setUpDefaultTraversable
 
 
 class _TestBase(BaseRegistryTests, ConformsToIFilesystemExporter,
