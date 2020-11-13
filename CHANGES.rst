@@ -6,6 +6,10 @@ Change Log
 
 - Fix DeprecationWarnings occurring on Zope 5.
 
+- Fixed error assigning groups in ``manage_groups`` page in ZMI.
+  See issues `#61 <https://github.com/zopefoundation/Products.PluggableAuthService/issues/61>`_
+  and `#84 <https://github.com/zopefoundation/Products.PluggableAuthService/issues/84>`_.
+
 
 2.5 (2020-10-12)
 ----------------
@@ -803,4 +807,3 @@ Change Log
 ----------------
 
 - Initial release
-
