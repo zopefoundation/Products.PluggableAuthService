@@ -24,13 +24,15 @@ matrix:
               - coveralls
         - python: "3.8"
           env: TOXENV=py38
+        - python: "3.9"
+          env: TOXENV=py39
 
 install:
-    - travis_retry pip install -U pip setuptools tox
-    - travis_retry pip install -U coverage coveralls
+    - pip install -U pip setuptools tox
+    - pip install -U coverage coveralls
 
 script:
-    - travis_retry tox
+    - tox
 
 notifications:
     email: false

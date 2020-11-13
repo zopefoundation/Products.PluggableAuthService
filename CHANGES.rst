@@ -1,10 +1,12 @@
 Change Log
 ==========
 
-2.5.1 (unreleased)
+2.6.0 (unreleased)
 ------------------
 
 - Fix DeprecationWarnings occurring on Zope 5.
+
+- Add support for Python 3.9.
 
 
 2.5 (2020-10-12)
