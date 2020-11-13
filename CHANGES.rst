@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-2.5.1 (unreleased)
+2.5.1 (2020-11-13)
 ------------------
 
 - Fixed error assigning groups in ``manage_groups`` page in ZMI.
