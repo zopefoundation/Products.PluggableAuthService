@@ -4,6 +4,14 @@ Change Log
 2.6.0 (unreleased)
 ------------------
 
+
+2.5.1 (2020-11-13)
+------------------
+
+- Fixed error assigning groups in ``manage_groups`` page in ZMI.
+  (`#61 <https://github.com/zopefoundation/Products.PluggableAuthService/issues/61>`_,
+  `#84 <https://github.com/zopefoundation/Products.PluggableAuthService/issues/84>`_)
+
 - Fix DeprecationWarnings occurring on Zope 5.
 
 - Add support for Python 3.9.
@@ -805,4 +813,3 @@ Change Log
 ----------------
 
 - Initial release
-

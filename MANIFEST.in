@@ -1,6 +1,7 @@
 include *.rst
 include *.txt
 include buildout.cfg
+include buildout4.cfg
 include tox.ini
 
 recursive-include Products *.gif
