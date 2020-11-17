@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-2.5.2 (unreleased)
+2.6.0 (unreleased)
 ------------------
 
 
@@ -13,6 +13,8 @@ Change Log
   `#84 <https://github.com/zopefoundation/Products.PluggableAuthService/issues/84>`_)
 
 - Fix DeprecationWarnings occurring on Zope 5.
+
+- Add support for Python 3.9.
 
 
 2.5 (2020-10-12)
