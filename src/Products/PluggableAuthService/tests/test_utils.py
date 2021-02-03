@@ -279,8 +279,7 @@ def _createHashedValue(items):
     from hashlib import sha1 as sha
 
     hasher = sha()
-    items = list(items)
-    items.sort()
+    items = sorted(items)
     for k, v in items:
         if isinstance(k, six.text_type):
             k = k.encode('utf-8')

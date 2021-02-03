@@ -108,7 +108,7 @@ def initialize(context):
     context.registerClass(PluggableAuthService.PluggableAuthService,
                           permission=ManageUsers,
                           constructors=(
-                            PluggableAuthService.addPluggableAuthService,),
+                              PluggableAuthService.addPluggableAuthService,),
                           icon='www/PluggableAuthService.png')
 
     context.registerClass(HBAH.HTTPBasicAuthHelper,
@@ -145,47 +145,47 @@ def initialize(context):
     context.registerClass(ScriptablePlugin.ScriptablePlugin,
                           permission=ManageUsers,
                           constructors=(
-                            ScriptablePlugin.manage_addScriptablePluginForm,
-                            ScriptablePlugin.addScriptablePlugin),
+                              ScriptablePlugin.manage_addScriptablePluginForm,
+                              ScriptablePlugin.addScriptablePlugin),
                           visibility=None,
                           icon='plugins/www/ScriptablePlugin.png')
 
     context.registerClass(ZODBGroupManager.ZODBGroupManager,
                           permission=ManageGroups,
                           constructors=(
-                            ZODBGroupManager.manage_addZODBGroupManagerForm,
-                            ZODBGroupManager.addZODBGroupManager),
+                              ZODBGroupManager.manage_addZODBGroupManagerForm,
+                              ZODBGroupManager.addZODBGroupManager),
                           visibility=None,
                           icon='plugins/www/ZODBGroupManager.gif')
 
     context.registerClass(ZODBUserManager.ZODBUserManager,
                           permission=ManageUsers,
                           constructors=(
-                            ZODBUserManager.manage_addZODBUserManagerForm,
-                            ZODBUserManager.addZODBUserManager),
+                              ZODBUserManager.manage_addZODBUserManagerForm,
+                              ZODBUserManager.addZODBUserManager),
                           visibility=None,
                           icon='plugins/www/ZODBUserManager.gif')
 
     context.registerClass(ZODBRoleManager.ZODBRoleManager,
                           permission=ManageUsers,
                           constructors=(
-                            ZODBRoleManager.manage_addZODBRoleManagerForm,
-                            ZODBRoleManager.addZODBRoleManager),
+                              ZODBRoleManager.manage_addZODBRoleManagerForm,
+                              ZODBRoleManager.addZODBRoleManager),
                           visibility=None,
                           icon='plugins/www/ZODBRoleManager.gif')
 
     context.registerClass(LocalRolePlugin.LocalRolePlugin,
                           permission=ManageUsers,
                           constructors=(
-                            LocalRolePlugin.manage_addLocalRolePluginForm,
-                            LocalRolePlugin.addLocalRolePlugin),
+                              LocalRolePlugin.manage_addLocalRolePluginForm,
+                              LocalRolePlugin.addLocalRolePlugin),
                           visibility=None,
                           icon='plugins/www/ZODBRoleManager.gif')
 
     context.registerClass(DMP.DelegatingMultiPlugin, permission=ManageUsers,
                           constructors=(
-                            DMP.manage_addDelegatingMultiPluginForm,
-                            DMP.manage_addDelegatingMultiPlugin),
+                              DMP.manage_addDelegatingMultiPluginForm,
+                              DMP.manage_addDelegatingMultiPlugin),
                           visibility=None,
                           icon='plugins/www/DelegatingMultiPlugin.png')
 
@@ -197,8 +197,8 @@ def initialize(context):
 
     context.registerClass(RGP.RecursiveGroupsPlugin, permission=ManageUsers,
                           constructors=(
-                            RGP.manage_addRecursiveGroupsPluginForm,
-                            RGP.addRecursiveGroupsPlugin),
+                              RGP.manage_addRecursiveGroupsPluginForm,
+                              RGP.addRecursiveGroupsPlugin),
                           visibility=None,
                           icon='plugins/www/RecursiveGroupsPlugin.png')
 
@@ -210,8 +210,8 @@ def initialize(context):
 
     context.registerClass(CPC.ChallengeProtocolChooser, permission=ManageUsers,
                           constructors=(
-                            CPC.manage_addChallengeProtocolChooserForm,
-                            CPC.addChallengeProtocolChooserPlugin),
+                              CPC.manage_addChallengeProtocolChooserForm,
+                              CPC.addChallengeProtocolChooserPlugin),
                           visibility=None,
                           icon='plugins/www/DelegatingMultiPlugin.png')
 
@@ -229,8 +229,8 @@ def initialize(context):
     context.registerClass(PluggableAuthService.PluggableAuthService,
                           meta_type='Configured PAS', permission=ManageUsers,
                           constructors=(
-                            PluggableAuthService.addConfiguredPASForm,
-                            PluggableAuthService.addConfiguredPAS),
+                              PluggableAuthService.addConfiguredPASForm,
+                              PluggableAuthService.addConfiguredPAS),
                           icon='www/PluggableAuthService.png')
 
     try:

@@ -23,7 +23,6 @@ class IExtractionPlugin(Interface):
     """
 
     def extractCredentials(request):
-
         """ request -> {...}
 
         o Return a mapping of any derived credentials.
@@ -39,7 +38,6 @@ class ILoginPasswordExtractionPlugin(IExtractionPlugin):
     """
 
     def extractCredentials(request):
-
         """ request -> {'login': login, 'password': password,
                          k1: v1, ... , kN: vN} | empty dict
 
@@ -57,7 +55,6 @@ class ILoginPasswordHostExtractionPlugin(ILoginPasswordExtractionPlugin):
     """
 
     def extractCredentials(request):
-
         """ request -> { 'login' : login
                        , 'password' : password
                        , 'remote_host' : remote_host
@@ -82,7 +79,6 @@ class IAuthenticationPlugin(Interface):
     """
 
     def authenticateCredentials(credentials):
-
         """ credentials -> (userid, login)
 
         o 'credentials' will be a mapping, as returned by IExtractionPlugin.
@@ -108,7 +104,6 @@ class IChallengePlugin(Interface):
     """
 
     def challenge(request, response):
-
         """ Assert via the response that credentials will be gathered.
 
         Takes a REQUEST object and a RESPONSE object.
@@ -136,7 +131,6 @@ class ICredentialsUpdatePlugin(Interface):
     """
 
     def updateCredentials(request, response, login, new_password):
-
         """ Scribble as appropriate.
         """
 
@@ -147,7 +141,6 @@ class ICredentialsResetPlugin(Interface):
     """
 
     def resetCredentials(request, response):
-
         """ Scribble as appropriate.
         """
 
@@ -158,7 +151,6 @@ class IUserAdderPlugin(Interface):
     """
 
     def doAddUser(login, password):
-
         """ Add a user record to a User Manager, with the given login
             and password.  It is up to the implementation to determine
             if the login is used as user id as well.
@@ -173,14 +165,12 @@ class IRoleAssignerPlugin(Interface):
     """
 
     def doAssignRoleToPrincipal(principal_id, role):
-
         """ Create a principal/role association in a Role Manager
 
         o Return a Boolean indicating whether the role was assigned or not
         """
 
     def doRemoveRoleFromPrincipal(principal_id, role):
-
         """ Remove a principal/role association from a Role Manager
 
         o Return a Boolean indicating whether the role was removed or not
@@ -193,7 +183,6 @@ class IUserFactoryPlugin(Interface):
     """
 
     def createUser(user_id, name):
-
         """ Return a user, if possible.
 
         o Return None to allow another plugin, or the default, to fire.
@@ -206,7 +195,6 @@ class IAnonymousUserFactoryPlugin(Interface):
     """
 
     def createAnonymousUser():
-
         """ Return an anonymous user, if possible.
 
         o Return None to allow another plugin, or the default, to fire.
@@ -219,7 +207,6 @@ class IPropertiesPlugin(Interface):
     """
 
     def getPropertiesForUser(user, request=None):
-
         """ user -> empty dict
 
         o User will implement IPropertiedUser.
@@ -241,7 +228,6 @@ class IGroupsPlugin(Interface):
     """
 
     def getGroupsForPrincipal(principal, request=None):
-
         """ principal -> (group_1, ... group_N)
 
         o Return a sequence of group names to which the principal
@@ -257,7 +243,6 @@ class IRolesPlugin(Interface):
     """
 
     def getRolesForPrincipal(principal, request=None):
-
         """ principal -> (role_1, ... role_N)
 
         o Return a sequence of role names which the principal has.
@@ -272,7 +257,6 @@ class IUpdatePlugin(Interface):
     """
 
     def updateUserInfo(user, set_id, set_info):
-
         """ Update backing store for 'set_id' using 'set_info'.
         """
 
@@ -287,7 +271,6 @@ class IValidationPlugin(Interface):
     """
 
     def validateUserInfo(user, set_id, set_info):
-
         """ -> (error_info_1, ... error_info_N)
 
         o Returned values are dictionaries, containing at least keys:
@@ -308,7 +291,6 @@ class IUserEnumerationPlugin(Interface):
 
     def enumerateUsers(id=None, login=None, exact_match=False, sort_by=None,
                        max_results=None, **kw):
-
         """ -> (user_info_1, ... user_info_N)
 
         o Return mappings for users matching the given criteria.
@@ -382,7 +364,6 @@ class IGroupEnumerationPlugin(Interface):
 
     def enumerateGroups(id=None, exact_match=False, sort_by=None,
                         max_results=None, **kw):
-
         """ -> (group_info_1, ... group_info_N)
 
         o Return mappings for groups matching the given criteria.
@@ -430,7 +411,6 @@ class IRoleEnumerationPlugin(Interface):
     """
     def enumerateRoles(id=None, exact_match=False, sort_by=None,
                        max_results=None, **kw):
-
         """ -> (role_info_1, ... role_info_N)
 
         o Return mappings for roles matching the given criteria.
@@ -515,6 +495,5 @@ class INotCompetentPlugin(Interface):
     """
 
     def isNotCompetentToAuthenticate(request):
-
         """return true if this user folder should not authenticate *request*.
         """

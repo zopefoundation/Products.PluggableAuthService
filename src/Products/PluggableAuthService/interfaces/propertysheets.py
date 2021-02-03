@@ -28,31 +28,26 @@ class IPropertySheet(Interface):
     """
 
     def getId():
-
         """ Identify the sheet within a collection.
         """
 
     def hasProperty(id):
-
         """ Does the sheet have a property corresponding to 'id'?
         """
 
     def getProperty(id, default=None):
-
         """ Return the value of the property corresponding to 'id'.
 
         o If no such property exists within the sheet, return 'default'.
         """
 
     def getPropertyType(id):
-
         """ Return the string identifying the type of property, 'id'.
 
         o If no such property exists within the sheet, return None.
         """
 
     def propertyInfo(id):
-
         """ Return a mapping describing property, 'id'.
 
         o Keys must include:
@@ -65,21 +60,17 @@ class IPropertySheet(Interface):
         """
 
     def propertyMap():
-
         """ Return a tuple of 'propertyInfo' mappings, one per property.
         """
 
     def propertyIds():
-
         """ Return a sequence of the IDs of the sheet's properties.
         """
 
     def propertyValues():
-
         """ Return a sequence of the values of the sheet's properties.
         """
 
     def propertyItems():
-
         """ Return a sequence of (id, value) tuples, one per property.
         """

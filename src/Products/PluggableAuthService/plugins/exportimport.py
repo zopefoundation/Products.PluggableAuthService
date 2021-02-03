@@ -418,6 +418,7 @@ class ChallengeProtocolChooserExportImport(SimpleXMLExportImport):
 class ScriptablePluginExportImport(FolderishExporterImporter):
     """ Export / import the Scriptable type plugin.
     """
+
     def export(self, export_context, subdir, root=False):
         """ See IFilesystemExporter.
         """
@@ -432,6 +433,7 @@ class ScriptablePluginExportImport(FolderishExporterImporter):
 class PythonScriptFileAdapter(DAVAwareFileAdapter):
     """File-ish for PythonScript.
     """
+
     def _getFileName(self):
         """ Return the name under which our file data is stored.
         """

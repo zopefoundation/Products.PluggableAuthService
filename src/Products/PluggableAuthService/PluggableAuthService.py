@@ -113,7 +113,6 @@ class DumbHTTPExtractor(Implicit):
 
     @security.private
     def extractCredentials(self, request):
-
         """ Pull HTTP credentials out of the request.
         """
         creds = {}
@@ -146,7 +145,6 @@ class EmergencyUserAuthenticator(Implicit):
 
     @security.private
     def authenticateCredentials(self, credentials):
-
         """ Check credentials against the emergency user.
         """
         if isinstance(credentials, dict):
@@ -195,7 +193,7 @@ class PluggableAuthService(Folder, Cacheable):
         dict(id='title', type='string', mode='w', label='Title'),
         dict(id='login_transform', type='string', mode='w',
              label='Transform to apply to login name'),
-            )
+    )
 
     def getId(self):
 
@@ -206,7 +204,6 @@ class PluggableAuthService(Folder, Cacheable):
     #
     @security.protected(ManageUsers)
     def getUser(self, name):
-
         """ See IUserFolder.
         """
         plugins = self._getOb('plugins')
@@ -221,7 +218,6 @@ class PluggableAuthService(Folder, Cacheable):
 
     @security.protected(ManageUsers)
     def getUserById(self, id, default=None):
-
         """ See IUserFolder.
         """
         plugins = self._getOb('plugins')
@@ -235,7 +231,6 @@ class PluggableAuthService(Folder, Cacheable):
 
     @security.public
     def validate(self, request, auth='', roles=_noroles):
-
         """ See IUserFolder.
         """
         plugins = self._getOb('plugins')
@@ -511,7 +506,6 @@ class PluggableAuthService(Folder, Cacheable):
     #
     @security.private
     def _isNotCompetent(self, request, plugins):
-
         """ return true when this user folder should not try authentication.
 
         Never called for top level user folder.
@@ -535,7 +529,6 @@ class PluggableAuthService(Folder, Cacheable):
 
     @security.private
     def _extractUserIds(self, request, plugins):
-
         """ request -> [validated_user_id]
 
         o For each set of extracted credentials, try to authenticate
@@ -585,7 +578,7 @@ class PluggableAuthService(Folder, Cacheable):
                 # First try to authenticate against the emergency
                 # user and return immediately if authenticated
                 user_id, name = self._tryEmergencyUserAuthentication(
-                                                            credentials)
+                    credentials)
 
                 if user_id is not None:
                     return [(user_id, name)]
@@ -616,7 +609,7 @@ class PluggableAuthService(Folder, Cacheable):
                         except _SWALLOWABLE_PLUGIN_EXCEPTIONS:
                             reraise(auth)
                             msg = 'AuthenticationPlugin %s error' % (
-                                    authenticator_id,)
+                                authenticator_id,)
                             logger.debug(msg, exc_info=True)
                             continue
 
@@ -631,7 +624,7 @@ class PluggableAuthService(Folder, Cacheable):
 
         # Emergency user via HTTP basic auth always wins
         user_id, name = self._tryEmergencyUserAuthentication(
-                DumbHTTPExtractor().extractCredentials(request))
+            DumbHTTPExtractor().extractCredentials(request))
 
         if user_id is not None:
             return [(user_id, name)]
@@ -640,7 +633,6 @@ class PluggableAuthService(Folder, Cacheable):
 
     @security.private
     def _tryEmergencyUserAuthentication(self, credentials):
-
         """ credentials -> emergency_user or None
         """
         try:
@@ -677,7 +669,6 @@ class PluggableAuthService(Folder, Cacheable):
 
     @security.private
     def _createAnonymousUser(self, plugins):
-
         """ Allow IAnonymousUserFactoryPlugins to create or fall back.
         """
         factories = plugins.listPlugins(IAnonymousUserFactoryPlugin)
@@ -693,7 +684,6 @@ class PluggableAuthService(Folder, Cacheable):
 
     @security.private
     def _createUser(self, plugins, user_id, name):
-
         """ Allow IUserFactoryPlugins to create, or fall back to default.
         """
         name = self.applyTransform(name)
@@ -710,7 +700,6 @@ class PluggableAuthService(Folder, Cacheable):
 
     @security.private
     def _findUser(self, plugins, user_id, name=None, request=None):
-
         """ user_id -> decorated_user
         """
         if user_id == self._emergency_user.getUserName():
@@ -807,7 +796,6 @@ class PluggableAuthService(Folder, Cacheable):
     @security.private
     def _authorizeUser(self, user, accessed, container, name, value,
                        roles=_noroles):
-
         """ -> boolean (whether user has roles).
 
         o Add the user to the SM's stack, if successful.
@@ -837,7 +825,6 @@ class PluggableAuthService(Folder, Cacheable):
 
     @security.private
     def _isTop(self):
-
         """ Are we the user folder in the root object?
         """
         try:
@@ -850,7 +837,6 @@ class PluggableAuthService(Folder, Cacheable):
 
     @security.private
     def _getObjectContext(self, v, request):
-
         """ request -> (a, c, n, v)
 
         o 'a 'is the object the object was accessed through

@@ -46,11 +46,10 @@ class IDynamicGroupsPlugin(Interface):
 
 
 manage_addDynamicGroupsPluginForm = PageTemplateFile(
-        'www/dgpAdd', globals(), __name__='manage_addDynamicGroupsPluginForm')
+    'www/dgpAdd', globals(), __name__='manage_addDynamicGroupsPluginForm')
 
 
 def addDynamicGroupsPlugin(dispatcher, id, title='', RESPONSE=None):
-
     """ Add a DGP to 'dispatcher'.
     """
     dgp = DynamicGroupsPlugin(id, title)
@@ -87,7 +86,6 @@ class DynamicGroupDefinition(SimpleItem, PropertyManager):
         self.active = bool(active)
 
     def __call__(self, principal, request=None):
-
         """ Evaluate our expression to determine whether 'principal' belongs.
         """
         predicate = self._getPredicate()
@@ -97,11 +95,11 @@ class DynamicGroupDefinition(SimpleItem, PropertyManager):
         for k, v in self.propertyItems():
             properties[k] = v
 
-        data = getEngine().getContext({'request':    request,
-                                       'nothing':    None,
-                                       'principal':  principal,
-                                       'group':      properties,
-                                       'plugin':     plugin})
+        data = getEngine().getContext({'request': request,
+                                       'nothing': None,
+                                       'principal': principal,
+                                       'group': properties,
+                                       'plugin': plugin})
 
         result = predicate(data)
 
@@ -176,7 +174,6 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
     #
     @security.protected(ManageGroups)
     def getGroupsForPrincipal(self, principal, request=None):
-
         """ See IGroupsPlugin.
         """
         grps = []
@@ -225,7 +222,7 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
             if g_info is not None:
 
                 url = '/%s/%s/manage_propertiesForm' % (
-                            self.absolute_url(1), group_id)
+                    self.absolute_url(1), group_id)
                 info = {}
                 info.update(self.getGroupInfo(group_id))
 
@@ -249,14 +246,12 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
     #
     @security.protected(ManageGroups)
     def listGroupIds(self):
-
         """ Return a list of IDs for the dynamic groups we manage.
         """
         return self.objectIds(DynamicGroupDefinition.meta_type)
 
     @security.protected(ManageGroups)
     def getGroupInfo(self, group_id, raise_keyerror=True):
-
         """ Return a mappings describing one dynamic group we manage.
 
         o If 'raise_keyerror' is True, raise KeyError if we don't have an
@@ -297,7 +292,6 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
 
     @security.protected(ManageGroups)
     def listGroupInfo(self):
-
         """ Return a list of mappings describing the dynamic groups we manage.
 
         o Keys include:
@@ -313,7 +307,6 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
     @security.private
     def addGroup(self, group_id, predicate, title='', description='',
                  active=True):
-
         """ Add a group definition.
 
         o Raise KeyError if we have an existing group definition
@@ -336,7 +329,6 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
     @security.private
     def updateGroup(self, group_id, predicate, title=None, description=None,
                     active=None):
-
         """ Update a group definition.
 
         o Raise KeyError if we don't have an existing group definition
@@ -368,7 +360,6 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
 
     @security.private
     def removeGroup(self, group_id):
-
         """ Remove a group definition.
 
         o Raise KeyError if we don't have an existing group definition

@@ -234,7 +234,7 @@ class UserFolderTests(pastc.PASTestCase):
         self.uf._doAddUser(USER_ID, PASSWORD, [], [])
 
         uid_and_info = self.uf.users.authenticateCredentials(
-                                {'login': USER_ID, 'password': PASSWORD})
+            {'login': USER_ID, 'password': PASSWORD})
 
         self.assertEqual(uid_and_info, (USER_ID, USER_ID))
 
@@ -250,7 +250,7 @@ class UserFolderTests(pastc.PASTestCase):
         self.uf._doAddUser(USER_ID, ENCRYPTED, [], [])
 
         uid_and_info = self.uf.users.authenticateCredentials(
-                                {'login': USER_ID, 'password': PASSWORD})
+            {'login': USER_ID, 'password': PASSWORD})
 
         self.assertEqual(uid_and_info, (USER_ID, USER_ID))
 

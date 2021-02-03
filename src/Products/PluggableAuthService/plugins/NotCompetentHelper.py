@@ -42,6 +42,7 @@ class HigherLevelUserFolderAccessMixin(object):
 
        requires to be mixed with a `BasePlugin`.
     """
+
     def _generateHigherLevelUserFolders(self):
         folder = aq_parent(aq_inner(self._getPAS()))
         while True:

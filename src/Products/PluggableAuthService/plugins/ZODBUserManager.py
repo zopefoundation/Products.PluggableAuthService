@@ -94,7 +94,6 @@ class ZODBUserManager(BasePlugin, Cacheable):
     #
     @security.private
     def authenticateCredentials(self, credentials):
-
         """ See IAuthenticationPlugin.
 
         o We expect the credentials to be those returned by
@@ -147,7 +146,6 @@ class ZODBUserManager(BasePlugin, Cacheable):
     @security.private
     def enumerateUsers(self, id=None, login=None, exact_match=False,
                        sort_by=None, max_results=None, **kw):
-
         """ See IUserEnumerationPlugin.
         """
         user_info = []
@@ -237,14 +235,12 @@ class ZODBUserManager(BasePlugin, Cacheable):
     #
     @security.protected(ManageUsers)
     def listUserIds(self):
-
         """ -> (user_id_1, ... user_id_n)
         """
         return self._user_passwords.keys()
 
     @security.protected(ManageUsers)
     def getUserInfo(self, user_id):
-
         """ user_id -> dict
         """
         return {'user_id': user_id,
@@ -253,7 +249,6 @@ class ZODBUserManager(BasePlugin, Cacheable):
 
     @security.protected(ManageUsers)
     def listUserInfo(self):
-
         """ -> (dict, ...dict)
 
         o Return one mapping per user, with the following keys:
@@ -265,7 +260,6 @@ class ZODBUserManager(BasePlugin, Cacheable):
 
     @security.protected(ManageUsers)
     def getUserIdForLogin(self, login_name):
-
         """ login_name -> user_id
 
         o Raise KeyError if no user exists for the login name.
@@ -274,7 +268,6 @@ class ZODBUserManager(BasePlugin, Cacheable):
 
     @security.protected(ManageUsers)
     def getLoginForUserId(self, user_id):
-
         """ user_id -> login_name
 
         o Raise KeyError if no user exists for that ID.
@@ -519,7 +512,6 @@ class ZODBUserManager(BasePlugin, Cacheable):
     #
     @security.protected(SetOwnPassword)
     def getOwnUserInfo(self):
-
         """ Return current user's info.
         """
         user_id = getSecurityManager().getUser().getId()
@@ -529,9 +521,9 @@ class ZODBUserManager(BasePlugin, Cacheable):
     security.declareProtected(SetOwnPassword,  # NOQA: D001
                               'manage_updatePasswordForm')
     manage_updatePasswordForm = PageTemplateFile(
-                                    'www/zuPasswd',
-                                    globals(),
-                                    __name__='manage_updatePasswordForm')
+        'www/zuPasswd',
+        globals(),
+        __name__='manage_updatePasswordForm')
 
     @security.protected(SetOwnPassword)
     @csrf_only

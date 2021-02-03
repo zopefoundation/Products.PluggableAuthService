@@ -395,4 +395,4 @@ class ZODBGroupManagerTests(unittest.TestCase,
 def test_suite():
     return unittest.TestSuite((
         unittest.makeSuite(ZODBGroupManagerTests),
-       ))
+    ))

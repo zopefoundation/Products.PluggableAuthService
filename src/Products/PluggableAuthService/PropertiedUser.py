@@ -29,6 +29,7 @@ class PropertiedUser(BasicUser):
 
     """ User objects which manage propertysheets, obtained from decorators.
     """
+
     def __init__(self, id, login=None):
 
         self._id = id
@@ -46,19 +47,16 @@ class PropertiedUser(BasicUser):
     #   BasicUser's public interface
     #
     def getId(self):
-
         """ -> user ID
         """
         return self._id
 
     def getUserName(self):
-
         """ -> login name
         """
         return self._login
 
     def getRoles(self):
-
         """ -> [role]
 
         o Include only "global" roles.
@@ -73,7 +71,6 @@ class PropertiedUser(BasicUser):
         return list(self._groups.keys())
 
     def getDomains(self):
-
         """ -> [domain]
 
         o The list represents the only domains from which the user is
@@ -82,7 +79,6 @@ class PropertiedUser(BasicUser):
         return ()
 
     def getRolesInContext(self, object):
-
         """ Return the list of roles assigned to the user.
 
         o Include local roles assigned in context of the passed-in object.
@@ -102,7 +98,7 @@ class PropertiedUser(BasicUser):
         local = {}
         object = aq_inner(object)
 
-        while 1:
+        while True:
 
             local_roles = getattr(object, '__ac_local_roles__', None)
 
@@ -136,7 +132,6 @@ class PropertiedUser(BasicUser):
         return list(self.getRoles()) + list(local.keys())
 
     def allowed(self, object, object_roles=None):
-
         """ Check whether the user has access to object.
 
         o The user must have one of the roles in object_roles to allow access.
@@ -189,7 +184,7 @@ class PropertiedUser(BasicUser):
         principal_ids = list(group_ids)
         principal_ids.insert(0, user_id)
 
-        while 1:
+        while True:
 
             local_roles = getattr(inner_obj, '__ac_local_roles__', None)
 
@@ -234,7 +229,6 @@ class PropertiedUser(BasicUser):
     #   Interfaces to allow user folder plugins to annotate the user.
     #
     def _addGroups(self, groups=()):
-
         """ Extend our set of groups.
 
         o Don't complain about duplicates.
@@ -243,7 +237,6 @@ class PropertiedUser(BasicUser):
             self._groups[group] = 1
 
     def _addRoles(self, roles=()):
-
         """ Extend our set of roles.
 
         o Don't complain about duplicates.
@@ -255,13 +248,11 @@ class PropertiedUser(BasicUser):
     #   Propertysheet management
     #
     def listPropertysheets(self):
-
         """ -> [propertysheet_id]
         """
         return list(self._propertysheets.keys())
 
     def getPropertysheet(self, id):
-
         """ id -> sheet
 
         o Raise KeyError if no such seet exists.
@@ -271,7 +262,6 @@ class PropertiedUser(BasicUser):
     __getitem__ = getPropertysheet
 
     def addPropertysheet(self, id, data):
-
         """ Add a new propertysheet.
 
         o Raise KeyError if a sheet of the given ID already exists.

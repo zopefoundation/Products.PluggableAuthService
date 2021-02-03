@@ -579,7 +579,7 @@ class CookieAuthHelperExportImportTests(_TestBase):
 
         ctx = DummyImportContext(plugin)
         ctx._files['plugins/no_title.xml'] = _COOKIE_AUTH_TEMPLATE_NO_TITLE % (
-                COOKIE_NAME, LOGIN_PATH)
+            COOKIE_NAME, LOGIN_PATH)
         adapter.import_(ctx, 'plugins', False)
 
         self.assertEqual(plugin.title, None)
@@ -682,8 +682,8 @@ class DomainAuthHelperExportImportTests(_TestBase):
         self.assertEqual(filename, 'plugins/with_map.xml')
         self._compareDOM(text.decode('UTF-8'),
                          _FILLED_DOMAIN_AUTH % (
-                            TITLE, USER_ID, DOMAIN, 'equals',
-                            ','.join(ROLES), USER_ID))
+            TITLE, USER_ID, DOMAIN, 'equals',
+            ','.join(ROLES), USER_ID))
         self.assertEqual(content_type, 'text/xml')
 
     def test_import_empty(self):
@@ -697,7 +697,7 @@ class DomainAuthHelperExportImportTests(_TestBase):
 
         context = DummyImportContext(plugin)
         context._files['plugins/empty.xml'] = _FILLED_DOMAIN_AUTH % (
-                TITLE, USER_ID, DOMAIN, 'equals', ','.join(ROLES), USER_ID)
+            TITLE, USER_ID, DOMAIN, 'equals', ','.join(ROLES), USER_ID)
         self.assertEqual(plugin.title, '')
 
         adapter.import_(context, 'plugins', False)
@@ -955,7 +955,7 @@ class DelegatePathExportImportTests(_TestBase):
 
         context = DummyImportContext(plugin)
         context._files['plugins/with_title.xml'] = _DELEGATE_PATH_TEMPLATE % (
-                TITLE, DELEGATE_PATH)
+            TITLE, DELEGATE_PATH)
         adapter.import_(context, 'plugins', False)
 
         self.assertEqual(plugin.title, TITLE)

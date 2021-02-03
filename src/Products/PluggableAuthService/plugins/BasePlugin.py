@@ -85,7 +85,7 @@ class BasePlugin(SimpleItem, PropertyManager):
 
         for iface_name in interfaces:
             active_interfaces.append(plugins._getInterfaceFromName(
-                                                iface_name))
+                iface_name))
 
         pt = plugins._plugin_types
         id = self.getId()

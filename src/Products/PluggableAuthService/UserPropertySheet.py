@@ -112,25 +112,21 @@ class UserPropertySheet(object):
     #   IPropertySheet implementation
     #
     def getId(self):
-
         """ See IPropertySheet.
         """
         return self._id
 
     def hasProperty(self, id):
-
         """ See IPropertySheet.
         """
         return id in self.propertyIds()
 
     def getProperty(self, id, default=None):
-
         """ See IPropertySheet.
         """
         return self._properties.get(id, default)
 
     def getPropertyType(self, id):
-
         """ See IPropertySheet.
         """
         found = [x[1] for x in self._schema if x[0] == id]
@@ -138,7 +134,6 @@ class UserPropertySheet(object):
         return found and found[0] or None
 
     def propertyInfo(self, id):
-
         """ See IPropertySheet.
         """
         for schema_id, ptype in self._schema:
@@ -149,7 +144,6 @@ class UserPropertySheet(object):
         return None
 
     def propertyMap(self):
-
         """ See IPropertySheet.
         """
         result = []
@@ -160,13 +154,11 @@ class UserPropertySheet(object):
         return tuple(result)
 
     def propertyIds(self):
-
         """ See IPropertySheet.
         """
         return [x[0] for x in self._schema]
 
     def propertyValues(self):
-
         """ See IPropertySheet.
         """
         return [self._properties.get(x) for x in self.propertyIds()]

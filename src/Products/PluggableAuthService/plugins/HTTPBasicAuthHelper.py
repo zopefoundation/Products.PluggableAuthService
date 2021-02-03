@@ -36,7 +36,6 @@ class IHTTPBasicAuthHelper(Interface):
 
 
 def addHTTPBasicAuthHelper(dispatcher, id, title=None, REQUEST=None):
-
     """ Add a HTTP Basic Auth Helper to a Pluggable Auth Service.
     """
     sp = HTTPBasicAuthHelper(id, title)
@@ -64,7 +63,6 @@ class HTTPBasicAuthHelper(BasePlugin):
 
     @security.private
     def extractCredentials(self, request):
-
         """ Extract basic auth credentials from 'request'.
         """
         creds = {}
@@ -86,7 +84,6 @@ class HTTPBasicAuthHelper(BasePlugin):
 
     @security.private
     def challenge(self, request, response, **kw):
-
         """ Challenge the user for credentials.
         """
         realm = response.realm
@@ -101,7 +98,6 @@ class HTTPBasicAuthHelper(BasePlugin):
 
     @security.private
     def resetCredentials(self, request, response):
-
         """ Raise unauthorized to tell browser to clear credentials.
         """
         # ???:  Does this need to check whether we have an HTTP response?

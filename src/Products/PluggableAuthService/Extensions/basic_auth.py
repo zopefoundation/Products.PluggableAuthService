@@ -16,7 +16,6 @@
 
 
 def extraction(self, request):
-
     """ Fetch HTTP Basic Auth credentials from the request.
     """
     creds = request._authUserPW()
@@ -30,7 +29,6 @@ def extraction(self, request):
 
 
 def authentication(self, credentials):
-
     """ Authenticate against nested acl_users.
     """
     real_user_folder = self.simple_uf.acl_users
@@ -44,7 +42,6 @@ def authentication(self, credentials):
 
 
 def authorize(self, user):
-
     """ Fetch user roles from nested acl_users.
     """
     real_user_folder = self.simple_uf.acl_users

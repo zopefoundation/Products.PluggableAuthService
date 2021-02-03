@@ -1935,7 +1935,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
         directlyProvides(olivier, IUserEnumerationPlugin, IRolesPlugin)
         olivier.enumerateUsers = lambda id: id == 'foo' or None
         olivier.getRolesForPrincipal = lambda user, req: (
-                     user.getId() == 'olivier' and ('Hamlet',) or ())
+            user.getId() == 'olivier' and ('Hamlet',) or ())
 
         zcuf._setObject('olivier', olivier)
 
@@ -1985,7 +1985,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
         directlyProvides(olivier, IUserEnumerationPlugin, IRolesPlugin)
         olivier.enumerateUsers = lambda id: id == 'foo' or None
         olivier.getRolesForPrincipal = lambda user, req: (
-                     user.getId() == 'olivier' and ('Hamlet',) or ())
+            user.getId() == 'olivier' and ('Hamlet',) or ())
 
         zcuf._setObject('olivier', olivier)
 
@@ -2079,7 +2079,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
         directlyProvides(olivier, IUserEnumerationPlugin, IRolesPlugin)
         olivier.enumerateUsers = lambda id: id == 'foo' or None
         olivier.getRolesForPrincipal = lambda user, req: (
-                     user.getId() == 'olivier' and ('Hamlet',) or ())
+            user.getId() == 'olivier' and ('Hamlet',) or ())
 
         zcuf._setObject('olivier', olivier)
 

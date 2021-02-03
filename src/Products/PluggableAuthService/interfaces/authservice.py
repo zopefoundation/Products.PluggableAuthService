@@ -26,7 +26,6 @@ class IBasicUser(Interface):
     """
 
     def getId():
-
         """ Get the ID of the user.
 
         o The ID can be used, at least from Python, to get the user from
@@ -34,7 +33,6 @@ class IBasicUser(Interface):
         """
 
     def getUserName():
-
         """ Return the name used by the user to log into the system.
 
         o Note that this may not be identical to the user's 'getId'
@@ -43,12 +41,10 @@ class IBasicUser(Interface):
         """
 
     def getRoles():
-
         """ Return the roles assigned to a user "globally".
         """
 
     def getRolesInContext(object):
-
         """ Return the roles assigned to the user in context of 'object'.
 
         o Roles include both global roles (ones assigned to the user
@@ -57,7 +53,6 @@ class IBasicUser(Interface):
         """
 
     def getDomains():
-
         """ Return the list of domain restrictions for a user.
         """
 
@@ -70,14 +65,12 @@ class IPropertiedUser(IBasicUser):
     """
 
     def addPropertysheet(id, data):
-
         """ Add a new property sheet to the user.
 
         The property sheet has to be a map or an IPropertySheet instance.
         """
 
     def listPropertysheets():
-
         """ Return a sequence of property sheet ids
 
         o for each id in the list getPropertysheet(id)
@@ -85,7 +78,6 @@ class IPropertiedUser(IBasicUser):
         """
 
     def getPropertysheet(id):
-
         """ Return a property sheet for the given id
 
         o the returned object implements IPropertySheet
@@ -109,19 +101,16 @@ class IUserFolder(Interface):
     """
 
     def getUser(name):
-
         """ Return the named user object or None.
         """
 
     def getUserById(id, default=None):
-
         """ Return the user corresponding to the given id.
 
         o If no such user can be found, return 'default'.
         """
 
     def validate(request, auth='', roles=_noroles):
-
         """ Perform identification, authentication, and authorization.
 
         o Return an IUser-conformant user object, or None if we can't
@@ -142,7 +131,6 @@ class IPluggableAuthService(IUserFolder):
     """
 
     def searchUsers(**kw):
-
         """ Search for users.  Returns a sequence of dicts, each dict
         representing a user matching the query, with the keys
         'userid','id', 'login', 'title', and 'principal_type',
@@ -250,17 +238,14 @@ class IMutableUserFolder(Interface):
     """
 
     def userFolderAddUser(name, password, roles, domains, **kw):
-
         """ Create a new user object.
         """
 
     def userFolderEditUser(name, password, roles, domains, **kw):
-
         """ Change user object attributes.
         """
 
     def userFolderDelUsers(names):
-
         """ Delete one or more user objects.
         """
 
@@ -271,11 +256,9 @@ class IEnumerableUserFolder(IUserFolder):
     """
 
     def getUserNames():
-
         """ Return a list of usernames.
         """
 
     def getUsers():
-
         """ Return a list of user objects.
         """

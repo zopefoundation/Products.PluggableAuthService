@@ -136,8 +136,8 @@ class ZODBUserManagerTests(unittest.TestCase,
         zum.addUser('userid', 'userid@example.com', 'password')
 
         user_id, login = zum.authenticateCredentials(
-                                {'login': 'userid@example.com',
-                                 'password': 'password'})
+            {'login': 'userid@example.com',
+             'password': 'password'})
 
         self.assertEqual(user_id, 'userid')
         self.assertEqual(login, 'userid@example.com')
@@ -380,15 +380,15 @@ class ZODBUserManagerTests(unittest.TestCase,
         zum.addUser('new_user', 'new_user@example.com', 'new_password')
 
         user_id, login = zum.authenticateCredentials(
-                                {'login': 'old_user@example.com',
-                                 'password': 'old_password'})
+            {'login': 'old_user@example.com',
+             'password': 'old_password'})
 
         self.assertEqual(user_id, 'old_user')
         self.assertEqual(login, 'old_user@example.com')
 
         user_id, login = zum.authenticateCredentials(
-                                {'login': 'new_user@example.com',
-                                 'password': 'new_password'})
+            {'login': 'new_user@example.com',
+             'password': 'new_password'})
 
         self.assertEqual(user_id, 'new_user')
         self.assertEqual(login, 'new_user@example.com')

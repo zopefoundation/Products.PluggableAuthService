@@ -202,7 +202,7 @@ class DelegatingMultiPlugin(Folder, BasePlugin):
             if max_results is not None:
                 try:
                     max_results = int(max_results)
-                    result = result[:max_results+1]
+                    result = result[:max_results + 1]
                 except ValueError:
                     pass
 

@@ -99,7 +99,6 @@ class ZODBRoleManager(BasePlugin):
     #
     @security.private
     def getRolesForPrincipal(self, principal, request=None):
-
         """ See IRolesPlugin.
         """
         result = list(self._principal_roles.get(principal.getId(), ()))
@@ -115,7 +114,6 @@ class ZODBRoleManager(BasePlugin):
     #
     def enumerateRoles(self, id=None, exact_match=False, sort_by=None,
                        max_results=None, **kw):
-
         """ See IRoleEnumerationPlugin.
         """
         role_info = []
@@ -170,28 +168,24 @@ class ZODBRoleManager(BasePlugin):
     #
     @security.protected(ManageUsers)
     def listRoleIds(self):
-
         """ Return a list of the role IDs managed by this object.
         """
         return self._roles.keys()
 
     @security.protected(ManageUsers)
     def listRoleInfo(self):
-
         """ Return a list of the role mappings.
         """
         return self._roles.values()
 
     @security.protected(ManageUsers)
     def getRoleInfo(self, role_id):
-
         """ Return a role mapping.
         """
         return self._roles[role_id]
 
     @security.private
     def addRole(self, role_id, title='', description=''):
-
         """ Add 'role_id' to the list of roles managed by this object.
 
         o Raise KeyError on duplicate.
@@ -204,7 +198,6 @@ class ZODBRoleManager(BasePlugin):
 
     @security.private
     def updateRole(self, role_id, title, description):
-
         """ Update title and description for the role.
 
         o Raise KeyError if not found.
@@ -214,7 +207,6 @@ class ZODBRoleManager(BasePlugin):
 
     @security.private
     def removeRole(self, role_id, REQUEST=None):
-
         """ Remove 'role_id' from the list of roles managed by this object.
 
         o Raise KeyError if not found.
@@ -233,7 +225,6 @@ class ZODBRoleManager(BasePlugin):
     #
     @security.protected(ManageUsers)
     def listAvailablePrincipals(self, role_id, search_id):
-
         """ Return a list of principal IDs to whom a role can be assigned.
 
         o If supplied, 'search_id' constrains the principal IDs;  if not,
@@ -261,7 +252,6 @@ class ZODBRoleManager(BasePlugin):
 
     @security.protected(ManageUsers)
     def listAssignedPrincipals(self, role_id):
-
         """ Return a list of principal IDs to whom a role is assigned.
         """
         result = []
@@ -290,7 +280,6 @@ class ZODBRoleManager(BasePlugin):
 
     @security.private
     def assignRoleToPrincipal(self, role_id, principal_id):
-
         """ Assign a role to a principal (user or group).
 
         o Return a boolean indicating whether a new assignment was created.
@@ -312,7 +301,6 @@ class ZODBRoleManager(BasePlugin):
 
     @security.private
     def removeRoleFromPrincipal(self, role_id, principal_id):
-
         """ Remove a role from a principal (user or group).
 
         o Return a boolean indicating whether the role was already present.

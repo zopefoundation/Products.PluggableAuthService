@@ -80,7 +80,6 @@ class ZODBGroupManager(BasePlugin):
     @security.private
     def enumerateGroups(self, id=None, title=None, exact_match=False,
                         sort_by=None, max_results=None, **kw):
-
         """ See IGroupEnumerationPlugin.
         """
         group_info = []
@@ -133,7 +132,6 @@ class ZODBGroupManager(BasePlugin):
     #
     @security.private
     def getGroupsForPrincipal(self, principal, request=None):
-
         """ See IGroupsPlugin.
         """
         unadorned = self._principal_groups.get(principal.getId(), ())
@@ -144,14 +142,12 @@ class ZODBGroupManager(BasePlugin):
     #
     @security.protected(ManageGroups)
     def listGroupIds(self):
-
         """ -> (group_id_1, ... group_id_n)
         """
         return self._groups.keys()
 
     @security.protected(ManageGroups)
     def listGroupInfo(self):
-
         """ -> (dict, ...dict)
 
         o Return one mapping per group, with the following keys:
@@ -162,14 +158,12 @@ class ZODBGroupManager(BasePlugin):
 
     @security.protected(ManageGroups)
     def getGroupInfo(self, group_id):
-
         """ group_id -> dict
         """
         return self._groups[group_id]
 
     @security.private
     def addGroup(self, group_id, title=None, description=None):
-
         """ Add 'group_id' to the list of groups managed by this object.
 
         o Raise KeyError on duplicate.
@@ -183,7 +177,6 @@ class ZODBGroupManager(BasePlugin):
 
     @security.private
     def updateGroup(self, group_id, title=None, description=None):
-
         """ Update properties for 'group_id'
 
         o Raise KeyError if group_id doesn't already exist.
@@ -196,7 +189,6 @@ class ZODBGroupManager(BasePlugin):
 
     @security.private
     def removeGroup(self, group_id):
-
         """ Remove 'role_id' from the list of roles managed by this
             object, removing assigned members from it before doing so.
 
@@ -211,7 +203,6 @@ class ZODBGroupManager(BasePlugin):
     #
     @security.protected(ManageGroups)
     def listAvailablePrincipals(self, group_id, search_id):
-
         """ Return a list of principal IDs to that can belong to the group.
 
         o If supplied, 'search_id' constrains the principal IDs;  if not,
@@ -238,7 +229,6 @@ class ZODBGroupManager(BasePlugin):
 
     @security.protected(ManageGroups)
     def listAssignedPrincipals(self, group_id):
-
         """ Return a list of principal IDs belonging to a group.
         """
         result = []
@@ -258,7 +248,6 @@ class ZODBGroupManager(BasePlugin):
 
     @security.private
     def addPrincipalToGroup(self, principal_id, group_id):
-
         """ Add a principal to a group.
 
         o Return a boolean indicating whether a new assignment was created.
@@ -281,7 +270,6 @@ class ZODBGroupManager(BasePlugin):
 
     @security.private
     def removePrincipalFromGroup(self, principal_id, group_id):
-
         """ Remove a prinicpal from from a group.
 
         o Return a boolean indicating whether the principal was already
