@@ -1,0 +1,33 @@
+# Generated from:
+# https://github.com/zopefoundation/meta/tree/master/config/zope-product
+[meta]
+template = "zope-product"
+commit-id = "dff30b80f91fd1b4e68f2a73f7de721d9559de17"
+
+[python]
+with-appveyor = false
+with-pypy = false
+with-legacy-python = true
+with-docs = true
+with-sphinx-doctests = false
+
+[coverage]
+fail-under = 89
+
+[isort]
+known_first_party = "Products.PluginRegistry, Products.StandardCacheManagers, Products.GenericSetup"
+
+[check-manifest]
+additional-ignores = [
+    "docs/_build/html/_sources/api/*",
+    ]
+
+[manifest]
+additional-rules = [
+    "include buildout4.cfg",
+    "recursive-include src *.gif",
+    "recursive-include src *.objects",
+    "recursive-include src *.png",
+    "recursive-include src *.xml",
+    "recursive-include src *.zpt",
+    ]
