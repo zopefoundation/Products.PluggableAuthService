@@ -1,0 +1,59 @@
+# Generated from:
+# https://github.com/zopefoundation/meta/tree/master/config/zope-product
+[meta]
+template = "zope-product"
+commit-id = "211d612c86d6754ebe13fad9b7081533bb603ed9"
+
+[python]
+with-appveyor = false
+with-pypy = false
+with-legacy-python = true
+with-docs = true
+with-sphinx-doctests = false
+
+[coverage]
+fail-under = 89
+
+[isort]
+known_first_party = "Products.PluginRegistry, Products.StandardCacheManagers, Products.GenericSetup"
+
+[check-manifest]
+additional-ignores = [
+    "docs/_build/html/_sources/api/*",
+    ]
+
+[manifest]
+additional-rules = [
+    "include buildout4.cfg",
+    "recursive-include src *.gif",
+    "recursive-include src *.objects",
+    "recursive-include src *.png",
+    "recursive-include src *.xml",
+    "recursive-include src *.zpt",
+    ]
+
+[tox]
+additional-envlist = [
+    "py27-zserver",
+    "py37-ip_range",
+    ]
+testenv-additional = [
+    "",
+    "[testenv:py27-zserver]",
+    "commands_pre =",
+    "    {envbindir}/buildout -nc {toxinidir}/buildout4.cfg buildout:directory={envdir} buildout:develop={toxinidir} install test-zserver",
+    "commands =",
+    "    {envbindir}/test-zserver {posargs:-cv}",
+    "",
+    "[testenv:py37-ip_range]",
+    "commands_pre =",
+    "    {envbindir}/buildout -nc {toxinidir}/buildout.cfg buildout:directory={envdir} buildout:develop={toxinidir} install test-ip_range",
+    "commands =",
+    "    {envbindir}/test-ip_range {posargs:-cv}",
+    ]
+
+[github-actions]
+additional-config = [
+    "- [\"2.7\",   \"py27-zserver\"]",
+    "- [\"3.7\",   \"py37-ip_range\"]",
+    ]
