@@ -2,7 +2,7 @@
 # https://github.com/zopefoundation/meta/tree/master/config/zope-product
 [meta]
 template = "zope-product"
-commit-id = "dff30b80f91fd1b4e68f2a73f7de721d9559de17"
+commit-id = "211d612c86d6754ebe13fad9b7081533bb603ed9"
 
 [python]
 with-appveyor = false
@@ -30,4 +30,30 @@ additional-rules = [
     "recursive-include src *.png",
     "recursive-include src *.xml",
     "recursive-include src *.zpt",
+    ]
+
+[tox]
+additional-envlist = [
+    "py27-zserver",
+    "py37-ip_range",
+    ]
+testenv-additional = [
+    "",
+    "[testenv:py27-zserver]",
+    "commands_pre =",
+    "    {envbindir}/buildout -nc {toxinidir}/buildout4.cfg buildout:directory={envdir} buildout:develop={toxinidir} install test-zserver",
+    "commands =",
+    "    {envbindir}/test-zserver {posargs:-cv}",
+    "",
+    "[testenv:py37-ip_range]",
+    "commands_pre =",
+    "    {envbindir}/buildout -nc {toxinidir}/buildout.cfg buildout:directory={envdir} buildout:develop={toxinidir} install test-ip_range",
+    "commands =",
+    "    {envbindir}/test-ip_range {posargs:-cv}",
+    ]
+
+[github-actions]
+additional-config = [
+    "- [\"2.7\",   \"py27-zserver\"]",
+    "- [\"3.7\",   \"py37-ip_range\"]",
     ]
