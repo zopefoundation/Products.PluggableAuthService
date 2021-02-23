@@ -128,7 +128,8 @@ class CookieAuthHelperTests(unittest.TestCase,
     def test_challenge(self):
         rc, root, folder, object = self._makeTree()
         response = FauxCookieResponse()
-        testURL = 'http://test'
+        testPath = '/some/path'
+        testURL = 'http://test' + testPath
         request = FauxRequest(RESPONSE=response, URL=testURL,
                               ACTUAL_URL=testURL)
         root.REQUEST = request
@@ -138,7 +139,9 @@ class CookieAuthHelperTests(unittest.TestCase,
         helper.challenge(request, response)
         self.assertEqual(response.status, 302)
         self.assertEqual(len(response.headers), 3)
-        self.assertTrue(response.headers['Location'].endswith(quote(testURL)))
+        loc = response.headers['Location']
+        self.assertTrue(loc.endswith(quote(testPath)))
+        self.assertNotIn(testURL, loc)
         self.assertEqual(response.headers['Cache-Control'], 'no-cache')
         self.assertEqual(response.headers['Expires'],
                          'Sat, 01 Jan 2000 00:00:00 GMT')
@@ -159,8 +162,9 @@ class CookieAuthHelperTests(unittest.TestCase,
         self.assertEqual(response.status, 302)
         self.assertEqual(len(response.headers), 3)
         loc = response.headers['Location']
-        self.assertTrue(loc.endswith(quote(actualURL)))
+        self.assertTrue(loc.endswith(quote('/xxx')))
         self.assertFalse(loc.endswith(quote(vhm)))
+        self.assertNotIn(actualURL, loc)
         self.assertEqual(response.headers['Cache-Control'], 'no-cache')
         self.assertEqual(response.headers['Expires'],
                          'Sat, 01 Jan 2000 00:00:00 GMT')

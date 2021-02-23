@@ -4,6 +4,8 @@ Change Log
 2.6.0 (unreleased)
 ------------------
 
+- Fix open redirect issue in `Cookie Auth Helper` redirect handling
+
 - Add support for Python 3.9.
 
 
