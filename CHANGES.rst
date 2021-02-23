@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-2.6.0 (unreleased)
+2.6.0 (2021-02-23)
 ------------------
 
 - Fix missing access control on ZODB Role Manager ``enumerateRoles``

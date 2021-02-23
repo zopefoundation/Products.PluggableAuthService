@@ -5,15 +5,12 @@ include *.txt
 include buildout.cfg
 include tox.ini
 
-recursive-include docs *.bat
 recursive-include docs *.py
 recursive-include docs *.rst
 recursive-include docs *.txt
 recursive-include docs Makefile
 
-recursive-include src *.pt
 recursive-include src *.py
-recursive-include src *.rst
 recursive-include src *.txt
 recursive-include src *.zcml
 include buildout4.cfg
