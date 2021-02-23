@@ -28,6 +28,8 @@ from binascii import hexlify
 import six
 from six.moves.urllib.parse import quote
 from six.moves.urllib.parse import unquote
+from six.moves.urllib.parse import urlparse
+from six.moves.urllib.parse import urlunparse
 
 from AccessControl.class_init import InitializeClass
 from AccessControl.Permissions import view
@@ -224,6 +226,12 @@ class CookieAuthHelper(Folder, BasePlugin):
                     # the only sane thing to do is to give up because we are
                     # in an endless redirect loop.
                     return 0
+
+            # Sanitize the return URL ``came_from`` and only allow local URLs
+            # to prevent an open exploitable redirect issue
+            if came_from:
+                parsed = urlparse(came_from)
+                came_from = urlunparse(('', '') + parsed[2:])
 
             if '?' in url:
                 sep = '&'

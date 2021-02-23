@@ -4,6 +4,10 @@ Change Log
 2.6.0 (unreleased)
 ------------------
 
+- Fix missing access control on ZODB Role Manager ``enumerateRoles``
+
+- Fix open redirect issue in `Cookie Auth Helper` redirect handling
+
 - Add support for Python 3.9.
 
 

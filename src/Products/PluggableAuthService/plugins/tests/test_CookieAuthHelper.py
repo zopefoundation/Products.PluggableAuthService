@@ -20,7 +20,6 @@ import codecs
 import unittest
 
 import six
-from six.moves.urllib.parse import quote
 
 from ...tests.conformance import IChallengePlugin_conformance
 from ...tests.conformance import ICredentialsResetPlugin_conformance
@@ -128,7 +127,8 @@ class CookieAuthHelperTests(unittest.TestCase,
     def test_challenge(self):
         rc, root, folder, object = self._makeTree()
         response = FauxCookieResponse()
-        testURL = 'http://test'
+        testPath = '/some/path?arg1=val1&arg2=val2'
+        testURL = 'http://test' + testPath
         request = FauxRequest(RESPONSE=response, URL=testURL,
                               ACTUAL_URL=testURL)
         root.REQUEST = request
@@ -138,7 +138,9 @@ class CookieAuthHelperTests(unittest.TestCase,
         helper.challenge(request, response)
         self.assertEqual(response.status, 302)
         self.assertEqual(len(response.headers), 3)
-        self.assertTrue(response.headers['Location'].endswith(quote(testURL)))
+        self.assertEqual(
+            response.headers['Location'],
+            '/login_form?came_from=/some/path%3Farg1%3Dval1%26arg2%3Dval2')
         self.assertEqual(response.headers['Cache-Control'], 'no-cache')
         self.assertEqual(response.headers['Expires'],
                          'Sat, 01 Jan 2000 00:00:00 GMT')
@@ -147,7 +149,7 @@ class CookieAuthHelperTests(unittest.TestCase,
         rc, root, folder, object = self._makeTree()
         response = FauxCookieResponse()
         vhm = 'http://localhost/VirtualHostBase/http/test/VirtualHostRoot/xxx'
-        actualURL = 'http://test/xxx'
+        actualURL = 'http://test/xxx?arg1=val1&arg2=val2'
 
         request = FauxRequest(RESPONSE=response, URL=vhm,
                               ACTUAL_URL=actualURL)
@@ -158,9 +160,9 @@ class CookieAuthHelperTests(unittest.TestCase,
         helper.challenge(request, response)
         self.assertEqual(response.status, 302)
         self.assertEqual(len(response.headers), 3)
-        loc = response.headers['Location']
-        self.assertTrue(loc.endswith(quote(actualURL)))
-        self.assertFalse(loc.endswith(quote(vhm)))
+        self.assertEqual(
+            response.headers['Location'],
+            '/login_form?came_from=/xxx%3Farg1%3Dval1%26arg2%3Dval2')
         self.assertEqual(response.headers['Cache-Control'], 'no-cache')
         self.assertEqual(response.headers['Expires'],
                          'Sat, 01 Jan 2000 00:00:00 GMT')
