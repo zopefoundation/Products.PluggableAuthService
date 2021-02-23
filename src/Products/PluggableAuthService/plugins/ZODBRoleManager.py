@@ -112,6 +112,7 @@ class ZODBRoleManager(BasePlugin):
     #
     #   IRoleEnumerationPlugin implementation
     #
+    @security.private
     def enumerateRoles(self, id=None, exact_match=False, sort_by=None,
                        max_results=None, **kw):
         """ See IRoleEnumerationPlugin.
