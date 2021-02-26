@@ -19,6 +19,8 @@ import os
 from hashlib import sha1
 
 import six
+from six.moves.urllib.parse import urlparse
+from six.moves.urllib.parse import urlunparse
 
 from AccessControl import ClassSecurityInfo
 # BBB import
@@ -187,3 +189,15 @@ def csrf_only(wrapped):
     exec('\n'.join(lines), g, l_copy)
 
     return functools.wraps(wrapped)(l_copy['wrapper'])
+
+
+def url_local(url):
+    """Helper to convert a URL into a site-local URL
+
+    This function removes the protocol and host parts of a URL in order to
+    prevent open redirect issues.
+    """
+    if url:
+        parsed = urlparse(url)
+        url = urlunparse(('', '') + parsed[2:])
+    return url

@@ -28,8 +28,6 @@ from binascii import hexlify
 import six
 from six.moves.urllib.parse import quote
 from six.moves.urllib.parse import unquote
-from six.moves.urllib.parse import urlparse
-from six.moves.urllib.parse import urlunparse
 
 from AccessControl.class_init import InitializeClass
 from AccessControl.Permissions import view
@@ -45,6 +43,7 @@ from ..interfaces.plugins import ICredentialsUpdatePlugin
 from ..interfaces.plugins import ILoginPasswordHostExtractionPlugin
 from ..plugins.BasePlugin import BasePlugin
 from ..utils import classImplements
+from ..utils import url_local
 
 
 class ICookieAuthHelper(Interface):
@@ -229,9 +228,7 @@ class CookieAuthHelper(Folder, BasePlugin):
 
             # Sanitize the return URL ``came_from`` and only allow local URLs
             # to prevent an open exploitable redirect issue
-            if came_from:
-                parsed = urlparse(came_from)
-                came_from = urlunparse(('', '') + parsed[2:])
+            came_from = url_local(came_from)
 
             if '?' in url:
                 sep = '&'
@@ -279,7 +276,7 @@ class CookieAuthHelper(Folder, BasePlugin):
         if pas_instance is not None:
             pas_instance.updateCredentials(request, response, login, password)
 
-        came_from = request.form['came_from']
+        came_from = url_local(request.form['came_from'])
 
         return response.redirect(came_from)
 

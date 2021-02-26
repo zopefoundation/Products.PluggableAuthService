@@ -275,6 +275,24 @@ class Test_csrf_only(unittest.TestCase):
         self.assertEqual(wrapped(foo=None, bar=None, REQUEST=req), 42)
 
 
+class Test_utils(unittest.TestCase):
+
+    def test_url_local(self):
+        from ..utils import url_local
+
+        # Protocol and host will be removed
+        url_input = 'https://evil-site.com/exploit?arg1=val1&arg2=val2'
+        self.assertEqual(url_local(url_input), '/exploit?arg1=val1&arg2=val2')
+
+        # Site-local paths are unchanged
+        url_input = '/local/path?arg1=val1&arg2=val2'
+        self.assertEqual(url_local(url_input), url_input)
+
+        # Empty paths are unchanged
+        for url_input in ('', None):
+            self.assertEqual(url_local(url_input), url_input)
+
+
 def _createHashedValue(items):
     from hashlib import sha1 as sha
 

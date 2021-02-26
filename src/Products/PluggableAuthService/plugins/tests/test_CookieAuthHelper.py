@@ -175,6 +175,31 @@ class CookieAuthHelperTests(unittest.TestCase,
         helper.resetCredentials(request, response)
         self.assertEqual(len(response.cookies), 0)
 
+    def test_login_redirect(self):
+        helper = self._makeOne()
+        response = FauxCookieResponse()
+        request = FauxSettableRequest(RESPONSE=response)
+        helper.REQUEST = request
+
+        # came_from empty, redirect is empty as well
+        url = ''
+        request.form['came_from'] = url
+        helper.login()
+        self.assertEqual(response.headers['Location'], url)
+
+        # came_from is site-local, redirect won't change the URL
+        url = '/foo?arg1=val1&arg2=val2'
+        request.form['came_from'] = url
+        helper.login()
+        self.assertEqual(response.headers['Location'], url)
+
+        # Protocol and host parts will be chopped off
+        url = 'http://evil.com/foo?arg1=val1&arg2=val2'
+        request.form['came_from'] = url
+        helper.login()
+        self.assertEqual(response.headers['Location'],
+                         '/foo?arg1=val1&arg2=val2')
+
     def test_loginWithoutCredentialsUpdate(self):
         helper = self._makeOne()
         response = FauxCookieResponse()

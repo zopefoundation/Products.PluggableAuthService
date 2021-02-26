@@ -4,6 +4,8 @@ Change Log
 2.6.1 (unreleased)
 ------------------
 
+- Fix remaining open redirect sources
+
 
 2.6.0 (2021-02-23)
 ------------------

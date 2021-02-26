@@ -73,6 +73,7 @@ from .utils import _wwwdir
 from .utils import classImplements
 from .utils import createKeywords
 from .utils import createViewName
+from .utils import url_local
 
 
 security = ModuleSecurityInfo(
@@ -1153,7 +1154,7 @@ class PluggableAuthService(Folder, Cacheable):
         # credentials can be acted upon to e.g. go back to the login page
         referrer = REQUEST.get('HTTP_REFERER')  # optional header
         if referrer:
-            REQUEST['RESPONSE'].redirect(referrer)
+            REQUEST['RESPONSE'].redirect(url_local(referrer))
 
     @security.public
     def resetCredentials(self, request, response):
