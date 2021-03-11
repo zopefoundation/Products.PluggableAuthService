@@ -976,7 +976,7 @@ class PluggableAuthService(Folder, Cacheable):
         resp._unauthorized = self._unauthorized
         resp._has_challenged = False
 
-    @security.public
+    @security.private
     def applyTransform(self, value):
         """ Transform for login name.
 
@@ -1024,7 +1024,7 @@ class PluggableAuthService(Folder, Cacheable):
                          'Updating existing login names.', orig_value, value)
             self.updateAllLoginNames()
 
-    @security.public
+    @security.private
     def lower(self, value):
         """ Transform for login name.
 
@@ -1034,7 +1034,7 @@ class PluggableAuthService(Folder, Cacheable):
         """
         return value.strip().lower()
 
-    @security.public
+    @security.private
     def upper(self, value):
         """ Transform for login name.
 

@@ -4,6 +4,10 @@ Change Log
 2.6.2 (unreleaased)
 -------------------
 
+- Tighten down security on several login string transformation methods
+  (`#88
+  <https://github.com/zopefoundation/Products.PluggableAuthService/issues/88>`_)
+
 
 2.6.1 (2021-02-26)
 ------------------
