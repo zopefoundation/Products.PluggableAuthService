@@ -2,7 +2,7 @@
 # https://github.com/zopefoundation/meta/tree/master/config/zope-product
 [meta]
 template = "zope-product"
-commit-id = "211d612c86d6754ebe13fad9b7081533bb603ed9"
+commit-id = "5160fefd5278ff7780bff6efd7efbecc47d6741a"
 
 [python]
 with-appveyor = false
@@ -51,6 +51,7 @@ testenv-additional = [
     "commands =",
     "    {envbindir}/test-ip_range {posargs:-cv}",
     ]
+use-flake8 = true
 
 [github-actions]
 additional-config = [
