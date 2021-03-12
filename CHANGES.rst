@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-2.6.2 (unreleaased)
+2.6.2 (2021-03-12)
 -------------------
 
 - Tighten down security on several login string transformation methods
