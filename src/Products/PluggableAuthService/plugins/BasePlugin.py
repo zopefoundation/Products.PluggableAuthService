@@ -115,7 +115,7 @@ class BasePlugin(SimpleItem, PropertyManager):
             view_name = createViewName('_findUser', id)
             pas.ZCacheable_invalidate(view_name)
 
-    @security.public
+    @security.private
     def applyTransform(self, value):
         """ Transform for login name.
 
