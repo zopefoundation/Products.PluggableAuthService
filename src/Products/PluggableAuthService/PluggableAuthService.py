@@ -942,10 +942,12 @@ class PluggableAuthService(Folder, Cacheable):
         import Products
         allowed_types = tuple(MultiPlugins) + (RAMCacheManager.meta_type,)
 
-        meta_types =  [x for x in Products.meta_types if x['name'] in allowed_types]
-        
+        meta_types = [ x for x in Products.meta_types 
+            if x['name'] in allowed_types ]
+
         for mt in meta_types:
-            want_modal = getattr(mt.get('instance', None), 'zmi_show_add_dialog', True)
+            want_modal = getattr(mt.get('instance', None), 
+                'zmi_show_add_dialog', True)
             mt['zmi_show_add_dialog'] = 'modal' if want_modal else ''
 
         return meta_types
