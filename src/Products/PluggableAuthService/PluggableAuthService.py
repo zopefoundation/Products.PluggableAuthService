@@ -940,15 +940,15 @@ class PluggableAuthService(Folder, Cacheable):
         """ What objects can be put in here?
         """
         import Products
+        meta_types = Products.meta_types
         allowed_types = tuple(MultiPlugins) + (RAMCacheManager.meta_type,)
 
-        meta_types = [ x for x in Products.meta_types 
-            if x['name'] in allowed_types ]
+        meta_types = [x for x in meta_types if x['name'] in allowed_types]
+        dlg_type = 'zmi_show_add_dialog' 
 
         for mt in meta_types:
-            want_modal = getattr(mt.get('instance', None), 
-                'zmi_show_add_dialog', True)
-            mt['zmi_show_add_dialog'] = 'modal' if want_modal else ''
+            want_modal = getattr(mt.get('instance', None), dlg_type, True)
+            mt[dlg_type] = 'modal' if want_modal else ''
 
         return meta_types
 
