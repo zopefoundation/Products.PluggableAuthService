@@ -3,7 +3,7 @@ Change Log
 
 2.6.3 (unreleased)
 ------------------
-
+- Changed adding object gui to modal window
 
 2.6.2 (2021-03-12)
 -------------------
