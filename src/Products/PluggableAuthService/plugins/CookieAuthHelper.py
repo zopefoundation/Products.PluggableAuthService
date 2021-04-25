@@ -275,10 +275,18 @@ class CookieAuthHelper(Folder, BasePlugin):
 
         if pas_instance is not None:
             pas_instance.updateCredentials(request, response, login, password)
-
-        came_from = url_local(request.form['came_from'])
-
-        return response.redirect(came_from)
+        came_from = request.form.get('came_from')
+        if came_from is not None:
+            return response.redirect(url_local(came_from))
+        # When this happens, this either means
+        # - the administrator did not setup the login form properly
+        # - the user manipulated the login form and removed `came_from`
+        # Still, the user provided correct credentials and is logged in.
+        return (
+            '<h1>You have been logged in successfully.</h1>\n'
+            '<p>Unfortunately, we do not know where to redirect you to.</p>'
+            '<p>If you need help, please ask the site\'s administrator.</p>'
+        )
 
 
 classImplements(CookieAuthHelper, ICookieAuthHelper,
