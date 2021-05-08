@@ -211,14 +211,6 @@ class CookieAuthHelperTests(unittest.TestCase,
         helper.login()
         self.assertEqual(len(response.cookies), 0)
 
-    def test_login_with_missing_came_from(self):
-        helper = self._makeOne()
-        response = FauxCookieResponse()
-        request = FauxSettableRequest(RESPONSE=response)
-        helper.REQUEST = request
-        rv = helper.login()
-        self.assertIn('You have been logged in successfully.', rv)
-
     def test_extractCredentials_from_cookie_with_colon_in_password(self):
         # http://www.zope.org/Collectors/PAS/51
         # Passwords with ":" characters broke authentication

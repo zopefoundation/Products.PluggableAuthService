@@ -32,6 +32,8 @@ from six.moves.urllib.parse import unquote
 from AccessControl.class_init import InitializeClass
 from AccessControl.Permissions import view
 from AccessControl.SecurityInfo import ClassSecurityInfo
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from OFS.Folder import Folder
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from Products.PageTemplates.ZopePageTemplate import ZopePageTemplate
@@ -282,11 +284,8 @@ class CookieAuthHelper(Folder, BasePlugin):
         # - the administrator did not setup the login form properly
         # - the user manipulated the login form and removed `came_from`
         # Still, the user provided correct credentials and is logged in.
-        return (
-            '<h1>You have been logged in successfully.</h1>\n'
-            '<p>Unfortunately, we do not know where to redirect you to.</p>'
-            '<p>If you need help, please ask the site\'s administrator.</p>'
-        )
+        pas_root = aq_parent(aq_inner(self._getPAS()))
+        return response.redirect(pas_root.absolute_url())
 
 
 classImplements(CookieAuthHelper, ICookieAuthHelper,
