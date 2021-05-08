@@ -21,10 +21,12 @@ import unittest
 
 import six
 
+from ...interfaces.plugins import IChallengePlugin
 from ...tests.conformance import IChallengePlugin_conformance
 from ...tests.conformance import ICredentialsResetPlugin_conformance
 from ...tests.conformance import ICredentialsUpdatePlugin_conformance
 from ...tests.conformance import ILoginPasswordHostExtractionPlugin_conformance
+from ...tests import pastc
 from ...tests.test_PluggableAuthService import FauxContainer
 from ...tests.test_PluggableAuthService import FauxObject
 from ...tests.test_PluggableAuthService import FauxRequest
@@ -258,3 +260,28 @@ class CookieAuthHelperTests(unittest.TestCase,
         request.set(helper.cookie_name, cookie_val)
 
         self.assertEqual(helper.extractCredentials(request), {})
+
+
+class CookieAuthHelperIntegrationTests(pastc.PASTestCase):
+
+    def test_login_with_missing_came_from(self):
+        pas = self.folder.acl_users
+        factory = pas.manage_addProduct['PluggableAuthService']
+        factory.addCookieAuthHelper('cookie_auth')
+        plugins = pas.plugins
+        plugins.activatePlugin(IChallengePlugin, 'cookie_auth')
+
+        response = FauxCookieResponse()
+        request = FauxSettableRequest(RESPONSE=response)
+
+        # find cookie auth
+        for id_, plugin in pas.plugins.items():
+            if id_ == 'cookie_auth':
+                cookie_auth = plugin
+                break
+
+        cookie_auth.REQUEST = request
+        cookie_auth.login()
+
+        self.assertEqual(
+            response.headers['Location'], 'http://nohost/test_folder_1_')
