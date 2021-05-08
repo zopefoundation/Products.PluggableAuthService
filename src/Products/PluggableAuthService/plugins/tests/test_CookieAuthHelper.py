@@ -22,11 +22,11 @@ import unittest
 import six
 
 from ...interfaces.plugins import IChallengePlugin
+from ...tests import pastc
 from ...tests.conformance import IChallengePlugin_conformance
 from ...tests.conformance import ICredentialsResetPlugin_conformance
 from ...tests.conformance import ICredentialsUpdatePlugin_conformance
 from ...tests.conformance import ILoginPasswordHostExtractionPlugin_conformance
-from ...tests import pastc
 from ...tests.test_PluggableAuthService import FauxContainer
 from ...tests.test_PluggableAuthService import FauxObject
 from ...tests.test_PluggableAuthService import FauxRequest
