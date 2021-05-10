@@ -32,6 +32,8 @@ from six.moves.urllib.parse import unquote
 from AccessControl.class_init import InitializeClass
 from AccessControl.Permissions import view
 from AccessControl.SecurityInfo import ClassSecurityInfo
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from OFS.Folder import Folder
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from Products.PageTemplates.ZopePageTemplate import ZopePageTemplate
@@ -275,10 +277,15 @@ class CookieAuthHelper(Folder, BasePlugin):
 
         if pas_instance is not None:
             pas_instance.updateCredentials(request, response, login, password)
-
-        came_from = url_local(request.form['came_from'])
-
-        return response.redirect(came_from)
+        came_from = request.form.get('came_from')
+        if came_from is not None:
+            return response.redirect(url_local(came_from))
+        # When this happens, this either means
+        # - the administrator did not setup the login form properly
+        # - the user manipulated the login form and removed `came_from`
+        # Still, the user provided correct credentials and is logged in.
+        pas_root = aq_parent(aq_inner(self._getPAS()))
+        return response.redirect(pas_root.absolute_url())
 
 
 classImplements(CookieAuthHelper, ICookieAuthHelper,

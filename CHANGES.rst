@@ -5,6 +5,10 @@ Change Log
 ------------------
 - Changed adding object gui to modal window
 
+- Handle login issues for cookie based login when ``came_from`` is missing
+  (`#65
+  <https://github.com/zopefoundation/Products.PluggableAuthService/issues/65>`_)
+
 2.6.2 (2021-03-12)
 -------------------
 
