@@ -11,11 +11,11 @@ recursive-include docs *.txt
 recursive-include docs Makefile
 
 recursive-include src *.py
-recursive-include src *.txt
-recursive-include src *.zcml
 include buildout4.cfg
 recursive-include src *.gif
 recursive-include src *.objects
 recursive-include src *.png
+recursive-include src *.txt
 recursive-include src *.xml
+recursive-include src *.zcml
 recursive-include src *.zpt
