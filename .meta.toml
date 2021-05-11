@@ -2,7 +2,7 @@
 # https://github.com/zopefoundation/meta/tree/master/config/zope-product
 [meta]
 template = "zope-product"
-commit-id = "5160fefd5278ff7780bff6efd7efbecc47d6741a"
+commit-id = "b3b903c81546d54b062adf7fafa32e06125f5ba1"
 
 [python]
 with-appveyor = false
@@ -28,7 +28,9 @@ additional-rules = [
     "recursive-include src *.gif",
     "recursive-include src *.objects",
     "recursive-include src *.png",
+    "recursive-include src *.txt",
     "recursive-include src *.xml",
+    "recursive-include src *.zcml",
     "recursive-include src *.zpt",
     ]
 
