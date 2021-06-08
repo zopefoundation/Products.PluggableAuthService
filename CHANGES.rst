@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-2.6.3 (unreleased)
+2.6.3 (2021-06-08)
 ------------------
 
 - Fix CSRF token access for tigher TAL path expression security in Zope 5.2.1
