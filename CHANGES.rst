@@ -3,6 +3,11 @@ Change Log
 
 2.6.3 (unreleased)
 ------------------
+
+- Fix CSRF token access for tigher TAL path expression security in Zope 5.2.1
+  (`#99
+  <https://github.com/zopefoundation/Products.PluggableAuthService/issues/99>`_)
+
 - Changed adding object gui to modal window
 
 - Handle login issues for cookie based login when ``came_from`` is missing

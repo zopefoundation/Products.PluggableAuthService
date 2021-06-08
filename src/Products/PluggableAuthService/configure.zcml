@@ -7,6 +7,7 @@
       name="csrf_token"
       class=".utils.CSRFToken"
       permission="zope.Public"
+      attribute="token"
       />
 
   <include file="exportimport.zcml" />
