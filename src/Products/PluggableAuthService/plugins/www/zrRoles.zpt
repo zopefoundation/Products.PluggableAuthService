@@ -207,16 +207,13 @@
  <input type="hidden" name="role_id"
         tal:attributes="value role_id" />
  <input type="hidden" name="assign" value="1" />
- <div class="form-row align-items-center">
-  <div class="col-2">
-    <div class="form-label">Principal ID</div>
-  </div>
-  <div class="col-8">
-    <input type="text" name="search_id" value="" class="form-control"
-          tal:attributes="value search_id" />
-  </div>
-  <div class="col-2">
-    <input type="submit" class="btn btn-primary zmi-patch" value=" Search " />
+ <div class="form-row align-items-center py-4 px-2">
+  <div class="input-group">
+    <input class="col-10 form-control"
+      placeholder="Enter Principal ID" 
+      type="text" name="search_id" value="" 
+      tal:attributes="value search_id" />
+    <input type="submit" class="col-2 btn btn-primary zmi-patch" value=" Search " />
   </div>
 </div>
 </form>
