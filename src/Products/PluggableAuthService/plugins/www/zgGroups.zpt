@@ -1,244 +1,192 @@
 <h1 tal:replace="structure here/manage_page_header">Header</h1>
 
 <h2 tal:define="form_title string:ZODB Groups"
-    tal:replace="structure here/manage_tabs"> TABS </h2>
+  tal:replace="structure here/manage_tabs"> TABS </h2>
 
 <main class="container-fluid"
-      tal:define="adding request/adding | nothing;
-                  assigning python:not adding and request.get('assign');
-                  updating python:( not assigning
-                                and request.get('group_id')
-                                  );
-                  browsing python:( not assigning
-                                and not adding
-                                and not updating
-                                  );
-                 ">
+  tal:define="adding request/adding | nothing;
+    assigning python:not adding and request.get('assign');
+    updating python:(not assigning and request.get('group_id'));
+    browsing python:(not assigning and not adding and not updating);">
 
-<div tal:condition="browsing">
-<div>
+  <h3>Current Groups <a href="?adding=1">(Add a group)</a></h3>
 
-<h3> Current Groups <a href="?adding=1">(Add a group)</a></h3>
-
-<form action="." method="POST">
-<input type="hidden" name="csrf_token"
-       tal:attributes="value context/@@csrf_token/token" />
-
-<table class="table table-sm table-striped table-hover">
-<thead>
- <tr>
-  <td />
-  <th> Group </th>
-  <th> Description </th>
-  <th> Assignments </th>
- </tr>
-
- <tr tal:repeat="info here/listGroupInfo">
-
-  <td>
-    <input type="checkbox" name="group_ids:list" value="GROUP_ID"
-           tal:attributes="value info/id" />
-  </td>
-  <td>
-    <a href="?group_id=foo"
-       tal:attributes="href string:?group_id=${info/id}"
-       tal:content="info/id"
-    >GROUP_ID</a>
-    <span tal:condition="info/title"
-          tal:content="string:(${info/title})">GROUP_TITLE</span>
-  </td>
-  <td tal:content="info/description">GROUP DESCRIPTION</td>
-  <td>
-    <a href="?group_id=foo&amp;assign=1"
-       tal:attributes="href string:?group_id=${info/id}&amp;assign=1"
-    >?</a>
-    <span
-       tal:content="python:','.join(
-           [x[1] for x in here.listAssignedPrincipals(info['id'])] )"
-    >GROUP ASSIGNMENTS</span>
-  </td>
- </tr>
-
-</table>
-
-<div class="form-controls">
-    <input type="hidden" name="group_ids:list:default" value="" />
-    <input type="submit" name="manage_removeGroups:method" class="btn btn-primary"
-           value=" Remove Groups " />
-</div>
-</form>
-
-</div>
-</div>
-
-<div tal:condition="adding">
-<div tal:define="group_id request/group_id | python:'';
-                 login_name request/login_name | python:'';
-                 groups request/groups | python:();
-                ">
-
-<h3> Add a Group </h3>
-
-<form action="manage_addGroup" method="POST">
-<input type="hidden" name="csrf_token"
-       tal:attributes="value context/@@csrf_token/token" />
-<table class="table table-sm">
-
- <tr valign="top">
-  <th align="right">
-   <div class="form-label">Group ID</div>
-  </th>
-  <td>
-   <input type="text" name="group_id" size="20" class="form-control" />
-  </td>
- </tr>
-
- <tr valign="top">
-  <th align="right">
-   <div class="form-label">Title</div>
-  </th>
-  <td>
-   <input type="text" name="title" size="40" class="form-control" />
-  </td>
- </tr>
-
- <tr valign="top">
-  <th align="right">
-   <div class="form-label">Description</div>
-  </th>
-  <td>
-   <textarea name="description" rows="5" cols="65" class="form-control"></textarea>
-  </td>
- </tr>
-
-</table>
-
-<div class="form-controls">
-  <input type="submit" value=" Add Group " class="btn btn-primary" />
-</div>
-</form>
-
-</div>
-</div>
+  <form action="." method="POST">
+    <input type="hidden" name="csrf_token" 
+      tal:attributes="value context/@@csrf_token/token" />
+    <table class="table table-sm table-striped table-hover mt-4">
+      <thead>
+        <tr>
+          <th scope="col" style="width:4rem">&nbsp;</th>
+          <th scope="col">Group</th>
+          <th scope="col">Description</th>
+          <th scope="col">Assignments</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr tal:repeat="info here/listGroupInfo">
+          <td class="pl-4">
+            <input type="checkbox" name="group_ids:list" value="GROUP_ID"
+              tal:attributes="value info/id" />
+          </td>
+          <td>
+            <a href="?group_id=foo"
+                tal:attributes="href string:?group_id=${info/id}"
+                tal:content="info/id"
+            >GROUP_ID</a>
+            <span tal:condition="info/title"
+              tal:content="string:(${info/title})">GROUP_TITLE</span>
+          </td>
+          <td tal:content="info/description">GROUP DESCRIPTION</td>
+          <td>
+            <a href="?group_id=foo&amp;assign=1"
+              tal:attributes="href string:?group_id=${info/id}&amp;assign=1"
+            ><i class="far fa-edit text-primary"></i></a>
+            <span
+              tal:content="python:','.join(
+                [x[1] for x in here.listAssignedPrincipals(info['id'])] )"
+            >GROUP ASSIGNMENTS</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="form-group form-inline zmi-controls">
+      <input type="hidden" name="group_ids:list:default" value="" />
+      <input type="submit" name="manage_removeGroups:method" 
+        class="btn btn-primary" value=" Remove Groups " />
+    </div>
+  </form>
 
 
-<div tal:condition="updating">
-<div tal:define="group_id request/group_id;
-                 info python:here.getGroupInfo(group_id);
-                 title info/title;
-                 description info/description;
-                "
->
-<h3> Update Group: <span tal:replace="group_id">GROUP_ID</span>
-     <a href="manage_groups?group_id=group_id&amp;assign=1"
-        tal:define="url here/absolute_url;
-                    qs string:group_id=${group_id}&amp;assign=1;
-                   "
-        tal:attributes="href string:${url}/manage_groups?${qs}"
-     >(Assign)</a>
-</h3>
-
-<form action="manage_updateGroup" method="POST">
-<input type="hidden" name="csrf_token"
-       tal:attributes="value context/@@csrf_token/token" />
-<input type="hidden" name="group_id" value="GROUP_ID"
-       tal:attributes="value group_id" />
-<table class="table table-sm">
-
- <tr valign="top">
-  <th align="right" width="20%">
-   <div class="form-label">Group ID:</div>
-  </th>
-  <td tal:content="group_id">GROUP_ID</td>
- </tr>
-
- <tr valign="top">
-  <th align="right">
-   <div class="form-label">Title</div>
-  </th>
-  <td>
-   <input type="text" name="title" size="40" value="TITLE" class="form-control"
-          tal:attributes="value title"
-   />
-  </td>
- </tr>
-
- <tr valign="top">
-  <th align="right">
-   <div class="form-label">Description</div>
-  </th>
-  <td>
-   <textarea name="description" rows="5" cols="65" class="form-control"
-             tal:content="description">DESCRIPTION</textarea>
-  </td>
- </tr>
-
-</table>
-
-<div class="form-controls">
-  <input type="submit" value=" Update Group " class="btn btn-primary" />
-</div>
-</form>
-
-</div>
-</div>
-
-<div tal:condition="assigning">
-<div tal:define="group_id request/group_id;
-                 search_id request/search_id | nothing;
-                "
->
-<h3> Assign Group: <span tal:replace="group_id">GROUP_ID</span>
-     <a href="manage_groups?group_id=group_id"
-        tal:define="url here/absolute_url"
-        tal:attributes="href string:${url}/manage_groups?group_id=${group_id}"
-     >(Properties)</a>
-</h3>
-
-<form action="HERE" method="POST"
-      tal:attributes="action string:${here/absolute_url}/manage_groups">
- <input type="hidden" name="csrf_token"
-        tal:attributes="value context/@@csrf_token/token" />
- <input type="hidden" name="group_id"
-        tal:attributes="value group_id" />
- <input type="hidden" name="assign" value="1" />
- <div class="form-row align-items-center py-4 px-2">
-  <div class="input-group">
-    <input class="col-10 form-control"
-      placeholder="Enter Principal ID" 
-      type="text" name="search_id" value="" 
-      tal:attributes="value search_id" />
-      <input type="submit" class="col-2 btn btn-primary zmi-patch" value=" Search " />
+  <div tal:condition="adding" title="Add a Group">
+    <div tal:define="group_id request/group_id | python:'';
+      login_name request/login_name | python:'';
+      groups request/groups | python:();">
+      <h3 class="text-muted py-3">Add a Group</h3>
+      <form action="manage_addGroup" method="POST">
+        <input type="hidden" name="csrf_token"
+          tal:attributes="value context/@@csrf_token/token" />
+        <div class="form-group row">
+          <label for="group_id" class="form-label col-sm-3 col-md-2" label>Group ID</label>
+          <div class="col-sm-9 col-md-10">
+            <input type="text" name="group_id" class="form-control" />
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="title" class="form-label col-sm-3 col-md-2" label>Title</label>
+          <div class="col-sm-9 col-md-10">
+            <input type="text" name="title" class="form-control" />
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="title" class="form-label col-sm-3 col-md-2" label>Description</label>
+          <div class="col-sm-9 col-md-10">
+            <textarea type="text" name="description" rows="5" class="form-control"></textarea>
+          </div>
+        </div>
+        <div class="zmi-controls">
+          <input type="submit" value=" Add Group " class="btn btn-primary" />
+        </div>
+      </form>
+    </div>
   </div>
-</div>
-</form>
 
-<form action="." method="POST"
-      tal:define="matching python:
-                            here.listAvailablePrincipals(group_id, search_id);
-                  left_name string:principal_ids;
-                  left_list matching;
-                  right_name string:principal_ids;
-                  right_list python:here.listAssignedPrincipals(group_id);
-                  left_to_right string:manage_addPrincipalsToGroup;
-                  right_to_left string:manage_removePrincipalsFromGroup;
-                  right_is_ordered python:0;
-                 "
->
-<input type="hidden" name="csrf_token"
-       tal:attributes="value context/@@csrf_token/token" />
 
-<table metal:use-macro="here/manage_twoLists/macros/two_lists">
+  <div tal:condition="updating" title="Update a Group">
+    <div tal:define="group_id request/group_id;
+      info python:here.getGroupInfo(group_id);
+      title info/title;
+      description info/description;">
+      <h3 class="text-muted py-3">
+        Update Group: 
+        <span tal:replace="group_id">GROUP_ID</span>
+        <a href="manage_groups?group_id=group_id&amp;assign=1"
+          tal:define="url here/absolute_url;
+            qs string:group_id=${group_id}&amp;assign=1;"
+          tal:attributes="href string:${url}/manage_groups?${qs}"
+        >(Assign)</a>
+      </h3>
+      <form action="manage_updateGroup" method="POST">
+        <input type="hidden" name="csrf_token"
+          tal:attributes="value context/@@csrf_token/token" />
+        <input type="hidden" name="group_id" value="GROUP_ID"
+          tal:attributes="value group_id" />
+          <div class="form-group row">
+            <label for="group_id" class="form-label col-sm-3 col-md-2" label>Group ID</label>
+            <div class="col-sm-9 col-md-10">
+              <input type="text" disabled="disabled" class="form-control" tal:attributes="value group_id" />
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="title" class="form-label col-sm-3 col-md-2" label>Title</label>
+            <div class="col-sm-9 col-md-10">
+              <input type="text" name="title" class="form-control" tal:attributes="value title" />
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="title" class="form-label col-sm-3 col-md-2" label>Description</label>
+            <div class="col-sm-9 col-md-10">
+              <textarea type="text" name="description" rows="5" class="form-control"
+                tal:content="description"></textarea>
+            </div>
+          </div>
+          <div class="zmi-controls">
+            <input type="submit" value=" Update Group " class="btn btn-primary" />
+          </div>
+      </form>
+    </div>
+  </div>
 
-<input type="hidden" name="group_id" value="GROUP_ID"
-       tal:attributes="value group_id"
-       metal:fill-slot="hidden_vars" />
+  <div tal:condition="assigning" title="Assign a Group">
+    <div tal:define="group_id request/group_id;
+      search_id request/search_id | nothing;">
+      <h3 class="text-muted py-3">Assign Group: 
+        <span tal:replace="group_id">GROUP_ID</span>
+        <a href="manage_groups?group_id=group_id"
+            tal:define="url here/absolute_url"
+            tal:attributes="href string:${url}/manage_groups?group_id=${group_id}"
+        >(Properties)</a>
+      </h3>
+      <form action="HERE" method="POST"
+        tal:attributes="action string:${here/absolute_url}/manage_groups">
+        <input type="hidden" name="csrf_token"
+          tal:attributes="value context/@@csrf_token/token" />
+        <input type="hidden" name="group_id"
+          tal:attributes="value group_id" />
+        <input type="hidden" name="assign" value="1" />
+        <div class="form-row align-items-center py-4 px-2">
+          <div class="input-group">
+            <input class="col-10 form-control"
+              placeholder="Enter Principal ID" 
+              type="text" name="search_id" value="" 
+              tal:attributes="value search_id" />
+            <input type="submit" class="col-2 btn btn-primary zmi-patch" value=" Search " />
+          </div>
+        </div>
+      </form>
 
-</table>
-</form>
+      <form action="." method="POST"
+        tal:define="matching python: here.listAvailablePrincipals(group_id, search_id);
+          left_name string:principal_ids;
+          left_list matching;
+          right_name string:principal_ids;
+          right_list python:here.listAssignedPrincipals(group_id);
+          left_to_right string:manage_addPrincipalsToGroup;
+          right_to_left string:manage_removePrincipalsFromGroup;
+          right_is_ordered python:0;">
+        <input type="hidden" name="csrf_token"
+          tal:attributes="value context/@@csrf_token/token" />
 
-</div>
-</div>
+        <div metal:use-macro="here/manage_twoLists/macros/two_lists">
+          <input type="hidden" name="group_id" value="GROUP_ID"
+            tal:attributes="value group_id"
+            metal:fill-slot="hidden_vars" />
+        </div>
+
+      </form>
+
+    </div>
+  </div>
 
 </main>
 
