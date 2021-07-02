@@ -2149,6 +2149,14 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
         zcuf._setObject('sub', sub)
 
+    def test__setObject_arguments(self):
+        # Make sure the overridden definition matches the
+        # superclass definition
+        from OFS.Folder import Folder
+        zcuf = self._makeOne()
+        sub = Folder('sub')
+        zcuf._setObject('sub', sub, set_owner=False, suppress_events=True)
+
     def test__delOb_unregisters_plugin(self):
 
         from ..interfaces.plugins import IAuthenticationPlugin

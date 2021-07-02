@@ -4,6 +4,10 @@ Change Log
 2.6.4 (unreleased)
 ------------------
 
+- Fix method signature of ``PluggableAuthService._setObject``
+  (`#95
+  <https://github.com/zopefoundation/Products.PluggableAuthService/issues/95>`_)
+
 
 2.6.3 (2021-06-08)
 ------------------
