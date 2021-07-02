@@ -422,7 +422,8 @@ class PluggableAuthService(Folder, Cacheable):
         return 1
 
     @security.private
-    def _setObject(self, id, object, roles=None, user=None, set_owner=0):
+    def _setObject(self, id, object, roles=None, user=None, set_owner=0,
+                   suppress_events=False):
         #
         #   Override ObjectManager's version to change the default for
         #   'set_owner' (we don't want to enforce ownership on contained
