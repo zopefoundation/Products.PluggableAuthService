@@ -16,6 +16,8 @@ jobs:
       # We want to see all failures:
       fail-fast: false
       matrix:
+        os:
+        - ubuntu
         config:
         # [Python version, tox env]
         - ["3.8",   "lint"]
@@ -30,7 +32,7 @@ jobs:
         - ["2.7",   "py27-zserver"]
         - ["3.7",   "py37-ip_range"]
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}-latest
     name: ${{ matrix.config[1] }}
     steps:
     - uses: actions/checkout@v2
