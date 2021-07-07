@@ -8,6 +8,9 @@ Change Log
   (`#95
   <https://github.com/zopefoundation/Products.PluggableAuthService/issues/95>`_)
 
+- Fix tests when running on ``Products.GenericSetup >= 2.1.2``, thus requiring
+  at least that version.
+
 
 2.6.3 (2021-06-08)
 ------------------
