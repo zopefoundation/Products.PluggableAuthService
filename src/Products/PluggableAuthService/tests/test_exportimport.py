@@ -275,7 +275,7 @@ class Test_importPAS(_TestBase):
         csv_plugin = pas._getOb('csv_plugin')
         self.assertTrue(csv_plugin.__class__ is TestCSVAware)
         self.assertEqual(csv_plugin._was_put.getvalue().strip(),
-                         KNOWN_CSV.encode('ascii').strip())
+                         KNOWN_CSV.encode('UTF-8').strip())
 
 
 _EMPTY_PAS_OBJECTS = """\
