@@ -1,7 +1,13 @@
 Change Log
 ==========
 
-2.6.4 (unreleased)
+2.6.5 (unreleased)
+------------------
+
+- Nothing changed yet.
+
+
+2.6.4 (2021-07-28)
 ------------------
 
 - Fix method signature of ``PluggableAuthService._setObject``
@@ -10,6 +16,11 @@ Change Log
 
 - Fix tests when running on ``Products.GenericSetup >= 2.1.2``, thus requiring
   at least that version.
+
+- ZMI: use flexbox for twolist macro, fixes removing roles in Safari browser.
+  (`#91
+  <https://github.com/zopefoundation/Products.PluggableAuthService/issues/91>`_)
+
 
 
 2.6.3 (2021-06-08)
