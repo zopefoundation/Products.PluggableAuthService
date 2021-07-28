@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-2.6.4 (unreleased)
+2.6.4 (2021-07-28)
 ------------------
 
 - Fix method signature of ``PluggableAuthService._setObject``
