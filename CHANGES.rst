@@ -4,7 +4,7 @@ Change Log
 2.6.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fixed deprecation warning for ``AccessControl.AuthEncoding``.
 
 
 2.6.4 (2021-07-28)

@@ -109,9 +109,9 @@ def _replaceUserFolder(self, RESPONSE=None):
 
 def _migrate_user(pas, login, password, roles):
 
-    from AccessControl import AuthEncoding
+    from AuthEncoding.AuthEncoding import is_encrypted
 
-    if AuthEncoding.is_encrypted(password):
+    if is_encrypted(password):
         pas.users._user_passwords[login] = password
         pas.users._login_to_userid[login] = login
         pas.users._userid_to_login[login] = login
