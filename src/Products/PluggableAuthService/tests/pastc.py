@@ -57,6 +57,8 @@ class PASTestCase(ZopeTestCase.ZopeTestCase):
         plugins.activatePlugin(IRolesPlugin, 'roles')
         plugins.activatePlugin(IRoleAssignerPlugin, 'roles')
         plugins.activatePlugin(IRoleEnumerationPlugin, 'roles')
+        # add a user for which id and login are different
+        plugins.users.addUser("user_id", "user_login", "user_password")
 
     def _setupUser(self):
         """Creates the default user."""
