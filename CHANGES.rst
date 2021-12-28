@@ -6,6 +6,11 @@ Change Log
 
 - Fixed deprecation warning for ``AccessControl.AuthEncoding``.
 
+- Pass the login name as ``updateCredentials``'s ``login`` parameter
+  (not the user id) (`#105 
+  <https://github.com/zopefoundation/Products.PluggableAuthService/issues/105>`_).
+  Fix docstring of ``PluggableAuthService._extractUserIds``.
+
 
 2.6.4 (2021-07-28)
 ------------------
