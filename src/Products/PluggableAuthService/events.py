@@ -97,7 +97,7 @@ def userCredentialsUpdatedHandler(principal, event):
     pas.updateCredentials(
         pas.REQUEST,
         pas.REQUEST.RESPONSE,
-        principal.getId(),
+        principal.getUserName(), # aka "login"
         event.password)
 
 

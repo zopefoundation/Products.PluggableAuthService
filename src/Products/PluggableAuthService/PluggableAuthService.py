@@ -531,11 +531,11 @@ class PluggableAuthService(Folder, Cacheable):
 
     @security.private
     def _extractUserIds(self, request, plugins):
-        """ request -> [validated_user_id]
+        """ request -> [(validated_user_id, login)]
 
         o For each set of extracted credentials, try to authenticate
-          a user;  accumulate a list of the IDs of such users over all
-          our authentication and extraction plugins.
+          a user;  accumulate a list of pairs (ID, login) of such users
+          over all our authentication and extraction plugins.
         """
         try:
             extractors = plugins.listPlugins(IExtractionPlugin)
