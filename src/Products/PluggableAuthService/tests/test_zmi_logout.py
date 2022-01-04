@@ -18,7 +18,6 @@ from zope.interface import directlyProvides
 from ..interfaces.plugins import ICredentialsResetPlugin
 from ..interfaces.plugins import ICredentialsUpdatePlugin
 from ..interfaces.plugins import IExtractionPlugin
-
 from .pastc import PASTestCase
 from .pastc import user_name
 from .pastc import user_password
