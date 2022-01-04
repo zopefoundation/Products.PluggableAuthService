@@ -23,7 +23,6 @@ else:
 
 from AccessControl.Permissions import manage_users as ManageUsers
 from App.Management import Navigation
-from zExceptions import Unauthorized
 
 from Products.GenericSetup import BASE
 from Products.GenericSetup import profile_registry
@@ -73,34 +72,30 @@ registerMultiPlugin(SetupTool.meta_type)
 
 
 # monkey patch Zope to cause zmi logout to be PAS-aware
+zope_manage_zmi_logout = Navigation.manage_zmi_logout
+
+
 def manage_zmi_logout(self, REQUEST, RESPONSE):
     """Logout current user"""
+    # keep despite doubt that it will work
     p = getattr(REQUEST, '_logout_path', None)
     if p is not None:
         return self.restrictedTraverse(p)
 
-    acl_users = self.acl_users
-    realm = RESPONSE.realm
-    RESPONSE.setHeader('WWW-Authenticate', 'basic realm="%s"' % realm, 1)
+    from AccessControl import getSecurityManager
+    user = getSecurityManager().getUser()
+    if user is None or 'Authenticated' not in user.getRoles():
+        return 'You are not/no longer logged in'
+
+    acl_users = user.aq_parent
 
     if IPluggableAuthService.providedBy(acl_users):
-        acl_users.resetCredentials(REQUEST, RESPONSE)
+        return acl_users.logout(REQUEST)
     else:
-        raise Unauthorized('<p>You have been logged out.</p>')
-
-    RESPONSE.setStatus(401)
-    RESPONSE.setBody("""<html>
-<head><title>Logout</title></head>
-<body>
-<p>
-You have been logged out.
-</p>
-</body>
-</html>""")
+        return zope_manage_zmi_logout(self, REQUEST, RESPONSE)
 
 
 Navigation.manage_zmi_logout = manage_zmi_logout
-del manage_zmi_logout
 
 
 def initialize(context):

@@ -4,6 +4,9 @@ Change Log
 2.6.5 (unreleased)
 ------------------
 
+- Improve the PAS override for Zope's ``manage_zmi_logout`` (`#107
+  <https://github.com/zopefoundation/Products.PluggableAuthService/issues/107>`_)
+
 - Fixed deprecation warning for ``AccessControl.AuthEncoding``.
 
 - Pass the login name as ``updateCredentials``'s ``login`` parameter
