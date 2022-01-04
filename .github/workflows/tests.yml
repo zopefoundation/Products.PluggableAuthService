@@ -20,15 +20,16 @@ jobs:
         - ubuntu
         config:
         # [Python version, tox env]
-        - ["3.8",   "lint"]
+        - ["3.9",   "lint"]
         - ["2.7",   "py27"]
         - ["3.5",   "py35"]
         - ["3.6",   "py36"]
         - ["3.7",   "py37"]
         - ["3.8",   "py38"]
         - ["3.9",   "py39"]
-        - ["3.8",   "docs"]
-        - ["3.8",   "coverage"]
+        - ["3.10",  "py310"]
+        - ["3.9",   "docs"]
+        - ["3.9",   "coverage"]
         - ["2.7",   "py27-zserver"]
         - ["3.7",   "py37-ip_range"]
 
