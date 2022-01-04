@@ -254,14 +254,6 @@ class UserFolderTests(pastc.PASTestCase):
 
         self.assertEqual(uid_and_info, (USER_ID, USER_ID))
 
-    def test_manage_zmi_logout(self):
-        request = self.app.REQUEST
-        response = request.RESPONSE
-        self.folder.manage_zmi_logout(request, response)
-        self.assertEqual(response.status, 401)
-        self.assertEqual(response.headers.get('WWW-Authenticate'),
-                         'basic realm="%s"' % response.realm)
-
 
 class UserTests(pastc.PASTestCase):
 
