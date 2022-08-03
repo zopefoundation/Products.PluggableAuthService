@@ -356,8 +356,8 @@ class ZODBUserManager(BasePlugin, Cacheable):
                              ', '.join(errors))
 
         # Make sure we did not lose any users.
-        assert(len(self._login_to_userid.keys())
-               == len(new_login_to_userid.keys()))
+        assert (len(self._login_to_userid.keys())
+                == len(new_login_to_userid.keys()))
         # Empty the main cache.
         view_name = createViewName('enumerateUsers')
         self.ZCacheable_invalidate(view_name=view_name)

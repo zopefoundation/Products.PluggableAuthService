@@ -453,9 +453,8 @@ class IRoleEnumerationPlugin(Interface):
 
 
 class IRequestTypeSniffer(Interface):
+    """Given a request, detects request type for later use by other plugins."""
 
-    """ Given a request, detects the request type for later use by other plugins.
-    """
     def sniffRequestType(request):
         """ Return a interface identifying what kind the request is.
         """
