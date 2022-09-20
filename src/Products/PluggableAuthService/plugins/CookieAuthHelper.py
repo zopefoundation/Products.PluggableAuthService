@@ -176,7 +176,8 @@ class CookieAuthHelper(Folder, BasePlugin):
     def updateCredentials(self, request, response, login, new_password):
         """ Respond to change of credentials (NOOP for basic auth). """
         cookie_val = self.get_cookie_value(login, new_password)
-        response.setCookie(self.cookie_name, quote(cookie_val), path='/')
+        response.setCookie(self.cookie_name, quote(cookie_val),
+                           path='/', same_site='Strict')
 
     @security.private
     def resetCredentials(self, request, response):

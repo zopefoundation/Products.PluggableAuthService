@@ -4,6 +4,14 @@ Change Log
 2.7.1 (unreleased)
 ------------------
 
+- Set the Cookie Auth Helper cookies with ``SameSite`` set to ``Strict``.
+  This cookie flag is not currently set, which causes modern browsers to show
+  warnings at the console. Such cookies may be rejected in the future and break
+  the Cookie Auth Helper. See
+  https://hacks.mozilla.org/2020/08/changes-to-samesite-cookie-behavior/
+  for information about the ``SameSite`` cookie attribute and why its handling
+  in browsers is changing.
+
 
 2.7.0 (2022-01-04)
 ------------------
