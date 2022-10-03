@@ -44,12 +44,14 @@ class FauxCookieResponse(FauxResponse):
 
     def __init__(self):
         self.cookies = {}
+        self.cookie_attributes = {}
         self.redirected = False
         self.status = '200'
         self.headers = {}
 
-    def setCookie(self, cookie_name, cookie_value, path):
+    def setCookie(self, cookie_name, cookie_value, path, **kw):
         self.cookies[(cookie_name, path)] = cookie_value
+        self.cookie_attributes[(cookie_name, path)] = kw
 
     def expireCookie(self, cookie_name, path):
         if (cookie_name, path) in self.cookies:
@@ -260,6 +262,41 @@ class CookieAuthHelperTests(unittest.TestCase,
         request.set(helper.cookie_name, cookie_val)
 
         self.assertEqual(helper.extractCredentials(request), {})
+
+    def test_updateCredentials(self):
+        helper = self._makeOne()
+        response = FauxCookieResponse()
+        request = FauxSettableRequest(RESPONSE=response)
+
+        username = codecs.encode(b'foo', 'hex_codec')
+        password = codecs.encode(b'b:ar', 'hex_codec')
+        cookie_str = b'%s:%s' % (username, password)
+        cookie_val = encodebytes(cookie_str)
+        cookie_val = cookie_val.rstrip()
+        if six.PY3:
+            cookie_val = cookie_val.decode('utf8')
+        request.set(helper.cookie_name, cookie_val)
+
+        # Defaults
+        helper.updateCredentials(request, response, 'new_user', 'new_pass')
+        cookie_attrs = response.cookie_attributes[(helper.cookie_name, '/')]
+        self.assertEqual(cookie_attrs['same_site'], 'Lax')
+        self.assertFalse(cookie_attrs['secure'])
+
+        # Setting the cookie same site value to "None" forces secure flag
+        helper.cookie_same_site = 'None'
+        helper.updateCredentials(request, response, 'new_user', 'new_pass')
+        cookie_attrs = response.cookie_attributes[(helper.cookie_name, '/')]
+        self.assertEqual(cookie_attrs['same_site'], 'None')
+        self.assertTrue(cookie_attrs['secure'])
+
+        # Setting the Secure flag manually
+        helper.cookie_same_site = 'Lax'
+        helper.cookie_secure = True
+        helper.updateCredentials(request, response, 'new_user', 'new_pass')
+        cookie_attrs = response.cookie_attributes[(helper.cookie_name, '/')]
+        self.assertEqual(cookie_attrs['same_site'], 'Lax')
+        self.assertTrue(cookie_attrs['secure'])
 
 
 class CookieAuthHelperIntegrationTests(pastc.PASTestCase):

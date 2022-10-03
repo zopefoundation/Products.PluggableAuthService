@@ -96,12 +96,20 @@ class CookieAuthHelper(Folder, BasePlugin):
     zmi_icon = 'fas fa-cookie-bite'
     cookie_name = '__ginger_snap'
     login_path = 'login_form'
+    cookie_same_site = 'Lax'
+    cookie_same_site_choices = ('None', 'Lax', 'Strict')
+    cookie_secure = False
     security = ClassSecurityInfo()
 
     _properties = ({'id': 'title', 'label': 'Title',
                     'type': 'string', 'mode': 'w'},
                    {'id': 'cookie_name', 'label': 'Cookie Name',
                     'type': 'string', 'mode': 'w'},
+                   {'id': 'cookie_secure', 'type': 'boolean', 'mode': 'w',
+                    'label': 'Send cookie over HTTPS only'},
+                   {'id': 'cookie_same_site', 'type': 'selection',
+                    'label': 'Cookie SameSite restriction', 'mode': 'w',
+                    'select_variable': 'cookie_same_site_choices'},
                    {'id': 'login_path', 'label': 'Login Form',
                     'type': 'string', 'mode': 'w'})
 
@@ -176,8 +184,10 @@ class CookieAuthHelper(Folder, BasePlugin):
     def updateCredentials(self, request, response, login, new_password):
         """ Respond to change of credentials (NOOP for basic auth). """
         cookie_val = self.get_cookie_value(login, new_password)
+        cookie_secure = self.cookie_same_site == 'None' or self.cookie_secure
         response.setCookie(self.cookie_name, quote(cookie_val),
-                           path='/', same_site='Strict')
+                           path='/', same_site=self.cookie_same_site,
+                           secure=cookie_secure)
 
     @security.private
     def resetCredentials(self, request, response):
