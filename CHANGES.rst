@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-2.7.1 (unreleased)
+2.7.1 (2022-10-04)
 ------------------
 
 - Set the Cookie Auth Helper cookies with ``SameSite`` set to ``Lax`` by
