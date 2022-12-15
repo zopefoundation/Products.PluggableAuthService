@@ -43,9 +43,9 @@ setup(name='Products.%s' % NAME,
           'Programming Language :: Python :: 3.8',
           'Programming Language :: Python :: 3.9',
           'Programming Language :: Python :: 3.10',
+          'Programming Language :: Python :: 3.11',
           'Topic :: Software Development',
-          'Topic :: System :: Systems Administration :: '
-          'Authentication/Directory',
+          'Topic :: System :: Systems Administration :: Authentication/Directory',  # noqa: E501 line too long
       ],
       keywords='web application server zope',
       author='Zope Foundation and Contributors',
