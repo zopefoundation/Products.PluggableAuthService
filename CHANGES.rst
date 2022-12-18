@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-2.8.1 (unreleased)
+2.8.1 (2022-12-18)
 ------------------
 
 - Explicitly set the response `Content-Type` header where needed
