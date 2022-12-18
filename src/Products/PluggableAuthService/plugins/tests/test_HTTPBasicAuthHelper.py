@@ -61,6 +61,12 @@ class FauxHTTPResponse:
     def setBody(self, body, is_error=0):
         self.body = body
 
+    def getHeader(self, header):
+        return self.headers.get(header)
+
+    def setHeader(self, header, value):
+        self.headers[header] = value
+
 
 class HTTPBasicAuthHelperTests(unittest.TestCase,
                                ILoginPasswordHostExtractionPlugin_conformance,
@@ -106,6 +112,7 @@ class HTTPBasicAuthHelperTests(unittest.TestCase,
         self.assertEqual(
             response.body,
             '<strong>You are not authorized to access this resource.</strong>')
+        self.assertIn('text/html', response.getHeader('Content-Type'))
 
     def test_challenge_does_not_override_previously_set_body(self):
         helper = self._makeOne()

@@ -99,3 +99,4 @@ class InlineAuthHelperTests(unittest.TestCase,
         self.assertEqual(response.body, 'Should never see this.')
         helper.challenge(request, response)
         self.assertEqual(response.body, 'Overridden')
+        self.assertIn('text/html', response.getHeader('Content-Type'))

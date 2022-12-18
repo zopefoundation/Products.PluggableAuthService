@@ -299,7 +299,7 @@ class FauxNotFoundError(Exception):
 class FauxResponse:
 
     def __init__(self):
-        pass
+        self.headers = {}
 
     def notFoundError(self, message):
         raise FauxNotFoundError(message)
@@ -317,6 +317,12 @@ class FauxResponse:
 
     def redirect(self, *ignore, **ignored):
         pass
+
+    def getHeader(self, header):
+        return self.headers.get(header)
+
+    def setHeader(self, header, value):
+        self.headers[header] = value
 
 
 class FauxObject(Implicit):

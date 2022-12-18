@@ -92,6 +92,7 @@ class HTTPBasicAuthHelper(BasePlugin):
         m = '<strong>You are not authorized to access this resource.</strong>'
 
         if not response.body:
+            response.setHeader('Content-Type', 'text/html')
             response.setBody(m, is_error=1)
         response.setStatus(401)
         return 1

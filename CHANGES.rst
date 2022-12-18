@@ -4,6 +4,10 @@ Change Log
 2.8.1 (unreleased)
 ------------------
 
+- Explicitly set the response `Content-Type` header where needed
+  due to the changed default content type from `Zope#1075
+  <https://github.com/zopefoundation/Zope/pull/1075>`_.
+
 
 2.8.0 (2022-12-16)
 ------------------

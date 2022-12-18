@@ -92,6 +92,7 @@ class InlineAuthHelper(Folder, BasePlugin):
     def challenge(self, request, response, **kw):
         """ Challenge the user for credentials. """
         response.setStatus('200')
+        response.setHeader('Content-Type', 'text/html')
         response.setBody(self.body)
 
         # Keep HTTPResponse.exception() from further writing on the
