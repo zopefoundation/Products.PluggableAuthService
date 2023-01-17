@@ -20,19 +20,12 @@ from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from zope.interface import Interface
 from ZPublisher import xmlrpc
 
-from .. import HAVE_ZSERVER
 from ..interfaces.plugins import IRequestTypeSniffer
 from ..interfaces.request import IBrowserRequest
 from ..interfaces.request import IWebDAVRequest
 from ..interfaces.request import IXMLRPCRequest
 from ..plugins.BasePlugin import BasePlugin
 from ..utils import classImplements
-
-
-if HAVE_ZSERVER:
-    from ZServer.FTPRequest import FTPRequest
-
-    from ..interfaces.request import IFTPRequest
 
 
 class IRequestTypeSnifferPlugin(Interface):
@@ -130,19 +123,9 @@ def xmlrpcSniffer(request):
 registerSniffer(IXMLRPCRequest, xmlrpcSniffer)
 
 
-if HAVE_ZSERVER:
-    def ftpSniffer(request):
-        if isinstance(request, FTPRequest):
-            return True
-
-    registerSniffer(IFTPRequest, ftpSniffer)
-else:
-    ftpSniffer = None
-
-
 def browserSniffer(request):
     # If it's none of the above, it's very likely a browser request.
-    for sniffer in (xmlrpcSniffer, webdavSniffer, ftpSniffer):
+    for sniffer in (xmlrpcSniffer, webdavSniffer):
         if sniffer is not None and sniffer(request):
             return False
 
