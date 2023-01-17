@@ -567,5 +567,5 @@ class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance,
 
 def test_suite():
     return unittest.TestSuite((
-        unittest.makeSuite(ZODBRoleManagerTests),
+        unittest.defaultTestLoader.loadTestsFromTestCase(ZODBRoleManagerTests),
     ))

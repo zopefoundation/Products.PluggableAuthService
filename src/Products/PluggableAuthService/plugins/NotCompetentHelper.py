@@ -37,7 +37,7 @@ from ..plugins.BasePlugin import BasePlugin
 from ..utils import classImplements
 
 
-class HigherLevelUserFolderAccessMixin(object):
+class HigherLevelUserFolderAccessMixin:
     """mixin class for access to higher level user folders
 
        requires to be mixed with a `BasePlugin`.
@@ -137,4 +137,4 @@ def manage_addNotCompetent_byRoles(self, id, title='', REQUEST=None):
     if REQUEST is not None:
         qs = 'manage_tabs_message=NotCompetent_byRoles+added.'
         my_url = self.absolute_url()
-        REQUEST['RESPONSE'].redirect('%s/manage_workspace?%s' % (my_url, qs))
+        REQUEST['RESPONSE'].redirect(f'{my_url}/manage_workspace?{qs}')

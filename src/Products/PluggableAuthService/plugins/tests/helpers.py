@@ -51,7 +51,7 @@ class DummyUser:
 
 def makeRequestAndResponse():
     # the POST checking requires a real HTTPRequest
-    from six import StringIO
+    from io import StringIO
 
     from ZPublisher.HTTPRequest import HTTPRequest
     from ZPublisher.HTTPResponse import HTTPResponse

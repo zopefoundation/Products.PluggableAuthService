@@ -24,9 +24,9 @@ from .pastc import user_password
 from .test_PluggableAuthService import DummyCredentialsStore
 
 
-class PasMixin(object):
+class PasMixin:
     def _setupUserFolder(self):
-        super(PasMixin, self)._setupUserFolder()
+        super()._setupUserFolder()
         pas = self.folder.acl_users
         plugins = pas.plugins
         creds_store = DummyCredentialsStore('creds')
@@ -48,13 +48,13 @@ class PasMixin(object):
         return not folder.acl_users.creds.extractCredentials(request)
 
 
-class ZopeMixin(object):
+class ZopeMixin:
     def verify_logout(self):
         response = self.folder.REQUEST.response
         return response.getStatus() == 401
 
 
-class Tests(object):
+class Tests:
     def test_logout(self):
         folder = self.folder
         request = folder.REQUEST

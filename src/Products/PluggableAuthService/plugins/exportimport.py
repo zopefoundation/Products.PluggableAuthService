@@ -18,8 +18,6 @@ import os
 import sys
 from xml.dom.minidom import parseString
 
-import six
-
 from Acquisition import Implicit
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from zope.interface import implementer
@@ -84,8 +82,6 @@ class SimpleXMLExportImport(Implicit):
 
         data = import_context.readDataFile('%s.xml' % self.context.getId(),
                                            subdir)
-        if six.PY2:
-            data = data.decode('utf-8')
 
         if data is not None:
 
@@ -101,9 +97,6 @@ class SimpleXMLExportImport(Implicit):
         if attr is None:
             return default
         value = attr.value
-        if six.PY2 and isinstance(value, six.text_type) and \
-                self.encoding is not None:
-            value = value.encode(self.encoding)
         return value
 
 

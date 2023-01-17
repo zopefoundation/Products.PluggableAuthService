@@ -15,8 +15,6 @@
 """
 import logging
 
-import six
-
 from AccessControl import ClassSecurityInfo
 from AccessControl import ModuleSecurityInfo
 from AccessControl.class_init import InitializeClass
@@ -470,7 +468,8 @@ class PluggableAuthService(Folder, Cacheable):
         if batch.end < len(results):
             qs = self._getBatchLink(REQUEST.get('QUERY_STRING', ''),
                                     start, batch.end)
-            REQUEST.set('next_batch_url', '%s?%s' % (REQUEST.get('URL'), qs))
+            REQUEST.set('next_batch_url', '{}?{}'.format(
+                REQUEST.get('URL'), qs))
 
         if start > 0:
             new_start = start - size - 1
@@ -481,7 +480,7 @@ class PluggableAuthService(Folder, Cacheable):
             qs = self._getBatchLink(REQUEST.get('QUERY_STRING', ''),
                                     start, new_start)
             REQUEST.set('previous_batch_url',
-                        '%s?%s' % (REQUEST.get('URL'), qs))
+                        '{}?{}'.format(REQUEST.get('URL'), qs))
 
         return batch
 
@@ -610,8 +609,8 @@ class PluggableAuthService(Folder, Cacheable):
 
                         except _SWALLOWABLE_PLUGIN_EXCEPTIONS:
                             reraise(auth)
-                            msg = 'AuthenticationPlugin %s error' % (
-                                authenticator_id,)
+                            msg = 'AuthenticationPlugin {} error'.format(
+                                authenticator_id)
                             logger.debug(msg, exc_info=True)
                             continue
 
@@ -1000,7 +999,7 @@ class PluggableAuthService(Folder, Cacheable):
         transform = self._get_login_transform_method()
         if not transform:
             return value
-        if isinstance(value, six.string_types):
+        if isinstance(value, str):
             return transform(value)
         result = []
         for v in value:
@@ -1027,7 +1026,7 @@ class PluggableAuthService(Folder, Cacheable):
     def _setPropValue(self, id, value):
         if id == 'login_transform':
             orig_value = getattr(self, id)
-        super(PluggableAuthService, self)._setPropValue(id, value)
+        super()._setPropValue(id, value)
         if id == 'login_transform' and value and value != orig_value:
             logger.debug('login_transform changed from %r to %r. '
                          'Updating existing login names.', orig_value, value)

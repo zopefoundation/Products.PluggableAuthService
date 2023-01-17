@@ -15,8 +15,6 @@ import os.path
 import sys
 import unittest
 
-import six
-
 from DateTime.DateTime import DateTime
 from OFS.Image import Image
 
@@ -28,11 +26,10 @@ img_path = os.path.join(os.path.dirname(__file__), 'image.gif')
 
 class UserPropertySheetTests(unittest.TestCase, IPropertySheet_conformance):
 
-    _LONG_TYPE = 'long' if six.PY2 else 'int'
     _SCHEMA = (('s', 'string'),
                ('i', 'int'),
                ('f', 'float'),
-               ('n', _LONG_TYPE),
+               ('n', 'int'),
                ('d', 'date'),
                ('l', 'lines'),
                ('t', 'lines'),
@@ -113,8 +110,8 @@ class UserPropertySheetTests(unittest.TestCase, IPropertySheet_conformance):
         else:
             self.assertEqual(ups.getProperty('f'), self._FLOAT_VALUE)
 
-        self.assertEqual(ups.getPropertyType('n'), self._LONG_TYPE)
-        self.assertEqual(ups.propertyInfo('n')['type'], self._LONG_TYPE)
+        self.assertEqual(ups.getPropertyType('n'), 'int')
+        self.assertEqual(ups.propertyInfo('n')['type'], 'int')
         if values_are_none:
             self.assertEqual(ups.getProperty('n'), None)
         else:
@@ -186,7 +183,7 @@ class UserPropertySheetTests(unittest.TestCase, IPropertySheet_conformance):
         ups = self._makeOne('guessed', s=self._STRING_VALUE,
                             i=self._INT_VALUE, f=self._FLOAT_VALUE,
                             n=self._LONG_VALUE, d=self._DATE_VALUE,
-                            l=self._LIST_VALUE, t=self._TUPLE_VALUE,  # noqa
+                            l=self._LIST_VALUE, t=self._TUPLE_VALUE,
                             b=self._BOOL_VALUE, img=self._IMG_VALUE)
 
         self._checkStockSchema(ups)
@@ -196,7 +193,7 @@ class UserPropertySheetTests(unittest.TestCase, IPropertySheet_conformance):
         ups = self._makeOne('w_schema', self._SCHEMA, s=self._STRING_VALUE,
                             i=self._INT_VALUE, f=self._FLOAT_VALUE,
                             n=self._LONG_VALUE, d=self._DATE_VALUE,
-                            l=self._LIST_VALUE, t=self._TUPLE_VALUE,  # noqa
+                            l=self._LIST_VALUE, t=self._TUPLE_VALUE,
                             b=self._BOOL_VALUE, img=self._IMG_VALUE)
 
         self._checkStockSchema(ups)

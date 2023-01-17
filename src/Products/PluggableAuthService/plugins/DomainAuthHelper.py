@@ -112,7 +112,7 @@ def manage_addDomainAuthHelper(self, id, title='', REQUEST=None):
     if REQUEST is not None:
         qs = 'manage_tabs_message=DomainAuthHelper+added.'
         my_url = self.absolute_url()
-        REQUEST['RESPONSE'].redirect('%s/manage_workspace?%s' % (my_url, qs))
+        REQUEST['RESPONSE'].redirect(f'{my_url}/manage_workspace?{qs}')
 
 
 class DomainAuthHelper(BasePlugin):
@@ -215,13 +215,13 @@ class DomainAuthHelper(BasePlugin):
         if not r_host:
             try:
                 r_host = socket.gethostbyaddr(r_address)[0]
-            except socket.error:
+            except OSError:
                 pass
 
         if not r_address:
             try:
                 r_address = socket.gethostbyname(r_host)
-            except socket.error:
+            except OSError:
                 pass
 
         if not r_host and not r_address:
@@ -274,7 +274,7 @@ class DomainAuthHelper(BasePlugin):
         except re.error:
             msg = 'Invalid regular expression %s' % match_string
         except ValueError as e:
-            msg = 'Invalid match string %s (%s)' % (match_string, e)
+            msg = 'Invalid match string {} ({})'.format(match_string, e)
 
         if not match_string:
             msg = 'No match string specified'
@@ -290,7 +290,7 @@ class DomainAuthHelper(BasePlugin):
         match = {'match_type': match_type,
                  'match_string': match_string,
                  'match_filter': filter,
-                 'match_id': '%s_%s' % (user_id, str(time.time())),
+                 'match_id': '{}_{}'.format(user_id, str(time.time())),
                  'username': user_id or username or 'Remote User',
                  'roles': roles}
 

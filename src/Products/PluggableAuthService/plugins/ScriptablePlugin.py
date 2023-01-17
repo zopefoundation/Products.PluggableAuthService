@@ -110,7 +110,7 @@ class ScriptablePlugin(Folder, BasePlugin):
         plugins = pas_instance._getOb('plugins')
         curr_interfaces = set(providedBy(self))
 
-        del_interfaces = set([x for x in providedBy(self) if id in x.names()])
+        del_interfaces = {x for x in providedBy(self) if id in x.names()}
 
         for interface in del_interfaces:
             if myId in plugins.listPluginIds(interface):

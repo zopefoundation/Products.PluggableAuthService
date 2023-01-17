@@ -24,7 +24,6 @@ from ..interfaces.plugins import IChallengePlugin
 from ..interfaces.plugins import IChallengeProtocolChooser
 from ..interfaces.plugins import IRequestTypeSniffer
 from ..interfaces.request import IBrowserRequest
-from ..interfaces.request import IFTPRequest
 from ..interfaces.request import IWebDAVRequest
 from ..interfaces.request import IXMLRPCRequest
 from ..plugins.BasePlugin import BasePlugin
@@ -179,6 +178,5 @@ InitializeClass(ChallengeProtocolChooser)
 
 for label, iface in (('Browser', IBrowserRequest),
                      ('WebDAV', IWebDAVRequest),
-                     ('FTP', IFTPRequest),
                      ('XML-RPC', IXMLRPCRequest)):
     registerRequestType(label, iface)

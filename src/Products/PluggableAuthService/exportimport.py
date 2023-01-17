@@ -30,7 +30,7 @@ def importPAS(context):
 
 
 @implementer(IContentFactory)
-class PAS_PR_ContentFactory(object):
+class PAS_PR_ContentFactory:
 
     def __init__(self, context):
         self.context = context
@@ -44,7 +44,7 @@ class PAS_PR_ContentFactory(object):
 
 
 @implementer(IContentFactoryName)
-class PAS_CF_Namer(object):
+class PAS_CF_Namer:
 
     def __init__(self, context):
         self.context = context

@@ -10,5 +10,3 @@ Requests
 .. autointerface:: Products.PluggableAuthService.interfaces.request.IWebDAVRequest
 
 .. autointerface:: Products.PluggableAuthService.interfaces.request.IXMLRPCRequest
-
-.. autointerface:: Products.PluggableAuthService.interfaces.request.IFTPRequest

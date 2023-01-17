@@ -145,8 +145,8 @@ class ZODBRoleManager(BasePlugin):
                 info.update(self._roles[role_id])
 
                 info['pluginid'] = plugin_id
-                info['properties_url'] = '%s?%s' % (e_url, p_qs)
-                info['members_url'] = '%s?%s' % (e_url, m_qs)
+                info['properties_url'] = '{}?{}'.format(e_url, p_qs)
+                info['members_url'] = '{}?{}'.format(e_url, m_qs)
 
                 if not role_filter or role_filter(info):
                     role_info.append(info)
@@ -413,7 +413,8 @@ class ZODBRoleManager(BasePlugin):
         if not assigned:
             message = 'Role+%s+already+assigned+to+all+principals' % role_id
         else:
-            message = 'Role+%s+assigned+to+%s' % (role_id, '+'.join(assigned))
+            message = 'Role+{}+assigned+to+{}'.format(
+                role_id, '+'.join(assigned))
 
         if RESPONSE is not None:
             RESPONSE.redirect('%s/manage_roles?role_id=%s&assign=1'
@@ -436,7 +437,8 @@ class ZODBRoleManager(BasePlugin):
         if not removed:
             message = 'Role+%s+alread+removed+from+all+principals' % role_id
         else:
-            message = 'Role+%s+removed+from+%s' % (role_id, '+'.join(removed))
+            message = 'Role+{}+removed+from+{}'.format(
+                role_id, '+'.join(removed))
 
         if RESPONSE is not None:
             RESPONSE.redirect('%s/manage_roles?role_id=%s&assign=1'

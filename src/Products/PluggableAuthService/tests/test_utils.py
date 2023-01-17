@@ -13,8 +13,6 @@
 ##############################################################################
 import unittest
 
-import six
-
 
 class Test_createViewName(unittest.TestCase):
 
@@ -29,23 +27,23 @@ class Test_createViewName(unittest.TestCase):
         self.assertEqual(self._callFUT('foo', None), b'foo')
 
     def test_latin1_umlaut_in_method(self):
-        self.assertEqual(self._callFUT(u'f\366o'), b'f\xc3\xb6o')
+        self.assertEqual(self._callFUT('f\366o'), b'f\xc3\xb6o')
 
     def test_utf8_umlaut_in_method(self):
         self.assertEqual(self._callFUT(b'f\303\266o'), b'f\303\266o')
 
     def test_unicode_umlaut_in_method(self):
-        self.assertEqual(self._callFUT(u'f\366o'), b'f\xc3\xb6o')
+        self.assertEqual(self._callFUT('f\366o'), b'f\xc3\xb6o')
 
     def test_latin1_umlaut_in_handle(self):
-        self.assertEqual(self._callFUT('foo', u'b\344r'), b'foo-b\xc3\xa4r')
+        self.assertEqual(self._callFUT('foo', 'b\344r'), b'foo-b\xc3\xa4r')
 
     def test_utf8_umlaut_in_handle(self):
         self.assertEqual(self._callFUT('foo', b'b\303\244r'),
                          b'foo-b\xc3\xa4r')
 
     def test_unicode_umlaut_in_handle(self):
-        self.assertEqual(self._callFUT('foo', u'b\344r'), b'foo-b\303\244r')
+        self.assertEqual(self._callFUT('foo', 'b\344r'), b'foo-b\303\244r')
 
 
 class Test_createKeywords(unittest.TestCase):
@@ -79,22 +77,22 @@ class Test_createKeywords(unittest.TestCase):
                          {'keywords': hashed})
 
     def test_createKeywords_unicode_umlaut(self):
-        _ITEMS = (('foo', 'bar'), ('baz', u'M\344dchen'))
+        _ITEMS = (('foo', 'bar'), ('baz', 'M\344dchen'))
         hashed = _createHashedValue(_ITEMS)
-        self.assertEqual(self._callFUT(foo='bar', baz=u'M\344dchen'),
+        self.assertEqual(self._callFUT(foo='bar', baz='M\344dchen'),
                          {'keywords': hashed})
 
     def test_createKeywords_utf16_umlaut(self):
-        _ITEMS = (('foo', 'bar'), ('baz', u'M\344dchen'.encode('utf-16')))
+        _ITEMS = (('foo', 'bar'), ('baz', 'M\344dchen'.encode('utf-16')))
         hashed = _createHashedValue(_ITEMS)
         self.assertEqual(self._callFUT(foo='bar',
-                                       baz=u'M\344dchen'.encode('utf-16')),
+                                       baz='M\344dchen'.encode('utf-16')),
                          {'keywords': hashed})
 
     def test_createKeywords_unicode_chinese(self):
-        _ITEMS = (('foo', 'bar'), ('baz', u'\u03a4\u03b6'))
+        _ITEMS = (('foo', 'bar'), ('baz', '\u03a4\u03b6'))
         hashed = _createHashedValue(_ITEMS)
-        self.assertEqual(self._callFUT(foo='bar', baz=u'\u03a4\u03b6'),
+        self.assertEqual(self._callFUT(foo='bar', baz='\u03a4\u03b6'),
                          {'keywords': hashed})
 
 
@@ -299,10 +297,10 @@ def _createHashedValue(items):
     hasher = sha()
     items = sorted(items)
     for k, v in items:
-        if isinstance(k, six.text_type):
+        if isinstance(k, str):
             k = k.encode('utf-8')
         hasher.update(k)
-        if isinstance(v, six.text_type):
+        if isinstance(v, str):
             v = v.encode('utf-8')
         hasher.update(v)
     return hasher.hexdigest()

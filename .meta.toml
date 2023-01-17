@@ -13,7 +13,7 @@ with-future-python = false
 with-macos = false
 
 [coverage]
-fail-under = 89
+fail-under = 90
 
 [isort]
 known_first_party = "Products.PluginRegistry, Products.StandardCacheManagers, Products.GenericSetup"

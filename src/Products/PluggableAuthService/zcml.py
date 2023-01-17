@@ -31,13 +31,13 @@ class IRegisterMultiPlugin(Interface):
     """
 
     class_ = PythonIdentifier(
-        title=u'Class',
-        description=u'',
+        title='Class',
+        description='',
         required=False)
 
     meta_type = PythonIdentifier(
-        title=u'Meta-Type',
-        description=u"If not specified, 'class/meta_type' is used.",
+        title='Meta-Type',
+        description="If not specified, 'class/meta_type' is used.",
         required=False)
 
 

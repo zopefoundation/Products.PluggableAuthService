@@ -14,8 +14,7 @@
 """ Unit tests for GenericSetup-based export / import of PAS.
 """
 from csv import reader
-
-from six import StringIO
+from io import StringIO
 
 from zope.component.testing import PlacelessSetup
 

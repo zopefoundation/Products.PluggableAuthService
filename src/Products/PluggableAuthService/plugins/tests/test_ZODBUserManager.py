@@ -22,13 +22,13 @@ from ...tests.conformance import IUserAdderPlugin_conformance
 from ...tests.conformance import IUserEnumerationPlugin_conformance
 
 
-class FakePAS(object):
+class FakePAS:
 
     def _get_login_transform_method(self):
         return None
 
 
-class FakeLowerCasePAS(object):
+class FakeLowerCasePAS:
 
     def _get_login_transform_method(self):
         return self.lower
@@ -283,7 +283,7 @@ class ZODBUserManagerTests(unittest.TestCase,
 
             zum.addUser(id, '%s@example.com' % id, 'password')
 
-        info_list = zum.enumerateUsers(id=u'abc', exact_match=False)
+        info_list = zum.enumerateUsers(id='abc', exact_match=False)
         self.assertEqual(len(info_list), 0)
 
     def test_enumerateUsers_exact_nonesuch(self):

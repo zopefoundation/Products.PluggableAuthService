@@ -15,8 +15,6 @@
 import io
 import unittest
 
-import six
-
 import Testing.ZopeTestCase
 
 from ...tests.conformance import IChallengeProtocolChooser_conformance
@@ -28,10 +26,7 @@ XMLRPC_CALL = b"""\
     <methodName>test_script</methodName>
 </methodCall>"""
 
-if six.PY2:
-    XML_PREAMBLE = b"<?xml version='1.0'?>"
-else:
-    XML_PREAMBLE = b'<?xml version="1.0" encoding="utf-8" ?>'
+XML_PREAMBLE = b'<?xml version="1.0" encoding="utf-8" ?>'
 
 XMLRPC_ACCESS_GRANTED = b"""\
 %s
@@ -58,7 +53,7 @@ class ChallengeProtocolChooser(unittest.TestCase,
         return self._getTargetClass()(id, *args, **kw)
 
 
-class ChallengeProtocolChooserTestHelper(object):
+class ChallengeProtocolChooserTestHelper:
     """Helper functions for the ChallengeProtocolChooser tests."""
 
     def setup_user_folder(self):
@@ -147,7 +142,7 @@ class ChallengeProtocolChooserTestHelper(object):
         self.assertIsNone(pas.getUserById('test_user_'))
 
         username, password = 'test_user_', 'test_user_pw'
-        self.basic_auth = '%s:%s' % (username, password)
+        self.basic_auth = '{}:{}'.format(username, password)
         user = pas._doAddUser(username, password, ['Manager'], [])
         self.assertIsInstance(user, PropertiedUser)
         self.assertIsNotNone(pas.getUserById('test_user_'))
@@ -178,15 +173,14 @@ class ChallengeProtocolChooserFunctionalTests(
     """ Test basic functionality """
 
     def setUp(self):
-        super(ChallengeProtocolChooserFunctionalTests, self).setUp()
+        super().setUp()
         self.setup_user_folder()
         self.setup_cookie_auth()
         self.setup_http_auth()
         self.setup_sniffer()
 
     def test_manage_updateProtocolMapping(self):
-        # Make sure the mapped request types contain
-        # valid data under Python 2 and Python 3
+        # Make sure the mapped request types contain valid data
         pas = self.app.test_folder_1_.acl_users
         plugin = pas.chooser
 
@@ -205,7 +199,7 @@ class ChallengeProtocolChooserBasicAuthTests(
     """
 
     def setUp(self):
-        super(ChallengeProtocolChooserBasicAuthTests, self).setUp()
+        super().setUp()
         self.setup_user_folder()
         self.setup_http_auth()
         self.setup_user()
@@ -216,37 +210,37 @@ class ChallengeProtocolChooserBasicAuthTests(
         # browser access. Anonymous user should be challenged with a 401
         # response status.
 
-        response = self.publish('/{0.folder_name}/test_script'.format(self))
+        response = self.publish(f'/{self.folder_name}/test_script')
         self.assertStatus(response, b'HTTP/1.1 401 Unauthorized')
 
     def test_GET_authorized(self):
         # With the right credentials though the request should succeed:
         response = self.publish(
-            '/{0.folder_name}/test_script'.format(self), basic=self.basic_auth)
+            f'/{self.folder_name}/test_script', basic=self.basic_auth)
         self.assertStatus(response, b'HTTP/1.1 200 OK')
         self.assertIn('Access Granted', str(response))
 
     def test_WebDAV_unauthorized(self):
         # Now a PROPFIND request, simulating a WebDAV client. Anonymous user
         # should be challenged with a 401 response status:
-        response = self.publish('/{0.folder_name}/test_script'.format(self),
+        response = self.publish(f'/{self.folder_name}/test_script',
                                 request_method='PROPFIND')
         self.assertStatus(response, b'HTTP/1.1 401 Unauthorized')
 
         response = self.publish(
-            '/{0.folder_name}/test_script/manage_DAVget'.format(self),
+            f'/{self.folder_name}/test_script/manage_DAVget',
             request_method='GET')
         self.assertStatus(response, b'HTTP/1.1 401 Unauthorized')
 
     def test_WebDAV_authorized(self):
         # And with the right credentials the request should succeed:
-        response = self.publish('/{0.folder_name}/test_script'.format(self),
+        response = self.publish(f'/{self.folder_name}/test_script',
                                 request_method='PROPFIND',
                                 basic=self.basic_auth)
         self.assertStatus(response, b'HTTP/1.1 207 Multi-Status')
 
         response = self.publish(
-            '/{0.folder_name}/test_script/manage_DAVget'.format(self),
+            f'/{self.folder_name}/test_script/manage_DAVget',
             request_method='GET', basic=self.basic_auth)
         self.assertStatus(response, b'HTTP/1.1 200 OK')
 
@@ -254,7 +248,7 @@ class ChallengeProtocolChooserBasicAuthTests(
         # And a XML-RPC Request. Again, Anonymous user should be challenged
         # with a 401 response status.
         response = self.publish(
-            '/{0.folder_name}'.format(self), request_method='POST',
+            f'/{self.folder_name}', request_method='POST',
             env={'CONTENT_TYPE': 'text/xml; charset="utf-8"'},
             stdin=io.BytesIO(XMLRPC_CALL))
         self.assertStatus(response, b'HTTP/1.1 401 Unauthorized')
@@ -262,7 +256,7 @@ class ChallengeProtocolChooserBasicAuthTests(
     def test_XMLRPC_authorized(self):
         # And with valid credentials the reqeuest should succeed:
         response = self.publish(
-            '/{0.folder_name}'.format(self), request_method='POST',
+            f'/{self.folder_name}', request_method='POST',
             env={'CONTENT_TYPE': 'text/xml; charset="utf-8"'},
             stdin=io.BytesIO(XMLRPC_CALL), basic=self.basic_auth)
         self.assertStatus(response, b'HTTP/1.1 200 OK')
@@ -278,7 +272,7 @@ class ChallengeProtocolChooserCookieAuthTests(
     """Testing of cookie auth capabilities of `ChallengeProtocolChooser`."""
 
     def setUp(self):
-        super(ChallengeProtocolChooserCookieAuthTests, self).setUp()
+        super().setUp()
         self.setup_user_folder()
         self.setup_cookie_auth()
         self.setup_http_auth()  # HTTP Auth should appear after Cookie Auth
@@ -288,24 +282,24 @@ class ChallengeProtocolChooserCookieAuthTests(
     def test_GET_unauthorized(self):
         # Now, invalid credentials should result in a 302 response status for a
         # normal (eg: browser) request:
-        response = self.publish('/{0.folder_name}/test_script'.format(self))
+        response = self.publish(f'/{self.folder_name}/test_script')
         self.assertStatus(response, b'HTTP/1.1 302 Found')
 
     def test_WebDAV_unauthorized(self):
         # And the same for a WebDAV request:
-        response = self.publish('/{0.folder_name}/test_script'.format(self),
+        response = self.publish(f'/{self.folder_name}/test_script',
                                 request_method='PROPFIND')
         self.assertStatus(response, b'HTTP/1.1 302 Found')
 
         response = self.publish(
-            '/{0.folder_name}/test_script/manage_DAVget'.format(self),
+            f'/{self.folder_name}/test_script/manage_DAVget',
             request_method='GET')
         self.assertStatus(response, b'HTTP/1.1 302 Found')
 
     def test_XMLRPC_unauthorized(self):
         # And for a XML-RPC request:
         response = self.publish(
-            '/{0.folder_name}'.format(self), request_method='POST',
+            f'/{self.folder_name}', request_method='POST',
             env={'CONTENT_TYPE': 'text/xml; charset="utf-8"'},
             stdin=io.BytesIO(XMLRPC_CALL))
         self.assertStatus(response, b'HTTP/1.1 302 Found')
@@ -330,7 +324,7 @@ class ChallengeProtocolChooserCookieAuthTypeSnifferTests(
     """
 
     def setUp(self):
-        super(ChallengeProtocolChooserCookieAuthTypeSnifferTests, self).setUp()
+        super().setUp()
         self.setup_user_folder()
         self.setup_cookie_auth()
         self.setup_http_auth()  # HTTP Auth should appear after Cookie Auth
@@ -341,24 +335,24 @@ class ChallengeProtocolChooserCookieAuthTypeSnifferTests(
     def test_GET_unauthorized(self):
         # Now, invalid credentials should result in a 302 response status for a
         # normal (eg: browser) request:
-        response = self.publish('/{0.folder_name}/test_script'.format(self))
+        response = self.publish(f'/{self.folder_name}/test_script')
         self.assertStatus(response, b'HTTP/1.1 302 Found')
 
     def test_WebDAV_unauthorized(self):
         # A WebDAV request should result in a 401 response status:
-        response = self.publish('/{0.folder_name}/test_script'.format(self),
+        response = self.publish(f'/{self.folder_name}/test_script',
                                 request_method='PROPFIND')
         self.assertStatus(response, b'HTTP/1.1 401 Unauthorized')
 
         response = self.publish(
-            '/{0.folder_name}/test_script/manage_DAVget'.format(self),
+            f'/{self.folder_name}/test_script/manage_DAVget',
             request_method='GET')
         self.assertStatus(response, b'HTTP/1.1 401 Unauthorized')
 
     def test_XMLRPC_unauthorized(self):
         # And a XML-RPC request should also result in a 401 response status:
         response = self.publish(
-            '/{0.folder_name}'.format(self), request_method='POST',
+            f'/{self.folder_name}', request_method='POST',
             env={'CONTENT_TYPE': 'text/xml; charset="utf-8"'},
             stdin=io.BytesIO(XMLRPC_CALL))
         self.assertStatus(response, b'HTTP/1.1 401 Unauthorized')

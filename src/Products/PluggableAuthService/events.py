@@ -29,7 +29,7 @@ from .interfaces.events import IPropertiesUpdatedEvent
 
 
 @implementer(IPASEvent)
-class PASEvent(object):
+class PASEvent:
 
     def __init__(self, principal):
         self.principal = principal
@@ -40,7 +40,7 @@ class PASEvent(object):
 class PrincipalAddedToGroup(PASEvent):
 
     def __init__(self, principal, group_id):
-        super(PrincipalAddedToGroup, self).__init__(principal)
+        super().__init__(principal)
         self.group_id = group_id
 
 
@@ -48,7 +48,7 @@ class PrincipalAddedToGroup(PASEvent):
 class PrincipalRemovedFromGroup(PASEvent):
 
     def __init__(self, principal, group_id):
-        super(PrincipalRemovedFromGroup, self).__init__(principal)
+        super().__init__(principal)
         self.group_id = group_id
 
 
@@ -66,7 +66,7 @@ class PrincipalDeleted(PASEvent):
 class GroupCreated(PASEvent):
 
     def __init__(self, group, plugin):
-        super(GroupCreated, self).__init__(group)
+        super().__init__(group)
         self.plugin = plugin
 
 
@@ -79,7 +79,7 @@ class GroupDeleted(PASEvent):
 class CredentialsUpdated(PASEvent):
 
     def __init__(self, principal, password):
-        super(CredentialsUpdated, self).__init__(principal)
+        super().__init__(principal)
         self.password = password
 
 
@@ -87,7 +87,7 @@ class CredentialsUpdated(PASEvent):
 class PropertiesUpdated(PASEvent):
 
     def __init__(self, principal, properties):
-        super(PropertiesUpdated, self).__init__(principal)
+        super().__init__(principal)
         self.properties = properties
 
 

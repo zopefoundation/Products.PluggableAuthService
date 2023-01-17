@@ -4,8 +4,12 @@ Change Log
 3.0 (unreleased)
 ----------------
 
-
 - Drop support for Python 2.7, 3.5, 3.6.
+
+- Drop ``zserver`` extra in ``setup.py``. Thus dropping FTP support.
+
+- Drop support for ``Zope < 5``.
+
 
 2.8.1 (2022-12-18)
 ------------------
@@ -48,7 +52,7 @@ Change Log
 - Fixed deprecation warning for ``AccessControl.AuthEncoding``.
 
 - Pass the login name as ``updateCredentials``'s ``login`` parameter
-  (not the user id) (`#105 
+  (not the user id) (`#105
   <https://github.com/zopefoundation/Products.PluggableAuthService/issues/105>`_).
   Fix docstring of ``PluggableAuthService._extractUserIds``.
 
