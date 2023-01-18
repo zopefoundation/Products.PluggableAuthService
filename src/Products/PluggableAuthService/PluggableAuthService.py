@@ -609,8 +609,9 @@ class PluggableAuthService(Folder, Cacheable):
 
                         except _SWALLOWABLE_PLUGIN_EXCEPTIONS:
                             reraise(auth)
-                            msg = f'AuthenticationPlugin {authenticator_id} error'
-                            logger.debug(msg, exc_info=True)
+                            logger.debug(
+                                f'AuthenticationPlugin {authenticator_id}'
+                                ' error', exc_info=True)
                             continue
 
                         if user_id is not None:
