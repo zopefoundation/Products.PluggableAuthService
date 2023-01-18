@@ -49,9 +49,3 @@ class IXMLRPCRequest(IHTTPRequest):
 
     """ XML-RPC Request
     """
-
-
-class IFTPRequest(IRequest):
-
-    """ FTP Request
-    """

@@ -180,7 +180,7 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
         DGD = DynamicGroupDefinition.meta_type
         for group in self.objectValues(DGD):
             if group.active and group(principal, request):
-                grps.append('%s%s' % (self.prefix, group.getId()))
+                grps.append('{}{}'.format(self.prefix, group.getId()))
         return grps
 
     @security.protected(ManageGroups)
@@ -221,7 +221,7 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
             g_info = self.getGroupInfo(group_id, raise_keyerror=False)
             if g_info is not None:
 
-                url = '/%s/%s/manage_propertiesForm' % (
+                url = '/{}/{}/manage_propertiesForm'.format(
                     self.absolute_url(1), group_id)
                 info = {}
                 info.update(self.getGroupInfo(group_id))
@@ -230,7 +230,7 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
                 info['properties_url'] = url
                 info['members_url'] = url
 
-                info['id'] = '%s%s' % (self.prefix, info['id'])
+                info['id'] = '{}{}'.format(self.prefix, info['id'])
 
                 if not group_filter or group_filter(info):
                     if info['active']:

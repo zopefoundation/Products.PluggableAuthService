@@ -14,20 +14,13 @@
 """ Class: CookieAuthHelper
 """
 
-try:
-    from base64 import decodebytes
-    from base64 import encodebytes
-except ImportError:  # Python < 3.1
-    from base64 import decodestring as decodebytes
-    from base64 import encodestring as encodebytes
-
 import codecs
+from base64 import decodebytes
+from base64 import encodebytes
 from binascii import Error
 from binascii import hexlify
-
-import six
-from six.moves.urllib.parse import quote
-from six.moves.urllib.parse import unquote
+from urllib.parse import quote
+from urllib.parse import unquote
 
 from AccessControl.class_init import InitializeClass
 from AccessControl.Permissions import view
@@ -72,20 +65,17 @@ def addCookieAuthHelper(dispatcher, id, title=None, cookie_name='',
 
 def decode_cookie(raw):
     value = unquote(raw)
-    if six.PY3:
-        value = value.encode('utf8')
+    value = value.encode('utf8')
     value = decodebytes(value)
-    if six.PY3:
-        value = value.decode('utf8')
+    value = value.decode('utf8')
     return value
 
 
 def decode_hex(raw):
-    if isinstance(raw, six.text_type):
+    if isinstance(raw, str):
         raw = raw.encode('utf8')
     value = codecs.decode(raw, 'hex_codec')
-    if six.PY3:
-        value = value.decode('utf-8')
+    value = value.decode('utf-8')
     return value
 
 
@@ -247,7 +237,7 @@ class CookieAuthHelper(Folder, BasePlugin):
                 sep = '&'
             else:
                 sep = '?'
-            url = '%s%scame_from=%s' % (url, sep, quote(came_from))
+            url = '{}{}came_from={}'.format(url, sep, quote(came_from))
             resp.redirect(url, lock=1)
             resp.setHeader('Expires', 'Sat, 01 Jan 2000 00:00:00 GMT')
             resp.setHeader('Cache-Control', 'no-cache')
@@ -262,7 +252,7 @@ class CookieAuthHelper(Folder, BasePlugin):
         if self.login_path.startswith('/') or '://' in self.login_path:
             return self.login_path
         elif self.login_path != '':
-            return '%s/%s' % (self.absolute_url(), self.login_path)
+            return '{}/{}'.format(self.absolute_url(), self.login_path)
         else:
             return None
 

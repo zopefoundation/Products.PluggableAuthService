@@ -14,7 +14,6 @@
 """ Classes: ZODBGroupManager
 """
 
-import six
 
 from AccessControl import ClassSecurityInfo
 from AccessControl.class_init import InitializeClass
@@ -86,10 +85,10 @@ class ZODBGroupManager(BasePlugin):
         group_ids = []
         plugin_id = self.getId()
 
-        if isinstance(id, six.string_types):
+        if isinstance(id, str):
             id = [id]
 
-        if isinstance(title, six.string_types):
+        if isinstance(title, str):
             title = [title]
 
         if exact_match and (id or title):
@@ -117,10 +116,10 @@ class ZODBGroupManager(BasePlugin):
                 info.update(self._groups[group_id])
 
                 info['pluginid'] = plugin_id
-                info['properties_url'] = '%s?%s' % (e_url, p_qs)
-                info['members_url'] = '%s?%s' % (e_url, m_qs)
+                info['properties_url'] = f'{e_url}?{p_qs}'
+                info['members_url'] = f'{e_url}?{m_qs}'
 
-                info['id'] = '%s%s' % (self.prefix, info['id'])
+                info['id'] = '{}{}'.format(self.prefix, info['id'])
 
                 if not group_filter or group_filter(info):
                     group_info.append(info)
@@ -135,7 +134,7 @@ class ZODBGroupManager(BasePlugin):
         """ See IGroupsPlugin.
         """
         unadorned = self._principal_groups.get(principal.getId(), ())
-        return tuple(['%s%s' % (self.prefix, x) for x in unadorned])
+        return tuple(['{}{}'.format(self.prefix, x) for x in unadorned])
 
     #
     #   (notional)IZODBGroupManager interface
@@ -377,7 +376,7 @@ class ZODBGroupManager(BasePlugin):
         if not assigned:
             message = 'Principals+already+members+of+%s' % group_id
         else:
-            message = '%s+added+to+%s' % ('+'.join(assigned), group_id)
+            message = '{}+added+to+{}'.format('+'.join(assigned), group_id)
 
         if RESPONSE is not None:
             RESPONSE.redirect('%s/manage_groups?group_id=%s&assign=1'
@@ -400,8 +399,8 @@ class ZODBGroupManager(BasePlugin):
         if not removed:
             message = 'Principals+not+in+group+%s' % group_id
         else:
-            message = 'Principals+%s+removed+from+%s' % ('+'.join(removed),
-                                                         group_id)
+            message = 'Principals+{}+removed+from+{}'.format(
+                '+'.join(removed), group_id)
 
         if RESPONSE is not None:
             RESPONSE.redirect('%s/manage_groups?group_id=%s&assign=1'

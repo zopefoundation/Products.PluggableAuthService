@@ -13,14 +13,6 @@
 ##############################################################################
 """ PluggableAuthService product initialization.
 """
-
-try:
-    import ZServer  # noqa
-except ImportError:
-    HAVE_ZSERVER = False
-else:
-    HAVE_ZSERVER = True
-
 from AccessControl.Permissions import manage_users as ManageUsers
 from App.Management import Navigation
 

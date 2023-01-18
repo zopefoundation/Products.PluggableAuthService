@@ -12,7 +12,7 @@
 #
 ##############################################################################
 
-from six import StringIO
+from io import StringIO
 
 from ..PluggableAuthService import PluggableAuthService
 from ..tests import pastc

@@ -15,8 +15,7 @@
 """
 import copy
 import logging
-
-import six
+from hashlib import sha1
 
 from AccessControl import ClassSecurityInfo
 from AccessControl.class_init import InitializeClass
@@ -37,12 +36,6 @@ from ..plugins.BasePlugin import BasePlugin
 from ..utils import classImplements
 from ..utils import createViewName
 from ..utils import csrf_only
-
-
-try:
-    from hashlib import sha1 as sha
-except ImportError:
-    from sha import sha
 
 
 logger = logging.getLogger('PluggableAuthService')
@@ -131,9 +124,9 @@ class ZODBUserManager(BasePlugin, Cacheable):
                 return userid, login
 
         # Support previous naive behavior
-        if isinstance(password, six.text_type):
+        if isinstance(password, str):
             password = password.encode('utf8')
-        digested = sha(password).hexdigest()
+        digested = sha1(password).hexdigest()
 
         if reference == digested:
             return userid, login
@@ -153,10 +146,10 @@ class ZODBUserManager(BasePlugin, Cacheable):
         plugin_id = self.getId()
         view_name = createViewName('enumerateUsers', id or login)
 
-        if isinstance(id, six.string_types):
+        if isinstance(id, str):
             id = [id]
 
-        if isinstance(login, six.string_types):
+        if isinstance(login, str):
             login = [login]
 
         # Look in the cache first...
@@ -209,7 +202,7 @@ class ZODBUserManager(BasePlugin, Cacheable):
                 info = {'id': self.prefix + user_id,
                         'login': self._userid_to_login[user_id],
                         'pluginid': plugin_id,
-                        'editurl': '%s?%s' % (e_url, qs)}
+                        'editurl': f'{e_url}?{qs}'}
 
                 if not user_filter or user_filter(info):
                     user_info.append(info)

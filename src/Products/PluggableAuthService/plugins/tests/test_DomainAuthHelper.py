@@ -267,13 +267,14 @@ class IPFilterTests(unittest.TestCase):
 
 
 def test_suite():
-    tests = (unittest.makeSuite(DomainAuthHelperTests),
-             unittest.makeSuite(EqualsFilterTests),
-             unittest.makeSuite(StartsWithFilterTests),
-             unittest.makeSuite(EndsWithFilterTests),
-             unittest.makeSuite(RegexFilterTests))
+    loadTestsFromTestCase = unittest.defaultTestLoader.loadTestsFromTestCase
+    tests = (loadTestsFromTestCase(DomainAuthHelperTests),
+             loadTestsFromTestCase(EqualsFilterTests),
+             loadTestsFromTestCase(StartsWithFilterTests),
+             loadTestsFromTestCase(EndsWithFilterTests),
+             loadTestsFromTestCase(RegexFilterTests))
 
     if IP is not None:
-        tests += (unittest.makeSuite(IPFilterTests),)
+        tests += (loadTestsFromTestCase(IPFilterTests),)
 
     return unittest.TestSuite(tests)

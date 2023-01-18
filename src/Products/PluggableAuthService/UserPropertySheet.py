@@ -14,7 +14,6 @@
 """ Represent a group of properties about a user.
 """
 
-import six
 
 from DateTime.DateTime import DateTime
 from OFS.Image import Image
@@ -23,7 +22,7 @@ from .interfaces.propertysheets import IPropertySheet
 from .utils import classImplements
 
 
-StringTypes = (str, six.text_type)
+StringTypes = (str, str)
 
 
 def _guessSchema(kw):
@@ -33,11 +32,8 @@ def _guessSchema(kw):
 
         ptype = 'string'
 
-        if isinstance(v, (six.binary_type, six.text_type)):
+        if isinstance(v, (bytes, str)):
             ptype = 'string'
-
-        elif six.PY2 and isinstance(v, long):  # noqa
-            ptype = 'long'
 
         elif type(v) == int:
             # bool is a subsclass of int, so we cannot use isinstance
@@ -51,7 +47,7 @@ def _guessSchema(kw):
 
         elif isinstance(v, (tuple, list)):
 
-            if v and not isinstance(v[0], (six.binary_type, six.text_type)):
+            if v and not isinstance(v[0], (bytes, str)):
                 raise ValueError('Property %s: sequence items not strings' % k)
 
             ptype = 'lines'
@@ -69,7 +65,7 @@ def _guessSchema(kw):
         elif isinstance(v, Image):
             ptype = 'image'
 
-        elif not isinstance(v, (six.binary_type, six.text_type)):
+        elif not isinstance(v, (bytes, str)):
             raise ValueError('Property %s: unknown type' % k)
 
         schema.append((k, ptype))
@@ -77,7 +73,7 @@ def _guessSchema(kw):
     return schema
 
 
-class UserPropertySheet(object):
+class UserPropertySheet:
 
     """ Model a single, read-only set of properties about a user.
 

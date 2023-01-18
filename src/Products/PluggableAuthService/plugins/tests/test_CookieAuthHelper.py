@@ -11,15 +11,9 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-try:
-    from base64 import encodebytes
-except ImportError:  # Python < 3.1
-    from base64 import encodestring as encodebytes
-
 import codecs
 import unittest
-
-import six
+from base64 import encodebytes
 
 from ...interfaces.plugins import IChallengePlugin
 from ...tests import pastc
@@ -227,8 +221,7 @@ class CookieAuthHelperTests(unittest.TestCase,
         cookie_str = b'%s:%s' % (username, password)
         cookie_val = encodebytes(cookie_str)
         cookie_val = cookie_val.rstrip()
-        if six.PY3:
-            cookie_val = cookie_val.decode('utf8')
+        cookie_val = cookie_val.decode('utf8')
         request.set(helper.cookie_name, cookie_val)
 
         self.assertEqual(helper.extractCredentials(request),
@@ -246,8 +239,7 @@ class CookieAuthHelperTests(unittest.TestCase,
         cookie_str = b'cookie:from_other_plugin'
         cookie_val = encodebytes(cookie_str)
         cookie_val = cookie_val.rstrip()
-        if six.PY3:
-            cookie_val = cookie_val.decode('utf8')
+        cookie_val = cookie_val.decode('utf8')
         request.set(helper.cookie_name, cookie_val)
 
         self.assertEqual(helper.extractCredentials(request), {})
@@ -273,8 +265,7 @@ class CookieAuthHelperTests(unittest.TestCase,
         cookie_str = b'%s:%s' % (username, password)
         cookie_val = encodebytes(cookie_str)
         cookie_val = cookie_val.rstrip()
-        if six.PY3:
-            cookie_val = cookie_val.decode('utf8')
+        cookie_val = cookie_val.decode('utf8')
         request.set(helper.cookie_name, cookie_val)
 
         # Defaults

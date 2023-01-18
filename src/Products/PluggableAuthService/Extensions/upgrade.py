@@ -155,7 +155,7 @@ def _upgradeLocalRoleAssignments(self, RESPONSE=None):
                         new_map[npid] = map[key]
                         _write(RESPONSE,
                                'upgradeLocalRoleAssignmentsFromRoot',
-                               '  Translated %s to %s\n' % (key, npid))
+                               f'  Translated {key} to {npid}\n')
                         _write(RESPONSE,
                                'upgradeLocalRoleAssignmentsFromRoot',
                                '  Assigned roles %s to %s\n' %

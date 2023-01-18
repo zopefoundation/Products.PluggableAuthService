@@ -17,10 +17,8 @@ import inspect
 import logging
 import os
 from hashlib import sha1
-
-import six
-from six.moves.urllib.parse import urlparse
-from six.moves.urllib.parse import urlunparse
+from urllib.parse import urlparse
+from urllib.parse import urlunparse
 
 from AccessControl import ClassSecurityInfo
 # BBB import
@@ -57,11 +55,11 @@ _wwwdir = os.path.join(product_dir, 'www')
 
 def makestr(s):
     """Converts 's' to a non-Unicode string"""
-    if isinstance(s, six.binary_type):
+    if isinstance(s, bytes):
         return s
-    if not isinstance(s, six.text_type):
+    if not isinstance(s, str):
         s = repr(s)
-    if isinstance(s, six.text_type):
+    if isinstance(s, str):
         s = s.encode('utf-8')
     return s
 
@@ -102,7 +100,7 @@ def getCSRFToken(request):
     else:
         # Can happen in tests.
         token = binascii.hexlify(os.urandom(20))
-    if six.PY3 and isinstance(token, bytes):
+    if isinstance(token, bytes):
         token = token.decode('utf8')
     return token
 
@@ -129,7 +127,7 @@ def checkCSRFToken(request, token='csrf_token', raises=True):
     return True
 
 
-class CSRFToken(object):
+class CSRFToken:
     # View helper for rendering CSRF token in templates.
     #
     # E.g., in every protected form, add this::
@@ -153,10 +151,7 @@ class CSRFToken(object):
 
 
 def csrf_only(wrapped):
-    try:
-        wrapped_spec = inspect.getfullargspec(wrapped)
-    except AttributeError:  # Python 2
-        wrapped_spec = inspect.getargspec(wrapped)
+    wrapped_spec = inspect.getfullargspec(wrapped)
     args, varargs, kwargs, defaults = wrapped_spec[:4]
     if 'REQUEST' not in args:
         raise ValueError("Method doesn't name request")
@@ -168,16 +163,13 @@ def csrf_only(wrapped):
         arglen -= len(defaults)
 
     spec = (args, varargs, kwargs, defaults)
-    try:
-        signature = inspect.signature(wrapped)
-        new_parameters = []
-        for param in signature.parameters.values():
-            if param.default is not inspect.Parameter.empty:
-                param = param.replace(default=None)
-            new_parameters.append(param)
-        argspec = str(signature.replace(parameters=new_parameters))
-    except AttributeError:  # Python 2
-        argspec = inspect.formatargspec(formatvalue=lambda v: '=None', *spec)
+    signature = inspect.signature(wrapped)
+    new_parameters = []
+    for param in signature.parameters.values():
+        if param.default is not inspect.Parameter.empty:
+            param = param.replace(default=None)
+        new_parameters.append(param)
+    argspec = str(signature.replace(parameters=new_parameters))
     lines = ['def wrapper' + argspec + ':',
              '    if IBrowserRequest.providedBy(REQUEST):',
              '        checkCSRFToken(REQUEST)',

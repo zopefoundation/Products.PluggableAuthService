@@ -14,8 +14,6 @@
 
 import unittest
 
-import six
-
 from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import noSecurityManager
 from AccessControl.SecurityManager import setSecurityPolicy
@@ -57,20 +55,20 @@ class DummyUserEnumerator(DummyPlugin):
         _id = self._user_id
 
         if self.identifier is not None:
-            _id = '%s%s' % (self.identifier, self._user_id)
+            _id = '{}{}'.format(self.identifier, self._user_id)
 
         result = [{'id': _id, 'login': self._login,
                    'pluginid': self.PLUGINID}]
 
         # Both id and login can be strings or sequences.
         user_id = kw.get('id')
-        if isinstance(user_id, six.string_types):
+        if isinstance(user_id, str):
             user_id = [user_id]
         if user_id and _id in user_id:
             return tuple(result)
 
         login = kw.get('login')
-        if isinstance(login, six.string_types):
+        if isinstance(login, str):
             login = [login]
         if login and self._login in login:
             return tuple(result)
@@ -147,7 +145,7 @@ class DummyGroupEnumerator(DummyPlugin):
         _id = self._group_id
 
         if self.identifier is not None:
-            _id = '%s%s' % (self.identifier, self._group_id)
+            _id = '{}{}'.format(self.identifier, self._group_id)
 
         result = [{'id': _id, 'pluginid': self.PLUGINID}]
 
@@ -257,7 +255,7 @@ class DummyNotCompetentPlugin(DummyPlugin):
         return self.type
 
 
-class FauxRequest(object):
+class FauxRequest:
 
     form = property(lambda self: self)
 
@@ -341,7 +339,7 @@ class FauxObject(Implicit):
 
     def publishable(self, *args, **kw):
 
-        return 'Args: %s\nKeywords: %s' % (args, kw)
+        return f'Args: {args}\nKeywords: {kw}'
 
     def this(self):
         return self
@@ -2686,7 +2684,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
         self.assertEqual(zcuf.applyTransform(' User '), ' User ')
         zcuf.login_transform = 'lower'
         self.assertEqual(zcuf.applyTransform(' User '), 'user')
-        self.assertEqual(zcuf.applyTransform(u' User '), u'user')
+        self.assertEqual(zcuf.applyTransform(' User '), 'user')
         self.assertEqual(zcuf.applyTransform(''), '')
         self.assertEqual(zcuf.applyTransform(None), None)
         self.assertEqual(zcuf.applyTransform([' User ']), ['user'])

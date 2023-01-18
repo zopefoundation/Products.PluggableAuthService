@@ -1175,7 +1175,6 @@ class ChallengeProtocolChooserExportImportTests(_TestBase):
         plugin = self._makePlugin('non_empty', None).__of__(self.root)
         plugin.title = 'TITLE'
         plugin.manage_updateProtocolMapping({'WebDAV': ('http',),
-                                             'FTP': ('http',),
                                              'XML-RPC': ('http',)})
         adapter = self._makeOne(plugin)
 
@@ -1195,7 +1194,6 @@ class ChallengeProtocolChooserExportImportTests(_TestBase):
         plugin = self._makePlugin('with_map').__of__(self.root)
         plugin.title = 'Plugin Title'
         plugin.manage_updateProtocolMapping({'WebDAV': ('http', 'digest'),
-                                             'FTP': ('http',),
                                              'XML-RPC': ('http', 'digest')})
 
         adapter = self._makeOne(plugin)
@@ -1238,8 +1236,6 @@ class ChallengeProtocolChooserExportImportTests(_TestBase):
             protocols = sorted(plugin._map.get(label, ()))
             if label == 'Browser':
                 self.assertEqual(protocols, [])
-            elif label == 'FTP':
-                self.assertEqual(protocols, ['http'])
             else:
                 self.assertEqual(protocols, ['digest', 'http'])
 
@@ -1339,17 +1335,18 @@ class NotCompetent_byRolesExportImportTests(_TestBase):
 
 
 def test_suite():
+    loadTestsFromTestCase = unittest.defaultTestLoader.loadTestsFromTestCase
     return unittest.TestSuite((
-        unittest.makeSuite(ZODBUserManagerExportImportTests),
-        unittest.makeSuite(ZODBGroupManagerExportImportTests),
-        unittest.makeSuite(ZODBRoleManagerExportImportTests),
-        unittest.makeSuite(CookieAuthHelperExportImportTests),
-        unittest.makeSuite(DomainAuthHelperExportImportTests),
-        unittest.makeSuite(TitleOnlyExportImportTests),
-        unittest.makeSuite(DelegatePathExportImportTests),
-        unittest.makeSuite(DynamicGroupsPluginExportImportTests),
-        unittest.makeSuite(ChallengeProtocolChooserExportImportTests),
-        unittest.makeSuite(NotCompetent_byRolesExportImportTests)))
+        loadTestsFromTestCase(ZODBUserManagerExportImportTests),
+        loadTestsFromTestCase(ZODBGroupManagerExportImportTests),
+        loadTestsFromTestCase(ZODBRoleManagerExportImportTests),
+        loadTestsFromTestCase(CookieAuthHelperExportImportTests),
+        loadTestsFromTestCase(DomainAuthHelperExportImportTests),
+        loadTestsFromTestCase(TitleOnlyExportImportTests),
+        loadTestsFromTestCase(DelegatePathExportImportTests),
+        loadTestsFromTestCase(DynamicGroupsPluginExportImportTests),
+        loadTestsFromTestCase(ChallengeProtocolChooserExportImportTests),
+        loadTestsFromTestCase(NotCompetent_byRolesExportImportTests)))
 
 
 _EMPTY_ZODB_USERS = """\
@@ -1521,7 +1518,6 @@ _EMPTY_CHOOSER = """\
 <?xml version="1.0" ?>
 <challenge-protocol-chooser>
 <mapping label="Browser" protocols="" />
-<mapping label="FTP" protocols="" />
 <mapping label="WebDAV" protocols="" />
 <mapping label="XML-RPC" protocols="" />
 </challenge-protocol-chooser>
@@ -1533,10 +1529,6 @@ _FILLED_CHOOSER = """\
 <mapping
     label="Browser"
     protocols=""
-    />
-<mapping
-    label="FTP"
-    protocols="http"
     />
 <mapping
     label="WebDAV"

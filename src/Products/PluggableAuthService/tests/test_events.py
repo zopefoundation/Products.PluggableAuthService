@@ -139,7 +139,7 @@ class PropertiesUpdatedTests(unittest.TestCase, ConformsToIPASEvent):
         verifyObject(IPropertiesUpdatedEvent, self._makeOne())
 
 
-class DummyPrincipal(object):
+class DummyPrincipal:
     pass
 
 
@@ -251,5 +251,5 @@ class PrincipalRemovedFromGroupTests(unittest.TestCase, ConformsToIPASEvent):
         self.assertEqual(evt.group_id, 'foo')
 
 
-class DummyGroup(object):
+class DummyGroup:
     pass

@@ -12,7 +12,6 @@ recursive-include docs *.txt
 recursive-include docs Makefile
 
 recursive-include src *.py
-include buildout4.cfg
 recursive-include src *.gif
 recursive-include src *.objects
 recursive-include src *.png

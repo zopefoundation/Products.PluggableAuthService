@@ -14,8 +14,6 @@
 
 import unittest
 
-from six.moves import range
-
 from AccessControl import Unauthorized
 from AccessControl.Permissions import add_folders as AddFolders
 from AccessControl.Permissions import view as View
