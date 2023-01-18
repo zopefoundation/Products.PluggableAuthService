@@ -274,7 +274,7 @@ class DomainAuthHelper(BasePlugin):
         except re.error:
             msg = 'Invalid regular expression %s' % match_string
         except ValueError as e:
-            msg = 'Invalid match string {} ({})'.format(match_string, e)
+            msg = f'Invalid match string {match_string} ({e})'
 
         if not match_string:
             msg = 'No match string specified'

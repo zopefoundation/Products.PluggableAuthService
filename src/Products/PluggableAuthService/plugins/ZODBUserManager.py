@@ -202,7 +202,7 @@ class ZODBUserManager(BasePlugin, Cacheable):
                 info = {'id': self.prefix + user_id,
                         'login': self._userid_to_login[user_id],
                         'pluginid': plugin_id,
-                        'editurl': '{}?{}'.format(e_url, qs)}
+                        'editurl': f'{e_url}?{qs}'}
 
                 if not user_filter or user_filter(info):
                     user_info.append(info)

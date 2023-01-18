@@ -116,8 +116,8 @@ class ZODBGroupManager(BasePlugin):
                 info.update(self._groups[group_id])
 
                 info['pluginid'] = plugin_id
-                info['properties_url'] = '{}?{}'.format(e_url, p_qs)
-                info['members_url'] = '{}?{}'.format(e_url, m_qs)
+                info['properties_url'] = f'{e_url}?{p_qs}'
+                info['members_url'] = f'{e_url}?{m_qs}'
 
                 info['id'] = '{}{}'.format(self.prefix, info['id'])
 

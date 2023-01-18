@@ -145,8 +145,8 @@ class ZODBRoleManager(BasePlugin):
                 info.update(self._roles[role_id])
 
                 info['pluginid'] = plugin_id
-                info['properties_url'] = '{}?{}'.format(e_url, p_qs)
-                info['members_url'] = '{}?{}'.format(e_url, m_qs)
+                info['properties_url'] = f'{e_url}?{p_qs}'
+                info['members_url'] = f'{e_url}?{m_qs}'
 
                 if not role_filter or role_filter(info):
                     role_info.append(info)

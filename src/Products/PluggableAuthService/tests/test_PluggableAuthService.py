@@ -339,7 +339,7 @@ class FauxObject(Implicit):
 
     def publishable(self, *args, **kw):
 
-        return 'Args: {}\nKeywords: {}'.format(args, kw)
+        return f'Args: {args}\nKeywords: {kw}'
 
     def this(self):
         return self
