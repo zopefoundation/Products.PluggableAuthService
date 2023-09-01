@@ -35,8 +35,8 @@ def _guessSchema(kw):
         if isinstance(v, (bytes, str)):
             ptype = 'string'
 
-        elif type(v) == int:
-            # bool is a subsclass of int, so we cannot use isinstance
+        elif type(v) is int:
+            # bool is a subclass of int, so we cannot use isinstance
             ptype = 'int'
 
         elif isinstance(v, float):
