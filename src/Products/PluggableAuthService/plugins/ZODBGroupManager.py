@@ -134,7 +134,7 @@ class ZODBGroupManager(BasePlugin):
         """ See IGroupsPlugin.
         """
         unadorned = self._principal_groups.get(principal.getId(), ())
-        return tuple(['{}{}'.format(self.prefix, x) for x in unadorned])
+        return tuple([f'{self.prefix}{x}' for x in unadorned])
 
     #
     #   (notional)IZODBGroupManager interface

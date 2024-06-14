@@ -180,7 +180,7 @@ class DynamicGroupsPlugin(Folder, BasePlugin, Cacheable):
         DGD = DynamicGroupDefinition.meta_type
         for group in self.objectValues(DGD):
             if group.active and group(principal, request):
-                grps.append('{}{}'.format(self.prefix, group.getId()))
+                grps.append(f'{self.prefix}{group.getId()}')
         return grps
 
     @security.protected(ManageGroups)

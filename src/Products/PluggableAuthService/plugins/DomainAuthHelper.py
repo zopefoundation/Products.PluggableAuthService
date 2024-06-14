@@ -34,7 +34,7 @@ from ..utils import classImplements
 
 try:
     from IPy import IP
-except ImportError:
+except ModuleNotFoundError:
     IP = None
 
 
@@ -79,12 +79,15 @@ class RegexFilter:
         return self.regex.match(candidate)
 
 
-_MATCH_TYPE_FILTERS = {'equals': EqualsFilter,
-                       'startswith': StartsWithFilter,
-                       'endswith': EndsWithFilter,
-                       'regex': RegexFilter}
+_MATCH_TYPE_FILTERS = {
+    'equals': EqualsFilter,
+    'startswith': StartsWithFilter,
+    'endswith': EndsWithFilter,
+    'regex': RegexFilter
+}
 
 if IP is not None:
+
     class IPFilter:
 
         def __init__(self, matchstring):
@@ -98,7 +101,6 @@ if IP is not None:
             return c_ip in self.ip
 
     _MATCH_TYPE_FILTERS['ip'] = IPFilter
-
 
 manage_addDomainAuthHelperForm = PageTemplateFile(
     'www/daAdd', globals(), __name__='manage_addDomainAuthHelperForm')
@@ -127,11 +129,14 @@ class DomainAuthHelper(BasePlugin):
     security.declareProtected(manage_users, 'manage_genericmap')  # NOQA: D001
     manage_genericmap = PageTemplateFile('www/daGeneric', globals())
 
-    manage_options = (BasePlugin.manage_options[:1]
-                      + ({'label': 'User Map', 'action': 'manage_map'},
-                         {'label': 'Generic Map',
-                          'action': 'manage_genericmap'})
-                      + BasePlugin.manage_options[1:])
+    manage_options = (BasePlugin.manage_options[:1] +
+                      ({
+                          'label': 'User Map',
+                          'action': 'manage_map'
+                      }, {
+                          'label': 'Generic Map',
+                          'action': 'manage_genericmap'
+                      }) + BasePlugin.manage_options[1:])
 
     def __init__(self, id, title=''):
         """ Initialize a new instance """
@@ -253,17 +258,24 @@ class DomainAuthHelper(BasePlugin):
         record = self._domain_map.get(user_id, [])
 
         for match_info in record:
-            result.append({'match_type': match_info['match_type'],
-                           'match_string': match_info['match_string'],
-                           'match_id': match_info['match_id'],
-                           'roles': match_info['roles'],
-                           'username': match_info['username']})
+            result.append({
+                'match_type': match_info['match_type'],
+                'match_string': match_info['match_string'],
+                'match_id': match_info['match_id'],
+                'roles': match_info['roles'],
+                'username': match_info['username']
+            })
 
         return result
 
     @security.protected(manage_users)
-    def manage_addMapping(self, user_id='', match_type='', match_string='',
-                          username='', roles=[], REQUEST=None):
+    def manage_addMapping(self,
+                          user_id='',
+                          match_type='',
+                          match_string='',
+                          username='',
+                          roles=[],
+                          REQUEST=None):
         """ Add a mapping for a user """
         msg = ''
 
@@ -287,12 +299,14 @@ class DomainAuthHelper(BasePlugin):
 
         record = self._domain_map.get(user_id, [])
 
-        match = {'match_type': match_type,
-                 'match_string': match_string,
-                 'match_filter': filter,
-                 'match_id': '{}_{}'.format(user_id, str(time.time())),
-                 'username': user_id or username or 'Remote User',
-                 'roles': roles}
+        match = {
+            'match_type': match_type,
+            'match_string': match_string,
+            'match_filter': filter,
+            'match_id': f'{user_id}_{str(time.time())}',
+            'username': user_id or username or 'Remote User',
+            'roles': roles
+        }
 
         if match not in record:
             record.append(match)
@@ -344,6 +358,5 @@ class DomainAuthHelper(BasePlugin):
 
 classImplements(DomainAuthHelper, IDomainAuthHelper, IExtractionPlugin,
                 IAuthenticationPlugin, IRolesPlugin)
-
 
 InitializeClass(DomainAuthHelper)
