@@ -2,7 +2,7 @@
 # https://github.com/zopefoundation/meta/tree/master/config/zope-product
 [meta]
 template = "zope-product"
-commit-id = "b21fbbf2"
+commit-id = "b1221c3c"
 
 [python]
 with-pypy = false
@@ -37,11 +37,11 @@ additional-rules = [
 
 [tox]
 additional-envlist = [
-    "py39-ip_range",
+    "py311-ip_range",
     ]
 testenv-additional = [
     "",
-    "[testenv:py39-ip_range]",
+    "[testenv:py311-ip_range]",
     "commands_pre =",
     "    {envbindir}/buildout -nc {toxinidir}/buildout.cfg buildout:directory={envdir} buildout:develop={toxinidir} install test-ip_range",
     "commands =",
@@ -51,5 +51,5 @@ use-flake8 = true
 
 [github-actions]
 additional-config = [
-    "- [\"3.9\",   \"py39-ip_range\"]",
+    "- [\"3.11\",   \"py311-ip_range\"]",
     ]
