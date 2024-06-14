@@ -36,14 +36,14 @@ setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Zope Public License',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
+        'Programming Language :: Python :: 3.12',
         'Topic :: Software Development',
-        'Topic :: System :: Systems Administration ::'
-        ' Authentication/Directory',
+        'Topic :: System :: Systems Administration'
+        ' :: Authentication/Directory',
     ],
     keywords='web application server zope',
     author='Zope Foundation and Contributors',
@@ -63,7 +63,7 @@ setup(
     include_package_data=True,
     namespace_packages=['Products'],
     zip_safe=False,
-    python_requires='>=3.7',
+    python_requires='>=3.8',
     install_requires=[
         'setuptools',
         'Zope >= 5',
@@ -81,4 +81,4 @@ setup(
     [zope2.initialize]
     Products.{} = Products.{}:initialize
     """.format(NAME, NAME),
-    )
+)

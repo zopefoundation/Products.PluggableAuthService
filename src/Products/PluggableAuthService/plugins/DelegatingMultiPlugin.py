@@ -162,7 +162,7 @@ class DelegatingMultiPlugin(Folder, BasePlugin):
         result = []
         acl = self._getUserFolder()
         plugin_id = self.getId()
-        edit_url = '{}/{}/manage_userrecords'.format(plugin_id, acl.getId())
+        edit_url = f'{plugin_id}/{acl.getId()}/manage_userrecords'
 
         if acl is None:
             return ()

@@ -20,7 +20,6 @@ parent_dir = os.path.abspath(parent)
 with open(os.path.join(parent_dir, 'version.txt'), 'r') as version_file:
     pkg_version = version_file.read().strip()
 
-
 # -- Project information -----------------------------------------------------
 
 project = 'Products.PluggableAuthService'
@@ -31,7 +30,6 @@ author = 'Zope Foundation and Contributors'
 version = pkg_version.replace(u'.dev0', u'')
 # The full version, including alpha/beta/rc tags
 release = pkg_version
-
 
 # -- General configuration ---------------------------------------------------
 
@@ -63,7 +61,7 @@ master_doc = 'index'
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = 'en'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -72,7 +70,6 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
-
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -102,12 +99,10 @@ html_static_path = ['_static']
 #
 # html_sidebars = {}
 
-
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'ProductsPluggableAuthServicedoc'
-
 
 # -- Options for LaTeX output ------------------------------------------------
 
@@ -133,20 +128,17 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'ProductsPluggableAuthService.tex', 'Products.PluggableAuthService Documentation',
+    (master_doc, 'ProductsPluggableAuthService.tex',
+     'Products.PluggableAuthService Documentation',
      '2004-2018 Zope Foundation and Contributors', 'manual'),
 ]
-
 
 # -- Options for manual page output ------------------------------------------
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [
-    (master_doc, 'productspluggableauthservice', 'Products.PluggableAuthService Documentation',
-     [author], 1)
-]
-
+man_pages = [(master_doc, 'productspluggableauthservice',
+              'Products.PluggableAuthService Documentation', [author], 1)]
 
 # -- Options for Texinfo output ----------------------------------------------
 
@@ -154,11 +146,11 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'ProductsPluggableAuthService', 'Products.PluggableAuthService Documentation',
-     author, 'ProductsPluggableAuthService', 'One line description of project.',
+    (master_doc, 'ProductsPluggableAuthService',
+     'Products.PluggableAuthService Documentation', author,
+     'ProductsPluggableAuthService', 'One line description of project.',
      'Miscellaneous'),
 ]
-
 
 # -- Extension configuration -------------------------------------------------
 autodoc_default_flags = ['members', 'show-inheritance']

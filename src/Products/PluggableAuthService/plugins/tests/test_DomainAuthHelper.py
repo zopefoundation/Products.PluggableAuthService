@@ -20,7 +20,7 @@ from ...tests.conformance import IRolesPlugin_conformance
 
 try:
     from IPy import IP
-except ImportError:
+except ModuleNotFoundError:
     IP = None
 
 
@@ -66,46 +66,50 @@ class DomainAuthHelperTests(unittest.TestCase, IExtractionPlugin_conformance,
         request = FauxRequestWithClientAddr(REMOTE_HOST='foo',
                                             CLIENT_ADDR='bar')
 
-        self.assertEqual(helper.extractCredentials(request),
-                         {'remote_host': 'foo',
-                          'remote_address': 'bar'})
+        self.assertEqual(helper.extractCredentials(request), {
+            'remote_host': 'foo',
+            'remote_address': 'bar'
+        })
 
     def test_extractCredentials_no_getClientAddr_with_REMOTE_ADDR(self):
 
         helper = self._makeOne()
-        request = FauxRequest(REMOTE_HOST='foo',
-                              REMOTE_ADDR='bam')
+        request = FauxRequest(REMOTE_HOST='foo', REMOTE_ADDR='bam')
 
-        self.assertEqual(helper.extractCredentials(request),
-                         {'remote_host': 'foo',
-                          'remote_address': 'bam'})
+        self.assertEqual(helper.extractCredentials(request), {
+            'remote_host': 'foo',
+            'remote_address': 'bam'
+        })
 
     def test_extractCredentials_with_getClientAddr_no_REMOTE_HSOT(self):
 
         helper = self._makeOne()
         request = FauxRequestWithClientAddr(CLIENT_ADDR='bar')
 
-        self.assertEqual(helper.extractCredentials(request),
-                         {'remote_host': '',
-                          'remote_address': 'bar'})
+        self.assertEqual(helper.extractCredentials(request), {
+            'remote_host': '',
+            'remote_address': 'bar'
+        })
 
     def test_extractCredentials_with_REMOTE_ADDR_no_REMOTE_HOST(self):
 
         helper = self._makeOne()
         request = FauxRequest(REMOTE_ADDR='bam')
 
-        self.assertEqual(helper.extractCredentials(request),
-                         {'remote_host': '',
-                          'remote_address': 'bam'})
+        self.assertEqual(helper.extractCredentials(request), {
+            'remote_host': '',
+            'remote_address': 'bam'
+        })
 
     def test_extractCredentials_no_getClientAddr_no_REMOTE_ADDR(self):
 
         helper = self._makeOne()
         request = FauxRequest(REMOTE_HOST='foo')
 
-        self.assertEqual(helper.extractCredentials(request),
-                         {'remote_host': 'foo',
-                          'remote_address': ''})
+        self.assertEqual(helper.extractCredentials(request), {
+            'remote_host': 'foo',
+            'remote_address': ''
+        })
 
     def test_authenticateCredentials_empty_mapping_empty_creds(self):
         creds = {}
@@ -132,7 +136,8 @@ class DomainAuthHelperTests(unittest.TestCase, IExtractionPlugin_conformance,
     def test_authenticateCredentials_w_mapping_known_remote_addr(self):
         creds = {'login': 'qux', 'remote_address': 'baz'}
         helper = self._makeOne()
-        helper.manage_addMapping(match_type='endswith', match_string='z',
+        helper.manage_addMapping(match_type='endswith',
+                                 match_string='z',
                                  username='foo')
 
         self.assertEqual(helper.authenticateCredentials(creds), ('qux', 'qux'))
@@ -140,7 +145,8 @@ class DomainAuthHelperTests(unittest.TestCase, IExtractionPlugin_conformance,
     def test_authenticateCredentials_w_mapping_no_login_known_remote_hst(self):
         creds = {'remote_host': 'baz'}
         helper = self._makeOne()
-        helper.manage_addMapping(match_type='equals', match_string='baz',
+        helper.manage_addMapping(match_type='equals',
+                                 match_string='baz',
                                  username='foo')
 
         self.assertEqual(helper.authenticateCredentials(creds), ('foo', 'foo'))
@@ -275,6 +281,6 @@ def test_suite():
              loadTestsFromTestCase(RegexFilterTests))
 
     if IP is not None:
-        tests += (loadTestsFromTestCase(IPFilterTests),)
+        tests += (loadTestsFromTestCase(IPFilterTests), )
 
     return unittest.TestSuite(tests)

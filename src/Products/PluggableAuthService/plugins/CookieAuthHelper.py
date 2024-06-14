@@ -237,7 +237,7 @@ class CookieAuthHelper(Folder, BasePlugin):
                 sep = '&'
             else:
                 sep = '?'
-            url = '{}{}came_from={}'.format(url, sep, quote(came_from))
+            url = f'{url}{sep}came_from={quote(came_from)}'
             resp.redirect(url, lock=1)
             resp.setHeader('Expires', 'Sat, 01 Jan 2000 00:00:00 GMT')
             resp.setHeader('Cache-Control', 'no-cache')
@@ -252,7 +252,7 @@ class CookieAuthHelper(Folder, BasePlugin):
         if self.login_path.startswith('/') or '://' in self.login_path:
             return self.login_path
         elif self.login_path != '':
-            return '{}/{}'.format(self.absolute_url(), self.login_path)
+            return f'{self.absolute_url()}/{self.login_path}'
         else:
             return None
 

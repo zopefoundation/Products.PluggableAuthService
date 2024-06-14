@@ -55,7 +55,7 @@ class DummyUserEnumerator(DummyPlugin):
         _id = self._user_id
 
         if self.identifier is not None:
-            _id = '{}{}'.format(self.identifier, self._user_id)
+            _id = f'{self.identifier}{self._user_id}'
 
         result = [{'id': _id, 'login': self._login,
                    'pluginid': self.PLUGINID}]
@@ -145,7 +145,7 @@ class DummyGroupEnumerator(DummyPlugin):
         _id = self._group_id
 
         if self.identifier is not None:
-            _id = '{}{}'.format(self.identifier, self._group_id)
+            _id = f'{self.identifier}{self._group_id}'
 
         result = [{'id': _id, 'pluginid': self.PLUGINID}]
 

@@ -35,7 +35,7 @@ class FauxPAS(FauxContainer):
             if plugin.getId() in ignore_plugins:
                 continue
             groups = plugin.getGroupsForPrincipal(principal, request)
-            groups = ['{}:{}'.format(plugin.getId(), x) for x in groups]
+            groups = [f'{plugin.getId()}:{x}' for x in groups]
             all_groups.extend(groups)
 
         return all_groups
