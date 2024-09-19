@@ -155,14 +155,6 @@ class PropertiedUser(BasicUser):
                 self.getUserName() != 'Anonymous User':
             return 1
 
-        # Check for ancient role data up front, convert if found.
-        # This should almost never happen, and should probably be
-        # deprecated at some point.
-        if 'Shared' in object_roles:
-            object_roles = self._shared_roles(object)
-            if object_roles is None or 'Anonymous' in object_roles:
-                return 1
-
         # Check for a role match with the normal roles given to
         # the user, then with local roles only if necessary. We
         # want to avoid as much overhead as possible.
