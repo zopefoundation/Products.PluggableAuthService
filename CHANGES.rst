@@ -8,6 +8,8 @@ Change Log
 
 - Drop support for Python 3.7.
 
+- Remove traces of long-deprecated 'Shared' roles support.
+
 
 3.0 (2024-01-22)
 ----------------
