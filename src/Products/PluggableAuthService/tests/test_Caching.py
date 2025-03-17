@@ -96,10 +96,10 @@ class PluggableAuthServiceCachingTests(unittest.TestCase):
 
         # Make sure the PAS instance is not associated with any cache manager
         # by default
-        self.assertTrue(zcuf.ZCacheable_getManager() is None)
+        self.assertIsNone(zcuf.ZCacheable_getManager())
 
         # Make sure the RAMCacheManager is empty
-        self.assertTrue(len(rcm.getCacheReport()) == 0)
+        self.assertEqual(len(rcm.getCacheReport()), 0)
 
     def test_caching_in_PAS(self):
         zcuf = self._makeAndFill()
@@ -136,7 +136,7 @@ class PluggableAuthServiceCachingTests(unittest.TestCase):
         zcuf.ZCacheable_setManagerId(rcm.getId())
 
         # Make sure the PAS instance is associated with the cache
-        self.assertTrue(aq_base(zcuf.ZCacheable_getManager()) is aq_base(rcm))
+        self.assertIs(aq_base(zcuf.ZCacheable_getManager()), aq_base(rcm))
 
         # Now we can see if the cache is getting used. Test for emptiness
         # first, then retrieve a user, and the cache should have content.
@@ -170,7 +170,7 @@ class PluggableAuthServiceCachingTests(unittest.TestCase):
         # reusing the same cache entries.
         zcuf.getUser('testlogin')
         report = rcm.getCacheReport()
-        self.assertTrue(len(report) == 1)
+        self.assertEqual(len(report), 1)
         report_item = report[0]
         self.assertEqual(report_item.get('misses'), firstpass_misses)
         self.assertGreater(report_item.get('hits'), firstpass_hits)

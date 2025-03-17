@@ -98,15 +98,15 @@ class UserFolderTests(pastc.PASTestCase):
 
     def testGetRoles(self):
         user = self.uf.getUser('user1')
-        self.assertTrue('role1' in user.getRoles())
-        self.assertFalse('role2' in user.getRoles())
+        self.assertIn('role1', user.getRoles())
+        self.assertNotIn('role2', user.getRoles())
 
     def testGetRolesInContext(self):
         user = self.uf.getUser('user1')
         self.folder.manage_addLocalRoles('user1', ['role2'])
         roles = user.getRolesInContext(self.folder)
-        self.assertTrue('role1' in roles)
-        self.assertTrue('role2' in roles)
+        self.assertIn('role1', roles)
+        self.assertIn('role2', roles)
 
     def testHasRole(self):
         user = self.uf.getUser('user1')

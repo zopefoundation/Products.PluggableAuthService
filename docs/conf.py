@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # Configuration file for the Sphinx documentation builder.
 #
@@ -13,11 +12,11 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os
-import sys
+
 
 parent = os.path.dirname(os.path.dirname(__file__))
 parent_dir = os.path.abspath(parent)
-with open(os.path.join(parent_dir, 'version.txt'), 'r') as version_file:
+with open(os.path.join(parent_dir, 'version.txt')) as version_file:
     pkg_version = version_file.read().strip()
 
 # -- Project information -----------------------------------------------------
@@ -27,7 +26,7 @@ copyright = '2004-2018 Zope Foundation and Contributors'
 author = 'Zope Foundation and Contributors'
 
 # The short X.Y version
-version = pkg_version.replace(u'.dev0', u'')
+version = pkg_version.replace('.dev0', '')
 # The full version, including alpha/beta/rc tags
 release = pkg_version
 

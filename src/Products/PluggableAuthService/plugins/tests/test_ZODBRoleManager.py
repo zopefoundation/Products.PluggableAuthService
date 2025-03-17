@@ -223,7 +223,7 @@ class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance,
         self.assertEqual(len(info_list), len(ID_LIST))
 
         for info in info_list:
-            self.assertTrue(info['id'] in ID_LIST)
+            self.assertIn(info['id'], ID_LIST)
 
         SUBSET = ID_LIST[:3]
 
@@ -232,7 +232,7 @@ class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance,
         self.assertEqual(len(info_list), len(SUBSET))
 
         for info in info_list:
-            self.assertTrue(info['id'] in SUBSET)
+            self.assertIn(info['id'], SUBSET)
 
     def test_enumerateRoles_exact_nonesuch(self):
 
@@ -275,14 +275,14 @@ class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance,
 
         roles = zrm.getRolesForPrincipal(user)
         self.assertEqual(len(roles), 1)
-        self.assertTrue('test1' in roles)
+        self.assertIn('test1', roles)
 
         zrm.assignRoleToPrincipal('test2', 'foo')
 
         roles = zrm.getRolesForPrincipal(user)
         self.assertEqual(len(roles), 2)
-        self.assertTrue('test1' in roles)
-        self.assertTrue('test2' in roles)
+        self.assertIn('test1', roles)
+        self.assertIn('test2', roles)
 
     def test_assignRoleToPrincipal_group(self):
 
@@ -301,7 +301,7 @@ class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance,
 
         roles = zrm.getRolesForPrincipal(user)
         self.assertEqual(len(roles), 1)
-        self.assertTrue('test1' in roles)
+        self.assertIn('test1', roles)
 
     def test_assignRoleToPrincipal_new(self):
 
@@ -386,9 +386,9 @@ class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance,
 
         assigned = [x[0] for x in zrm.listAssignedPrincipals('test')]
         self.assertEqual(len(assigned), 3)
-        self.assertTrue('foo' in assigned)
-        self.assertTrue('bar' in assigned)
-        self.assertTrue('baz' in assigned)
+        self.assertIn('foo', assigned)
+        self.assertIn('bar', assigned)
+        self.assertIn('baz', assigned)
 
         removed = zrm.removeRoleFromPrincipal('test', 'bar')
 
@@ -396,9 +396,9 @@ class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance,
 
         assigned = [x[0] for x in zrm.listAssignedPrincipals('test')]
         self.assertEqual(len(assigned), 2)
-        self.assertTrue('foo' in assigned)
-        self.assertFalse('bar' in assigned)
-        self.assertTrue('baz' in assigned)
+        self.assertIn('foo', assigned)
+        self.assertNotIn('bar', assigned)
+        self.assertIn('baz', assigned)
 
     def test_removeRoleFromPrincipal_noop(self):
 
@@ -412,8 +412,8 @@ class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance,
 
         assigned = [x[0] for x in zrm.listAssignedPrincipals('test')]
         self.assertEqual(len(assigned), 2)
-        self.assertTrue('foo' in assigned)
-        self.assertTrue('baz' in assigned)
+        self.assertIn('foo', assigned)
+        self.assertIn('baz', assigned)
 
         removed = zrm.removeRoleFromPrincipal('test', 'bar')
 
@@ -479,12 +479,12 @@ class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance,
 
         zrm.addRole('test')
         zrm.assignRoleToPrincipal('test', 'foo')
-        self.assertTrue('test' in zrm.getRolesForPrincipal(user))
+        self.assertIn('test', zrm.getRolesForPrincipal(user))
 
         zrm.removeRole('test')
         zrm.addRole('test')
 
-        self.assertFalse('test' in zrm.getRolesForPrincipal(user))
+        self.assertNotIn('test', zrm.getRolesForPrincipal(user))
 
     def test_manage_assignRoleToPrincipal_POST_permissions(self):
         USER_ID = 'testuser'

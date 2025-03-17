@@ -185,7 +185,7 @@ class ChallengeProtocolChooserFunctionalTests(
         plugin = pas.chooser
 
         for key, value in plugin._map.items():
-            self.assertTrue(isinstance(value, (list, tuple, set)))
+            self.assertIsInstance(value, (list, tuple, set))
 
 
 class ChallengeProtocolChooserBasicAuthTests(

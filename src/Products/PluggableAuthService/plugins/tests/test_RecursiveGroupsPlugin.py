@@ -144,10 +144,10 @@ class RecursiveGroupsPluginTests(unittest.TestCase, IGroupsPlugin_conformance):
 
         groups = rgp.getGroupsForPrincipal(user)
         self.assertEqual(len(groups), 4)
-        self.assertTrue('dummy:group1' in groups)
-        self.assertTrue('dummy:group2' in groups)
-        self.assertTrue('other_dummy:group3' in groups)
-        self.assertTrue('other_dummy:group4' in groups)
+        self.assertIn('dummy:group1', groups)
+        self.assertIn('dummy:group2', groups)
+        self.assertIn('other_dummy:group3', groups)
+        self.assertIn('other_dummy:group4', groups)
 
     def test_cross_nested_flattening(self):
 
@@ -178,5 +178,5 @@ class RecursiveGroupsPluginTests(unittest.TestCase, IGroupsPlugin_conformance):
 
         groups = rgp.getGroupsForPrincipal(user)
         self.assertEqual(len(groups), 2)
-        self.assertTrue('dummy:group1' in groups)
-        self.assertTrue('other_dummy:group2' in groups)
+        self.assertIn('dummy:group1', groups)
+        self.assertIn('other_dummy:group2', groups)
