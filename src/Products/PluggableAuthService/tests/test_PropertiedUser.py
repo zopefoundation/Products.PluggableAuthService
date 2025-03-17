@@ -68,7 +68,7 @@ class PropertiedUserTests(unittest.TestCase, IBasicUser_conformance,
         user._addGroups(groups)
         self.assertEqual(len(user.getGroups()), len(groups))
         for g in user.getGroups():
-            self.assertTrue(g in groups)
+            self.assertIn(g, groups)
 
     def test_username(self):
         user = self._makeOne('username', 'User with Username')
@@ -80,7 +80,7 @@ class PropertiedUserTests(unittest.TestCase, IBasicUser_conformance,
         user._addRoles(roles)
         self.assertEqual(len(user.getRoles()), 2)
         for r in user.getRoles():
-            self.assertTrue(r in roles)
+            self.assertIn(r, roles)
 
     def test_addPropertysheet(self):
 
@@ -132,7 +132,7 @@ class PropertiedUserTests(unittest.TestCase, IBasicUser_conformance,
 
         local_roles = user.getRolesInContext(faux)
         self.assertEqual(len(local_roles), 1)
-        self.assertTrue('Manager' in local_roles)
+        self.assertIn('Manager', local_roles)
 
     def test_getRolesInContext_group_overlap(self):
 
@@ -145,8 +145,8 @@ class PropertiedUserTests(unittest.TestCase, IBasicUser_conformance,
 
         local_roles = user.getRolesInContext(faux)
         self.assertEqual(len(local_roles), 2)
-        self.assertTrue('Manager' in local_roles)
-        self.assertTrue('Owner' in local_roles)
+        self.assertIn('Manager', local_roles)
+        self.assertIn('Owner', local_roles)
 
     def test_getRolesInContext_group_nomatch(self):
 
@@ -171,7 +171,7 @@ class PropertiedUserTests(unittest.TestCase, IBasicUser_conformance,
 
         local_roles = user.getRolesInContext(faux_contained)
         self.assertEqual(len(local_roles), 1)
-        self.assertTrue('Manager' in local_roles)
+        self.assertIn('Manager', local_roles)
 
     def test_getRolesInContext_weslayan(self):
 
@@ -186,7 +186,7 @@ class PropertiedUserTests(unittest.TestCase, IBasicUser_conformance,
 
         local_roles = user.getRolesInContext(faux_self.method)
         self.assertEqual(len(local_roles), 1)
-        self.assertTrue('Manager' in local_roles)
+        self.assertIn('Manager', local_roles)
 
     def test_allowed_not_even_god_should(self):
 

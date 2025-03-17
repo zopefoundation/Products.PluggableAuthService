@@ -71,7 +71,7 @@ class DynamicGroupsPlugin(unittest.TestCase, IGroupsPlugin_conformance,
         dpg.addGroup('everyone', 'python:True', 'title', 'description', True)
 
         self.assertEqual(len(dpg.listGroupIds()), 1)
-        self.assertTrue('everyone' in dpg.listGroupIds())
+        self.assertIn('everyone', dpg.listGroupIds())
 
         self.assertEqual(len(dpg.listGroupInfo()), 1)
         info = dpg.listGroupInfo()[0]
@@ -115,32 +115,32 @@ class DynamicGroupsPlugin(unittest.TestCase, IGroupsPlugin_conformance,
         dpg.addGroup('noone', predicate='python:False')
 
         self.assertEqual(len(dpg.listGroupIds()), 3)
-        self.assertTrue('everyone' in dpg.listGroupIds())
-        self.assertTrue('beast' in dpg.listGroupIds())
-        self.assertTrue('noone' in dpg.listGroupIds())
+        self.assertIn('everyone', dpg.listGroupIds())
+        self.assertIn('beast', dpg.listGroupIds())
+        self.assertIn('noone', dpg.listGroupIds())
 
         info_list = dpg.listGroupInfo()
         self.assertEqual(len(info_list), 3)
 
         ids = [x['id'] for x in info_list]
-        self.assertTrue('everyone' in ids)
-        self.assertTrue('beast' in ids)
-        self.assertTrue('noone' in ids)
+        self.assertIn('everyone', ids)
+        self.assertIn('beast', ids)
+        self.assertIn('noone', ids)
 
         dpg.removeGroup('beast')
 
         self.assertEqual(len(dpg.listGroupIds()), 2)
-        self.assertTrue('everyone' in dpg.listGroupIds())
-        self.assertFalse('beast' in dpg.listGroupIds())
-        self.assertTrue('noone' in dpg.listGroupIds())
+        self.assertIn('everyone', dpg.listGroupIds())
+        self.assertNotIn('beast', dpg.listGroupIds())
+        self.assertIn('noone', dpg.listGroupIds())
 
         info_list = dpg.listGroupInfo()
         self.assertEqual(len(info_list), 2)
 
         ids = [x['id'] for x in info_list]
-        self.assertTrue('everyone' in ids)
-        self.assertFalse('beast' in ids)
-        self.assertTrue('noone' in ids)
+        self.assertIn('everyone', ids)
+        self.assertNotIn('beast', ids)
+        self.assertIn('noone', ids)
 
     def test_updateGroup_nonesuch(self):
 
@@ -155,7 +155,7 @@ class DynamicGroupsPlugin(unittest.TestCase, IGroupsPlugin_conformance,
         dpg.addGroup('noone', predicate='python:False')
 
         self.assertEqual(len(dpg.listGroupIds()), 1)
-        self.assertTrue('noone' in dpg.listGroupIds())
+        self.assertIn('noone', dpg.listGroupIds())
 
         self.assertEqual(len(dpg.listGroupInfo()), 1)
         info = dpg.listGroupInfo()[0]
@@ -169,7 +169,7 @@ class DynamicGroupsPlugin(unittest.TestCase, IGroupsPlugin_conformance,
         dpg.updateGroup('noone', 'python:True', 'title', 'description', False)
 
         self.assertEqual(len(dpg.listGroupIds()), 1)
-        self.assertTrue('noone' in dpg.listGroupIds())
+        self.assertIn('noone', dpg.listGroupIds())
 
         self.assertEqual(len(dpg.listGroupInfo()), 1)
         info = dpg.listGroupInfo()[0]
@@ -187,7 +187,7 @@ class DynamicGroupsPlugin(unittest.TestCase, IGroupsPlugin_conformance,
         dpg.addGroup('everyone', 'python:True', 'title', 'description', True)
 
         self.assertEqual(len(dpg.listGroupIds()), 1)
-        self.assertTrue('everyone' in dpg.listGroupIds())
+        self.assertIn('everyone', dpg.listGroupIds())
 
         self.assertEqual(len(dpg.listGroupInfo()), 1)
         info = dpg.listGroupInfo()[0]
@@ -201,7 +201,7 @@ class DynamicGroupsPlugin(unittest.TestCase, IGroupsPlugin_conformance,
         dpg.updateGroup('everyone', predicate='python:False')
 
         self.assertEqual(len(dpg.listGroupIds()), 1)
-        self.assertTrue('everyone' in dpg.listGroupIds())
+        self.assertIn('everyone', dpg.listGroupIds())
 
         self.assertEqual(len(dpg.listGroupInfo()), 1)
         info = dpg.listGroupInfo()[0]
@@ -229,9 +229,9 @@ class DynamicGroupsPlugin(unittest.TestCase, IGroupsPlugin_conformance,
 
         ids = [x['id'] for x in info_list]
 
-        self.assertTrue('everyone' in ids)
-        self.assertTrue('noone' in ids)
-        self.assertTrue('hohum' in ids)
+        self.assertIn('everyone', ids)
+        self.assertIn('noone', ids)
+        self.assertIn('hohum', ids)
 
     def test_enumerateGroups_exact_list(self):
 
@@ -253,7 +253,7 @@ class DynamicGroupsPlugin(unittest.TestCase, IGroupsPlugin_conformance,
         ids = [x['id'] for x in info_list]
 
         for id in ID_LIST:
-            self.assertTrue(id in ids)
+            self.assertIn(id, ids)
 
     def test_enumerateGroups_exact_one(self):
 
@@ -319,9 +319,9 @@ class DynamicGroupsPlugin(unittest.TestCase, IGroupsPlugin_conformance,
 
         ids = [x['id'] for x in info_list]
 
-        self.assertTrue('everyone' in ids)
-        self.assertTrue('noone' in ids)
-        self.assertFalse('inactive' in ids)
+        self.assertIn('everyone', ids)
+        self.assertIn('noone', ids)
+        self.assertNotIn('inactive', ids)
 
     def test_getGroupsForPrincipal_empty(self):
 
@@ -340,7 +340,7 @@ class DynamicGroupsPlugin(unittest.TestCase, IGroupsPlugin_conformance,
         dpg.addGroup('effable', 'python:principal.getId().startswith("f")')
         groups = dpg.getGroupsForPrincipal(principal, {})
         self.assertEqual(len(groups), 1)
-        self.assertTrue('effable' in groups)
+        self.assertIn('effable', groups)
 
     def test_getGroupsForPrincipal_python(self):
 
@@ -350,7 +350,7 @@ class DynamicGroupsPlugin(unittest.TestCase, IGroupsPlugin_conformance,
         dpg.addGroup('everyone', 'python:1')
         groups = dpg.getGroupsForPrincipal(principal, {})
         self.assertEqual(len(groups), 1)
-        self.assertTrue('everyone' in groups)
+        self.assertIn('everyone', groups)
 
     def test_getGroupsForPrincipal_request(self):
 
@@ -371,7 +371,7 @@ class DynamicGroupsPlugin(unittest.TestCase, IGroupsPlugin_conformance,
         groups = dpg.getGroupsForPrincipal(principal, {'is_local': 1})
 
         self.assertEqual(len(groups), 1)
-        self.assertTrue('local' in groups)
+        self.assertIn('local', groups)
 
     def test_getGroupsForPrincipal_group(self):
 
@@ -388,7 +388,7 @@ class DynamicGroupsPlugin(unittest.TestCase, IGroupsPlugin_conformance,
         dpg.willing._updateProperty('willing', 1)
         groups = dpg.getGroupsForPrincipal(principal, {})
         self.assertEqual(len(groups), 1)
-        self.assertTrue('willing' in groups)
+        self.assertIn('willing', groups)
 
     def test_getGroupsForPrincipal_plugin_nope(self):
 
@@ -413,7 +413,7 @@ class DynamicGroupsPlugin(unittest.TestCase, IGroupsPlugin_conformance,
 
         groups = dpg.getGroupsForPrincipal(principal, {})
         self.assertEqual(len(groups), 1)
-        self.assertTrue('scripted' in groups)
+        self.assertIn('scripted', groups)
 
     def test_enumerateGroups_matching_with_optional_prefix(self):
 
@@ -436,7 +436,7 @@ class DynamicGroupsPlugin(unittest.TestCase, IGroupsPlugin_conformance,
         ids = [x['id'] for x in info_list]
 
         for id in ID_LIST:
-            self.assertTrue(id in ids)
+            self.assertIn(id, ids)
 
     def test_enumerateGroups_enumerating_with_optional_prefix(self):
 
@@ -460,7 +460,7 @@ class DynamicGroupsPlugin(unittest.TestCase, IGroupsPlugin_conformance,
         ids = [x['id'] for x in info_list]
 
         for id in ID_LIST:
-            self.assertTrue(id in ids)
+            self.assertIn(id, ids)
 
     def test_getGroupsForPrincipal_optional_prefix(self):
 
@@ -472,4 +472,4 @@ class DynamicGroupsPlugin(unittest.TestCase, IGroupsPlugin_conformance,
         dpg.addGroup('effable', 'python:principal.getId().startswith("f")')
         groups = dpg.getGroupsForPrincipal(principal, {})
         self.assertEqual(len(groups), 1)
-        self.assertTrue('ggp_effable' in groups)
+        self.assertIn('ggp_effable', groups)

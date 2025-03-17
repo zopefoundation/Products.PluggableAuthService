@@ -263,16 +263,16 @@ class Test_importPAS(_TestBase):
         ctx._files['PAS/csv_plugin.csv'] = KNOWN_CSV
 
         self.assertEqual(len(pas.objectIds()), 1)
-        self.assertTrue('plugins' in pas.objectIds())
+        self.assertIn('plugins', pas.objectIds())
 
         importPAS(ctx)
 
         self.assertEqual(len(pas.objectIds()), 2)
-        self.assertTrue('plugins' in pas.objectIds())
-        self.assertTrue('csv_plugin' in pas.objectIds())
+        self.assertIn('plugins', pas.objectIds())
+        self.assertIn('csv_plugin', pas.objectIds())
 
         csv_plugin = pas._getOb('csv_plugin')
-        self.assertTrue(csv_plugin.__class__ is TestCSVAware)
+        self.assertIs(csv_plugin.__class__, TestCSVAware)
         self.assertEqual(csv_plugin._was_put.getvalue().strip(),
                          KNOWN_CSV.encode('UTF-8').strip())
 

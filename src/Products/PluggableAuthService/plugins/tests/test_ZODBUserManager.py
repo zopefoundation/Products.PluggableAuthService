@@ -319,7 +319,7 @@ class ZODBUserManagerTests(unittest.TestCase,
         self.assertEqual(len(info_list), len(ID_LIST))
 
         for info in info_list:
-            self.assertTrue(info['id'] in ID_LIST)
+            self.assertIn(info['id'], ID_LIST)
 
         SUBSET = ID_LIST[:3]
 
@@ -328,7 +328,7 @@ class ZODBUserManagerTests(unittest.TestCase,
         self.assertEqual(len(info_list), len(SUBSET))
 
         for info in info_list:
-            self.assertTrue(info['id'] in SUBSET)
+            self.assertIn(info['id'], SUBSET)
 
     def test_enumerateUsers_multiple_logins(self):
 
@@ -349,8 +349,8 @@ class ZODBUserManagerTests(unittest.TestCase,
         self.assertEqual(len(info_list), len(LOGIN_LIST))
 
         for info in info_list:
-            self.assertTrue(info['id'] in ID_LIST)
-            self.assertTrue(info['login'] in LOGIN_LIST)
+            self.assertIn(info['id'], ID_LIST)
+            self.assertIn(info['login'], LOGIN_LIST)
 
         SUBSET_LOGINS = LOGIN_LIST[:3]
         SUBSET_IDS = ID_LIST[:3]
@@ -360,8 +360,8 @@ class ZODBUserManagerTests(unittest.TestCase,
         self.assertEqual(len(info_list), len(SUBSET_LOGINS))
 
         for info in info_list:
-            self.assertTrue(info['id'] in SUBSET_IDS)
-            self.assertTrue(info['login'] in SUBSET_LOGINS)
+            self.assertIn(info['id'], SUBSET_IDS)
+            self.assertIn(info['login'], SUBSET_LOGINS)
 
     def test_authenticateWithOldPasswords(self):
         from hashlib import sha1 as sha

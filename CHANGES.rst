@@ -4,6 +4,10 @@ Change Log
 4.0 (unreleased)
 ----------------
 
+- Add support for Python 3.13.
+
+- Drop support for Python 3.8.
+
 - Add support for Python 3.12.
 
 - Drop support for Python 3.7.

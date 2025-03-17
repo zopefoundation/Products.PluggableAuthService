@@ -1302,10 +1302,14 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
         plugins.activatePlugin(IUserEnumerationPlugin, 'enumerator')
 
-        self.assertTrue(
-            zcuf._verifyUser(plugins, login='foo')['id'] == 'bar')
-        self.assertTrue(
-            zcuf._verifyUser(plugins, login='foobar')['id'] == 'foo')
+        self.assertEqual(
+            zcuf._verifyUser(plugins, login='foo')['id'],
+            'bar'
+        )
+        self.assertEqual(
+            zcuf._verifyUser(plugins, login='foobar')['id'],
+            'foo'
+        )
 
     def test__verifyUser_no_login_or_userid(self):
         # setup cargo-culted from other tests...
@@ -1323,7 +1327,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
         # Our enumerator plugin normally returns something, even if
         # you ask for a nonexistent user.
-        self.assertTrue(zcuf._verifyUser(plugins, login='qux') in users)
+        self.assertIn(zcuf._verifyUser(plugins, login='qux'), users)
 
         # But with no criteria, we should always get None.
         self.assertEqual(zcuf._verifyUser(plugins, login=None, user_id=None),
@@ -1354,12 +1358,18 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
         self.assertFalse(zcuf._verifyUser(plugins, login='BAR'))
         self.assertFalse(zcuf._verifyUser(plugins, login='Bar'))
         self.assertFalse(zcuf._verifyUser(plugins, login='bar'))
-        self.assertTrue(
-            zcuf._verifyUser(plugins, login='FOOBAR')['id'] == 'Foo')
-        self.assertTrue(
-            zcuf._verifyUser(plugins, login='Foobar')['id'] == 'Foo')
-        self.assertTrue(
-            zcuf._verifyUser(plugins, login='foobar')['id'] == 'Foo')
+        self.assertEqual(
+            zcuf._verifyUser(plugins, login='FOOBAR')['id'],
+            'Foo'
+        )
+        self.assertEqual(
+            zcuf._verifyUser(plugins, login='Foobar')['id'],
+            'Foo'
+        )
+        self.assertEqual(
+            zcuf._verifyUser(plugins, login='foobar')['id'],
+            'Foo'
+        )
 
     def test__verifyUser_login_transform_upper(self):
 
@@ -1382,9 +1392,9 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
         # No matter what we try as login parameter, it is always upper
         # cased before verifying a user.
-        self.assertTrue(zcuf._verifyUser(plugins, login='BAR')['id'] == 'Bar')
-        self.assertTrue(zcuf._verifyUser(plugins, login='Bar')['id'] == 'Bar')
-        self.assertTrue(zcuf._verifyUser(plugins, login='bar')['id'] == 'Bar')
+        self.assertEqual(zcuf._verifyUser(plugins, login='BAR')['id'], 'Bar')
+        self.assertEqual(zcuf._verifyUser(plugins, login='Bar')['id'], 'Bar')
+        self.assertEqual(zcuf._verifyUser(plugins, login='bar')['id'], 'Bar')
         self.assertFalse(zcuf._verifyUser(plugins, login='FOOBAR'))
         self.assertFalse(zcuf._verifyUser(plugins, login='Foobar'))
         self.assertFalse(zcuf._verifyUser(plugins, login='foobar'))
@@ -1441,7 +1451,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
         plugins = zcuf._getOb('plugins')
 
         real_user = zcuf._findUser(plugins, 'someone', 'to watch over me')
-        self.assertFalse(real_user.__class__ is FauxUser)
+        self.assertIsNot(real_user.__class__, FauxUser)
 
         plugins.activatePlugin(IUserFactoryPlugin, 'bar')
 
@@ -1450,7 +1460,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
         self.assertEqual(faux_user.getId(), 'someone')
         self.assertEqual(faux_user.getUserName(), 'to watch over me')
 
-        self.assertTrue(faux_user.__class__ is FauxUser)
+        self.assertIs(faux_user.__class__, FauxUser)
 
     def test__findUser_with_userfactory_plugin_and_transform(self):
 
@@ -1475,7 +1485,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
         plugins = zcuf._getOb('plugins')
 
         real_user = zcuf._findUser(plugins, 'Mixed', 'Case')
-        self.assertFalse(real_user.__class__ is FauxUser)
+        self.assertIsNot(real_user.__class__, FauxUser)
 
         plugins.activatePlugin(IUserFactoryPlugin, 'bar')
 
@@ -1485,7 +1495,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
         # This is lower case:
         self.assertEqual(faux_user.getUserName(), 'case')
 
-        self.assertTrue(faux_user.__class__ is FauxUser)
+        self.assertIs(faux_user.__class__, FauxUser)
 
     def test__findUser_with_plugins(self):
 
@@ -1515,8 +1525,8 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
         sheet_ids = user.listPropertysheets()
         self.assertEqual(len(sheet_ids), 2)
-        self.assertTrue('foo' in sheet_ids)
-        self.assertTrue('bar' in sheet_ids)
+        self.assertIn('foo', sheet_ids)
+        self.assertIn('bar', sheet_ids)
 
         foosheet = user['foo']
         self.assertEqual(len(foosheet.propertyMap()), 1)
@@ -1542,8 +1552,8 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
         groups = user.getGroups()
         self.assertEqual(len(groups), 2)
-        self.assertTrue('group1' in groups)
-        self.assertTrue('group2' in groups)
+        self.assertIn('group1', groups)
+        self.assertIn('group2', groups)
 
     def test__findUser_with_groups_ignoring_one(self):
 
@@ -1573,8 +1583,8 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
         groups = zcuf._getGroupsForPrincipal(user, plugins=plugins,
                                              ignore_plugins=('bar',))
         self.assertEqual(len(groups), 2)
-        self.assertFalse('bar:group3' in groups)
-        self.assertFalse('bar:group4' in groups)
+        self.assertNotIn('bar:group3', groups)
+        self.assertNotIn('bar:group4', groups)
 
     def test__authorizeUser_force_ok(self):
 
@@ -1826,12 +1836,12 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
         groups = foo.getGroupsForPrincipal(faux)
         for g in groups:
-            self.assertTrue(g in default_groups)
+            self.assertIn(g, default_groups)
 
         faux._addGroups(groups)
 
-        self.assertTrue('Group A' in faux.getGroups())
-        self.assertTrue('Group B' in faux.getGroups())
+        self.assertIn('Group A', faux.getGroups())
+        self.assertIn('Group B', faux.getGroups())
 
     def test_validate_simple_unauth(self):
 
@@ -2131,8 +2141,8 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
         f = Folder()
         zcuf = self._makeOne()
         f._setObject(zcuf.getId(), zcuf)
-        self.assertTrue(zcuf.getId() in f.objectIds())
-        self.assertTrue(aq_base(f.__allow_groups__) is aq_base(f.acl_users))
+        self.assertIn(zcuf.getId(), f.objectIds())
+        self.assertIs(aq_base(f.__allow_groups__), aq_base(f.acl_users))
         f._delObject(zcuf.getId())
         self.assertTrue(not zcuf.getId() in f.objectIds())
 
@@ -2219,22 +2229,22 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
         # Search by id
         self.assertFalse(zcuf.searchUsers(id='zope'))
         self.assertTrue(zcuf.searchUsers(id='foo'))
-        self.assertTrue(len(zcuf.searchUsers(id='foo')) == 1)
+        self.assertEqual(len(zcuf.searchUsers(id='foo')), 1)
 
         # Search by login name
         self.assertFalse(zcuf.searchUsers(name='zope'))
         self.assertTrue(zcuf.searchUsers(name='foo'))
-        self.assertTrue(len(zcuf.searchUsers(name='foo')) == 1)
+        self.assertEqual(len(zcuf.searchUsers(name='foo')), 1)
 
         # Login name can be a sequence
         self.assertFalse(zcuf.searchUsers(name=['zope']))
         self.assertTrue(zcuf.searchUsers(name=['foo']))
-        self.assertTrue(len(zcuf.searchUsers(name=['foo'])) == 1)
+        self.assertEqual(len(zcuf.searchUsers(name=['foo'])), 1)
         self.assertFalse(zcuf.searchUsers(name=('zope',)))
         self.assertTrue(zcuf.searchUsers(name=('foo',)))
-        self.assertTrue(len(zcuf.searchUsers(name=('foo',))) == 1)
+        self.assertEqual(len(zcuf.searchUsers(name=('foo',))), 1)
         self.assertTrue(zcuf.searchUsers(name=('foo', 'bar')))
-        self.assertTrue(len(zcuf.searchUsers(name=('foo', 'bar'))) == 1)
+        self.assertEqual(len(zcuf.searchUsers(name=('foo', 'bar'))), 1)
 
     def test_searchUsers_transform(self):
 
@@ -2257,33 +2267,33 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
         # Search by id
         self.assertFalse(zcuf.searchUsers(id='ZOPE'))
         self.assertTrue(zcuf.searchUsers(id='FOO'))
-        self.assertTrue(len(zcuf.searchUsers(id='FOO')) == 1)
+        self.assertEqual(len(zcuf.searchUsers(id='FOO')), 1)
 
         # Search by login name
         self.assertFalse(zcuf.searchUsers(name='Zope'))
         self.assertTrue(zcuf.searchUsers(name='Foo'))
-        self.assertTrue(len(zcuf.searchUsers(name='Foo')) == 1)
+        self.assertEqual(len(zcuf.searchUsers(name='Foo')), 1)
 
         # Login name can be a sequence
         self.assertFalse(zcuf.searchUsers(name=['Zope']))
         self.assertTrue(zcuf.searchUsers(name=['Foo']))
-        self.assertTrue(len(zcuf.searchUsers(name=['Foo'])) == 1)
+        self.assertEqual(len(zcuf.searchUsers(name=['Foo'])), 1)
         self.assertFalse(zcuf.searchUsers(name=('Zope',)))
         self.assertTrue(zcuf.searchUsers(name=('Foo',)))
-        self.assertTrue(len(zcuf.searchUsers(name=('Foo',))) == 1)
+        self.assertEqual(len(zcuf.searchUsers(name=('Foo',))), 1)
 
         # Search for more ids or names.
         self.assertTrue(zcuf.searchUsers(id=['FOO', 'BAR', 'ZOPE']))
-        self.assertTrue(len(zcuf.searchUsers(id=['FOO', 'BAR', 'ZOPE'])) == 1)
+        self.assertEqual(len(zcuf.searchUsers(id=['FOO', 'BAR', 'ZOPE'])), 1)
         self.assertTrue(zcuf.searchUsers(name=('Foo', 'Bar', 'Zope')))
         expected = zcuf.searchUsers(name=('Foo', 'Bar', 'Zope'))
-        self.assertTrue(len(expected) == 1)
+        self.assertEqual(len(expected), 1)
 
         # Activate the bar plugin and try again.
         plugins.activatePlugin(IUserEnumerationPlugin, 'bar')
-        self.assertTrue(len(zcuf.searchUsers(id=['FOO', 'BAR', 'ZOPE'])) == 2)
+        self.assertEqual(len(zcuf.searchUsers(id=['FOO', 'BAR', 'ZOPE'])), 2)
         expected = zcuf.searchUsers(name=('Foo', 'Bar', 'Zope'))
-        self.assertTrue(len(expected) == 2)
+        self.assertEqual(len(expected), 2)
 
     def test_searchGroups(self):
 
@@ -2320,7 +2330,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
         plugins.activatePlugin(IGroupEnumerationPlugin, 'foobar')
 
         self.assertFalse(zcuf.searchPrincipals(id='zope'))
-        self.assertTrue(len(zcuf.searchPrincipals(id='foo')) == 2)
+        self.assertEqual(len(zcuf.searchPrincipals(id='foo')), 2)
 
     def test_searchPrincipalsWithSuperEnumerator(self):
 
@@ -2338,8 +2348,8 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
         plugins.activatePlugin(IGroupEnumerationPlugin, 's00per')
 
         self.assertFalse(zcuf.searchPrincipals(id='zope'))
-        self.assertTrue(len(zcuf.searchPrincipals(id='user')) == 1)
-        self.assertTrue(len(zcuf.searchPrincipals(id='group')) == 1)
+        self.assertEqual(len(zcuf.searchPrincipals(id='user')), 1)
+        self.assertEqual(len(zcuf.searchPrincipals(id='group')), 1)
 
     def test_searchPrincipals_transform(self):
 
@@ -2361,19 +2371,19 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
 
         self.assertFalse(zcuf.searchPrincipals(name='zope'))
         # Note that groups are never found by name, only by id.
-        self.assertTrue(len(zcuf.searchPrincipals(name='foo')) == 1)
+        self.assertEqual(len(zcuf.searchPrincipals(name='foo')), 1)
         user1 = zcuf.searchPrincipals(name='foo')[0]
         self.assertEqual(user1['principal_type'], 'user')
         self.assertEqual(user1['id'], 'foo')
         self.assertEqual(user1['login'], 'foo')
 
         # Search for mixed case.
-        self.assertTrue(len(zcuf.searchPrincipals(name='Foo')) == 1)
+        self.assertEqual(len(zcuf.searchPrincipals(name='Foo')), 1)
         user2 = zcuf.searchPrincipals(name='Foo')[0]
         self.assertEqual(user1, user2)
 
         # Search for upper case.
-        self.assertTrue(len(zcuf.searchPrincipals(name='FOO')) == 1)
+        self.assertEqual(len(zcuf.searchPrincipals(name='FOO')), 1)
         user3 = zcuf.searchPrincipals(name='FOO')[0]
         self.assertEqual(user1, user3)
 
@@ -2516,7 +2526,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
         # Since no challengers are in play, we end up calling
         # response._unauthorized(), which sets '.challenger' on
         # response
-        self.assertTrue(isinstance(response.challenger, FauxResponse))
+        self.assertIsInstance(response.challenger, FauxResponse)
 
     def test_challenge(self):
         from ..interfaces.plugins import IChallengePlugin
@@ -2539,7 +2549,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
         # PluggableAuthService._unauthorized(), which allows the
         # challengers to play. DummyChallenger sets '.challenger' on
         # response
-        self.assertTrue(isinstance(response.challenger, DummyChallenger))
+        self.assertIsInstance(response.challenger, DummyChallenger)
 
     def test_daisy_chain_challenge(self):
         # make sure that nested PASes each get a chance to challenge a
@@ -2582,7 +2592,7 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
         # PluggableAuthService._unauthorized(), which allows the
         # challengers to play. DummyChallenger sets '.challenger' on
         # response
-        self.assertTrue(isinstance(response.challenger, DummyChallenger))
+        self.assertIsInstance(response.challenger, DummyChallenger)
 
     def test_challenge_multi_protocols(self):
         from ..interfaces.plugins import IChallengePlugin
@@ -2671,13 +2681,13 @@ class PluggableAuthServiceTests(unittest.TestCase, IUserFolder_conformance,
         request['login'] = 'foo'
         request['HTTP_REFERER'] = ''
         extracted = creds_store.extractCredentials(request)
-        self.assertFalse(len(extracted.keys()) == 0)
+        self.assertNotEqual(len(extracted.keys()), 0)
 
         # Now call the logout method - the credentials should go away
         newSecurityManager(None, FauxUser('foo', 'foo'))
         zcuf.logout(request)
         extracted = creds_store.extractCredentials(request)
-        self.assertTrue(len(extracted.keys()) == 0)
+        self.assertEqual(len(extracted.keys()), 0)
 
     def test_applyTransform(self):
         zcuf = self._makeOne()

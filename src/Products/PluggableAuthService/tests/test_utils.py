@@ -119,7 +119,7 @@ class Test_getCSRFToken(unittest.TestCase):
     def test_wo_token_in_request(self):
         request = _makeRequestWSession()
         token = self._callFUT(request)
-        self.assertTrue(isinstance(token, str))
+        self.assertIsInstance(token, str)
         self.assertFalse(set(token) - set('0123456789abcdef'))
 
     def test_w_token_in_request(self):
@@ -210,7 +210,7 @@ class CSRFTokenTests(unittest.TestCase):
         request = _makeRequestWSession()
         token = self._makeOne(request=request)
         value = token.token()
-        self.assertTrue(isinstance(value, str))
+        self.assertIsInstance(value, str)
         self.assertFalse(set(value) - set('0123456789abcdef'))
 
     def test_w_token_in_request(self):

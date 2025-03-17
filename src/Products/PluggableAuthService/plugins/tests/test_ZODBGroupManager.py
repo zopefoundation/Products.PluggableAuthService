@@ -270,7 +270,7 @@ class ZODBGroupManagerTests(unittest.TestCase,
         self.assertEqual(len(info_list), len(ID_LIST))
 
         for info in info_list:
-            self.assertTrue(info['id'] in ID_LIST)
+            self.assertIn(info['id'], ID_LIST)
 
         SUBSET = ID_LIST[:3]
 
@@ -279,7 +279,7 @@ class ZODBGroupManagerTests(unittest.TestCase,
         self.assertEqual(len(info_list), len(SUBSET))
 
         for info in info_list:
-            self.assertTrue(info['id'] in SUBSET)
+            self.assertIn(info['id'], SUBSET)
 
     def test_enumerateGroups_prefixed(self):
         from ...tests.test_PluggableAuthService import FauxRoot
@@ -300,7 +300,7 @@ class ZODBGroupManagerTests(unittest.TestCase,
         self.assertEqual(len(info_list), len(ID_LIST))
 
         for info in info_list:
-            self.assertTrue(info['id'] in PRE_LIST)
+            self.assertIn(info['id'], PRE_LIST)
 
     def test_addPrincipalToGroup_w_prefix(self):
         zgm = self._makeOne()
