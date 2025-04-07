@@ -13,9 +13,6 @@
 ##############################################################################
 import unittest
 
-from zope.component import adapter
-from zope.component import provideHandler
-
 from ...tests.conformance import ICredentialsResetPlugin_conformance
 from ...tests.conformance import ICredentialsUpdatePlugin_conformance
 from ...tests.conformance import ILoginPasswordHostExtractionPlugin_conformance
