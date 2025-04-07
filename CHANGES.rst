@@ -4,6 +4,11 @@ Change Log
 4.0 (unreleased)
 ----------------
 
+- Add property to clear session data at login boundary to the session auth
+  helper. This property defaults to ``False`` to preserve the current behavior.
+  Clearing session data during login helps mitigate session fixation attacks:
+  https://owasp.org/www-community/attacks/Session_fixation
+
 - Add support for Python 3.13.
 
 - Drop support for Python 3.8.

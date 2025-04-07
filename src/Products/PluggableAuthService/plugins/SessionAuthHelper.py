@@ -16,6 +16,7 @@
 
 from AccessControl.class_init import InitializeClass
 from AccessControl.SecurityInfo import ClassSecurityInfo
+from OFS.PropertyManager import PropertyManager
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from zope.interface import Interface
 
@@ -52,6 +53,15 @@ class SessionAuthHelper(BasePlugin):
     meta_type = 'Session Auth Helper'
     zmi_icon = 'fas fa-fingerprint'
     security = ClassSecurityInfo()
+    clear_session_on_login = False
+
+    _properties = (
+        PropertyManager._properties +
+        ({'id': 'clear_session_on_login',
+          'label': 'Clear session data at login boundary',
+          'type': 'boolean',
+          'mode': 'rw'},)
+    )
 
     def __init__(self, id, title=None):
         self._setId(id)
@@ -77,8 +87,10 @@ class SessionAuthHelper(BasePlugin):
                 name, password = login_pw
                 creds['login'] = name
                 creds['password'] = password
-                request.SESSION.set('__ac_name', name)
-                request.SESSION.set('__ac_password', password)
+
+                # Put the newly discovered credentials into the user session
+                self.updateCredentials(
+                    request, request.RESPONSE, name, password)
 
         if creds:
             creds['remote_host'] = request.get('REMOTE_HOST', '')
@@ -93,7 +105,11 @@ class SessionAuthHelper(BasePlugin):
     @security.private
     def updateCredentials(self, request, response, login, new_password):
         """ Respond to change of credentials. """
-        request.SESSION.set('__ac_name', login)
+        if request.SESSION.get('__ac_name') != login:
+            # This is a new session
+            if self.clear_session_on_login:
+                request.SESSION.clear()
+            request.SESSION.set('__ac_name', login)
         request.SESSION.set('__ac_password', new_password)
 
     @security.private
