@@ -238,6 +238,8 @@ class RegexFilterTests(unittest.TestCase):
         self.assertFalse(filter('miss'))
 
 
+@unittest.skipUnless(IP,
+                     'Install IPy or the ip_range extra to enable IP filters.')
 class IPFilterTests(unittest.TestCase):
 
     def _getTargetClass(self):
@@ -278,9 +280,7 @@ def test_suite():
              loadTestsFromTestCase(EqualsFilterTests),
              loadTestsFromTestCase(StartsWithFilterTests),
              loadTestsFromTestCase(EndsWithFilterTests),
-             loadTestsFromTestCase(RegexFilterTests))
-
-    if IP is not None:
-        tests += (loadTestsFromTestCase(IPFilterTests), )
+             loadTestsFromTestCase(RegexFilterTests),
+             loadTestsFromTestCase(IPFilterTests))
 
     return unittest.TestSuite(tests)

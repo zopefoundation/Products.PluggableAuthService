@@ -255,6 +255,12 @@ class DummyNotCompetentPlugin(DummyPlugin):
         return self.type
 
 
+class FauxSession(dict):
+
+    def set(self, name, value):
+        return self.__setitem__(name, value)
+
+
 class FauxRequest:
 
     form = property(lambda self: self)
@@ -265,6 +271,7 @@ class FauxRequest:
         self._dict = {}
         self._dict.update(kw)
         self._held = []
+        self.SESSION = FauxSession()
 
     def get(self, key, default=None):
 
@@ -275,7 +282,11 @@ class FauxRequest:
 
     def _authUserPW(self):
         form = self.get('form')
-        return (form.get('login'), form.get('password'))
+        login, pw = (form.get('login'), form.get('password'))
+        if login and pw:
+            return (login, pw)
+
+        return None
 
     def __getitem__(self, key):
 

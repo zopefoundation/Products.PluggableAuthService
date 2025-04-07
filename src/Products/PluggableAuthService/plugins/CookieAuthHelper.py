@@ -30,8 +30,10 @@ from Acquisition import aq_parent
 from OFS.Folder import Folder
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from Products.PageTemplates.ZopePageTemplate import ZopePageTemplate
+from zope.event import notify
 from zope.interface import Interface
 
+from ..events import UserSessionStarted
 from ..interfaces.plugins import IChallengePlugin
 from ..interfaces.plugins import ICredentialsResetPlugin
 from ..interfaces.plugins import ICredentialsUpdatePlugin
@@ -114,37 +116,44 @@ class CookieAuthHelper(Folder, BasePlugin):
         if cookie_name:
             self.cookie_name = cookie_name
 
+    def _getCookieData(self, request):
+        cookie_creds = {}
+        cookie = request.get(self.cookie_name, '')
+
+        if cookie and cookie != 'deleted':
+            try:
+                cookie_val = decode_cookie(cookie)
+            except Error:
+                # Cookie is in a different format, so it is not ours
+                return cookie_creds
+
+            try:
+                login, password = cookie_val.split(':')
+            except ValueError:
+                # Cookie is in a different format, so it is not ours
+                return cookie_creds
+
+            try:
+                cookie_creds['login'] = decode_hex(login)
+                cookie_creds['password'] = decode_hex(password)
+            except (Error, TypeError):
+                # Cookie is in a different format, so it is not ours
+                return cookie_creds
+
+        return cookie_creds
+
     @security.private
     def extractCredentials(self, request):
         """ Extract credentials from cookie or 'request'. """
         creds = {}
-        cookie = request.get(self.cookie_name, '')
         # Look in the request.form for the names coming from the login form
         login = request.form.get('__ac_name', '')
 
         if login and '__ac_password' in request.form:
             creds['login'] = login
             creds['password'] = request.form.get('__ac_password', '')
-
-        elif cookie and cookie != 'deleted':
-            try:
-                cookie_val = decode_cookie(cookie)
-            except Error:
-                # Cookie is in a different format, so it is not ours
-                return creds
-
-            try:
-                login, password = cookie_val.split(':')
-            except ValueError:
-                # Cookie is in a different format, so it is not ours
-                return creds
-
-            try:
-                creds['login'] = decode_hex(login)
-                creds['password'] = decode_hex(password)
-            except (Error, TypeError):
-                # Cookie is in a different format, so it is not ours
-                return {}
+        else:
+            creds = self._getCookieData(request)
 
         if creds:
             creds['remote_host'] = request.get('REMOTE_HOST', '')
@@ -173,11 +182,15 @@ class CookieAuthHelper(Folder, BasePlugin):
     @security.private
     def updateCredentials(self, request, response, login, new_password):
         """ Respond to change of credentials (NOOP for basic auth). """
+        old_creds = self._getCookieData(request)
         cookie_val = self.get_cookie_value(login, new_password)
         cookie_secure = self.cookie_same_site == 'None' or self.cookie_secure
         response.setCookie(self.cookie_name, quote(cookie_val),
                            path='/', same_site=self.cookie_same_site,
                            secure=cookie_secure)
+        if old_creds.get('login') != login:
+            # Only notify if cookie is new or the login changed
+            notify(UserSessionStarted(login))
 
     @security.private
     def resetCredentials(self, request, response):

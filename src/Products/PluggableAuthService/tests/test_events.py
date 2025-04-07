@@ -89,6 +89,78 @@ class PrincipalDeletedTests(unittest.TestCase, ConformsToIPASEvent):
         verifyObject(IPrincipalDeletedEvent, self._makeOne())
 
 
+class UserLoggedInTests(unittest.TestCase, ConformsToIPASEvent):
+
+    def _getTargetClass(self):
+        from ..events import UserLoggedIn
+        return UserLoggedIn
+
+    def _makeOne(self, principal=None):
+        if principal is None:
+            principal = DummyPrincipal()
+        return self._getTargetClass()(principal)
+
+    def test_class_conforms_to_IUserLoggedInEvent(self):
+        from zope.interface.verify import verifyClass
+
+        from ..interfaces.events import IUserLoggedInEvent
+        verifyClass(IUserLoggedInEvent, self._getTargetClass())
+
+    def test_instance_conforms_to_IUserLoggedInEvent(self):
+        from zope.interface.verify import verifyObject
+
+        from ..interfaces.events import IUserLoggedInEvent
+        verifyObject(IUserLoggedInEvent, self._makeOne())
+
+
+class UserSessionStartedTests(unittest.TestCase, ConformsToIPASEvent):
+
+    def _getTargetClass(self):
+        from ..events import UserSessionStarted
+        return UserSessionStarted
+
+    def _makeOne(self, principal=None):
+        if principal is None:
+            principal = DummyPrincipal()
+        return self._getTargetClass()(principal)
+
+    def test_class_conforms_to_IUserSessionStartedEvent(self):
+        from zope.interface.verify import verifyClass
+
+        from ..interfaces.events import IUserSessionStartedEvent
+        verifyClass(IUserSessionStartedEvent, self._getTargetClass())
+
+    def test_instance_conforms_to_IUserSessionStartedEvent(self):
+        from zope.interface.verify import verifyObject
+
+        from ..interfaces.events import IUserSessionStartedEvent
+        verifyObject(IUserSessionStartedEvent, self._makeOne())
+
+
+class UserLoggedOutTests(unittest.TestCase, ConformsToIPASEvent):
+
+    def _getTargetClass(self):
+        from ..events import UserLoggedOut
+        return UserLoggedOut
+
+    def _makeOne(self, principal=None):
+        if principal is None:
+            principal = DummyPrincipal()
+        return self._getTargetClass()(principal)
+
+    def test_class_conforms_to_IUserLoggedOutEvent(self):
+        from zope.interface.verify import verifyClass
+
+        from ..interfaces.events import IUserLoggedOutEvent
+        verifyClass(IUserLoggedOutEvent, self._getTargetClass())
+
+    def test_instance_conforms_to_IUserLoggedOutEvent(self):
+        from zope.interface.verify import verifyObject
+
+        from ..interfaces.events import IUserLoggedOutEvent
+        verifyObject(IUserLoggedOutEvent, self._makeOne())
+
+
 class CredentialsUpdatedTests(unittest.TestCase, ConformsToIPASEvent):
 
     def _getTargetClass(self):

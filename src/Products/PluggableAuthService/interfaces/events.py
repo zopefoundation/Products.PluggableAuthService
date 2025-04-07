@@ -31,6 +31,11 @@ class IUserLoggedInEvent(IPASEvent):
     """
 
 
+class IUserSessionStartedEvent(IUserLoggedInEvent):
+    """ A user session has been started.
+    """
+
+
 class IUserLoggedOutEvent(IPASEvent):
     """ A user logged out.
     """

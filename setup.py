@@ -29,6 +29,7 @@ setup(
     version=_package_doc('version.txt').strip(),
     description='Pluggable Zope authentication / authorization framework',
     long_description=README,
+    long_description_content_type='text/x-rst',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Framework :: Plone',
