@@ -120,25 +120,27 @@ class CookieAuthHelper(Folder, BasePlugin):
         cookie_creds = {}
         cookie = request.get(self.cookie_name, '')
 
-        if cookie and cookie != 'deleted':
-            try:
-                cookie_val = decode_cookie(cookie)
-            except Error:
-                # Cookie is in a different format, so it is not ours
-                return cookie_creds
+        if not cookie or cookie == 'deleted':
+            return cookie_creds
 
-            try:
-                login, password = cookie_val.split(':')
-            except ValueError:
-                # Cookie is in a different format, so it is not ours
-                return cookie_creds
+        try:
+            cookie_val = decode_cookie(cookie)
+        except Error:
+            # Cookie is in a different format, so it is not ours
+            return cookie_creds
 
-            try:
-                cookie_creds['login'] = decode_hex(login)
-                cookie_creds['password'] = decode_hex(password)
-            except (Error, TypeError):
-                # Cookie is in a different format, so it is not ours
-                return cookie_creds
+        try:
+            login, password = cookie_val.split(':')
+        except ValueError:
+            # Cookie is in a different format, so it is not ours
+            return cookie_creds
+
+        try:
+            cookie_creds['login'] = decode_hex(login)
+            cookie_creds['password'] = decode_hex(password)
+        except (Error, TypeError):
+            # Cookie is in a different format, so it is not ours
+            return cookie_creds
 
         return cookie_creds
 
