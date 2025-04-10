@@ -26,6 +26,9 @@ from .interfaces.events import IPrincipalCreatedEvent
 from .interfaces.events import IPrincipalDeletedEvent
 from .interfaces.events import IPrincipalRemovedFromGroupEvent
 from .interfaces.events import IPropertiesUpdatedEvent
+from .interfaces.events import IUserLoggedInEvent
+from .interfaces.events import IUserLoggedOutEvent
+from .interfaces.events import IUserSessionStartedEvent
 
 
 @implementer(IPASEvent)
@@ -59,6 +62,21 @@ class PrincipalCreated(PASEvent):
 
 @implementer(IPrincipalDeletedEvent)
 class PrincipalDeleted(PASEvent):
+    pass
+
+
+@implementer(IUserLoggedInEvent)
+class UserLoggedIn(PASEvent):
+    pass
+
+
+@implementer(IUserSessionStartedEvent)
+class UserSessionStarted(UserLoggedIn):
+    pass
+
+
+@implementer(IUserLoggedOutEvent)
+class UserLoggedOut(PASEvent):
     pass
 
 

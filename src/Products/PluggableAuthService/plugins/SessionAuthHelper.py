@@ -18,8 +18,10 @@ from AccessControl.class_init import InitializeClass
 from AccessControl.SecurityInfo import ClassSecurityInfo
 from OFS.PropertyManager import PropertyManager
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from zope.event import notify
 from zope.interface import Interface
 
+from ..events import UserSessionStarted
 from ..interfaces.plugins import ICredentialsResetPlugin
 from ..interfaces.plugins import ICredentialsUpdatePlugin
 from ..interfaces.plugins import ILoginPasswordHostExtractionPlugin
@@ -106,7 +108,8 @@ class SessionAuthHelper(BasePlugin):
     def updateCredentials(self, request, response, login, new_password):
         """ Respond to change of credentials. """
         if request.SESSION.get('__ac_name') != login:
-            # This is a new session
+            # This is a new session, notify.
+            notify(UserSessionStarted(login))
             if self.clear_session_on_login:
                 request.SESSION.clear()
             request.SESSION.set('__ac_name', login)

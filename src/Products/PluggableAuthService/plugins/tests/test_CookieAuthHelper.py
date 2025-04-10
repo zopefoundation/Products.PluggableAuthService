@@ -15,6 +15,10 @@ import codecs
 import unittest
 from base64 import encodebytes
 
+from zope.component import adapter
+from zope.component import provideHandler
+
+from ...interfaces.events import IUserSessionStartedEvent
 from ...interfaces.plugins import IChallengePlugin
 from ...tests import pastc
 from ...tests.conformance import IChallengePlugin_conformance
@@ -26,6 +30,25 @@ from ...tests.test_PluggableAuthService import FauxObject
 from ...tests.test_PluggableAuthService import FauxRequest
 from ...tests.test_PluggableAuthService import FauxResponse
 from ...tests.test_PluggableAuthService import FauxRoot
+
+
+EVENTS = []
+
+
+def _getTestEvents():
+    global EVENTS
+    return EVENTS
+
+
+def _resetTestEvents():
+    global EVENTS
+    EVENTS = []
+
+
+@adapter(IUserSessionStartedEvent)
+def userSessionStartedHandler(event):
+    events = _getTestEvents()
+    events.append(event)
 
 
 class FauxSettableRequest(FauxRequest):
@@ -83,6 +106,9 @@ class CookieAuthHelperTests(unittest.TestCase,
         object = FauxObject('object').__of__(folder)
 
         return rc, root, folder, object
+
+    def afterSetUp(self):
+        _resetTestEvents()
 
     def test_extractCredentials_no_creds(self):
 
@@ -256,6 +282,7 @@ class CookieAuthHelperTests(unittest.TestCase,
         self.assertEqual(helper.extractCredentials(request), {})
 
     def test_updateCredentials(self):
+        provideHandler(userSessionStartedHandler)
         helper = self._makeOne()
         response = FauxCookieResponse()
         request = FauxSettableRequest(RESPONSE=response)
@@ -273,6 +300,11 @@ class CookieAuthHelperTests(unittest.TestCase,
         cookie_attrs = response.cookie_attributes[(helper.cookie_name, '/')]
         self.assertEqual(cookie_attrs['same_site'], 'Lax')
         self.assertFalse(cookie_attrs['secure'])
+        self.assertEqual(len(_getTestEvents()), 1)
+
+        # If the login does not change no event is fired.
+        helper.updateCredentials(request, response, 'foo', 'new_pass')
+        self.assertEqual(len(_getTestEvents()), 1)
 
         # Setting the cookie same site value to "None" forces secure flag
         helper.cookie_same_site = 'None'
@@ -280,6 +312,7 @@ class CookieAuthHelperTests(unittest.TestCase,
         cookie_attrs = response.cookie_attributes[(helper.cookie_name, '/')]
         self.assertEqual(cookie_attrs['same_site'], 'None')
         self.assertTrue(cookie_attrs['secure'])
+        self.assertEqual(len(_getTestEvents()), 2)
 
         # Setting the Secure flag manually
         helper.cookie_same_site = 'Lax'
@@ -288,6 +321,7 @@ class CookieAuthHelperTests(unittest.TestCase,
         cookie_attrs = response.cookie_attributes[(helper.cookie_name, '/')]
         self.assertEqual(cookie_attrs['same_site'], 'Lax')
         self.assertTrue(cookie_attrs['secure'])
+        self.assertEqual(len(_getTestEvents()), 3)
 
 
 class CookieAuthHelperIntegrationTests(pastc.PASTestCase):

@@ -4,6 +4,15 @@ Change Log
 4.0 (unreleased)
 ----------------
 
+- Fire ``UserSessionStarted`` event when a new cookie-based session starts.
+
+- Fire ``UserSessionStarted`` event when a new user session starts.
+
+- Fire ``UserLoggedOut`` event if the credentials are reset in the user folder.
+
+- Define new events: ``UserLoggedIn``, ``UserLoggedOut`` and
+  ``UserSessionStarted``.
+
 - Add property to clear session data at login boundary to the session auth
   helper. This property defaults to ``False`` to preserve the current behavior.
   Clearing session data during login helps mitigate session fixation attacks:

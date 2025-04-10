@@ -42,6 +42,7 @@ from Products.PluginRegistry.PluginRegistry import PluginRegistry
 from Products.StandardCacheManagers.RAMCacheManager import RAMCacheManager
 
 from .events import PrincipalCreated
+from .events import UserLoggedOut
 from .interfaces.authservice import IPluggableAuthService
 from .interfaces.authservice import _noroles
 from .interfaces.plugins import IAnonymousUserFactoryPlugin
@@ -1175,6 +1176,8 @@ class PluggableAuthService(Folder, Cacheable):
 
             for resetter_id, resetter in cred_resetters:
                 resetter.resetCredentials(request, response)
+
+            notify(UserLoggedOut(user))
 
     @security.protected(ManageUsers)
     def updateLoginName(self, user_id, login_name):
