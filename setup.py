@@ -1,6 +1,5 @@
 import os
 
-from setuptools import find_packages
 from setuptools import setup
 
 
@@ -37,11 +36,11 @@ setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Zope Public License',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
         'Programming Language :: Python :: 3.12',
         'Programming Language :: Python :: 3.13',
+        'Programming Language :: Python :: 3.14',
         'Topic :: Software Development',
         'Topic :: System :: Systems Administration'
         ' :: Authentication/Directory',
@@ -59,14 +58,8 @@ setup(
                     'Products.PluggableAuthService'),
     },
     license='ZPL-2.1 (http://www.zope.org/Resources/License/ZPL-2.1)',
-    packages=find_packages('src'),
-    package_dir={'': 'src'},
-    include_package_data=True,
-    namespace_packages=['Products'],
-    zip_safe=False,
-    python_requires='>=3.9',
+    python_requires='>=3.10',
     install_requires=[
-        'setuptools',
         'Zope >= 5',
         'AccessControl >= 4.0a1',
         'Products.PluginRegistry >= 1.6',
@@ -76,7 +69,7 @@ setup(
     ],
     extras_require={
         'ip_range': ['IPy'],
-        'docs': ['Sphinx', 'repoze.sphinx.autointerface'],
+        'docs': ['Sphinx', 'repoze.sphinx.autointerface', 'furo'],
     },
     entry_points="""
     [zope2.initialize]

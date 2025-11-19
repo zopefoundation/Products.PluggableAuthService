@@ -11,24 +11,26 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
+import datetime
 import os
+import sys
+from importlib.metadata import distribution
 
 
-parent = os.path.dirname(os.path.dirname(__file__))
-parent_dir = os.path.abspath(parent)
-with open(os.path.join(parent_dir, 'version.txt')) as version_file:
-    pkg_version = version_file.read().strip()
+year = datetime.datetime.now().year
+sys.path.append(os.path.abspath('../src'))
+rqmt = distribution('Products.PluggableAuthService')
 
 # -- Project information -----------------------------------------------------
 
 project = 'Products.PluggableAuthService'
-copyright = '2004-2018 Zope Foundation and Contributors'
+copyright = f'2004-{year} Zope Foundation and Contributors'
 author = 'Zope Foundation and Contributors'
 
 # The short X.Y version
-version = pkg_version.replace('.dev0', '')
+version = '%s.%s' % tuple(rqmt.version.split('.')[:2])
 # The full version, including alpha/beta/rc tags
-release = pkg_version
+release = rqmt.version
 
 # -- General configuration ---------------------------------------------------
 
@@ -75,7 +77,7 @@ pygments_style = 'sphinx'
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'default'
+html_theme = 'furo'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
