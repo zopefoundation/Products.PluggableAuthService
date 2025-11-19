@@ -25,7 +25,7 @@ README = (README + _boundary + CHANGES)
 
 setup(
     name='Products.%s' % NAME,
-    version='4.1',
+    version='4.2.dev0',
     description='Pluggable Zope authentication / authorization framework',
     long_description=README,
     long_description_content_type='text/x-rst',
