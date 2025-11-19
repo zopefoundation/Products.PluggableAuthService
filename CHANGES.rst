@@ -1,8 +1,10 @@
 Change Log
 ==========
 
-4.1 (unreleased)
+4.1 (2025-11-19)
 ----------------
+
+- Fix release to include package data files.
 
 
 4.0 (2025-11-19)

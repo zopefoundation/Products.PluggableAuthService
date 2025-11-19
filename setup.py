@@ -25,7 +25,7 @@ README = (README + _boundary + CHANGES)
 
 setup(
     name='Products.%s' % NAME,
-    version=_package_doc('version.txt').strip(),
+    version='4.1',
     description='Pluggable Zope authentication / authorization framework',
     long_description=README,
     long_description_content_type='text/x-rst',
@@ -71,6 +71,7 @@ setup(
         'ip_range': ['IPy'],
         'docs': ['Sphinx', 'repoze.sphinx.autointerface', 'furo'],
     },
+    include_package_data=True,
     entry_points="""
     [zope2.initialize]
     Products.{} = Products.{}:initialize
