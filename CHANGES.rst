@@ -4,18 +4,16 @@ Change Log
 4.0 (unreleased)
 ----------------
 
+- Switch to PEP 420 native namespace.
+
+- Add support for Python 3.12, 3.13 and 3.14.
+
+- Drop support for Python 3.7, 3.8 and 3.9.
+
 - Add property to clear session data at login boundary to the session auth
   helper. This property defaults to ``False`` to preserve the current behavior.
   Clearing session data during login helps mitigate session fixation attacks:
   https://owasp.org/www-community/attacks/Session_fixation
-
-- Add support for Python 3.13.
-
-- Drop support for Python 3.8.
-
-- Add support for Python 3.12.
-
-- Drop support for Python 3.7.
 
 - Remove traces of long-deprecated 'Shared' roles support.
 
