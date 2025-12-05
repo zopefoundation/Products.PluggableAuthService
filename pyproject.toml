@@ -1,12 +1,62 @@
-# Generated from:
-# https://github.com/zopefoundation/meta/tree/master/config/zope-product
-
+# Generated with zope.meta (https://zopemeta.readthedocs.io/) from:
+# https://github.com/zopefoundation/meta/tree/master/src/zope/meta/zope-product
 [build-system]
 requires = [
     "setuptools >= 78.1.1,< 81",
     "wheel",
 ]
 build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "Products.PluggableAuthService"
+version = "4.2.dev0"
+description = "Pluggable Zope authentication / authorization framework"
+license = "ZPL-2.1"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Framework :: Plone",
+    "Framework :: Zope :: 5",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Software Development",
+    "Topic :: System :: Systems Administration :: Authentication/Directory",
+]
+dynamic = ["readme"]
+requires-python = ">=3.10"
+authors = [
+    {name = "Zope Foundation and contributors",email = "zope-cmf@zope.dev"},
+]
+maintainers = [
+    {name = "Plone Foundation and contributors",email = "zope-dev@zope.dev"},
+]
+dependencies = [
+    "Zope >= 5",
+    "AccessControl >= 4.0a1",
+    "Products.PluginRegistry >= 1.6",
+    "Products.GenericSetup >= 2.1.2",
+    "Products.Sessions",
+    "Products.StandardCacheManagers",
+]
+keywords = ["web", "application", "server", "zope"]
+
+[project.optional-dependencies]
+ip_range = ["IPy"]
+docs = [
+    "Sphinx",
+    "repoze.sphinx.autointerface",
+    "furo",
+]
+
+[project.urls]
+Documentation = "https://productspluggableauthservice.readthedocs.io"
+Source = "https://github.com/zopefoundation/Products.PluggableAuthService"
+Issues = "https://github.com/zopefoundation/Products.PluggableAuthService/issues"
 
 [tool.coverage.run]
 branch = true
@@ -30,3 +80,7 @@ exclude_lines = [
 
 [tool.coverage.html]
 directory = "parts/htmlcov"
+
+[tool.setuptools.dynamic]
+readme = {file = ["README.rst", "CHANGES.rst"]}
+

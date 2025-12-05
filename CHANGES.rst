@@ -4,6 +4,8 @@ Change Log
 4.2 (unreleased)
 ----------------
 
+- Move package metadata from setup.py to pyproject.toml.
+
 
 4.1 (2025-11-19)
 ----------------
