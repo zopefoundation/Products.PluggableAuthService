@@ -1,10 +1,10 @@
 Change Log
 ==========
 
-4.3 (unreleased)
-----------------
+4.2.1 (unreleased)
+------------------
 
-- Nothing changed yet.
+- Fix release.
 
 
 4.2 (2026-08-05)
