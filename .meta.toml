@@ -13,6 +13,9 @@ with-future-python = false
 with-macos = false
 with-free-threaded-python = false
 
+[pypi]
+trusted-publishing = true
+
 [coverage]
 fail-under = 90
 
