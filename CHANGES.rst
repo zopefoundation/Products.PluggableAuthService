@@ -4,6 +4,8 @@ Change Log
 4.2 (unreleased)
 ----------------
 
+- Fix tests in combination with Zope 6.2, where XML-RPC is disallowed by default.
+
 - Move package metadata from setup.py to pyproject.toml.
 
 

@@ -14,6 +14,7 @@
 """Unit tests for ChallengeProtocolChooser."""
 import io
 import unittest
+from contextlib import contextmanager
 
 import Testing.ZopeTestCase
 
@@ -38,6 +39,18 @@ XMLRPC_ACCESS_GRANTED = b"""\
 </params>
 </methodResponse>
 """ % XML_PREAMBLE
+
+
+@contextmanager
+def force_enable_xmlrpc():
+    # Since Zope 6.2, XML-RPC is disable by default.
+    # For some tests we want to enable it.
+    from App.config import _config
+
+    orig_xmlrpc = _config.enable_xmlrpc
+    _config.enable_xmlrpc = True
+    yield
+    _config.enable_xmlrpc = orig_xmlrpc
 
 
 class ChallengeProtocolChooser(unittest.TestCase,
@@ -244,21 +257,31 @@ class ChallengeProtocolChooserBasicAuthTests(
             request_method='GET', basic=self.basic_auth)
         self.assertStatus(response, b'HTTP/1.1 200 OK')
 
-    def test_XMLRPC_unauthorized(self):
-        # And a XML-RPC Request. Again, Anonymous user should be challenged
-        # with a 401 response status.
+    def test_XMLRPC_disabled(self):
+        # Since Zope 6.2, by default an XML-RPC Request is denied.
         response = self.publish(
             f'/{self.folder_name}', request_method='POST',
             env={'CONTENT_TYPE': 'text/xml; charset="utf-8"'},
             stdin=io.BytesIO(XMLRPC_CALL))
+        self.assertStatus(response, b'HTTP/1.1 400 Bad Request')
+
+    def test_XMLRPC_unauthorized(self):
+        # Allow XML-RPC Requests. Again, Anonymous user should be challenged
+        # with a 401 response status.
+        with force_enable_xmlrpc():
+            response = self.publish(
+                f'/{self.folder_name}', request_method='POST',
+                env={'CONTENT_TYPE': 'text/xml; charset="utf-8"'},
+                stdin=io.BytesIO(XMLRPC_CALL))
         self.assertStatus(response, b'HTTP/1.1 401 Unauthorized')
 
     def test_XMLRPC_authorized(self):
-        # And with valid credentials the reqeuest should succeed:
-        response = self.publish(
-            f'/{self.folder_name}', request_method='POST',
-            env={'CONTENT_TYPE': 'text/xml; charset="utf-8"'},
-            stdin=io.BytesIO(XMLRPC_CALL), basic=self.basic_auth)
+        # And with valid credentials the request should succeed:
+        with force_enable_xmlrpc():
+            response = self.publish(
+                f'/{self.folder_name}', request_method='POST',
+                env={'CONTENT_TYPE': 'text/xml; charset="utf-8"'},
+                stdin=io.BytesIO(XMLRPC_CALL), basic=self.basic_auth)
         self.assertStatus(response, b'HTTP/1.1 200 OK')
         self.assertEqual(
             response.getHeader('Content-Type'), 'text/xml; charset=utf-8')
@@ -296,12 +319,21 @@ class ChallengeProtocolChooserCookieAuthTests(
             request_method='GET')
         self.assertStatus(response, b'HTTP/1.1 302 Found')
 
-    def test_XMLRPC_unauthorized(self):
-        # And for a XML-RPC request:
+    def test_XMLRPC_disabled(self):
+        # Since Zope 6.2, by default an XML-RPC Request is denied.
         response = self.publish(
             f'/{self.folder_name}', request_method='POST',
             env={'CONTENT_TYPE': 'text/xml; charset="utf-8"'},
             stdin=io.BytesIO(XMLRPC_CALL))
+        self.assertStatus(response, b'HTTP/1.1 400 Bad Request')
+
+    def test_XMLRPC_unauthorized(self):
+        # Allow XML-RPC request and retry anonymous:
+        with force_enable_xmlrpc():
+            response = self.publish(
+                f'/{self.folder_name}', request_method='POST',
+                env={'CONTENT_TYPE': 'text/xml; charset="utf-8"'},
+                stdin=io.BytesIO(XMLRPC_CALL))
         self.assertStatus(response, b'HTTP/1.1 302 Found')
 
 
@@ -349,10 +381,20 @@ class ChallengeProtocolChooserCookieAuthTypeSnifferTests(
             request_method='GET')
         self.assertStatus(response, b'HTTP/1.1 401 Unauthorized')
 
-    def test_XMLRPC_unauthorized(self):
-        # And a XML-RPC request should also result in a 401 response status:
+    def test_XMLRPC_disabled(self):
+        # Since Zope 6.2, by default an XML-RPC Request is denied.
         response = self.publish(
             f'/{self.folder_name}', request_method='POST',
             env={'CONTENT_TYPE': 'text/xml; charset="utf-8"'},
             stdin=io.BytesIO(XMLRPC_CALL))
+        self.assertStatus(response, b'HTTP/1.1 400 Bad Request')
+
+    def test_XMLRPC_unauthorized(self):
+        # Allow XML-RPC request and retry anonymous.
+        # This should also result in a 401 response status:
+        with force_enable_xmlrpc():
+            response = self.publish(
+                f'/{self.folder_name}', request_method='POST',
+                env={'CONTENT_TYPE': 'text/xml; charset="utf-8"'},
+                stdin=io.BytesIO(XMLRPC_CALL))
         self.assertStatus(response, b'HTTP/1.1 401 Unauthorized')
