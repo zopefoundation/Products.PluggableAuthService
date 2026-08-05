@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-4.2 (unreleased)
+4.2 (2026-08-05)
 ----------------
 
 - Fix tests in combination with Zope 6.2, where XML-RPC is disallowed by default.
