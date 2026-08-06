@@ -4,7 +4,7 @@ Change Log
 4.2.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix XML-RPC tests to pass whether Zope enables XML-RPC or not.
 
 
 4.2.1 (2026-08-05)
