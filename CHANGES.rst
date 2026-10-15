@@ -4,7 +4,7 @@ Change Log
 4.3.0 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Drop support for Python 3.10.
 
 
 4.2.2 (2026-08-06)
