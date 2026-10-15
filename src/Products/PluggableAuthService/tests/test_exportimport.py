@@ -146,7 +146,7 @@ class Test_exportPAS(_TestBase):
         self.assertEqual(filename, 'PAS/.objects')
         self.assertEqual(content_type, 'text/comma-separated-values')
 
-        objects = [x for x in reader(StringIO(text))]
+        objects = [*reader(StringIO(text))]
         self.assertEqual(len(objects), 2)
 
         object_id, type_name = objects[0]

@@ -132,7 +132,7 @@ class ScriptablePlugin(Folder, BasePlugin):
         for interface in interfaces:
             new_interfaces.append(plugins._getInterfaceFromName(interface))
 
-        klass_interfaces = [x for x in implementedBy(ScriptablePlugin)]
+        klass_interfaces = [*implementedBy(ScriptablePlugin)]
         directlyProvides(self, *(klass_interfaces + new_interfaces))
 
         if RESPONSE is not None:

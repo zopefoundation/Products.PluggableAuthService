@@ -6,7 +6,7 @@ Plugin Types
 PluggableAuthService defines the following plugin types:
 
   - Authentication plugins identify the user based on data in the request.
-  
+
     - Each PluggableAuthService must contain at least one authentication
       plugin.
 
