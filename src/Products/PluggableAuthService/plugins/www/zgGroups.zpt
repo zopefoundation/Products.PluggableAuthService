@@ -12,7 +12,7 @@
   <h3>Current Groups <a href="?adding=1">(Add a group)</a></h3>
 
   <form action="." method="POST">
-    <input type="hidden" name="csrf_token" 
+    <input type="hidden" name="csrf_token"
       tal:attributes="value context/@@csrf_token/token" />
     <table class="table table-sm table-striped table-hover mt-4">
       <thead>
@@ -52,7 +52,7 @@
     </table>
     <div class="form-group form-inline zmi-controls">
       <input type="hidden" name="group_ids:list:default" value="" />
-      <input type="submit" name="manage_removeGroups:method" 
+      <input type="submit" name="manage_removeGroups:method"
         class="btn btn-primary" value=" Remove Groups " />
     </div>
   </form>
@@ -98,7 +98,7 @@
       title info/title;
       description info/description;">
       <h3 class="text-muted py-3">
-        Update Group: 
+        Update Group:
         <span tal:replace="group_id">GROUP_ID</span>
         <a href="manage_groups?group_id=group_id&amp;assign=1"
           tal:define="url here/absolute_url;
@@ -140,7 +140,7 @@
   <div tal:condition="assigning" title="Assign a Group">
     <div tal:define="group_id request/group_id;
       search_id request/search_id | nothing;">
-      <h3 class="text-muted py-3">Assign Group: 
+      <h3 class="text-muted py-3">Assign Group:
         <span tal:replace="group_id">GROUP_ID</span>
         <a href="manage_groups?group_id=group_id"
             tal:define="url here/absolute_url"
@@ -157,8 +157,8 @@
         <div class="form-row align-items-center py-4 px-2">
           <div class="input-group">
             <input class="col-10 form-control"
-              placeholder="Enter Principal ID" 
-              type="text" name="search_id" value="" 
+              placeholder="Enter Principal ID"
+              type="text" name="search_id" value=""
               tal:attributes="value search_id" />
             <input type="submit" class="col-2 btn btn-primary zmi-patch" value=" Search " />
           </div>

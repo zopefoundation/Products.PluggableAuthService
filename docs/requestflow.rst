@@ -20,7 +20,7 @@ Request flow
         else:
             user.setAuthenticationSource( id )
             break
-        
+
     else:
         user = self.createAnonymousUser()
 
