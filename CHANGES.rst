@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-4.2.3 (unreleased)
+4.3.0 (unreleased)
 ------------------
 
 - Nothing changed yet.
