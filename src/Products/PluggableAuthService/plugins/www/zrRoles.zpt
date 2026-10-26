@@ -58,7 +58,7 @@
 
     <div class="form-group form-inline zmi-controls">
       <input type="hidden" name="role_ids:list:default" value="" />
-      <input type="submit" name="manage_removeRoles:method" 
+      <input type="submit" name="manage_removeRoles:method"
         class="btn btn-primary" value=" Remove Roles " />
     </div>
   </form>
@@ -102,7 +102,7 @@
       info python:here.getRoleInfo(role_id);
       title info/title;
       description info/description;">
-      <h3 class="text-muted py-3">Update Role: 
+      <h3 class="text-muted py-3">Update Role:
         <span tal:replace="role_id">ROLE_ID</span>
         <a href="manage_roles?role_id=role_id&amp;assign=1"
             tal:define="url here/absolute_url;
@@ -144,7 +144,7 @@
   <div tal:condition="assigning" title="Assign a Role">
     <div tal:define="role_id request/role_id;
       search_id request/search_id | nothing;">
-      <h3 class="text-muted py-2">Assign Role: 
+      <h3 class="text-muted py-2">Assign Role:
         <span tal:replace="role_id">ROLE_ID</span>
         <a href="manage_roles?role_id=role_id"
             tal:define="url here/absolute_url"
@@ -161,8 +161,8 @@
         <div class="form-row align-items-center py-4 px-2">
           <div class="input-group">
             <input class="col-10 form-control"
-              placeholder="Enter Principal ID" 
-              type="text" name="search_id" value="" 
+              placeholder="Enter Principal ID"
+              type="text" name="search_id" value=""
               tal:attributes="value search_id" />
             <input type="submit" class="col-2 btn btn-primary zmi-patch" value=" Search " />
           </div>

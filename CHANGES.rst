@@ -1,10 +1,12 @@
 Change Log
 ==========
 
-4.2.3 (unreleased)
+4.3.0 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add support for Python 3.15.
+
+- Drop support for Python 3.10.
 
 
 4.2.2 (2026-08-06)
