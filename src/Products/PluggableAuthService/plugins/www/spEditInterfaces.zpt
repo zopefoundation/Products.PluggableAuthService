@@ -39,4 +39,3 @@ Choose the functionality this Scriptable Plugin will perform.
 </main>
 
 <h1 tal:replace="structure here/manage_page_footer">Footer</h1>
-

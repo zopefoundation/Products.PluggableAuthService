@@ -21,19 +21,19 @@ ZMI view, which shows which plugins have stored values, how many values
 are stored, an approximation of the memory consumption for the cached
 data, and how often the data has been retrieved from cache.
 
-The Statistics view also provides an easy way to summarily invalidate 
+The Statistics view also provides an easy way to summarily invalidate
 cached values if needed. However, cache invalidation should be handled
 by the plugins itself if it is possible.
 
 The PluggableAuthService itself is also cacheable this way. Caching PAS
 itself is the easiest way to achieve caching. In PAS, the _findUsers and
-_verifyUser methods, being a suitably central spot for caching, have 
+_verifyUser methods, being a suitably central spot for caching, have
 been enhanced to use the RAM Cache Manager if so configured.
 
 
 How does a plugin programmer use it?
 ------------------------------------
-Due to the pluggable (and thus infinitely variable) nature of the 
+Due to the pluggable (and thus infinitely variable) nature of the
 PluggableAuthService it is up to the plugin developer to decide what to
 cache and how to do so. Some of the built-in plugins provide a sample
 implementation by caching certain methods' return values and invalidating
@@ -42,16 +42,16 @@ to enable cacheability at the plugin level:
 
     - Add the Cacheable mix-in class to the list of classes your plugin
       subclasses from
-    
-    - Determine which method calls should have their return values cached, 
+
+    - Determine which method calls should have their return values cached,
       and which method calls affect the return value of the method that is
       being cached and thus should invalidate the cache
-    
+
     - In the cached method, add code to try and look up the return value in
       the cache first, and only perform the computation if the cache does
       not have the desired data. At the end of computing the return value,
       add it to the cache
-    
+
     - Add cache invalidation to those methods deemed to affect the cached
       method's return value.
 
@@ -101,7 +101,7 @@ as the caching key for information returned from the retrieveData method.
 
 This example also shows how, due to the way the built-in Zope caching
 framework handles cached data, it is not possible to invalidate specific
-entries, such as the value for one specific view_name/key combination. 
+entries, such as the value for one specific view_name/key combination.
 All cached records for a specific view_name are invalidated at once.
 
 It must be kept in mind that it is very hard if not impossible to reach
@@ -109,12 +109,12 @@ a state where the cache is 100% synchronized with the live data in
 those situations where information is retrieved and manipulated in more
 than one plugin. Imagine a situation where one plugin's cached answer
 is dependent on another plugin that handles updating the underlying data.
-The retrieving plugin is not notified of updates happening in the 
-"mutator plugin" (and thus does not invalidate cached data) unless the 
+The retrieving plugin is not notified of updates happening in the
+"mutator plugin" (and thus does not invalidate cached data) unless the
 plugin developer forces some nasty cross-plugin dependencies.
 
 The PluggableAuthService has two "sample implementations" for plugin
-caching. Both the DynamicGroupsPlugin and the ZODBUserManager are 
+caching. Both the DynamicGroupsPlugin and the ZODBUserManager are
 cache-enabled.
 
 CAVEATS
@@ -123,4 +123,3 @@ The Caching mechanism should not be used to cache persistent objects. So
 if for some reason your PluggableAuthService emits user objects that are
 persistent (which is not the default) you should not enable caching at the
 PluggableAuthService-level.
-

@@ -50,4 +50,3 @@ information, and consult the interfaces files under ``interfaces/`` in
 the software package for PluggableAuthService and plugin APIs.
 
 The documentation is also online available at https://productspluggableauthservice.readthedocs.io/.
-

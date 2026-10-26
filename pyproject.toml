@@ -18,16 +18,16 @@ classifiers = [
     "Framework :: Zope :: 5",
     "Intended Audience :: Developers",
     "Programming Language :: Python",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
     "Topic :: Software Development",
     "Topic :: System :: Systems Administration :: Authentication/Directory",
 ]
 dynamic = ["readme"]
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 authors = [
     {name = "Zope Foundation and contributors",email = "zope-cmf@zope.dev"},
 ]
