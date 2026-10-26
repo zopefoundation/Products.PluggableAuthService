@@ -1,10 +1,14 @@
 Change Log
 ==========
 
-4.2.3 (unreleased)
+4.3.0 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add ``IRoleAssignedToPrincipalEvent`` and ``IRoleRemovedFromPrincipalEvent``,
+  fired by ``ZODBRoleManager`` when a role is assigned to or removed from a
+  user or group, like the events for group membership. Audit logging needs
+  these to record privilege changes, as required by the NIS2 directive.
+  (`#130 <https://github.com/zopefoundation/Products.PluggableAuthService/issues/130>`_)
 
 
 4.2.2 (2026-08-06)

@@ -23,8 +23,11 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from BTrees.OOBTree import OOBTree
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from zope.event import notify
 from zope.interface import Interface
 
+from ..events import RoleAssignedToPrincipal
+from ..events import RoleRemovedFromPrincipal
 from ..interfaces.plugins import IRoleAssignerPlugin
 from ..interfaces.plugins import IRoleEnumerationPlugin
 from ..interfaces.plugins import IRolesPlugin
@@ -297,6 +300,7 @@ class ZODBRoleManager(BasePlugin):
             new = current + (role_id,)
             self._principal_roles[principal_id] = new
             self._invalidatePrincipalCache(principal_id)
+            notify(RoleAssignedToPrincipal(principal_id, role_id))
 
         return not already
 
@@ -321,6 +325,7 @@ class ZODBRoleManager(BasePlugin):
         if already:
             self._principal_roles[principal_id] = new
             self._invalidatePrincipalCache(principal_id)
+            notify(RoleRemovedFromPrincipal(principal_id, role_id))
 
         return already
 

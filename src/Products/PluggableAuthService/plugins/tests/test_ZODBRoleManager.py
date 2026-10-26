@@ -15,7 +15,12 @@ import unittest
 
 from AccessControl.users import SpecialUser
 from zExceptions import Forbidden
+from zope.component import adapter
+from zope.component import globalSiteManager
+from zope.component import provideHandler
 
+from ...interfaces.events import IRoleAssignedToPrincipalEvent
+from ...interfaces.events import IRoleRemovedFromPrincipalEvent
 from ...plugins.tests.helpers import DummyUser
 from ...plugins.tests.helpers import FauxPAS
 from ...plugins.tests.helpers import FauxSmartPAS
@@ -25,9 +30,31 @@ from ...tests.conformance import IRoleEnumerationPlugin_conformance
 from ...tests.conformance import IRolesPlugin_conformance
 
 
+_events = []
+
+
+@adapter(IRoleAssignedToPrincipalEvent)
+def roleAssignedHandler(event):
+    _events.append(event)
+
+
+@adapter(IRoleRemovedFromPrincipalEvent)
+def roleRemovedHandler(event):
+    _events.append(event)
+
+
 class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance,
                            IRoleEnumerationPlugin_conformance,
                            IRoleAssignerPlugin_conformance):
+
+    def setUp(self):
+        provideHandler(roleAssignedHandler)
+        provideHandler(roleRemovedHandler)
+
+    def tearDown(self):
+        globalSiteManager.unregisterHandler(roleAssignedHandler)
+        globalSiteManager.unregisterHandler(roleRemovedHandler)
+        del _events[:]
 
     def _getTargetClass(self):
 
@@ -418,6 +445,90 @@ class ZODBRoleManagerTests(unittest.TestCase, IRolesPlugin_conformance,
         removed = zrm.removeRoleFromPrincipal('test', 'bar')
 
         self.assertFalse(removed)
+
+    def test_assignRoleToPrincipal_event(self):
+
+        root = FauxPAS()
+        zrm = self._makeOne(id='assign_event').__of__(root)
+
+        zrm.addRole('test')
+        zrm.assignRoleToPrincipal('test', 'foo')
+
+        self.assertEqual(len(_events), 1)
+        event = _events[0]
+        self.assertTrue(IRoleAssignedToPrincipalEvent.providedBy(event))
+        self.assertEqual(event.principal, 'foo')
+        self.assertEqual(event.object, 'foo')
+        self.assertEqual(event.role_id, 'test')
+
+    def test_assignRoleToPrincipal_already_no_event(self):
+
+        root = FauxPAS()
+        zrm = self._makeOne(id='assign_already_event').__of__(root)
+
+        zrm.addRole('test')
+        zrm.assignRoleToPrincipal('test', 'foo')
+        zrm.assignRoleToPrincipal('test', 'foo')
+
+        self.assertEqual(len(_events), 1)
+
+    def test_doAssignRoleToPrincipal_event(self):
+
+        root = FauxPAS()
+        zrm = self._makeOne(id='do_assign_event').__of__(root)
+
+        zrm.addRole('test')
+        zrm.doAssignRoleToPrincipal('foo', 'test')
+
+        self.assertEqual(len(_events), 1)
+        self.assertTrue(IRoleAssignedToPrincipalEvent.providedBy(_events[0]))
+
+    def test_removeRoleFromPrincipal_event(self):
+
+        root = FauxPAS()
+        zrm = self._makeOne(id='remove_event').__of__(root)
+
+        zrm.addRole('test')
+        zrm.assignRoleToPrincipal('test', 'foo')
+        zrm.removeRoleFromPrincipal('test', 'foo')
+
+        self.assertEqual(len(_events), 2)
+        event = _events[1]
+        self.assertTrue(IRoleRemovedFromPrincipalEvent.providedBy(event))
+        self.assertEqual(event.principal, 'foo')
+        self.assertEqual(event.object, 'foo')
+        self.assertEqual(event.role_id, 'test')
+
+    def test_removeRoleFromPrincipal_noop_no_event(self):
+
+        root = FauxPAS()
+        zrm = self._makeOne(id='remove_noop_event').__of__(root)
+
+        zrm.addRole('test')
+        zrm.removeRoleFromPrincipal('test', 'foo')
+
+        self.assertEqual(len(_events), 0)
+
+    def test_removeRole_events(self):
+
+        root = FauxPAS()
+        zrm = self._makeOne(id='remove_role_events').__of__(root)
+
+        zrm.addRole('test')
+        zrm.addRole('other')
+        zrm.assignRoleToPrincipal('test', 'foo')
+        zrm.assignRoleToPrincipal('test', 'bar')
+        zrm.assignRoleToPrincipal('other', 'baz')
+        del _events[:]
+
+        zrm.removeRole('test')
+
+        # one event for each principal that had the role
+        self.assertEqual(
+            sorted((e.principal, e.role_id) for e in _events),
+            [('bar', 'test'), ('foo', 'test')])
+        for event in _events:
+            self.assertTrue(IRoleRemovedFromPrincipalEvent.providedBy(event))
 
     def test_listAssignedPrincipals_duplicate_principals(self):
         from ...plugins.ZODBRoleManager import MultiplePrincipalError

@@ -26,6 +26,8 @@ from .interfaces.events import IPrincipalCreatedEvent
 from .interfaces.events import IPrincipalDeletedEvent
 from .interfaces.events import IPrincipalRemovedFromGroupEvent
 from .interfaces.events import IPropertiesUpdatedEvent
+from .interfaces.events import IRoleAssignedToPrincipalEvent
+from .interfaces.events import IRoleRemovedFromPrincipalEvent
 
 
 @implementer(IPASEvent)
@@ -50,6 +52,22 @@ class PrincipalRemovedFromGroup(PASEvent):
     def __init__(self, principal, group_id):
         super().__init__(principal)
         self.group_id = group_id
+
+
+@implementer(IRoleAssignedToPrincipalEvent)
+class RoleAssignedToPrincipal(PASEvent):
+
+    def __init__(self, principal, role_id):
+        super().__init__(principal)
+        self.role_id = role_id
+
+
+@implementer(IRoleRemovedFromPrincipalEvent)
+class RoleRemovedFromPrincipal(PASEvent):
+
+    def __init__(self, principal, role_id):
+        super().__init__(principal)
+        self.role_id = role_id
 
 
 @implementer(IPrincipalCreatedEvent)

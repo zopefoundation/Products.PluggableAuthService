@@ -21,6 +21,22 @@ class IPrincipalRemovedFromGroupEvent(IPASEvent):
     group_id = Attribute('Group ID from which principal is being removed')
 
 
+class IRoleAssignedToPrincipalEvent(IPASEvent):
+    """A role has been assigned to a principal.
+
+    ``principal`` is the ID of the principal (user or group).
+    """
+    role_id = Attribute('ID of the role that has been assigned')
+
+
+class IRoleRemovedFromPrincipalEvent(IPASEvent):
+    """A role has been removed from a principal.
+
+    ``principal`` is the ID of the principal (user or group).
+    """
+    role_id = Attribute('ID of the role that has been removed')
+
+
 class IPrincipalCreatedEvent(IPASEvent):
     """A new principal has been created.
     """
