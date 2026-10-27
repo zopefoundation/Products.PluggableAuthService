@@ -16,3 +16,7 @@ Events
 .. autointerface:: Products.PluggableAuthService.interfaces.events.IPropertiesUpdatedEvent
 
 .. autointerface:: Products.PluggableAuthService.interfaces.events.IGroupDeletedEvent
+
+.. autointerface:: Products.PluggableAuthService.interfaces.events.IRoleAssignedToPrincipalEvent
+
+.. autointerface:: Products.PluggableAuthService.interfaces.events.IRoleRemovedFromPrincipalEvent

@@ -4,6 +4,12 @@ Change Log
 4.3.0 (unreleased)
 ------------------
 
+- Add ``IRoleAssignedToPrincipalEvent`` and ``IRoleRemovedFromPrincipalEvent``,
+  fired by ``ZODBRoleManager`` when a role is assigned to or removed from a
+  user or group, like the events for group membership. Audit logging needs
+  these to record privilege changes, as required by the NIS2 directive.
+  (`#130 <https://github.com/zopefoundation/Products.PluggableAuthService/issues/130>`_)
+
 - Add support for Python 3.15.
 
 - Drop support for Python 3.10.
