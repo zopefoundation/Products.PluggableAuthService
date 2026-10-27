@@ -1,8 +1,8 @@
 Change Log
 ==========
 
-4.3.0 (unreleased)
-------------------
+4.3 (2026-10-27)
+----------------
 
 - Add ``IRoleAssignedToPrincipalEvent`` and ``IRoleRemovedFromPrincipalEvent``,
   fired by ``ZODBRoleManager`` when a role is assigned to or removed from a

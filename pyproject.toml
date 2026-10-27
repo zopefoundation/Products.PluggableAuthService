@@ -9,7 +9,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "Products.PluggableAuthService"
-version = "4.3.0.dev0"
+version = "4.3"
 description = "Pluggable Zope authentication / authorization framework"
 license = "ZPL-2.1"
 classifiers = [
